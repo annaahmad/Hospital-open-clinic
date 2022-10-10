@@ -7,6 +7,7 @@ import be.mxs.common.util.system.Debug;
 import be.mxs.common.util.system.ScreenHelper;
 import be.openclinic.common.OC_Object;
 import be.openclinic.system.Application;
+import be.openclinic.system.SH;
 
 import java.security.MessageDigest;
 import java.sql.*;
@@ -64,7 +65,7 @@ public class User extends OC_Object {
     
     public void setStop(java.util.Date dStop) {
     	try {
-    		stop = new SimpleDateFormat("dd/MM/yyyy").format(dStop);
+    		stop = SH.formatDate(dStop);
     	}
     	catch(Exception e) {
     		stop="";

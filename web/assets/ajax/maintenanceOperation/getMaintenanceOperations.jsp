@@ -68,6 +68,8 @@
     findObject.operator = sOperator;
     findObject.result = sResult;
     findObject.setTag(sAssetUID+";"+sServiceUID);
+    findObject.setPeriodPerformedBegin(SH.parseDate(sPeriodPerformedBegin));
+    findObject.setPeriodPerformedEnd(SH.parseDate(sPeriodPerformedEnd));
 
     List operations = MaintenanceOperation.getList(findObject);
     String sReturn = "";

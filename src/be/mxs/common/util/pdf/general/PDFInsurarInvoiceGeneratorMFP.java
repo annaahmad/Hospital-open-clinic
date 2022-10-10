@@ -198,7 +198,7 @@ public class PDFInsurarInvoiceGeneratorMFP extends PDFInvoiceGenerator {
             table.setWidthPercentage(pageWidth);
             cell=createLabelCell(MedwanQuery.getInstance().getLabel("web.mfp","detailedemployerlist",user.person.language)+": "+ScreenHelper.stdDateFormat.format(start)+" - "+ScreenHelper.stdDateFormat.format(end), 1);
             table.addCell(cell);
-            cell=createLabelCell(MedwanQuery.getInstance().getLabel("web","category",user.person.language)+": "+serviceUid.split(";")[1], 1);
+            cell=createLabelCell(MedwanQuery.getInstance().getLabel("web","category",user.person.language)+": "+(serviceUid.split(";").length<2?"?":serviceUid.split(";")[1]), 1);
             table.addCell(cell);
             doc.add(table);
             addBlankRow();

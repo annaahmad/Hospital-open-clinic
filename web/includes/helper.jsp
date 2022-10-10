@@ -1344,6 +1344,7 @@
     String sSHOWMODALDIALOG = "<script src='"+sCONTEXTPATH+"/_common/_script/showmodaldialog.js'></script>";
     String sJSMASKEDINPUT = "<script src='"+sCONTEXTPATH+"/_common/_script/masked_input_1.4-min.js'></script>";
     String sJSTOOLTIP = "<script src='"+sCONTEXTPATH+"/_common/_script/tooltip.js'></script>";
+    String sJSGAUGE = "<script src='"+sCONTEXTPATH+"/_common/_script/gauge.min.js'></script>";
     String sJSSHORTCUTS = "<script src='"+sCONTEXTPATH+"/_common/_script/shortcuts.js'></script>";
     String sJSCHAR = "<script src='"+sCONTEXTPATH+"/_common/_script/char.js'></script>";
     String sJSPOPUPSEARCH = "<script src='"+sCONTEXTPATH+"/_common/_script/popupsearch.js'></script>";

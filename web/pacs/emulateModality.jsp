@@ -13,9 +13,9 @@
                  java.io.File,java.io.*,be.mxs.common.util.system.Picture"%>
 
 <%
-	String patientid="0";
+	String patientid=activePatient.personid;
 	String aetitle="OCPX";
-	String host="localhost";
+	String host=SH.cs("defaultPACShost","localhost");
 	int port=10555;
 	if(ServletFileUpload.isMultipartContent(request)){
 		try{

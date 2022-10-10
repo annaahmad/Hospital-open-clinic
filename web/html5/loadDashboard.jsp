@@ -309,7 +309,7 @@
 		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
 		String sid=MedwanQuery.getInstance().getServerId()+"";
 		String sSql = 	"select * from oc_assets a,oc_maintenanceplans p where oc_asset_objectid=replace(oc_maintenanceplan_assetuid,'"+sid+".','') and"+
-								" oc_maintenanceplan_type=2 and oc_asset_service like '"+serviceuid+"%' and (oc_maintenanceplan_enddate is null or oc_maintenanceplan_enddate>'"+
+								" oc_maintenanceplan_type=2 and oc_asset_service in ("+Service.getChildIdsAsString(serviceuid)+") and (oc_maintenanceplan_enddate is null or oc_maintenanceplan_enddate>'"+
 								new SimpleDateFormat("yyyy-MM-dd").format(dBegin)+"') and oc_maintenanceplan_startdate<'"+new SimpleDateFormat("yyyy-MM-dd").format(dEnd)+"'";
 		PreparedStatement ps = conn.prepareStatement(sSql);
 		ResultSet rs = ps.executeQuery();
@@ -321,15 +321,22 @@
 			//Was there an intervention action planned in the selected period?
 			//Check if any existing intervention had a nextdate in this period
 			boolean bMaintenancePlanDue=false,bInit=false;
-			PreparedStatement ps2 = conn.prepareStatement("select * from oc_maintenanceoperations where oc_maintenanceoperation_maintenanceplanuid=?");
+			PreparedStatement ps2 = conn.prepareStatement("select * from oc_maintenanceoperations where oc_maintenanceoperation_maintenanceplanuid=? and oc_maintenanceoperation_date<? order by oc_maintenanceoperation_nextdate desc");
 			ps2.setString(1,maintenancePlanUid);
+			ps2.setDate(2, SH.toSQLDate(dBegin));
 			ResultSet rs2 = ps2.executeQuery();
-			while(rs2.next()){
-				bInit=true;
+			while(rs2.next() && !bMaintenancePlanDue){
 				java.util.Date d = rs2.getDate("oc_maintenanceoperation_nextdate");
 				if(d!=null && !d.before(dBegin) && d.before(dEnd)){
 					bMaintenancePlanDue=true;
 				}
+				else if(!bInit && d!=null && d.before(dEnd)) {
+					bMaintenancePlanDue=true;
+				}
+				else if(d!=null && d.before(dBegin)) {
+					break;
+				}
+				bInit=true;
 			}
 			rs2.close();
 			ps2.close();
@@ -366,9 +373,12 @@
 		<td class='mobileadmin2'><span style='font-size:4vw;font-weight: bold'><%=plans.size() %></span></td>
 	</tr>
 	<%
+		SH.syslog("1: "+preventativeoperations);
 		if(preventativeoperations>plans.size()){
 			preventativeoperations=plans.size();
 		}
+		SH.syslog("2: "+preventativeoperations);
+		SH.syslog("3: "+plans.size());
 	%>
 	<tr>
 		<td class='mobileadmin' style='font-size:4vw;'>
@@ -385,7 +395,7 @@
 	<%
 		plans = new HashSet();
 		sSql = 	"select * from oc_assets a,oc_maintenanceplans p where oc_asset_objectid=replace(oc_maintenanceplan_assetuid,'"+sid+".','') and"+
-				" oc_maintenanceplan_type=3 and oc_asset_service like '"+serviceuid+"%' and oc_maintenanceplan_startdate>='"+new SimpleDateFormat("yyyy-MM-dd").format(dBegin)+"' and oc_maintenanceplan_startdate<'"+new SimpleDateFormat("yyyy-MM-dd").format(dEnd)+"' and (oc_maintenanceplan_enddate is null or oc_maintenanceplan_enddate>'"+new SimpleDateFormat("yyyy-MM-dd").format(dBegin)+"')";
+				" oc_maintenanceplan_type=3 and oc_asset_service in ("+Service.getChildIdsAsString(serviceuid)+") and oc_maintenanceplan_startdate>='"+new SimpleDateFormat("yyyy-MM-dd").format(dBegin)+"' and oc_maintenanceplan_startdate<'"+new SimpleDateFormat("yyyy-MM-dd").format(dEnd)+"' and (oc_maintenanceplan_enddate is null or oc_maintenanceplan_enddate>'"+new SimpleDateFormat("yyyy-MM-dd").format(dBegin)+"')";
 		ps = conn.prepareStatement(sSql);
 		rs = ps.executeQuery();
 		int c = 0;

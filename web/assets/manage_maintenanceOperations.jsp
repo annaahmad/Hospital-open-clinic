@@ -200,8 +200,8 @@
           parameters: "planUID="+encodeURIComponent(SearchForm.searchMaintenancePlanUID.value)+
 			          "&serviceuid="+encodeURIComponent(SearchForm.serviceuid.value)+
 			          "&assetuid="+encodeURIComponent(SearchForm.searchAssetUID.value)+
-			          "&periodPerformedBegin="+encodeURIComponent(SearchForm.searchPeriodPerformedBegin.value)+
-                      "&periodPerformedEnd="+encodeURIComponent(SearchForm.searchPeriodPerformedEnd.value)+
+			          "&periodPerformedBegin="+SearchForm.searchPeriodPerformedBegin.value+
+                      "&periodPerformedEnd="+SearchForm.searchPeriodPerformedEnd.value+
                       "&operator="+encodeURIComponent(SearchForm.searchOperator.value)+
                       "&result="+encodeURIComponent(SearchForm.searchResult.value),
           onSuccess: function(resp){

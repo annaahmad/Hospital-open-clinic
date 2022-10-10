@@ -53,71 +53,73 @@
     if(sAction.equals("save") && sEditOldCategoryCode.length() > 0){
         String sEditCategoryCode = checkString(request.getParameter("EditCategoryCode"));
         String sEditCategoryParentID = checkString(request.getParameter("EditCategoryParentCode"));
-        // new
-        if(sEditOldCategoryCode.equals("-1")){
-            //*** INSERT Category ******************************************************************
-            Hashtable hCategoryInfo = new Hashtable();
-            hCategoryInfo.put("categoryid",sEditCategoryCode.toUpperCase());
-            hCategoryInfo.put("oldcategoryid",sEditOldCategoryCode.toUpperCase());
-            hCategoryInfo.put("updatetime",getSQLTime());
-            hCategoryInfo.put("categoryparentid",sEditCategoryParentID);
-            hCategoryInfo.put("updateuserid",activeUser.userid);
-
-            DrugCategory.manageCategorySave(hCategoryInfo);
-
-            Label objLabel;
-            StringTokenizer tokenizer = new StringTokenizer(supportedLanguages, ",");
-            while (tokenizer.hasMoreTokens()){
-                tmpLang = tokenizer.nextToken();
-
-                objLabel = new Label();
-                objLabel.type = "drug.category";
-                objLabel.id = sEditCategoryCode;
-                objLabel.language = tmpLang;
-                objLabel.value = checkString((String) labelValues.get(tmpLang));
-                objLabel.showLink = "0";
-                objLabel.updateUserId = activeUser.userid;
-
-                objLabel.saveToDB();
-
-                MedwanQuery.getInstance().removeLabelFromCache("drug.category", sEditCategoryCode, tmpLang);
-                MedwanQuery.getInstance().getLabel("drug.category", sEditCategoryCode, tmpLang);
-            }
+        if(!DrugCategory.getChildIds(sEditCategoryCode).contains(sEditCategoryParentID)){
+	        // new
+	        if(sEditOldCategoryCode.equals("-1")){
+	            //*** INSERT Category ******************************************************************
+	            Hashtable hCategoryInfo = new Hashtable();
+	            hCategoryInfo.put("categoryid",sEditCategoryCode.toUpperCase());
+	            hCategoryInfo.put("oldcategoryid",sEditOldCategoryCode.toUpperCase());
+	            hCategoryInfo.put("updatetime",getSQLTime());
+	            hCategoryInfo.put("categoryparentid",sEditCategoryParentID);
+	            hCategoryInfo.put("updateuserid",activeUser.userid);
+	
+	            DrugCategory.manageCategorySave(hCategoryInfo);
+	
+	            Label objLabel;
+	            StringTokenizer tokenizer = new StringTokenizer(supportedLanguages, ",");
+	            while (tokenizer.hasMoreTokens()){
+	                tmpLang = tokenizer.nextToken();
+	
+	                objLabel = new Label();
+	                objLabel.type = "drug.category";
+	                objLabel.id = sEditCategoryCode;
+	                objLabel.language = tmpLang;
+	                objLabel.value = checkString((String) labelValues.get(tmpLang));
+	                objLabel.showLink = "0";
+	                objLabel.updateUserId = activeUser.userid;
+	
+	                objLabel.saveToDB();
+	
+	                MedwanQuery.getInstance().removeLabelFromCache("drug.category", sEditCategoryCode, tmpLang);
+	                MedwanQuery.getInstance().getLabel("drug.category", sEditCategoryCode, tmpLang);
+	            }
+	        }
+	        //*** UPDATE Category **********************************************************************
+	        else {
+	            Hashtable hCategoryInfo = new Hashtable();
+	            hCategoryInfo.put("categoryid",sEditCategoryCode);
+	            hCategoryInfo.put("updatetime",getSQLTime());
+	            hCategoryInfo.put("categoryparentid",sEditCategoryParentID);
+	            hCategoryInfo.put("updateuserid",activeUser.userid);
+	            hCategoryInfo.put("oldcategoryid",sEditOldCategoryCode.toUpperCase());
+	
+	            DrugCategory.manageCategoryUpdate(hCategoryInfo);
+	
+	            //***** update labels for all supported languages *****
+	
+	            StringTokenizer tokenizer = new StringTokenizer(supportedLanguages, ",");
+	            Label objLabel;
+	            while (tokenizer.hasMoreTokens()){
+	                tmpLang = tokenizer.nextToken();
+	
+	                objLabel = new Label();
+	                objLabel.type = "drug.category";
+	                objLabel.id = sEditCategoryCode;
+	                objLabel.language = tmpLang;
+	                objLabel.value = checkString((String) labelValues.get(tmpLang));
+	                objLabel.showLink = "0";
+	                objLabel.updateUserId = activeUser.userid;
+	
+	                objLabel.saveToDB();
+	
+	                MedwanQuery.getInstance().removeLabelFromCache("drug.category", sEditCategoryCode, tmpLang);
+	                MedwanQuery.getInstance().getLabel("drug.category", sEditCategoryCode, tmpLang);
+	            }
+	        }
+	
+	        reloadSingleton(session);
         }
-        //*** UPDATE Category **********************************************************************
-        else {
-            Hashtable hCategoryInfo = new Hashtable();
-            hCategoryInfo.put("categoryid",sEditCategoryCode);
-            hCategoryInfo.put("updatetime",getSQLTime());
-            hCategoryInfo.put("categoryparentid",sEditCategoryParentID);
-            hCategoryInfo.put("updateuserid",activeUser.userid);
-            hCategoryInfo.put("oldcategoryid",sEditOldCategoryCode.toUpperCase());
-
-            DrugCategory.manageCategoryUpdate(hCategoryInfo);
-
-            //***** update labels for all supported languages *****
-
-            StringTokenizer tokenizer = new StringTokenizer(supportedLanguages, ",");
-            Label objLabel;
-            while (tokenizer.hasMoreTokens()){
-                tmpLang = tokenizer.nextToken();
-
-                objLabel = new Label();
-                objLabel.type = "drug.category";
-                objLabel.id = sEditCategoryCode;
-                objLabel.language = tmpLang;
-                objLabel.value = checkString((String) labelValues.get(tmpLang));
-                objLabel.showLink = "0";
-                objLabel.updateUserId = activeUser.userid;
-
-                objLabel.saveToDB();
-
-                MedwanQuery.getInstance().removeLabelFromCache("drug.category", sEditCategoryCode, tmpLang);
-                MedwanQuery.getInstance().getLabel("drug.category", sEditCategoryCode, tmpLang);
-            }
-        }
-
-        reloadSingleton(session);
 
         sFindCategoryCode = sEditCategoryCode;
         if(sFindCategoryCode.length() > 0){

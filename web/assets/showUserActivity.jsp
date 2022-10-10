@@ -2,19 +2,24 @@
 <%@include file="/includes/validateUser.jsp"%>
 <%
 	StringBuffer sResult = new StringBuffer();
-	int assets=0,plans=0,operations=0;
+	int assets=0,plans=0,operations=0,consultations=0;
+	HashSet uniqueOperations= new HashSet();
+	HashSet uniqueOperationsNew= new HashSet();
+	HashSet uniqueAssets= new HashSet();
+	HashSet uniquePlans= new HashSet();
 	if(SH.p(request,"submitButton").length()>0 && SH.p(request,"begin").length()>0 && SH.p(request,"end").length()>0){
 		String userid = SH.p(request,"user");
 		long day = 24*3600*1000;
 		java.util.Date begin = SH.parseDate(SH.p(request,"begin"));
 		java.util.Date end = new java.util.Date(SH.parseDate(SH.p(request,"end")).getTime()+day-1);
+		consultations=AccessLog.getAccessTimes(SH.toSQLDate(begin), SH.toSQLDate(end), Integer.parseInt(userid)).size();
 		System.out.println("begin="+begin);
 		System.out.println("end="+end);
 		StringBuffer sql = new StringBuffer();
 		sql.append("SELECT 'asset' type,oc_asset_serverid serverid,oc_asset_objectid objectid,");
 		sql.append(" oc_asset_service serviceid,oc_asset_updatetime updatetime,");
 		sql.append(" oc_asset_description name");
-		sql.append(" ,null timestamp");
+		sql.append(" ,null timestamp, null tag");
 		sql.append(" from oc_assets");
 		sql.append(" WHERE oc_asset_updateid=? AND");
 		sql.append(" oc_asset_updatetime>=? AND");
@@ -24,7 +29,7 @@
 		sql.append(" SELECT 'asset.history' type,oc_asset_serverid serverid,oc_asset_objectid objectid,");
 		sql.append(" oc_asset_service serviceid,oc_asset_updatetime updatetime,");
 		sql.append(" oc_asset_description name");
-		sql.append(" ,oc_asset_historydate timestamp");
+		sql.append(" ,oc_asset_historydate timestamp, null tag");
 		sql.append(" from oc_assetshistory");
 		sql.append(" WHERE oc_asset_updateid=? AND");
 		sql.append(" oc_asset_updatetime>=? AND");
@@ -34,7 +39,7 @@
 		sql.append(" SELECT 'plan' type,oc_maintenanceplan_serverid serverid,oc_maintenanceplan_objectid objectid,");
 		sql.append(" oc_asset_service serviceid,oc_maintenanceplan_updatetime updatetime,");
 		sql.append(" oc_maintenanceplan_name||' ['||oc_asset_description||']' NAME");
-		sql.append(" ,null timestamp");
+		sql.append(" ,null timestamp, null tag");
 		sql.append(" from oc_assets,oc_maintenanceplans");
 		sql.append(" WHERE ");
 		sql.append(" oc_asset_objectid=REPLACE(oc_maintenanceplan_assetuid,'1.','') and");
@@ -46,7 +51,7 @@
 		sql.append(" SELECT 'plan.history' type,oc_maintenanceplan_serverid serverid,oc_maintenanceplan_objectid objectid,");
 		sql.append(" oc_asset_service serviceid,oc_maintenanceplan_updatetime updatetime,");
 		sql.append(" oc_maintenanceplan_name||' ['||oc_asset_description||']' NAME");
-		sql.append(" ,oc_maintenanceplan_historydate timestamp");
+		sql.append(" ,oc_maintenanceplan_historydate timestamp, null tag");
 		sql.append(" from oc_assets,oc_maintenanceplanshistory");
 		sql.append(" WHERE ");
 		sql.append(" oc_asset_objectid=REPLACE(oc_maintenanceplan_assetuid,'1.','') and");
@@ -58,7 +63,7 @@
 		sql.append(" SELECT 'operation' type,oc_maintenanceoperation_serverid serverid,oc_maintenanceoperation_objectid objectid,");
 		sql.append(" oc_asset_service serviceid,oc_maintenanceoperation_updatetime updatetime,");
 		sql.append(" oc_maintenanceplan_name||' ['||oc_asset_description||']' NAME");
-		sql.append(" ,null timestamp");
+		sql.append(" ,oc_maintenanceoperation_date timestamp, oc_maintenanceoperation_maintenanceplanuid tag");
 		sql.append(" from oc_assets,oc_maintenanceplans,oc_maintenanceoperations");
 		sql.append(" WHERE ");
 		sql.append(" oc_asset_objectid=REPLACE(oc_maintenanceplan_assetuid,'1.','') AND");
@@ -71,7 +76,7 @@
 		sql.append(" SELECT 'operation.history' type,oc_maintenanceoperation_serverid serverid,oc_maintenanceoperation_objectid objectid,");
 		sql.append(" oc_asset_service serviceid,oc_maintenanceoperation_updatetime updatetime,");
 		sql.append(" oc_maintenanceplan_name||' ['||oc_asset_description||']' NAME");
-		sql.append(" ,oc_maintenanceoperation_historydate timestamp");
+		sql.append(" ,oc_maintenanceoperation_historydate timestamp, null tag");
 		sql.append(" from oc_assets,oc_maintenanceplans,oc_maintenanceoperationshistory");
 		sql.append(" WHERE ");
 		sql.append(" oc_asset_objectid=REPLACE(oc_maintenanceplan_assetuid,'1.','') AND");
@@ -115,6 +120,7 @@
 				}
 				sResult.append("</tr>");
 				assets++;
+				uniqueAssets.add(serverid+"."+objectid);
 			}
 			else if(type.startsWith("plan")){
 				sResult.append("<tr>");
@@ -132,6 +138,7 @@
 				}
 				sResult.append("</tr>");
 				plans++;
+				uniquePlans.add(serverid+"."+objectid);
 			}
 			else if(type.startsWith("operation")){
 				sResult.append("<tr>");
@@ -149,6 +156,12 @@
 				}
 				sResult.append("</tr>");
 				operations++;
+				if(rs.getString("tag")!=null){
+					uniqueOperations.add(rs.getString("tag"));
+				}
+				if(rs.getTimestamp("timestamp").after(begin)){
+					uniqueOperationsNew.add(rs.getString("tag"));
+				}
 			}
 		}
 	}
@@ -182,13 +195,21 @@
 		</tr>
 	</table>
 </form>
-<%	if(sResult.length()>0){%>
 <p/>
+<%	if(SH.p(request,"submitButton").length()>0 && SH.p(request,"begin").length()>0 && SH.p(request,"end").length()>0){ %>
+<table>
+	<tr>
+		<td><b><%=getTran(request,"web","consultations",sWebLanguage)+":&nbsp;&nbsp;&nbsp;</b>#"+getTran(request,"web","logins",sWebLanguage)+": <b>"+consultations %></b></td>
+	</tr>
+</table>
+<% } %>
+<%	if(sResult.length()>0){%>
+</table>
 <table><tr>
 	<td><b><%=getTran(request,"web","updates",sWebLanguage)%>:&nbsp;&nbsp;&nbsp;</b></td>
-	<td>#<%=getTran(request,"web","inventory",sWebLanguage)+": <b>"+assets %></b>&nbsp;&nbsp;&nbsp;</td>
-	<td>#<%=getTran(request,"web","maintenanceplan",sWebLanguage)+": <b>"+plans %></b>&nbsp;&nbsp;&nbsp;</td>
-	<td>#<%=getTran(request,"web","maintenanceoperation",sWebLanguage)+": <b>"+operations %></b></td>
+	<td>#<%=getTran(request,"web","inventory",sWebLanguage)+": <b>"+assets %> [<%=getTran(request,"web","unique",sWebLanguage)+": "+uniqueAssets.size() %>]</b>&nbsp;&nbsp;&nbsp;</td>
+	<td>#<%=getTran(request,"web","maintenanceplan",sWebLanguage)+": <b>"+plans %> [<%=getTran(request,"web","unique",sWebLanguage)+": "+uniquePlans.size() %>]</b>&nbsp;&nbsp;&nbsp;</td>
+	<td>#<%=getTran(request,"web","maintenanceoperation",sWebLanguage)+": <b>"+operations %> [<%=uniqueOperations.size() +" "+getTran(request,"web","plans",sWebLanguage)+", "+uniqueOperationsNew.size()+" "+getTran(request,"web","newoperations",sWebLanguage) %>]</b></td>
 </tr></table>
 <table width='100%'>
 	<tr class='admin'>

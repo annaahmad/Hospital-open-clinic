@@ -274,7 +274,9 @@ public class Utils {
 			e.printStackTrace();
 		}
 		RxNormInteraction.deleteInteractions(rxcuis);
-		RxNormInteraction.storeInteraction(rxcuis, ScreenHelper.sortedMap2String(interactions));
+		if(interactions.size()>0) {
+			RxNormInteraction.storeInteraction(rxcuis, ScreenHelper.sortedMap2String(interactions));
+		}
 		return interactions;
 	}
 	

@@ -59,16 +59,16 @@
             //*** display order in one row ***
             html.append("<tr class='list"+sClass+"' onmouseover=\"this.style.cursor='pointer';\" onmouseout=\"this.style.cursor='default';\" title='"+detailsTran+"'>")
                  .append("<td align='center'><img src='"+sCONTEXTPATH+"/_img/icons/icon_delete.png' border='0' title='"+deleteTran+"' onclick=\"doDelete('"+order.getUid()+"');\">")
-                 .append("<td onclick=\"doShowDetails('"+order.getUid()+"');\">"+checkString(order.getDescription())+"</td>")
-                 .append("<td onclick=\"doShowDetails('"+order.getUid()+"');\">"+sServiceStockName+"</td>")
-                 .append("<td>"+sOrderForm+"</td>")
-                 .append("<td onclick=\"doShowDetails('"+order.getUid()+"');\">"+sProductName+"</td>")
-                 .append("<td onclick=\"doShowDetails('"+order.getUid()+"');\">"+order.getPackagesOrdered()+"</td>")
-                 .append("<td onclick=\"doShowDetails('"+order.getUid()+"');\">"+order.getPackagesDelivered()+"</td>")
-                 .append("<td onclick=\"doShowDetails('"+order.getUid()+"');\">"+sDateOrdered+"</td>")
-                 .append("<td onclick=\"doShowDetails('"+order.getUid()+"');\">"+sDateDelivered+"</td>")
-                 .append("<td onclick=\"doShowDetails('"+order.getUid()+"');\">"+sImportance+"</td>")
-                .append("</tr>");
+                 .append("<td onclick=\"doShowDetails('"+order.getUid()+"');\">&nbsp;"+checkString(order.getDescription())+"</td>")
+                 .append("<td onclick=\"doShowDetails('"+order.getUid()+"');\">&nbsp;"+sServiceStockName+"</td>")
+                 .append("<td>&nbsp;"+sOrderForm+"</td>")
+                 .append("<td onclick=\"doShowDetails('"+order.getUid()+"');\">&nbsp;"+sProductName+"</td>")
+                 .append("<td onclick=\"doShowDetails('"+order.getUid()+"');\">&nbsp;"+order.getPackagesOrdered()+"</td>")
+                 .append("<td onclick=\"doShowDetails('"+order.getUid()+"');\">&nbsp;"+order.getPackagesDelivered()+"</td>")
+                 .append("<td onclick=\"doShowDetails('"+order.getUid()+"');\">&nbsp;"+sDateOrdered+"</td>")
+                 .append("<td onclick=\"doShowDetails('"+order.getUid()+"');\">&nbsp;"+sDateDelivered+"</td>")
+                 .append("<td onclick=\"doShowDetails('"+order.getUid()+"');\">&nbsp;"+sImportance+"</td>")
+                .append("</tr>"); 
         }
 
         return html;
@@ -154,15 +154,15 @@
             //*** display order in one row ***
             html.append("<tr class='list"+sClass+"' onmouseover=\"this.style.cursor='pointer';\" onmouseout=\"this.style.cursor='default';\" title='"+detailsTran+"'>")
                  .append("<td><img src='"+sCONTEXTPATH+"/_img/icons/icon_delete.png' border='0' title='"+deleteTran+"' onclick=\"doDelete('"+order.getUid()+"');\">")
-                 .append("<td onclick=\"doShowDetails('"+order.getUid()+"');\">"+checkString(order.getDescription())+"</td>")
-                 .append("<td onclick=\"doShowDetails('"+order.getUid()+"');\">"+sServiceStockName+"</td>")
-                 .append("<td>"+sOrderForm+"</td>")
-                 .append("<td onclick=\"doShowDetails('"+order.getUid()+"');\">"+sProductName+"</td>")
-                 .append("<td onclick=\"doShowDetails('"+order.getUid()+"');\">"+order.getPackagesOrdered()+"</td>")
-                 .append("<td onclick=\"doShowDetails('"+order.getUid()+"');\">"+order.getPackagesDelivered()+"</td>")
-                 .append("<td onclick=\"doShowDetails('"+order.getUid()+"');\">"+sDateOrdered+"</td>")
-                 .append("<td onclick=\"doShowDetails('"+order.getUid()+"');\">"+sDateDeliveryDue+"</td>")
-                 .append("<td onclick=\"doShowDetails('"+order.getUid()+"');\">"+sImportance+"</td>")
+                 .append("<td onclick=\"doShowDetails('"+order.getUid()+"');\">&nbsp;"+checkString(order.getDescription())+"</td>")
+                 .append("<td onclick=\"doShowDetails('"+order.getUid()+"');\">&nbsp;"+sServiceStockName+"</td>")
+                 .append("<td>&nbsp;"+sOrderForm+"</td>")
+                 .append("<td onclick=\"doShowDetails('"+order.getUid()+"');\">&nbsp;"+sProductName+"</td>")
+                 .append("<td onclick=\"doShowDetails('"+order.getUid()+"');\">&nbsp;"+order.getPackagesOrdered()+"</td>")
+                 .append("<td onclick=\"doShowDetails('"+order.getUid()+"');\">&nbsp;"+order.getPackagesDelivered()+"</td>")
+                 .append("<td onclick=\"doShowDetails('"+order.getUid()+"');\">&nbsp;"+sDateOrdered+"</td>")
+                 .append("<td onclick=\"doShowDetails('"+order.getUid()+"');\">&nbsp;"+sDateDeliveryDue+"</td>")
+                 .append("<td onclick=\"doShowDetails('"+order.getUid()+"');\">&nbsp;"+sImportance+"</td>")
                 .append("</tr>");
         }
 
@@ -197,7 +197,8 @@ Debug.println("a");
     if(sEditProductStockDocumentUid.length() > 0){
         sEditProductStockDocumentUidText = getTran(request,"operationdocumenttypes",OperationDocument.get(sEditProductStockDocumentUid).getType(),sWebLanguage);
     }
-           
+    
+          
     String sEditProductName = checkString(request.getParameter("EditProductName"));
     Debug.println("b");
 
@@ -244,6 +245,7 @@ Debug.println("a");
     sFindDateDeliveredSince = checkString(request.getParameter("FindDateDeliveredSince"));
     sFindImportance = checkString(request.getParameter("FindImportance")); // (native|high|low)
     Debug.println("c");
+    sFindDateOrdered = sFindDateOrdered.length()>0?sFindDateOrdered:(SH.formatDate(new java.util.Date(new java.util.Date().getTime()-SH.ci("defaultNumberOfDaysToShowForPharmacyOrders",14)*SH.getTimeDay())));
 
     /// DEBUG /////////////////////////////////////////////////////////////////////////////////////
     if(Debug.enabled){

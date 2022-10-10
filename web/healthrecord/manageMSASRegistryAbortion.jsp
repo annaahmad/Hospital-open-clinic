@@ -70,7 +70,7 @@
 	        		<tr>
 			            <td class="admin"><%=getTran(request,"web","pregnancy.age",sWebLanguage)%>&nbsp;</td>
 			            <td class='admin2'>
-			            	<input class="text" type="text" size="10" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_ABORTION_PREGNANCYAGE" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_ABORTION_PREGNANCYAGE" property="value"/>"/>
+			            	<%=SH.writeDefaultNumericInput(session, (TransactionVO)transaction, "ITEM_TYPE_MSAS_ABORTION_PREGNANCYAGE", 10, 1, 50, sWebLanguage) %>
 			            	<%=getTran(request,"web","weeksofamenorrhea",sWebLanguage) %>
 			            </td>
 			            <td class='admin'><%=getTran(request,"web","abortion.type",sWebLanguage)%>&nbsp;</td>
@@ -114,6 +114,7 @@
 			            <td class="admin"><%=getTran(request,"web","method.familyplanning",sWebLanguage)%>&nbsp;</td>
 			            <td class="admin2">
 			                <textarea rows="1" onKeyup="resizeTextarea(this,10);" class="text" cols="30" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_ABORTION_METHOD_FP" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_ABORTION_METHOD_FP" property="value"/></textarea>
+			                <br/><%=SH.writeDefaultRadioButtons((TransactionVO)transaction, request, "msas.abortion.pf", "ITEM_TYPE_MSAS_ABORTION_METHOD_FP_WITHIN_WEEK", sWebLanguage, false, "", "") %>
 			            </td>
 			        </tr>
 		        	<tr>

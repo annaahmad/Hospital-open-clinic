@@ -477,22 +477,22 @@
 			                                			<tr class='list1'>
 			                                				<td><%=getTran(request,"web","breastfeed",sWebLanguage) %></td>
 			                                				<td>
-												                <input type="text" class="text" size="5" maxLength="10" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_CHILD1_SURVEILLANCE_BREASTFEED30" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_CHILD1_SURVEILLANCE_BREASTFEED30" property="value"/>">
+			                                					<%=SH.writeDefaultSelect(request, (TransactionVO)transaction, "ITEM_TYPE_DELIVERY_CHILD1_SURVEILLANCE_BREASTFEED30", "yesno", sWebLanguage, "") %>
 			                                				</td>
 			                                				<td>
-												                <input type="text" class="text" size="5" maxLength="10" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_CHILD1_SURVEILLANCE_BREASTFEED1" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_CHILD1_SURVEILLANCE_BREASTFEED1" property="value"/>">
+			                                					<%=SH.writeDefaultSelect(request, (TransactionVO)transaction, "ITEM_TYPE_DELIVERY_CHILD1_SURVEILLANCE_BREASTFEED1", "yesno", sWebLanguage, "") %>
 			                                				</td>
 			                                				<td>
-												                <input type="text" class="text" size="5" maxLength="10" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_CHILD1_SURVEILLANCE_BREASTFEED2" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_CHILD1_SURVEILLANCE_BREASTFEED2" property="value"/>">
+			                                					<%=SH.writeDefaultSelect(request, (TransactionVO)transaction, "ITEM_TYPE_DELIVERY_CHILD1_SURVEILLANCE_BREASTFEED2", "yesno", sWebLanguage, "") %>
 			                                				</td>
 			                                				<td>
-												                <input type="text" class="text" size="5" maxLength="10" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_CHILD1_SURVEILLANCE_BREASTFEED6" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_CHILD1_SURVEILLANCE_BREASTFEED6" property="value"/>">
+			                                					<%=SH.writeDefaultSelect(request, (TransactionVO)transaction, "ITEM_TYPE_DELIVERY_CHILD1_SURVEILLANCE_BREASTFEED6", "yesno", sWebLanguage, "") %>
 			                                				</td>
 			                                				<td>
-												                <input type="text" class="text" size="5" maxLength="10" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_CHILD1_SURVEILLANCE_BREASTFEED12" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_CHILD1_SURVEILLANCE_BREASTFEED12" property="value"/>">
+			                                					<%=SH.writeDefaultSelect(request, (TransactionVO)transaction, "ITEM_TYPE_DELIVERY_CHILD1_SURVEILLANCE_BREASTFEED12", "yesno", sWebLanguage, "") %>
 			                                				</td>
 			                                				<td>
-												                <input type="text" class="text" size="5" maxLength="10" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_CHILD1_SURVEILLANCE_BREASTFEED24" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_CHILD1_SURVEILLANCE_BREASTFEED24" property="value"/>">
+			                                					<%=SH.writeDefaultSelect(request, (TransactionVO)transaction, "ITEM_TYPE_DELIVERY_CHILD1_SURVEILLANCE_BREASTFEED24", "yesno", sWebLanguage, "") %>
 			                                				</td>
 			                                			</tr>
 			                                			<tr class='list'>
@@ -1080,22 +1080,22 @@
 			                                			<tr class='list1'>
 			                                				<td><%=getTran(request,"web","breastfeed",sWebLanguage) %></td>
 			                                				<td>
-												                <input type="text" class="text" size="5" maxLength="10" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_CHILD2_SURVEILLANCE_BREASTFEED30" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_CHILD2_SURVEILLANCE_BREASTFEED30" property="value"/>">
+			                                					<%=SH.writeDefaultSelect(request, (TransactionVO)transaction, "ITEM_TYPE_DELIVERY_CHILD2_SURVEILLANCE_BREASTFEED30", "yesno", sWebLanguage, "") %>
 			                                				</td>
 			                                				<td>
-												                <input type="text" class="text" size="5" maxLength="10" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_CHILD2_SURVEILLANCE_BREASTFEED1" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_CHILD2_SURVEILLANCE_BREASTFEED1" property="value"/>">
+			                                					<%=SH.writeDefaultSelect(request, (TransactionVO)transaction, "ITEM_TYPE_DELIVERY_CHILD2_SURVEILLANCE_BREASTFEED1", "yesno", sWebLanguage, "") %>
 			                                				</td>
 			                                				<td>
-												                <input type="text" class="text" size="5" maxLength="10" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_CHILD2_SURVEILLANCE_BREASTFEED2" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_CHILD2_SURVEILLANCE_BREASTFEED2" property="value"/>">
+			                                					<%=SH.writeDefaultSelect(request, (TransactionVO)transaction, "ITEM_TYPE_DELIVERY_CHILD2_SURVEILLANCE_BREASTFEED2", "yesno", sWebLanguage, "") %>
 			                                				</td>
 			                                				<td>
-												                <input type="text" class="text" size="5" maxLength="10" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_CHILD2_SURVEILLANCE_BREASTFEED6" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_CHILD2_SURVEILLANCE_BREASTFEED6" property="value"/>">
+			                                					<%=SH.writeDefaultSelect(request, (TransactionVO)transaction, "ITEM_TYPE_DELIVERY_CHILD2_SURVEILLANCE_BREASTFEED6", "yesno", sWebLanguage, "") %>
 			                                				</td>
 			                                				<td>
-												                <input type="text" class="text" size="5" maxLength="10" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_CHILD2_SURVEILLANCE_BREASTFEED12" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_CHILD2_SURVEILLANCE_BREASTFEED12" property="value"/>">
+			                                					<%=SH.writeDefaultSelect(request, (TransactionVO)transaction, "ITEM_TYPE_DELIVERY_CHILD2_SURVEILLANCE_BREASTFEED12", "yesno", sWebLanguage, "") %>
 			                                				</td>
 			                                				<td>
-												                <input type="text" class="text" size="5" maxLength="10" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_CHILD2_SURVEILLANCE_BREASTFEED24" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_CHILD2_SURVEILLANCE_BREASTFEED24" property="value"/>">
+			                                					<%=SH.writeDefaultSelect(request, (TransactionVO)transaction, "ITEM_TYPE_DELIVERY_CHILD2_SURVEILLANCE_BREASTFEED24", "yesno", sWebLanguage, "") %>
 			                                				</td>
 			                                			</tr>
 			                                			<tr class='list'>

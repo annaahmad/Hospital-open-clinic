@@ -226,7 +226,10 @@
         <tr class='admin'><td colspan='4'><%=getTran(request,"web","medicalprotocol",sWebLanguage) %></td></tr>
 		<tr>
 	       	<td class='admin'><%=getTran(request,"msas","action",sWebLanguage) %></td>
-        	<td class='admin2'><%=SH.writeDefaultTextArea(session, (TransactionVO)transaction, "ITEM_TYPE_UREN_ACTION", 50, 1) %></td>
+        	<td class='admin2'>
+        		<%=SH.writeDefaultTextArea(session, (TransactionVO)transaction, "ITEM_TYPE_UREN_ACTION", 50, 1) %><br/>
+	       		<%=SH.writeDefaultCheckBox((TransactionVO)transaction, request, "medwan.common.true", "TEM_TYPE_MSAS_MALNUTRITION_SENTTOCOMMUNITYLEVEL", "") %><%=getTran(request,"web","senttocommunitylevel",sWebLanguage) %>
+        	</td>
 	       	<td class='admin'><%=getTran(request,"msas","atpebags",sWebLanguage) %></td>
         	<td class='admin2'><%=SH.writeDefaultNumericInput(session, (TransactionVO)transaction, "ITEM_TYPE_UREN_ATPEBAGS", 3,0,20,sWebLanguage) %></td>
 		</tr>

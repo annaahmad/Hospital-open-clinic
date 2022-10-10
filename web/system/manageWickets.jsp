@@ -28,7 +28,8 @@
 	       sEditWicketService     = checkString(request.getParameter("EditWicketService")),
 	       sEditWicketServiceName = checkString(request.getParameter("EditWicketServiceName")),
 	       sEditWicketBalance     = checkString(request.getParameter("EditWicketBalance")),
-	       sEditWicketAuthorizedUsers = checkString(request.getParameter("EditAuthorizedUsers"));
+	       sEditWicketAuthorizedUsers = checkString(request.getParameter("EditAuthorizedUsers")),
+		   sEditWicketType = checkString(request.getParameter("EditWicketType"));
 	      
     String sFindWicketBegin   = checkString(request.getParameter("FindWicketBegin")),
 	       sFindWicketEnd     = checkString(request.getParameter("FindWicketEnd")),
@@ -87,6 +88,7 @@
         wicket.setAuthorizedUsersId(sEditWicketAuthorizedUsers);
         wicket.setUpdateDateTime(ScreenHelper.getSQLDate(getDate()));
         wicket.setUpdateUser(activeUser.userid);
+        wicket.setType(sEditWicketType);
         wicket.store();
         
         sEditWicketUID = wicket.getUid();
@@ -100,6 +102,7 @@
         sEditWicketServiceName = ScreenHelper.checkString(checkString(getTranNoLink("Service", wicket.getServiceUID(), sWebLanguage)));
         sEditWicketBalance = Double.toString(wicket.getBalance());
         sEditWicketAuthorizedUsers = wicket.getAuthorizedUsersId();
+        sEditWicketType = SH.c(wicket.getType());
     }
 
     //*** FIND-FORM *******************************************************************************
@@ -279,7 +282,14 @@
                 <input type="hidden" name="EditAuthorizedUsers" value="<%=authorizedUsersDB%>">
             </td>
         </tr>
-        
+        <tr>
+            <td class="admin" nowrap><%=getTran(request,"web","type",sWebLanguage)%>&nbsp;</td>
+            <td class="admin2">
+                <select class="text" name="EditWicketType">
+                	<%=SH.writeSelect(request, "wickettype", sEditWicketType, sWebLanguage) %>
+                </select>
+            </td>
+		</tr>        
         <%-- BUTTONS --%>
 		<%=ScreenHelper.setFormButtonsStart()%>
 		    <input class='button' type="button" name="SaveButton" value='<%=getTranNoLink("Web","save",sWebLanguage)%>' onclick="doSave();">&nbsp;

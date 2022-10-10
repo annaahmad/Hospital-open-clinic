@@ -329,7 +329,6 @@ public class OC {
    }
    
    public static Vector<Vector> getResponse(Vector<String> signs, String language){
-		Debug.println(new SimpleDateFormat("HH:mm:ss:SSS").format(new java.util.Date())+"A");
 		OC oc = new OC();
 		try {
 		    oc.language=language;
@@ -340,11 +339,8 @@ public class OC {
 		} catch (ArrayIndexOutOfBoundsException e) {
 		    Debug.println("ArrayIndexOutOfBoundsException caught");
 		}
-		Debug.println(new SimpleDateFormat("HH:mm:ss:SSS").format(new java.util.Date())+"B");
 		oc.setup();
-		Debug.println(new SimpleDateFormat("HH:mm:ss:SSS").format(new java.util.Date())+"C");
 		Vector<Vector> result = oc.getListData();
-		Debug.println(new SimpleDateFormat("HH:mm:ss:SSS").format(new java.util.Date())+"D");
 		try {
 			if(Db.conn!=null) Db.conn.close();
 		} catch (SQLException e) {

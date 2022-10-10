@@ -6,6 +6,7 @@ import java.net.NetworkInterface;
 import java.util.Enumeration;
 
 import be.mxs.common.util.db.MedwanQuery;
+import be.mxs.common.util.system.HTMLEntities;
 
 public class SystemInfo {
 	private String vpnDomain="?";
@@ -38,6 +39,7 @@ public class SystemInfo {
 	}
 
 	public static SystemInfo parse(String s) {
+		s=HTMLEntities.unhtmlentities(s);
 		SystemInfo systemInfo = new SystemInfo();
 		if(s.split(";").length>=6) {
 			systemInfo.setVpnDomain(s.split(";")[0]);
@@ -167,6 +169,30 @@ public class SystemInfo {
 		String s = "";
 		try {
 			Enumeration e = NetworkInterface.getNetworkInterfaces();
+			while(e.hasMoreElements())
+			{
+			    NetworkInterface n = (NetworkInterface) e.nextElement();
+			    Enumeration ee = n.getInetAddresses();
+			    while (ee.hasMoreElements())
+			    {
+			        InetAddress i = (InetAddress) ee.nextElement();
+			        if(i.getHostAddress().startsWith(MedwanQuery.getInstance().getConfigString("vpnPrefix","10.8.")) || i.getHostAddress().startsWith(MedwanQuery.getInstance().getConfigString("vpnPrefix","10.9."))) {
+			        	s=i.getHostAddress();
+			        	break;
+			        }
+			    }
+			}		
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		return s;
+	}
+
+	public static String getVPNIpAddress(Enumeration networkInterfaces) {
+		String s = "";
+		try {
+			Enumeration e = networkInterfaces;
 			while(e.hasMoreElements())
 			{
 			    NetworkInterface n = (NetworkInterface) e.nextElement();

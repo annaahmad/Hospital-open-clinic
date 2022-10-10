@@ -493,35 +493,61 @@
 		if(document.getElementById('ITEM_TYPE_CLEFS_ADULT_SYMSPEC23').checked || document.getElementById('ITEM_TYPE_CLEFS_ADULT_SYMSPEC24').checked || document.getElementById('ITEM_TYPE_CLEFS_ADULT_SYMSPEC25').checked || document.getElementById('ITEM_TYPE_CLEFS_ADULT_SYMSPEC26').checked || document.getElementById('ITEM_TYPE_CLEFS_ADULT_SYMSPEC27').checked || document.getElementById('ITEM_TYPE_CLEFS_ADULT_SYMSPEC28').checked || document.getElementById('ITEM_TYPE_CLEFS_ADULT_SYMSPEC29').checked){
 			document.getElementById('cb.symgen.11').style.backgroundColor='#4975A7';
 		}
-		if(document.getElementById('ITEM_TYPE_CLEFS_ADULT_SYMSPEC1').checked || document.getElementById('ITEM_TYPE_CLEFS_ADULT_SYMSPEC2').checked){
+		if(document.getElementById('ITEM_TYPE_CLEFS_ADULT_DIAG1').checked || document.getElementById('ITEM_TYPE_CLEFS_ADULT_SYMSPEC1').checked || document.getElementById('ITEM_TYPE_CLEFS_ADULT_SYMSPEC2').checked){
 			document.getElementById('cb.diag.1').className='adminselected';
 		}
-		if(document.getElementById('ITEM_TYPE_CLEFS_ADULT_SYMSPEC3').checked || document.getElementById('ITEM_TYPE_CLEFS_ADULT_SYMSPEC4').checked || document.getElementById('ITEM_TYPE_CLEFS_ADULT_SYMSPEC5').checked){
+		if(document.getElementById('ITEM_TYPE_CLEFS_ADULT_DIAG2').checked || document.getElementById('ITEM_TYPE_CLEFS_ADULT_SYMSPEC4').checked){
 			document.getElementById('cb.diag.2').className='adminselected';
 		}
-		if(document.getElementById('ITEM_TYPE_CLEFS_ADULT_SYMSPEC6').checked || document.getElementById('ITEM_TYPE_CLEFS_ADULT_SYMSPEC7').checked || document.getElementById('ITEM_TYPE_CLEFS_ADULT_SYMSPEC8').checked){
+		if(document.getElementById('ITEM_TYPE_CLEFS_ADULT_DIAG3').checked || document.getElementById('ITEM_TYPE_CLEFS_ADULT_SYMSPEC7').checked){
 			document.getElementById('cb.diag.3').className='adminselected';
 		}
-		if(document.getElementById('ITEM_TYPE_CLEFS_ADULT_SYMSPEC9').checked || document.getElementById('ITEM_TYPE_CLEFS_ADULT_SYMSPEC10').checked){
+		if(document.getElementById('ITEM_TYPE_CLEFS_ADULT_DIAG4').checked || document.getElementById('ITEM_TYPE_CLEFS_ADULT_SYMSPEC9').checked || document.getElementById('ITEM_TYPE_CLEFS_ADULT_SYMSPEC10').checked){
 			document.getElementById('cb.diag.4').className='adminselected';
 		}
-		if(document.getElementById('ITEM_TYPE_CLEFS_ADULT_SYMSPEC11').checked || document.getElementById('ITEM_TYPE_CLEFS_ADULT_SYMSPEC12').checked || document.getElementById('ITEM_TYPE_CLEFS_ADULT_SYMSPEC13').checked || document.getElementById('ITEM_TYPE_CLEFS_ADULT_SYMSPEC14').checked || document.getElementById('ITEM_TYPE_CLEFS_ADULT_SYMSPEC15').checked || document.getElementById('ITEM_TYPE_CLEFS_ADULT_SYMSPEC16').checked){
+		if(document.getElementById('ITEM_TYPE_CLEFS_ADULT_DIAG5').checked || (document.getElementById('ITEM_TYPE_CLEFS_ADULT_SYMSPEC11').checked && (document.getElementById('ITEM_TYPE_CLEFS_ADULT_SYMGEN4').checked || document.getElementById('ITEM_TYPE_CLEFS_ADULT_SYMGEN9').checked || document.getElementById('ITEM_TYPE_CLEFS_ADULT_SYMSPEC12').checked || document.getElementById('ITEM_TYPE_CLEFS_ADULT_SYMSPEC13').checked || document.getElementById('ITEM_TYPE_CLEFS_ADULT_SYMSPEC14').checked || document.getElementById('ITEM_TYPE_CLEFS_ADULT_SYMSPEC15').checked || document.getElementById('ITEM_TYPE_CLEFS_ADULT_SYMSPEC16').checked))){
 			document.getElementById('cb.diag.5').className='adminselected';
 		}
-		if(document.getElementById('ITEM_TYPE_CLEFS_ADULT_SYMSPEC17').checked || document.getElementById('ITEM_TYPE_CLEFS_ADULT_SYMSPEC18').checked || document.getElementById('ITEM_TYPE_CLEFS_ADULT_SYMSPEC19').checked || document.getElementById('ITEM_TYPE_CLEFS_ADULT_SYMSPEC20').checked){
+		if(document.getElementById('ITEM_TYPE_CLEFS_ADULT_DIAG6').checked || checkDepression()){
 			document.getElementById('cb.diag.6').className='adminselected';
 		}
-		if(document.getElementById('ITEM_TYPE_CLEFS_ADULT_SYMSPEC21').checked || document.getElementById('ITEM_TYPE_CLEFS_ADULT_SYMSPEC22').checked){
+		if(document.getElementById('ITEM_TYPE_CLEFS_ADULT_DIAG7').checked || document.getElementById('ITEM_TYPE_CLEFS_ADULT_SYMSPEC21').checked || document.getElementById('ITEM_TYPE_CLEFS_ADULT_SYMSPEC22').checked){
 			document.getElementById('cb.diag.7').className='adminselected';
 		}
-		if(document.getElementById('ITEM_TYPE_CLEFS_ADULT_SYMSPEC23').checked || document.getElementById('ITEM_TYPE_CLEFS_ADULT_SYMSPEC24').checked || document.getElementById('ITEM_TYPE_CLEFS_ADULT_SYMSPEC25').checked || document.getElementById('ITEM_TYPE_CLEFS_ADULT_SYMSPEC26').checked || document.getElementById('ITEM_TYPE_CLEFS_ADULT_SYMSPEC27').checked || document.getElementById('ITEM_TYPE_CLEFS_ADULT_SYMSPEC28').checked || document.getElementById('ITEM_TYPE_CLEFS_ADULT_SYMSPEC29').checked){
+		if(document.getElementById('ITEM_TYPE_CLEFS_ADULT_DIAG8').checked || checkPsychosis()){
 			document.getElementById('cb.diag.8').className='adminselected';
 		}
-		if(document.getElementById('ITEM_TYPE_CLEFS_ADULT_SYMGEN11').checked){
+		if(document.getElementById('ITEM_TYPE_CLEFS_ADULT_DIAG9').checked || document.getElementById('ITEM_TYPE_CLEFS_ADULT_SYMGEN11').checked){
 			document.getElementById('cb.diag.9').className='adminselected';
 		}
 	}
 
+  function checkDepression(){
+	  nSigns=0;
+	  signs="7;4;2;1;10;8".split(";");
+	  for(n=0;n<signs.length;n++){
+		  if(document.getElementById('ITEM_TYPE_CLEFS_ADULT_SYMGEN'+signs[n]) && document.getElementById('ITEM_TYPE_CLEFS_ADULT_SYMGEN'+signs[n]).checked){
+			  nSigns++;
+		  }
+	  }
+	  signs="17;20;18;19".split(";");
+	  for(n=0;n<signs.length;n++){
+		  if(document.getElementById('ITEM_TYPE_CLEFS_ADULT_SYMSPEC'+signs[n]) && document.getElementById('ITEM_TYPE_CLEFS_ADULT_SYMSPEC'+signs[n]).checked){
+			  nSigns++;
+		  }
+	  }
+	  return nSigns>=2;
+  }
+  function checkPsychosis(){
+	  nSigns=0;
+	  signs="24;23;25".split(";");
+	  for(n=0;n<signs.length;n++){
+		  if(document.getElementById('ITEM_TYPE_CLEFS_ADULT_SYMSPEC'+signs[n]) && document.getElementById('ITEM_TYPE_CLEFS_ADULT_SYMSPEC'+signs[n]).checked){
+			  nSigns++;
+		  }
+	  }
+	  return nSigns>=1;
+  }
   function searchEncounter(){
     openPopup("/_common/search/searchEncounter.jsp&ts=<%=getTs()%>&VarCode=encounteruid&VarText=&FindEncounterPatient=<%=activePatient.personid%>");
   }

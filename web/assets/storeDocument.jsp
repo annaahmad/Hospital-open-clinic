@@ -10,8 +10,8 @@
         	if(!formFile.isAcceptableUploadFileExtension()){
             	out.println("<ERROR-FORBIDDEN-FILETYPE>");
         	}
-        	else if(!new File(SH.getScanDirectoryToPath()+"/"+(String)hParameters.getParameter("folder")+"/"+formFile.getFilename()).exists()){
-        		formFile.store(sFolderStore+"/"+(String)hParameters.getParameter("folder")+"/"+formFile.getFilename());
+        	else if(!new File(SH.getScanDirectoryToPath()+"/"+(String)hParameters.get("folder")+"/"+formFile.getFilename()).exists()){
+        		formFile.store(SH.getScanDirectoryToPath()+"/"+(String)hParameters.get("folder")+"/"+formFile.getFilename());
                 out.println("<OK>");
         	}
             else{

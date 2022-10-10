@@ -11,20 +11,6 @@
 <%@include file="/includes/validateUser.jsp"%>
 <%@page errorPage="/includes/error.jsp" %>
 
-<script>
-  function reloadOpener(){
-    if(isModified && window.opener.document.getElementById('patientmedicationsummary')!=undefined){
-      window.opener.location.reload();
-    }
-  }
-</script>
-
-<body onbeforeunload="reloadOpener()">
-	<script>var isModified = false;</script>
-	<%=checkPermissionPopup(out,"prescriptions.drugs","select",activeUser)%>
-	<%=sJSSORTTABLE%>
-	<%=sJSDROPDOWNMENU%>
-
 <%!
     //--- OBJECTS TO HTML -------------------------------------------------------------------------
     private StringBuffer objectsToHtml(Vector objects, String sWebLanguage, User activeUser, HttpServletRequest request){
@@ -195,7 +181,11 @@
         return html;
     }
 %>
-
+<body>
+	<script>var isModified = false;</script>
+	<%=checkPermissionPopup(out,"prescriptions.drugs","select",activeUser)%>
+	<%=sJSSORTTABLE%>
+	<%=sJSDROPDOWNMENU%>
 <%
     String sDefaultSortCol = "OC_PRESCR_BEGIN",
            sDefaultSortDir = "DESC";
@@ -217,7 +207,7 @@
            sEditDiagnosis       = checkString(request.getParameter("EditDiagnosis")),
            sDispensingStockUID  = checkString(request.getParameter("DispensingStockUID")),
            sEditRequiredPackages    = checkString(request.getParameter("EditRequiredPackages"));
-    
+
     if(activePatient==null && sEditPrescrUid.length() > 0){
         activePatient = Prescription.get(sEditPrescrUid).getPatient();
     }
@@ -311,7 +301,6 @@
     //--- SAVE ------------------------------------------------------------------------------------
     if(sAction.equals("save") && sEditPrescrUid.length() > 0){
         out.println("<script>isModified=true;</script>");
-        
         // create prescription
         Prescription prescr = new Prescription();
         prescr.setUid(sEditPrescrUid);
@@ -357,7 +346,7 @@
         // supplying service uid
         if(sEditSupplyingServiceUid.length()==0){
             ServiceStock serviceStock = ServiceStock.get(sEditServiceStockUid);
-            if(serviceStock!=null){
+            if(serviceStock!=null && serviceStock.getService()!=null){
                 sEditSupplyingServiceUid = serviceStock.getService().code;
             }
         }
@@ -372,7 +361,8 @@
         prescr.store(false);
         prescriptionSchema.setPrescriptionUid(prescr.getUid());
         prescriptionSchema.store();
-
+		out.println("<script>window.opener.location.reload();</script>");
+		out.flush();
         msg = "<font color='green'>"+getTran(request,"web","dataissaved",sWebLanguage)+"</font>";
 
         sEditPrescrUid = prescr.getUid();
@@ -382,8 +372,16 @@
         Prescription.delete(sEditPrescrUid);
         PrescriptionSchema prescriptionSchemaToDelete = PrescriptionSchema.getPrescriptionSchema(sEditPrescrUid);
         prescriptionSchemaToDelete.delete();
+        Connection conn = SH.getOpenClinicConnection();
+        PreparedStatement ps = conn.prepareStatement("delete from oc_drugsoutlist where oc_list_prescriptionuid=?");
+        ps.setString(1,sEditPrescrUid);
+        ps.execute();
+        ps.close();
+        conn.close();
         msg = getTran(request,"web","dataisdeleted",sWebLanguage);
         out.println("<script>isModified=true;</script>");
+		out.println("<script>window.opener.location.reload();</script>");
+		out.flush();
     }
 
     //--- SHOW DETAILS ----------------------------------------------------------------------------
@@ -621,7 +619,7 @@
 <tr>
     <td class="admin"><%=getTran(request,"Web","packages",sWebLanguage)%>&nbsp;*&nbsp;</td>
     <td class="admin2">
-        <input class="text" type="text" name="EditRequiredPackages" id="EditRequiredPackages" size="5" maxLength="5" value="<%=sSelectedRequiredPackages%>" onKeyUp="if(isInteger(this)){calculatePrescriptionPeriod();}">
+        <input class="text" type="text" name="EditRequiredPackages" id="EditRequiredPackages" size="5" maxLength="5" value="<%=sSelectedRequiredPackages%>" onChange="if(isInteger(this)){calculatePrescriptionPeriod(true);}">
         &nbsp;(<input type="text" class="text" name="UnitsPerPackage" id="UnitsPerPackage" value="<%=sUnitsPerPackage%>" size="3" readonly style="border:none;background:transparent;text-align:right;">&nbsp;<%=getTran(request,"web","packageunits",sWebLanguage).toLowerCase()%>)
     </td>
 </tr>
@@ -725,19 +723,13 @@
 <%=ScreenHelper.alignButtonsStart()%>
 <%
     if(sAction.equals("showDetails") || sAction.equals("showDetailsAfterUpdateReject")){
-	    if(editableByPrescriber){
-	        // existing prescription : display saveButton with save-label
-	        if(prescr==null || (activeUser.getAccessRight("prescriptions.drugs.add") || activeUser.getAccessRight("prescriptions.drugs.edit"))){
-	            %><input class="button" type="button" name="saveButton" id="saveButton" value='<%=getTranNoLink("Web","save",sWebLanguage)%>' onclick="doSave();">&nbsp;<%
-	        }
-	        if((prescr==null || (prescr!=null && prescr.getDeliveredQuantity()==0)) && activeUser.getAccessRight("prescriptions.drugs.delete")){
-				%><input class="button" type="button" name="deleteButton" value='<%=getTranNoLink("Web","delete",sWebLanguage)%>' onclick="doDelete('<%=sEditPrescrUid%>');">&nbsp;<%
-	    	}
+        // existing prescription : display saveButton with save-label
+        if(prescr==null || (activeUser.getAccessRight("prescriptions.drugs.add") || activeUser.getAccessRight("prescriptions.drugs.edit"))){
+            %><input class="button" type="button" name="saveButton" id="saveButton" value='<%=getTranNoLink("Web","save",sWebLanguage)%>' onclick="doSave();">&nbsp;<%
         }
-        else{
-        	%><font color="red"><%=getTran(request,"web.occup","onlyEditableByPrescriber",sWebLanguage)%><br></font><%
-        }
-	    
+        if((prescr==null || (prescr!=null && prescr.getDeliveredQuantity()==0)) && activeUser.getAccessRight("prescriptions.drugs.delete")){
+			%><input class="button" type="button" name="deleteButton" value='<%=getTranNoLink("Web","delete",sWebLanguage)%>' onclick="doDelete('<%=sEditPrescrUid%>');">&nbsp;<%
+    	}
 		%><input class="button" type="button" name="returnButton" value='<%=getTranNoLink("Web","backtooverview",sWebLanguage)%>' onclick="doBack();"><%
 	}
     else if(sAction.equals("showDetailsNew") || sAction.equals("showDetailsAfterAddReject")){
@@ -753,22 +745,16 @@
 <%=ScreenHelper.alignButtonsStop()%>
 
 <script>
-<%-- RELOAD OPENER --%>
-function reloadOpener(){
-  if(isModified && window.opener.document.getElementById('patientmedicationsummary')!=undefined){
-    window.opener.location.reload();
-  }
-}
 
 setEditUnitsPerTimeUnitLabel();
 
 <%-- CALCULATE PRESCRIPTION PERIOD --%>
-function calculatePrescriptionPeriod(){
+function calculatePrescriptionPeriod(usepackages){
   var packages = transactionForm.EditRequiredPackages.value;
   var beginDateStr = transactionForm.EditDateBegin.value,
       endDateStr   = transactionForm.EditDateEnd.value;
 
-  if(packages.length > 0){
+  if(usepackages && packages.length > 0){
     var unitsPerPackage = transactionForm.UnitsPerPackage.value;
     var unitsPerTimeUnit = transactionForm.EditUnitsPerTimeUnit.value;
     var timeUnitCount = transactionForm.EditTimeUnitCount.value;
@@ -1216,7 +1202,7 @@ function checkForInteractions(){
 
 <%-- DO SAVE --%>
 function doSave(){
-  calculatePrescriptionPeriod();
+  calculatePrescriptionPeriod(false);
   calculatePackagesNeeded();
   <%
   	if(MedwanQuery.getInstance().getConfigInt("enablePrescriptionSelectionOfDispensingStock",0)==1){%>
@@ -1566,7 +1552,7 @@ function closeWindow(){
 <%-- DO BACK --%>
 function doBack(){
   if(checkSaveButton()){
-    window.location.href = "<%=sCONTEXTPATH%>/popup.jsp?Page=medical/managePrescriptionsPopup.jsp&ts="+new Date().getTime();
+    window.location.href = "<%=sCONTEXTPATH%>/popup.jsp?Page=medical/managePrescriptionsPopup.jsp&skipEmpty=1&PopupWidth=900&PopupHeight=400&ts="+new Date().getTime();
   }
 }
 
@@ -1579,9 +1565,6 @@ function doBack(){
 %>
 </script>
 
-<script for="window" event="onunload">
-  reloadOpener();
-</script>
 <script>
 	new Ajax.Autocompleter('EditProductName','autocomplete_prescription','medical/ajax/getDrugs.jsp?serviceStockUid=NONE',{
 	  minChars:1,
@@ -1634,7 +1617,7 @@ function doBack(){
 	        if(product.levels.indexOf("/0")>-1){
 	        	document.getElementById("productmsg").innerHTML=document.getElementById("productmsg").innerHTML+"<br/><img src='<c:url value="/"/>_img/icons/icon_warning.gif'/><%=getTran(request,"web","nocentralstock",sWebLanguage)%>";
 	        }
-	        calculatePrescriptionPeriod();
+	        calculatePrescriptionPeriod(true);
 			loadSchema();
 	      }
 	    });

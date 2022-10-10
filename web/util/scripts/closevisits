@@ -1,1 +1,1 @@
-mysql -u root < closevisits.sql
+mysql -u root < /root/closevisits.sql

@@ -37,16 +37,9 @@
 	                        <input type="text" class="text" size="12" maxLength="10" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_DECEASED_DEATHDATE" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_DECEASED_DEATHDATE" property="value" formatType="date"/>" id="deathdate" onblur='checkDate(this);'/>
 	                        <script>writeMyDate("deathdate", "<c:url value="/_img/icons/icon_agenda.png"/>", "<%=getTran(null,"Web","PutToday",sWebLanguage)%>");</script>
 			            </td>
-			            <td class="admin"><%=getTran(request,"web","pregnantwomen",sWebLanguage)%>&nbsp;</td>
+			            <td class="admin"><%=getTran(request,"web","maternaldeath",sWebLanguage)%>&nbsp;</td>
 			            <td class="admin2">
-			                <input type="radio" onDblClick="uncheckRadio(this);" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_DECEASED_PREGNANTWOMEN" property="itemId"/>]>.value" value="medwan.common.true"
-			                <mxs:propertyAccessorI18N name="transaction.items" scope="page"
-			                                          compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_DECEASED_PREGNANTWOMEN;value=medwan.common.true"
-			                                          property="value" outputString="checked"/>><label><%=getTran(request,"web","yes",sWebLanguage) %></label>
-			                <input type="radio" onDblClick="uncheckRadio(this);" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_DECEASED_PREGNANTWOMEN" property="itemId"/>]>.value" value="medwan.common.false"
-			                <mxs:propertyAccessorI18N name="transaction.items" scope="page"
-			                                          compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_DECEASED_PREGNANTWOMEN;value=medwan.common.false"
-			                                          property="value" outputString="checked"/>><label><%=getTran(request,"web","no",sWebLanguage) %></label>
+			            	<%=SH.writeDefaultSelect(request, (TransactionVO)transaction, "ITEM_TYPE_MSAS_DECEASED_MATERNALDEATH", "msas.maternaldeath", sWebLanguage, "") %>
 			            </td>
 			        </tr>
 		        	<tr>

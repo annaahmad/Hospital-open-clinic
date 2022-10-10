@@ -22,6 +22,7 @@ import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Vector;
 
+import org.apache.commons.io.FileExistsException;
 import org.apache.commons.io.FileUtils;
 import org.dcm4che2.data.DicomObject;
 import org.dcm4che2.data.Tag;
@@ -39,6 +40,7 @@ import be.mxs.common.util.io.MessageReader.User;
 import be.mxs.common.util.system.Debug;
 import be.mxs.common.util.system.PdfBarcode;
 import be.mxs.common.util.system.ScreenHelper;
+import be.openclinic.adt.Encounter;
 import be.openclinic.system.SH;
 import net.admin.AdminPerson;
 
@@ -250,7 +252,6 @@ public class ScanDirectoryMonitor implements Runnable{
 	        				moveFile(file,errFile);
 	        		        Debug.println("--> moved file to 'scanDirectoryMonitor_dirError' : "+SCANDIR_BASE+"/"+SCANDIR_ERR);
 	        			} catch (IOException e) {
-	        				// TODO Auto-generated catch block
 	        				e.printStackTrace();
 	        				file.delete();
 	        			}
@@ -509,7 +510,14 @@ public class ScanDirectoryMonitor implements Runnable{
 			        			//*** ARCH_DOC FOUND, WITHOUT REGISTERED LINKED FILE ***
 				        	    Debug.println("INFO : An archive-document with UDI '"+existingDoc.udi+"' exists and it has no linked file."+
 			        		                  " --> saved incoming file as file for the archive-document");
-				        	    acceptIncomingFile((file.getName().startsWith("-")?"-":"")+sUDI,file);
+				        	    try{
+				        	    	acceptIncomingFile((file.getName().startsWith("-")?"-":"")+sUDI,file);
+				        	    }
+				        	    catch(FileExistsException f) {
+				        	    	f.printStackTrace();
+				        	    	//Move counter 1 forward
+				        	    	MedwanQuery.getInstance().getOpenclinicCounter("ARCH_DOCUMENTS");
+				        	    }
 				        	    return 1; // acc
 			        		}
 		        		}
@@ -721,7 +729,12 @@ public class ScanDirectoryMonitor implements Runnable{
 			    			itemContextVO = new ItemContextVO(new Integer( IdentifierFactory.getInstance().getTemporaryNewIdentifier()), "", "");
 			    			transaction.getItems().add(new ItemVO(new Integer( IdentifierFactory.getInstance().getTemporaryNewIdentifier()),
 			    					"be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_REFMED",ScreenHelper.checkString(obj.getString(Tag.ReferringPhysicianName)),new Date(),itemContextVO));
-	
+			    			Encounter encounter = Encounter.getActiveEncounterOnDate(SH.getSQLTimestamp(transaction.getUpdateTime()),nPatientId+"");
+			    			if(encounter!=null) {
+				    			itemContextVO = new ItemContextVO(new Integer( IdentifierFactory.getInstance().getTemporaryNewIdentifier()), "", "");
+				    			transaction.getItems().add(new ItemVO(new Integer( IdentifierFactory.getInstance().getTemporaryNewIdentifier()),
+			    					"be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CONTEXT_ENCOUNTERUID",encounter.getUid(),new Date(),itemContextVO));
+			    			}
 			    			if(MedwanQuery.getInstance().getConfigInt("pacsTestLoad",0)==0){
 			    				MedwanQuery.getInstance().updateTransaction(nPatientId,transaction);
 			    			}
@@ -821,7 +834,6 @@ public class ScanDirectoryMonitor implements Runnable{
 				moveFile(file,errFile);
 		        Debug.println("--> moved file to 'scanDirectoryMonitor_dirError' : "+SCANDIR_BASE+"/"+SCANDIR_ERR);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 				file.delete();
 			}
@@ -849,7 +861,6 @@ public class ScanDirectoryMonitor implements Runnable{
 			try {
 				copyFile(file,toFile);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -890,7 +901,6 @@ public class ScanDirectoryMonitor implements Runnable{
 				try {
 					copyFile(file,toFile);
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}

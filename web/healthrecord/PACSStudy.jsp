@@ -28,7 +28,7 @@
                 <script>writeTranDate();</script>
             </td>
             <td class='admin2' rowspan='11' width='30%'>
-            	<center><img style='max-width: 300px; max-height: 300px' src='<%=sCONTEXTPATH %>/pacs/getDICOMJpeg.jsp?excludefromFilter=1&uid=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_STUDYUID" property="value"/>;<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_SERIESID" property="value"/>'/></center>
+            	<center><img id='preview' style='display: none;max-width: 300px; max-height: 300px' src=''/></center>
             </td>
         </tr>
         
@@ -182,7 +182,13 @@
       var url = "<c:url value='/pacs/'/>viewStudyLocal<%=MedwanQuery.getInstance().getConfigInt("enableLocalWeasisViewer3.5",0)==1?"2":""%>.jsp?studyuid=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_STUDYUID" property="value"/>&seriesid=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_SERIESID" property="value"/>";
       window.open(url,"hidden-form");
   }
+  
+  function preview(){
+	  document.getElementById("preview").src='<%=sCONTEXTPATH %>/pacs/getDICOMJpeg.jsp?excludefromFilter=1&uid=<%=tran.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_STUDYUID")%>;<%=tran.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_SERIESID")%>';
+	  document.getElementById("preview").style.display='';
+  }
 
+  window.setTimeout("preview()",500);
 </script>
 
 <%=writeJSButtons("transactionForm","saveButton")%>

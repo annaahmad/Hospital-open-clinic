@@ -191,7 +191,7 @@ public class PDFPatientInvoiceReceiptGeneratorCPLR extends PDFInvoiceGenerator {
 		            totalDebet+=debet.getAmount();
 		            totalinsurardebet+=debet.getInsurarAmount();
 		            totalextrainsurardebet+=debet.getExtraInsurarAmount();
-	            }
+		        }
 	        }
 
 			//Create the receipt content
@@ -395,7 +395,7 @@ public class PDFPatientInvoiceReceiptGeneratorCPLR extends PDFInvoiceGenerator {
 
 	        if(MedwanQuery.getInstance().getConfigInt("enablePatientReceiptPrintBy",0)==1){
 		        //Signature patient
-		        cell = createValueCell(ScreenHelper.getTranNoLink("web","printedby",sPrintLanguage)+": "+user.person.getFullName(), 50,new Double(7*scaleFactor).intValue(),Font.NORMAL);
+		        cell = createValueCell(ScreenHelper.getTranNoLink("web","printedby",sPrintLanguage)+": "+user.person.getFullName()+ " "+SH.getTranNoLink("web","on",sPrintLanguage)+" "+SH.fullDateFormat.format(new java.util.Date()), 50,new Double(7*scaleFactor).intValue(),Font.NORMAL);
 		        cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
 		        table.addCell(cell);
 	

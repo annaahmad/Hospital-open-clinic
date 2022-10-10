@@ -36,6 +36,7 @@ import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
 import be.mxs.common.util.db.MedwanQuery;
+import be.openclinic.system.SH;
 import be.openclinic.system.TransactionItem;
 
 public class UpdateSystem implements Runnable {
@@ -163,12 +164,12 @@ public class UpdateSystem implements Runnable {
 			//First load databasemodels
 			String tableName,columnName,indexName;
 			databaseMetaData=lad_conn.getMetaData();
-			rsCheck=databaseMetaData.getColumns(null, null, null, null);
+			rsCheck=databaseMetaData.getColumns(SH.cs("admindbName", "ocadmin_dbo"), null, null, null);
 			while(rsCheck.next()){
 				tableName=rsCheck.getString("TABLE_NAME");
 				columnName=rsCheck.getString("COLUMN_NAME");
 				if(adminTables.get(tableName)==null){
-					rsCheck2=databaseMetaData.getIndexInfo(null, null, tableName, false, true);
+					rsCheck2=databaseMetaData.getIndexInfo(SH.cs("admindbName", "ocadmin_dbo"), null, tableName, false, true);
 					while(rsCheck2.next()){
 						indexName=rsCheck2.getString("INDEX_NAME");
 						adminIndexes.put((tableName+"$"+indexName).toLowerCase(),"");
@@ -179,13 +180,13 @@ public class UpdateSystem implements Runnable {
 			}
 			setProgress(7);
 			databaseMetaData=loc_conn.getMetaData();
-			rsCheck=databaseMetaData.getColumns(null, null, null, null);
+			rsCheck=databaseMetaData.getColumns(SH.cs("openclinicdbName", "openclinic_dbo"), null, null, null);
 			while(rsCheck.next()){
 				tableName=rsCheck.getString("TABLE_NAME");
 				columnName=rsCheck.getString("COLUMN_NAME");
 				if(openclinicTables.get(tableName)==null){
 					openclinicTables.put(tableName.toLowerCase(),"");
-					rsCheck2=databaseMetaData.getIndexInfo(null, null, tableName, false, true);
+					rsCheck2=databaseMetaData.getIndexInfo(SH.cs("openclinicdbName", "openclinic_dbo"), null, tableName, false, true);
 					while(rsCheck2.next()){
 						indexName=rsCheck2.getString("INDEX_NAME");
 						openclinicIndexes.put((tableName+"$"+indexName).toLowerCase(),"");
@@ -196,13 +197,13 @@ public class UpdateSystem implements Runnable {
 			setProgress(9);
 
 			databaseMetaData=sta_conn.getMetaData();
-			rsCheck=databaseMetaData.getColumns(null, null, null, null);
+			rsCheck=databaseMetaData.getColumns(SH.cs("statsdbName", "ocstats_dbo"), null, null, null);
 			while(rsCheck.next()){
 				tableName=rsCheck.getString("TABLE_NAME");
 				columnName=rsCheck.getString("COLUMN_NAME");
 				if(statsTables.get(tableName)==null){
 					statsTables.put(tableName.toLowerCase(),"");
-					rsCheck2=databaseMetaData.getIndexInfo(null, null, tableName, false, true);
+					rsCheck2=databaseMetaData.getIndexInfo(SH.cs("statsdbName", "ocstats_dbo"), null, tableName, false, true);
 					while(rsCheck2.next()){
 						indexName=rsCheck2.getString("INDEX_NAME");
 						statsIndexes.put((tableName+"$"+indexName).toLowerCase(),"");
@@ -211,8 +212,9 @@ public class UpdateSystem implements Runnable {
 				statsColumns.put((tableName+"$"+columnName).toLowerCase(),"");
 			}
 			setProgress(11);
-			
+
 		    tables = model.elementIterator("table");
+		    String dbname=null;
 		    while (tables.hasNext()) {
 		        table = (Element) tables.next();
 		        if (table.attribute("db").getValue().equalsIgnoreCase("ocadmin")) {
@@ -220,16 +222,19 @@ public class UpdateSystem implements Runnable {
 		            hTables=adminTables;
 		            hColumns=adminColumns;
 		            hIndexes=adminIndexes;
+		            dbname=SH.cs("admindbName", "ocadmin_dbo");
 		        } else if (table.attribute("db").getValue().equalsIgnoreCase("openclinic")) {
 		            connectionCheck = loc_conn;
 		            hTables=openclinicTables;
 		            hColumns=openclinicColumns;
 		            hIndexes=openclinicIndexes;
+		            dbname=SH.cs("openclinicdbName", "openclinic_dbo");
 		        } else if (table.attribute("db").getValue().equalsIgnoreCase("stats")) {
 		            connectionCheck = sta_conn;
 		            hTables=statsTables;
 		            hColumns=statsColumns;
 		            hIndexes=statsIndexes;
+		            dbname=SH.cs("statsdbName", "ocstats_dbo");
 		        }
 
 		        boolean tableExists=hTables.get(table.attribute("name").getValue().toLowerCase())!=null;
@@ -244,7 +249,6 @@ public class UpdateSystem implements Runnable {
 		                    if (column.attribute("version") != null && column.attribute("version").getValue().equalsIgnoreCase("1")) {
 		                        versionColumn = column;
 		                    }
-		                    rsCheck = databaseMetaData.getColumns(null, null, table.attribute("name").getValue(), column.attribute("name").getValue());
 		                    boolean columnExists=hColumns.get(table.attribute("name").getValue().toLowerCase()+"$"+column.attribute("name").getValue().toLowerCase())!=null;
 		                    if (!columnExists) {
 		                        sSelect = "alter table " + table.attribute("name").getValue() + " add " + column.attribute("name").getValue() + " ";

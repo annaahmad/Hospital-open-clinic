@@ -5,6 +5,9 @@
                 be.openclinic.finance.ExtraInsurarInvoice"%>
 <%@page errorPage="/includes/error.jsp"%>
 <%@include file="/includes/validateUser.jsp"%>
+<%
+	System.out.println("START");
+%>
 
 <%!
     //--- ADD DEBETS ------------------------------------------------------------------------------

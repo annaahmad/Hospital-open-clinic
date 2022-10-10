@@ -42,7 +42,6 @@ public class UpdateQueries {
                             // execute query
                             if (conn != null) {
                                 String sLocalDbType = conn.getMetaData().getDatabaseProductName();
-                                System.out.println("sLocalDbType="+sLocalDbType);
                                 if (queryElem.attribute("dbserver") == null || queryElem.attribute("dbserver").getValue().equalsIgnoreCase(sLocalDbType)) {
                                 	sQuery = queryElem.getTextTrim().replaceAll("@admin@", MedwanQuery.getInstance().getConfigString("admindbName","ocadmin"));
 	                                sQuery = queryElem.getTextTrim().replaceAll("@openclinic@", MedwanQuery.getInstance().getConfigString("openclinicdbName","openclinic"));

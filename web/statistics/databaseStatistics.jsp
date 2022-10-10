@@ -117,7 +117,7 @@
 	conn.close();
 	
 	conn = MedwanQuery.getInstance().getOpenclinicConnection();
-	ps = conn.prepareStatement("select count(*) total from OC_BEDS");
+	ps = conn.prepareStatement("select count(*) total from OC_BEDS,servicesview where oc_bed_serviceuid=serviceid");
 	rs = ps.executeQuery();
 	rs.next();
 	int totalbeds = rs.getInt("total");

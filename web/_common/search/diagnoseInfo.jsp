@@ -181,6 +181,18 @@
             </tr>
         <%
             }
+            if(flags.indexOf("W")>-1){
+        %>
+            <%-- confirmed --%>
+            <tr>
+                <td class="admin" nowrap><%=getTran(request,"medical.diagnosis","suspected",sWebLanguage)%> *</td>
+                <td class="admin2">
+                    <input type="radio" name="confirmed" id="confirmed" value="medwan.common.true"/><%=getTran(request,"web","yes",sWebLanguage)%>
+                    <input type="radio" name="confirmed" value="medwan.common.false"/><%=getTran(request,"web","no",sWebLanguage)%>
+                </td>
+            </tr>
+        <%
+            }
 	        if(flags.indexOf("D")>-1){
         %>
             <%-- digestif --%>

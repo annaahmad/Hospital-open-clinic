@@ -49,7 +49,7 @@
 						continue;
 					}
 					try{
-						java.util.Date start = new SimpleDateFormat("dd/MM/yyyy HH:mm").parse(new SimpleDateFormat("dd/MM/yyyy").format(transaction.getUpdateDateTime())+" "+transaction.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_HOUR")+":"+transaction.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MINUTES"));
+						java.util.Date start = new SimpleDateFormat("dd/MM/yyyy HH:mm").parse(SH.formatDate(transaction.getUpdateDateTime())+" "+transaction.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_HOUR")+":"+transaction.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MINUTES"));
 						java.util.Date last = start;
 						TransactionVO lastVitalSigns = MedwanQuery.getInstance().getLastModifiedTransactionByType(MedwanQuery.getInstance().getPersonIdFromHealthrecordId(transaction.getHealthrecordId()), "be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_VITALSIGNS");
 						if(lastVitalSigns!=null && lastVitalSigns.getCreationDate().after(start)){

@@ -163,7 +163,7 @@
     		           "<td>"+line.name.toUpperCase()+"</td>"+
     		           "<td>"+line.profile+"</td>"+
     		           "<td>"+line.service+"</td>"+
-    		           "<td><b>"+deci.format(line.contacts)+"</b></td>"+
+    		           "<td><b><a href='javascript:showDocuments("+line.userid+")'>"+deci.format(line.contacts)+"</a></b></td>"+
     		          "</tr>");
     	}
     	
@@ -189,6 +189,10 @@
   function doBack(){
     window.location.href = "<c:url value='/main.do'/>?Page=statistics/index.jsp";
   }
+  
+	function showDocuments(userid){
+		window.open('<%=sCONTEXTPATH%>/popup.jsp?Page=statistics/showUserDocuments.jsp&userid='+userid+'&begin=<%=sFindBegin%>&end=<%=sFindEnd%>&PopupWidth=1024&PopupHeight=768','<%=getTranNoLink("web","clinicaldocuments",sWebLanguage)%>','toolbar=no,status=yes,scrollbars=yes,resizable=yes,width=1024,height=768,menubar=no').moveTo((this.screen.width-1024)/2,(this.screen.height-768)/2);
+	}
 
   <%-- CLEAR SEARCH FIELDS --%>
   function clearSearchFields(){

@@ -96,12 +96,12 @@
 <%	}
 %>
 	<tr>
-		<td colspan='2'><input type='button' name='find' value='<%=getTran(null,"web","find",sWebLanguage) %>' onclick='findinvoices();'/></td>
+		<td colspan='2'><input type='button' name='find' value='<%=getTran(null,"web","find",sWebLanguage) %>' onclick='findresults();'/></td>
 	</tr>
 </table>
 
 <script>
-	function findinvoices(){
+	function findresults(){
 		url="<c:url value='/util/csvStats.jsp?'/>query=<%=sQuery%>&db=<%=sDb%>&begin=<%=sBegin%>&end=<%=sEnd%>&doctor="+document.getElementById('doctor').value+"&service="+document.getElementById('service').value;
 		if(document.getElementById('includeadmissions') && document.getElementById('includeadmissions').checked) {
 			url+="&includeadmissions="+document.getElementById('includeadmissions').value;

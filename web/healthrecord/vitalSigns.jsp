@@ -66,15 +66,15 @@
 			<table width='100%'>
 				<tr>
 					<td width='33%' nowrap>
-						<input tabindex="-1" class="text" type="text" size="4" readonly name="WFL" id="WFL"><img id="wflinfo" style='display: none' src="<c:url value='/_img/icons/icon_info.gif'/>"/>
+						<input tabindex="-1" class="text" type="text" size="4" readonly name="WFL" id="WFL"><img id="wflinfo" style='vertical-align: middle;display: none' src="<c:url value='/_img/icons/icon_info.gif'/>"/>
 						<%=SH.writeDefaultHiddenInput(tran, "ITEM_TYPE_WEIGHT4HEIGHT_ZSCORE") %>
 					</td>
 					<td width='33%' nowrap>
-						<input tabindex="-1" class="text" type="text" size="4" readonly name="WFA" id="WFA"><img id="wfainfo" style='display: none' src="<c:url value='/_img/icons/icon_info.gif'/>"/>
+						<input tabindex="-1" class="text" type="text" size="4" readonly name="WFA" id="WFA"><img id="wfainfo" style='vertical-align: middle;display: none' src="<c:url value='/_img/icons/icon_info.gif'/>"/>
 						<%=SH.writeDefaultHiddenInput(tran, "ITEM_TYPE_WEIGHT4AGE_ZSCORE") %>
 					</td>
 					<td width='33%' nowrap>
-						<input tabindex="-1" class="text" type="text" size="4" readonly name="HFA" id="HFA"><img id="hfainfo" style='display: none' src="<c:url value='/_img/icons/icon_info.gif'/>"/>
+						<input tabindex="-1" class="text" type="text" size="4" readonly name="HFA" id="HFA"><img id="hfainfo" style='vertical-align: middle;display: none' src="<c:url value='/_img/icons/icon_info.gif'/>"/>
 						<%=SH.writeDefaultHiddenInput(tran, "ITEM_TYPE_HEIGHT4AGE_ZSCORE") %>
 					</td>
 				</tr>

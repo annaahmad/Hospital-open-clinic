@@ -1,3 +1,4 @@
+<%@page import="be.openclinic.finance.Insurance"%>
 <%@page import="java.io.StringBufferInputStream"%>
 <%@page import="java.io.FileInputStream"%>
 <%@page import="java.net.URLEncoder"%>
@@ -21,6 +22,7 @@
         public String employeeselected;
         public String dossierselected;
         public String activeencounter;
+        public String activeinsurance;
         private String enableParameter;
         private String accesskey;
         public boolean isEnabled;
@@ -48,6 +50,7 @@
             this.employeeselected = checkString(eMenu.attributeValue("employeeselected"));
             this.dossierselected = checkString(eMenu.attributeValue("dossierselected"));
             this.activeencounter = checkString(eMenu.attributeValue("activeencounter"));
+            this.activeinsurance = checkString(eMenu.attributeValue("activeinsurance"));
             this.enableParameter = checkString(eMenu.attributeValue("enableparameter"));
             this.accesskey = checkString(eMenu.attributeValue("accesskey"));
             this.isEnabled=false;
@@ -82,6 +85,7 @@
             this.employeeselected = checkString(eMenu.attributeValue("employeeselected"));
             this.dossierselected = checkString(eMenu.attributeValue("dossierselected"));
             this.activeencounter = checkString(eMenu.attributeValue("activeencounter"));
+            this.activeinsurance = checkString(eMenu.attributeValue("activeinsurance"));
             this.enableParameter = checkString(eMenu.attributeValue("enableparameter"));
             this.accesskey = checkString(eMenu.attributeValue("accesskey"));
             this.isEnabled=false;
@@ -144,6 +148,26 @@
                 if(this.activeencounter.equalsIgnoreCase("true")){
                     if(activePatient==null || Encounter.getActiveEncounter(activePatient.personid)==null){
                         return "";
+                    }
+                }
+
+                if(this.activeinsurance.equalsIgnoreCase("true")){
+                	boolean bHasActiveInsurance=false;
+                    if(activePatient!=null){
+                    	Vector insurances =  Insurance.getCurrentInsurances(activePatient.personid);
+                    	for(int n=0;n<insurances.size();n++){
+                    		Insurance insurance = (Insurance)insurances.elementAt(n);
+                    		if((insurance.getStop()==null || insurance.getStop().after(new java.util.Date())) && insurance.isAuthorized()){
+                    			bHasActiveInsurance=true;
+                    			break;
+                    		}
+                    	}
+                    	if(!bHasActiveInsurance){
+                    		return "";
+                    	}
+                    }
+                    else{
+                    	return "";
                     }
                 }
 
@@ -917,7 +941,7 @@
 	  try {
 	    var successful = document.execCommand('copy');
 	    var msg = successful ? 'successful' : 'unsuccessful';
-	    console.log('Copying text command was ' + msg);
+	    alert('Copying text command was ' + msg);
 	  } catch (err) {
 	    console.log('Oops, unable to copy');
 	  }
@@ -1229,33 +1253,36 @@
   }
 
   function showsmartglasses(){
-	  var key=window.prompt('<%=getTranNoLink("web","teleconsultationkey",sWebLanguage)%>');
-	  if(!key || key=='null'){
-		  key=makeid(3)+"-"+makeid(3)+"-"+makeid(3);
-	  }
-	  linkWizzeyeKey(key);
+	  openPopup("util/setupTelemedicineSession.jsp&PopupWidth=500&PopupHeight=200");
+	  
+	  //var key=window.prompt('<%=getTranNoLink("web","teleconsultationkey",sWebLanguage)%>');
+	  //if(!key || key=='null'){
+	  //	  key=makeid(3)+"-"+makeid(3)+"-"+makeid(3);
+	  //}
+	  //var key2=window.prompt('<%=getTranNoLink("web","teleconsultationkey2",sWebLanguage)%>');
+	  //linkWizzeyeKey(key,key2);
   }
 
-  function linkWizzeyeKey(key){
+  function linkWizzeyeKey(key,key2){
 	  <%if(activePatient!=null && activePatient.isNotEmpty()){%>
 		    var url = '<c:url value="/util/linkWizzeyeKey.jsp"/>?ts='+new Date().getTime();
 		    new Ajax.Request(url,{
 		      method:"POST",
-		      parameters:"key="+key,
+		      parameters:"key="+key+"&key2="+key2,
 		      onSuccess:function(resp){
-		    	  startWizzeyeSession(key);
+		    	  startWizzeyeSession(key,key2);
 		      }
 		    });
     <%} else {%>
-		  startWizzeyeSession(key);
+		  startWizzeyeSession(key,key2);
     <%}%>
   }
 
-  function startWizzeyeSession(key){
+  function startWizzeyeSession(key,key2){
 	  <%if(activePatient!=null && activePatient.isNotEmpty()){%>
-	  	  window.open("<%=SH.cs("wizzeyeserver","https://webrtc.hnrw.org:448/room.jsp")%>?roomid="+key+"&user=<%=activeUser.userid%>&patient=<%=SH.removeAccents(activePatient.getFullName())%>&observerStorageURL=<%=(request.getProtocol().toLowerCase().startsWith("https")?"https":"http")+"://"+ request.getServerName()+":"+request.getServerPort()+sCONTEXTPATH+"/util/saveWizzeyeSnapshot.jsp"%>","OpenClinic-Teleconsultation","height=600,width=900,toolbar=yes,status=no,scrollbars=yes,resizable=yes,menubar=yes");
+	  	  window.open("<%=SH.cs("wizzeyeserver","https://webrtc.hnrw.org:448/telemedicine.html")%>?roomid="+key+"&roomid2="+key2+"&user=<%=activeUser.userid%>&patient=<%=SH.removeAccents(activePatient.getFullName())%>&observerStorageURL=<%=SH.cs("wizzeyeprotocol","http")+"://"+ request.getServerName()+":"+request.getServerPort()+sCONTEXTPATH+"/util/saveWizzeyeSnapshot.jsp"%>","OpenClinic-Teleconsultation","height="+screen.height+",width="+screen.width+",toolbar=yes,status=no,scrollbars=yes,resizable=yes,menubar=yes");
 	  <%} else {%>
-	  	  window.open("<%=SH.cs("wizzeyeserver","https://webrtc.hnrw.org:448/room.jsp")%>?roomid="+key,"OpenClinic-Teleconsultation","height=600,width=900,toolbar=yes,status=no,scrollbars=yes,resizable=yes,menubar=yes");
+	  	  window.open("<%=SH.cs("wizzeyeserver","https://webrtc.hnrw.org:448/telemedicine.html")%>?roomid="+key+"&roomid2="+key2,"OpenClinic-Teleconsultation","height="+screen.height+",width="+screen.width+",toolbar=yes,status=no,scrollbars=yes,resizable=yes,menubar=yes");
 	  <%}%>
   }
   
@@ -1305,15 +1332,48 @@
     return "search="+element.value;
   }
   function openSADashboard(){
-	  openPopup('dashboards/systemAdministratorDashboard.jsp?language=<%=sWebLanguage%>',1024,800,'Dashboards');
+	  openPopup('dashboards/systemAdministratorDashboard.jsp&language=<%=sWebLanguage%>',1024,800,'Dashboards');
+  }
+  function openManagementDashboard(){
+	  openPopup('dashboards/<%=SH.cs("managementDashbord","managementDashboard.jsp")%>&language=<%=sWebLanguage%>',1024,800,'Dashboards');
+  }
+  function openSupervisionDashboard(){
+	  openPopup('dashboards/<%=SH.cs("supervisionDashbord","supervisionDashboard.jsp")%>&language=<%=sWebLanguage%>',1024,800,'Dashboards');
+  }
+  function openMyDashboard(){
+	  openPopup('dashboards/<%=SH.cs("myDashbord","managementDashboardDynamic.jsp")%>&language=<%=sWebLanguage%>',1024,800,'Dashboards');
   }
   function checkMandatoryFields(){
+	  <%	if(SH.ci("enforceEncounterBeforeClinicalDataEntry",1)==1){ %>
+	  			if(document.getElementById("encounteruid") && document.getElementById("encounteruid").value.trim().length==0){
+		  			alert("<%=getTranNoLink("web","encounterismandatory",sWebLanguage)%>");
+		  			if(searchEncounter){
+		  				searchEncounter();
+		  			}
+		  			return false;
+	  			}
+	  <%	}%>
 	  <%	if(SH.ci("enforceCompleteClinicalDataEntry",0)==1){ %>
-			  	var nodelist= document.querySelectorAll("textarea,input");
+			  	var nodelist= document.querySelectorAll("textarea,input,select");
 			  	for(n=0;n<nodelist.length;n++){
 			  		if(nodelist[n].dataset.mandatory && nodelist[n].dataset.mandatory=="1"){
 			  			var bOk=false;
-			  			if(nodelist[n].value.trim().length>0){
+			  			if(nodelist[n].type && nodelist[n].type=='checkbox'){
+			  				if(nodelist[n].checked){
+			  					bOk=true;
+			  				}
+			  				else{
+				  				for(i=0;i<nodelist.length;i++){
+				  					if(nodelist[i].id.startsWith(nodelist[n].id.split(".")[0]+".")){
+				  						if(nodelist[i].checked){
+				  							bOk=true;
+				  							break;
+				  						}
+				  					}
+				  				}
+			  				}
+			  			}
+			  			else if(nodelist[n].value.trim().length>0){
 			  				bOk=true;
 			  			}
 			  			else if(nodelist[n].dataset.alternateids){
@@ -1326,14 +1386,33 @@
 			  			}
 			  			if(!bOk){
 				  			alert("<%=getTranNoLink("web","datamissing",sWebLanguage)%>");
-				  			nodelist[n].focus();
+				  			if(nodelist[n].type=='hidden'){
+				  				for(i=0;i<nodelist.length;i++){
+				  					if(nodelist[i].id.startsWith(nodelist[n].id+".")){
+				  						nodelist[i].style.outline='3px solid red';
+				  						nodelist[i].focus();
+				  					}
+				  				}
+				  			}
+				  			else if(nodelist[n].type=='checkbox'){
+				  				for(i=0;i<nodelist.length;i++){
+				  					if(nodelist[i].id.startsWith(nodelist[n].id.split(".")[0]+".")){
+				  						nodelist[i].style.outline='3px solid red';
+				  						nodelist[i].focus();
+				  					}
+				  				}
+				  			}
+				  			else{
+		  						nodelist[n].style.outline='3px solid red';
+				  				nodelist[n].focus();
+				  			}
 				  			return false;
 			  			}
 			  		}
 			  	}
 	  <%	}	  %>
 	  <%	if(SH.ci("enforceReasonForEncounterBeforeClinicalDataEntry",0)==1){ %>
-				if(document.getElementById("rfe") && document.getElementById("rfe").innerHTML && document.getElementById("rfe").innerHTML.trim().length==0){
+				if(document.getElementById("rfe") && document.getElementById("rfe").innerHTML.trim().length==0){
 		  			alert("<%=getTranNoLink("web","reasonforencounterismandatory",sWebLanguage)%>");
 		  			document.getElementById("rfe").focus();
 		  			return false;
@@ -1341,5 +1420,12 @@
 	  <%	}	  %>
 	  return true;
   }
-
+	function removeOutline(el){
+	  	var nodelist= document.querySelectorAll("textarea,input");
+	  	for(n=0;n<nodelist.length;n++){
+	  		if(nodelist[n].id && nodelist[n].id.startsWith(el.id.split(".")[0])){
+	  			nodelist[n].style.outline='';
+	  		}
+	  	}
+	}
 </script>

@@ -4,6 +4,7 @@
 	String serviceUid = checkString(request.getParameter("service"));
 	java.util.Date dBegin = ScreenHelper.parseDate(request.getParameter("begin"));
 	java.util.Date dEnd = new java.util.Date(ScreenHelper.parseDate(request.getParameter("end")).getTime()+SH.getTimeDay());
+	boolean bProgrammedOnly = SH.p(request,"programmedonly").equalsIgnoreCase("1");
 %>
 <table width='100%'>
 	<tr class='admin'>
@@ -25,7 +26,7 @@
 		SortedMap interventions = new TreeMap();
 		Connection conn = SH.getOpenClinicConnection();
 		String sSql = 	"select * from oc_assets a,oc_maintenanceplans p where oc_asset_objectid=replace(oc_maintenanceplan_assetuid,'"+SH.getServerId()+".','') and"+
-			" oc_maintenanceplan_type=2 and oc_asset_service like '"+serviceUid+"%' and (oc_maintenanceplan_enddate is null or oc_maintenanceplan_enddate>'"+
+			" oc_maintenanceplan_type=2 and oc_asset_service in ("+Service.getChildIdsAsString(serviceUid)+") and (oc_maintenanceplan_enddate is null or oc_maintenanceplan_enddate>'"+
 			new SimpleDateFormat("yyyy-MM-dd").format(dBegin)+"') and oc_maintenanceplan_startdate<'"+new SimpleDateFormat("yyyy-MM-dd").format(dEnd)+"'";
 		PreparedStatement ps = conn.prepareStatement(sSql);
 		ResultSet rs = ps.executeQuery();
@@ -34,30 +35,51 @@
 			String frequency = rs.getString("oc_maintenanceplan_frequency");
 			//Was there an intervention action planned in the selected period?
 			//Check if any existing intervention had a nextdate in this period
-			boolean bMaintenancePlanDue=false,bInit=false;;
-			PreparedStatement ps2 = conn.prepareStatement("select * from oc_maintenanceoperations where oc_maintenanceoperation_maintenanceplanuid=?");
-			ps2.setString(1,maintenancePlanUid);
-			ResultSet rs2 = ps2.executeQuery();
+			boolean bMaintenancePlanDue=false,bInit=false;
 			java.util.Date dueDate = dBegin,effectiveDate=null;
-			while(rs2.next()){
-				bInit=true;
+			PreparedStatement ps2 = conn.prepareStatement("select * from oc_maintenanceoperations where oc_maintenanceoperation_maintenanceplanuid=? and oc_maintenanceoperation_date<? order by oc_maintenanceoperation_nextdate desc");
+			ps2.setString(1,maintenancePlanUid);
+			ps2.setDate(2, SH.toSQLDate(dBegin));
+			ResultSet rs2 = ps2.executeQuery();
+			while(rs2.next() && !bMaintenancePlanDue){
 				java.util.Date d = rs2.getDate("oc_maintenanceoperation_nextdate");
-				if(d!=null && !d.before(dBegin) && d.before(dEnd)){
-					bMaintenancePlanDue=true;
-					dueDate=d;
+				if(d!=null){
+					if(d.after(dEnd)){
+						bInit=true;
+						break;
+					}
+					if(!d.before(dBegin) || !bProgrammedOnly){
+						bMaintenancePlanDue=true;
+						if(!d.before(dBegin)){
+							dueDate=d;
+						}
+					}
 				}
-				d = rs2.getDate("oc_maintenanceoperation_date");
-				if(d!=null && !d.before(dBegin) && d.before(dEnd) && (effectiveDate==null || d.after(effectiveDate))){
-					effectiveDate=d;
+				else{
+					continue;
 				}
 			}
 			rs2.close();
 			ps2.close();
 			if(!bInit){
-				bMaintenancePlanDue=true;
+				if(!bProgrammedOnly){
+					bMaintenancePlanDue=true;
+				}
 			}			
 			if(bMaintenancePlanDue){
-				//Show this plan
+				//Show this plan and whent the operations where performed
+				ps2 = conn.prepareStatement("select max(oc_maintenanceoperation_date) effectivedate from oc_maintenanceoperations where oc_maintenanceoperation_maintenanceplanuid=? and oc_maintenanceoperation_date>=?");
+				ps2.setString(1,maintenancePlanUid);
+				ps2.setDate(2,SH.toSQLDate(dBegin));
+				rs2 = ps2.executeQuery();
+				if(rs2.next()){
+					java.util.Date d=rs2.getDate("effectivedate");
+					if(d!=null){
+						effectiveDate=d;
+					}
+				}
+				rs2.close();
+				ps2.close();
 				StringBuffer sb = new StringBuffer();
 				sb.append(rs.getString("oc_asset_serverid")+"."+rs.getString("oc_asset_objectid")+";");
 				sb.append(rs.getString("oc_asset_nomenclature")+";");

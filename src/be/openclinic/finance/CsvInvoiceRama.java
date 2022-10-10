@@ -34,7 +34,7 @@ public class CsvInvoiceRama {
 	        	}
 	        }
 		}
-		String sOutput="#;DATE;VOUCHER_ID;INVOICE_ID;BENEFICIARY_NR;BENEFICIARY_AGE;BENEFICIARY_SEX;BENEFICIARY_NAME;AFFILIATE_NAME;AFFILIATE_AFFECT;CONS;LAB;IMA;HOS;ACT;MAT;OTH;MED;TOT 100%;TOT "+coverage+"%\r\n";
+		String sOutput="#;DATE;BENEFICIARY_ID;VOUCHER_ID;INVOICE_ID;BENEFICIARY_NR;BENEFICIARY_AGE;BENEFICIARY_SEX;BENEFICIARY_NAME;AFFILIATE_NAME;AFFILIATE_AFFECT;CONS;LAB;IMA;HOS;ACT;MAT;OTH;MED;TOT 100%;TOT "+coverage+"%\r\n";
 		if(invoiceuid!=null){
 	        Vector debets = InsurarInvoice.getDebetsForInvoiceSortByDate(invoiceuid);
 	        if(debets.size() > 0){
@@ -45,7 +45,7 @@ public class CsvInvoiceRama {
 	            boolean displayPatientName=false,displayDate=false;
 	            SortedMap categories = new TreeMap(), totalcategories = new TreeMap();
 	            double total100pct=0,total85pct=0,generaltotal100pct=0,generaltotal85pct=0,daytotal100pct=0,daytotal85pct=0;
-	            String invoiceid="",adherent="",recordnumber="",insurarreference="";
+	            String invoiceid="",adherent="",recordnumber="",insurarreference="",personid="";
 	            int linecounter=1;
 	            for(int i=0; i<debets.size(); i++){
 	                debet = (Debet)debets.get(i);
@@ -54,7 +54,7 @@ public class CsvInvoiceRama {
 	                sPatientName = debet.getPatientName()+";"+debet.getEncounter().getPatientUID();
 	                displayPatientName = displayDate || !sPatientName.equals(sPrevPatientName) || (debet.getPatientInvoiceUid()!=null && debet.getPatientInvoiceUid().indexOf(".")>=0 && invoiceid.indexOf(debet.getPatientInvoiceUid().split("\\.")[1])<0 && invoiceid.length()>0);
 	                if(i>0 && (displayDate || displayPatientName)){
-	                    sOutput+=printDebet2(categories,displayDate,prevdate!=null?prevdate:date,invoiceid,adherent,sPrevPatientName.split(";")[0],total100pct,total85pct,recordnumber,linecounter++,insurarreference,beneficiarynr,beneficiaryage,beneficiarysex,affiliatecompany);
+	                    sOutput+=printDebet2(categories,displayDate,prevdate!=null?prevdate:date,invoiceid,adherent,sPrevPatientName.split(";")[0],total100pct,total85pct,recordnumber,linecounter++,insurarreference,beneficiarynr,beneficiaryage,beneficiarysex,affiliatecompany,personid);
 	                	categories = new TreeMap();
 	                	total100pct=0;
 	                	total85pct=0;
@@ -71,6 +71,7 @@ public class CsvInvoiceRama {
 	                	beneficiarysex="";
 	                	affiliatecompany="";
 	                }
+	                personid=debet.getEncounter().getPatientUID();
                 	beneficiarysex=debet.getPatientgender();
                		beneficiaryage=debet.getPatientbirthdate();
 	                if(debet.getPatientInvoiceUid()!=null && debet.getPatientInvoiceUid().indexOf(".")>=0 && invoiceid.indexOf(debet.getPatientInvoiceUid().split("\\.")[1])<0){
@@ -142,7 +143,7 @@ public class CsvInvoiceRama {
 	                prevdate = date;
 	                sPrevPatientName = sPatientName;
 	            }
-                sOutput+=printDebet2(categories,displayDate,prevdate!=null?prevdate:date,invoiceid,adherent,sPrevPatientName.split(";")[0],total100pct,total85pct,recordnumber,linecounter++,insurarreference,beneficiarynr,beneficiaryage,beneficiarysex,affiliatecompany);
+                sOutput+=printDebet2(categories,displayDate,prevdate!=null?prevdate:date,invoiceid,adherent,sPrevPatientName.split(";")[0],total100pct,total85pct,recordnumber,linecounter++,insurarreference,beneficiarynr,beneficiaryage,beneficiarysex,affiliatecompany,personid);
 
 	        }
 		}
@@ -150,10 +151,11 @@ public class CsvInvoiceRama {
 	}
 	
     //--- PRINT DEBET (prestation) ----------------------------------------------------------------
-    private static String printDebet2(SortedMap categories, boolean displayDate, Date date, String invoiceid,String adherent,String beneficiary,double total100pct,double total85pct,String recordnumber,int linecounter,String insurarreference,String beneficiarynr,String beneficiaryage,String beneficiarysex,String affiliatecompany){
+    private static String printDebet2(SortedMap categories, boolean displayDate, Date date, String invoiceid,String adherent,String beneficiary,double total100pct,double total85pct,String recordnumber,int linecounter,String insurarreference,String beneficiarynr,String beneficiaryage,String beneficiarysex,String affiliatecompany,String personid){
     	String sOutput="";
         sOutput+=linecounter+";";
         sOutput+=ScreenHelper.stdDateFormat.format(date)+";";
+        sOutput+=personid+";";
         sOutput+=insurarreference+";";
         sOutput+=invoiceid+";";
         sOutput+="Nr "+beneficiarynr+";";

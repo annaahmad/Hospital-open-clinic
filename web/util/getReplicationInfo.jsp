@@ -33,7 +33,9 @@
 				rs.close();
 				ps.close();
 			}
-			catch(Exception e){};
+			catch(Exception e){
+				e.printStackTrace();
+			};
 		}
 		
 		
@@ -71,7 +73,9 @@
 		
 		conn.close();
 	}
-	catch(Exception e){}
+	catch(Exception e){
+		e.printStackTrace();
+	}
 %>
 {
 	"Slave_IO_Running":"<%=Slave_IO_Running %>",

@@ -9,14 +9,14 @@
 	int nRows=0;
 	if(sText.length()>0){
 		Connection conn = SH.getOpenclinicConnection();
-		PreparedStatement ps = conn.prepareStatement("SELECT * FROM oc_labels WHERE oc_label_type='admin.nomenclature.asset' and oc_label_language=? and oc_label_value like ? and oc_label_id like ? order by oc_label_id");
+		PreparedStatement ps = conn.prepareStatement("SELECT l.* FROM oc_labels l,oc_nomenclature WHERE oc_nomenclature_id=oc_label_id and oc_nomenclature_type='asset' and oc_label_type='admin.nomenclature.asset' and oc_label_language=? and oc_label_value like ? and oc_label_id like ? order by oc_label_id");
 		ps.setString(1,sWebLanguage);
 		ps.setString(2, "%"+sText+"%");
 		ps.setString(3, sCode+"%");
 		ResultSet rs=ps.executeQuery();
 		while(rs.next() && nRows++<iMaxRows){
             out.write("<li>");
-        	out.write("<table><tr><td width='60px' nowrap>"+HTMLEntities.htmlentities(rs.getString("oc_label_id")+"</td><td>"+rs.getString("oc_label_value"))+"</td></tr></table>");
+        	out.write("<table><tr><td width='60px' nowrap>"+HTMLEntities.htmlentities(rs.getString("oc_label_id").toUpperCase()+"</td><td>"+rs.getString("oc_label_value"))+"</td></tr></table>");
             out.write("<span style='display:none'>"+rs.getString("oc_label_id")+"-idcache</span>");
             out.write("<span style='display:none'>$"+rs.getString("oc_label_value")+"$</span>");
             out.write("</li>");

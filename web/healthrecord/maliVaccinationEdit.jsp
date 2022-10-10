@@ -88,7 +88,7 @@
 		<tr>
 			<td class='admin'><%=getTran(request,"web","vaccinationlocation",sWebLanguage) %></td>
 			<td class='admin2'>
-				<select name='vaccinationlocation' id='vaccinationlocation' onchange='if(this.value==1){document.getElementById("vaccinationlocationtext").style.visibility="visible"} else {document.getElementById("vaccinationlocationtext").value="";document.getElementById("vaccinationlocationtext").style.visibility="hidden"}'>
+				<select class='text' name='vaccinationlocation' id='vaccinationlocation' onchange='if(this.value==1){document.getElementById("vaccinationlocationtext").style.visibility="visible"} else {document.getElementById("vaccinationlocationtext").value="";document.getElementById("vaccinationlocationtext").style.visibility="hidden"}'>
 					<%
 						Hashtable labels=(Hashtable)((Hashtable)(MedwanQuery.getInstance().getLabels())).get(sWebLanguage.toLowerCase());
 						if(labels!=null) labels=(Hashtable)labels.get("vaccinationlocation");

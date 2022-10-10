@@ -193,6 +193,27 @@
 %>
 
 <script>
+	function validateSerialNumber(sn){
+		if(sn.value.length>0){
+			var url = "<c:url value='/assets/ajax/asset/validateSerialNumber.jsp'/>?ts="+new Date().getTime();
+			var params = 	"assetuid="+'<%=sEditAssetUID%>'+
+			   				"&serialnumber="+sn.value;
+			new Ajax.Request(url,{
+			    method: "POST",
+			    parameters: params,
+			    onSuccess: function(resp){
+			      	var data = eval("("+resp.responseText+")");
+			      	if(data.exists){
+			      		alert('<%=getTranNoLink("web","serialnumberexists",sWebLanguage)%>');
+			      	}
+			    },
+			    onFailure: function(resp){
+			  	  alert('error');
+			    }
+			}); 
+		}
+	}
+
 	new Ajax.Autocompleter('nomenclature','autocomplete_nomenclature','assets/findNomenclature.jsp',{
 	  minChars:1,
 	  method:'post',
@@ -495,9 +516,9 @@
                 "&comment15="+document.getElementById("comment15").value+
                 "&comment16="+document.getElementById("comment16").value+
                 "&comment17="+document.getElementById("comment17").value+
-                /*
                 "&comment18="+document.getElementById("comment18").value+
                 "&comment19="+document.getElementById("comment19").value+
+                /*
                 "&comment20="+document.getElementById("comment20").value+
 				  */
                 "&saleDate="+document.getElementById("saleDate").value+
@@ -672,9 +693,9 @@
                       "&comment15="+document.getElementById("comment15").value+
                       "&comment16="+document.getElementById("comment16").value+
                       "&comment17="+document.getElementById("comment17").value+
-                      /*
                       "&comment18="+document.getElementById("comment18").value+
                       "&comment19="+document.getElementById("comment19").value+
+                      /*
                       "&comment20="+document.getElementById("comment20").value+
 					  */
                       "&saleDate="+document.getElementById("saleDate").value+

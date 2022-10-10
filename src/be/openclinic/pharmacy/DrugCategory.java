@@ -199,8 +199,8 @@ public class DrugCategory {
 
     	Connection ad_conn = MedwanQuery.getInstance().getOpenclinicConnection();
         try{
-            if(childId!=null && childId.trim().length()>0){
-                childIds.add(childId);
+            if(parentId!=null && parentId.trim().length()>0){
+                childIds.add(parentId);
             }
 
             String sSelect = "SELECT categoryid FROM DrugCategories WHERE categoryparentid = ?";

@@ -28,6 +28,11 @@
 				continue;
 			}
 		}
+		//Check if the user has access to the servicestock
+		ProductStock productStock = ProductStock.get(rs.getString("OC_LIST_PRODUCTSTOCKUID"));
+		if(productStock==null || !productStock.getServiceStock().isDispensingUser(activeUser.userid)){
+			continue;
+		}
 		// Create stock operation
 		ProductStockOperation operation = new ProductStockOperation();
 		operation.setUid("-1");

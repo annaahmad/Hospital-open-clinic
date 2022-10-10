@@ -183,6 +183,12 @@
         		  writeTblChildWithCode(activeUser.getAccessRight("statistics.userinvoices.select"),"javascript:getUserInvoices()",getTran(request,"Web","statistics.userinvoices",sWebLanguage)));
         out.print(ScreenHelper.writeTblFooter()+"<br>");
     }
+    //*** 6 - CHIN ********************************************************************************
+    if(activeUser.getAccessRight("statistics.chin.select")){      
+        out.print(ScreenHelper.writeTblHeader(getTran(request,"Web","chin",sWebLanguage),sCONTEXTPATH));
+        out.print(writeTblChildWithCode(activeUser.getAccessRight("dhis2report.select"),"javascript:dhis2report()",getTran(request,"Web","dhis2report",sWebLanguage)));
+        out.print(ScreenHelper.writeTblFooter());
+    }
 %>
 </form>
 

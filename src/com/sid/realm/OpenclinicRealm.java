@@ -2,7 +2,6 @@ package com.sid.realm;
 
 import java.util.List;
 import org.apache.catalina.realm.*;
-
 import java.util.ArrayList;
 import java.sql.ResultSet;
 import java.text.SimpleDateFormat;

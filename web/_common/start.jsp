@@ -119,7 +119,7 @@
     		out.println("<td>"+getTran(request,"web","gender",sWebLanguage)+"</td>");
         	out.println("<td>"+getTran(request,"web","service",sWebLanguage)+"</td>");
     		if(activeUser.getAccessRight("diagnoses.select")){
-        		out.println("<td>"+getTran(request,"web","diagnosis",sWebLanguage)+"</td>");
+        		out.println("<td width='25%'>"+getTran(request,"web","diagnosis",sWebLanguage)+"</td>");
     		}
     		out.println("<td>"+getTran(request,"web","lastaccess",sWebLanguage)+"</td>");
     		out.println("<td>#</td>");

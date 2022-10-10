@@ -197,7 +197,22 @@
 		   	<td class='admin'><%=getTran(request,"web","mothersname",sWebLanguage) %></td>
 		   	<td class='admin2'><%=SH.writeDefaultTextInput(session, (TransactionVO)transaction, "ITEM_TYPE_CREN_MOTHERSNAME", 50) %></td>
 		   	<td class='admin'><%=getTran(request,"web","admissiontype",sWebLanguage) %></td>
-		   	<td class='admin2'><%=SH.writeDefaultSelect(request, (TransactionVO)transaction, "ITEM_TYPE_CREN_ADMISSIONTYPE", "msas.cre.admissiontype",sWebLanguage, "") %></td>
+		   	<td class='admin2'>
+		   		<%=SH.writeDefaultSelect(request, (TransactionVO)transaction, "ITEM_TYPE_CREN_ADMISSIONTYPE", "msas.cre.admissiontype",sWebLanguage, "onchange='checkAdmission()'") %> <span id='admissionreason' style='display: none'><%=SH.writeDefaultSelect(request, (TransactionVO)transaction, "ITEM_TYPE_MSAS_CREN_ADMISSIONREASON","msas.cren.admissionreason", sWebLanguage, "") %></span><BR/>
+		   		<%=SH.writeDefaultCheckBoxes((TransactionVO)transaction, request, "msas.uren.communityreferral", "ITEM_TYPE_MSAS_UREN_COMMUNITYREFERRAL", sWebLanguage, false) %>
+		   	</td>
+		   	<script>
+		   		function checkAdmission(){
+		   			if(document.getElementById("ITEM_TYPE_CREN_ADMISSIONTYPE").value=='1'){
+		   				document.getElementById('admissionreason').style.display='';
+		   			}
+		   			else{
+		   				document.getElementById('admissionreason').style.display='none';
+		   				document.getElementById("ITEM_TYPE_MSAS_CREN_ADMISSIONREASON").selectedIndex=0;
+		   			}
+		   		}
+		   		checkAdmission();
+		   	</script>
 		</tr>
 		<tr>
 		   	<td class='admin'><%=getTran(request,"web","internaltransferfrom",sWebLanguage) %></td>
@@ -316,6 +331,11 @@
   }
 
   function submitForm(){
+	  if(document.getElementById('admissionreason').style.display=='' && document.getElementById("ITEM_TYPE_MSAS_CREN_ADMISSIONREASON").value==''){
+		  alert('<%=getTranNoLink("web","admissionreasonismandatory",sWebLanguage)%>');
+		  document.getElementById("ITEM_TYPE_MSAS_CREN_ADMISSIONREASON").focus();
+		  return;
+	  }
     transactionForm.saveButton.disabled = true;
     <%
         SessionContainerWO sessionContainerWO = (SessionContainerWO)SessionContainerFactory.getInstance().getSessionContainerWO(request,SessionContainerWO.class.getName());

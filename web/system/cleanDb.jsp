@@ -88,6 +88,7 @@
 					conn=MedwanQuery.getInstance().getOpenclinicConnection();
 				}
 				Statement st = conn.createStatement();
+				System.out.println("drop index "+index+" on "+table);
 				st.execute("drop index "+index+" on "+table);
 				st.close();
 				conn.close();
@@ -109,7 +110,7 @@
 		Document document = reader.read(new URL(sDoc));
 		Element root = document.getRootElement();
 		Connection conn = MedwanQuery.getInstance().getAdminConnection();
-		ResultSet rs = conn.getMetaData().getTables(null,null,"%",null);
+		ResultSet rs = conn.getMetaData().getTables(SH.cs("admindbName","ocadmin_dbo"),null,"%",null);
 		while(rs.next()){
 			String tablename = rs.getString("TABLE_NAME").toUpperCase();
 			String tabletype = rs.getString("TABLE_TYPE");
@@ -120,7 +121,7 @@
 				out.println("<tr><td>"+MedwanQuery.getInstance().getConfigString("admindbName","?admin?")+"</td><td><font color='red'>VIEW "+tablename+"</font></td><td><input type='checkbox' name='dropview$admin$"+tablename+"' checked/></td></tr>");
 			}
 			else if(tabletype.equalsIgnoreCase("table")){
-				ResultSet rs2 = conn.getMetaData().getIndexInfo(null, null, tablename, false, false);	
+				ResultSet rs2 = conn.getMetaData().getIndexInfo(SH.cs("admindbName","ocadmin_dbo"), null, tablename, false, false);	
 				while(rs2.next()){
 					String indexname=rs2.getString("INDEX_NAME");
 					if(indexname!=null){
@@ -135,7 +136,7 @@
 		}
 		rs.close();
 		conn = MedwanQuery.getInstance().getOpenclinicConnection();
-		rs = conn.getMetaData().getTables(null,null,"%",null);
+		rs = conn.getMetaData().getTables(SH.cs("openclinicdbName","openclinic_dbo"),null,"%",null);
 		while(rs.next()){
 			String tablename = rs.getString("TABLE_NAME").toUpperCase();
 			String tabletype = rs.getString("TABLE_TYPE");
@@ -154,7 +155,7 @@
 				out.println("<tr><td>"+MedwanQuery.getInstance().getConfigString("openclinicdbName","?openclinic?")+"</td><td><font color='red'>VIEW "+tablename+"</font></td><td><input type='checkbox' name='dropview$openclinic$"+tablename+"' checked/></td></tr>");
 			}
 			else if(tabletype.equalsIgnoreCase("table")){
-				ResultSet rs2 = conn.getMetaData().getIndexInfo(null, null, tablename, false, false);	
+				ResultSet rs2 = conn.getMetaData().getIndexInfo(SH.cs("openclinicdbName","openclinic_dbo"), null, tablename, false, false);	
 				while(rs2.next()){
 					String indexname=rs2.getString("INDEX_NAME");
 					if(indexname!=null){

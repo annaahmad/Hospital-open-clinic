@@ -69,21 +69,45 @@
 	        		</tr>
 			        <tr>
 			            <td class='admin'><%=getTran(request,"Web.Occup","medwan.healthrecord.biometry.weight",sWebLanguage)%>&nbsp;</td>
-			            <td class='admin2'><input <%=setRightClickMini("ITEM_TYPE_BIOMETRY_WEIGHT")%> id="weight" class="text" type="text" size="10" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_BIOMETRY_WEIGHT" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_BIOMETRY_WEIGHT" property="value"/>"/></td>
+			            <td class='admin2'>
+			            	<%=SH.writeDefaultNumericInput(session, (TransactionVO)transaction, "ITEM_TYPE_BIOMETRY_WEIGHT", 10, 0, 150, sWebLanguage) %> kg
+			            </td>
 			            <td class='admin'><%=getTran(request,"Web.Occup","medwan.healthrecord.biometry.length",sWebLanguage)%>&nbsp;</td>
-			            <td class='admin2'><input <%=setRightClickMini("ITEM_TYPE_BIOMETRY_HEIGHT")%> class="text" type="text" size="10" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_BIOMETRY_HEIGHT" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_BIOMETRY_HEIGHT" property="value"/>"/></td>
+			            <td class='admin2'>
+			            	<%=SH.writeDefaultNumericInput(session, (TransactionVO)transaction, "ITEM_TYPE_BIOMETRY_HEIGHT", 10, 0, 250, sWebLanguage) %> cm
+			            </td>
+			        </tr>
+			        <tr>
+			            <td class='admin'><%=getTran(request,"Web.Occup","medwan.healthrecord.biometry.headcircumference",sWebLanguage)%>&nbsp;</td>
+			            <td class='admin2'>
+			            	<%=SH.writeDefaultNumericInput(session, (TransactionVO)transaction, "ITEM_TYPE_BIOMETRY_HEADCIRCUMFERENCE", 10, 10, 100, sWebLanguage) %> cm
+			            </td>
+			            <td class='admin'><%=getTran(request,"Web.Occup","medwan.healthrecord.biometry.thoraxcircumference",sWebLanguage)%>&nbsp;</td>
+			            <td class='admin2'>
+			            	<%=SH.writeDefaultNumericInput(session, (TransactionVO)transaction, "ITEM_TYPE_BIOMETRY_THORAXCIRCUMFERENCE", 10, 10, 200, sWebLanguage) %> cm
+			            </td>
+			        </tr>
+			        <tr>
+			            <td class='admin'><%=getTran(request,"Web.Occup","medwan.healthrecord.biometry.armcircumference",sWebLanguage)%>&nbsp;</td>
+			            <td class='admin2' colspan='3'>
+			            	<%=SH.writeDefaultNumericInput(session, (TransactionVO)transaction, "ITEM_TYPE_ARM_CIRCUMFERENCE", 10, 5, 50, sWebLanguage) %> cm
+			            </td>
 			        </tr>
 		        	<tr>
 			            <td class="admin"><%=getTran(request,"web","temperature",sWebLanguage)%>&nbsp;</td>
 			            <td class='admin2'><input class="text" type="text" size="10" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_TEMPERATURE" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_TEMPERATURE" property="value"/>"/>°C</td>
-			            <td class='admin'><%=getTran(request,"web","child.status",sWebLanguage)%>&nbsp;</td>
-			            <td class="admin2">
+			            <td class='admin' rowspan="2"><%=getTran(request,"web","child.status",sWebLanguage)%>&nbsp;</td>
+			            <td class="admin2" rowspan="2">
 			                <select class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_POSTNATAL_CHILDSTATUS" property="itemId"/>]>.value">
 			                	<option/>
 				            	<%=ScreenHelper.writeSelect(request,"msas.childstatus",((TransactionVO)transaction).getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_POSTNATAL_CHILDSTATUS"),sWebLanguage,false,true) %>
-			                </select><br/><br/>
-				            <input class="text" type="text" size="25" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_CHILDSTATUSCOMMENT" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_CHILDSTATUSCOMMENT" property="value"/>"/>
+			                </select><br/>
+			                <%=SH.writeDefaultCheckBox((TransactionVO)transaction, request, "medwan.common.true", "ITEM_TYPE_MSAS_POSTNATAL_CHILDASPHYXIA", sWebLanguage, "") %><%=getTran(request,"web","asphyxia",sWebLanguage)%>
 			            </td>
+			        </tr>
+		        	<tr>
+			            <td class="admin"><%=getTran(request,"web","gender",sWebLanguage)%>&nbsp;</td>
+			            <td class='admin2'><%=SH.writeDefaultRadioButtons((TransactionVO)transaction, request, "gender", "ITEM_TYPE_MSAS_POSTNATAL_CHILDGENDER", sWebLanguage, false, "", "") %></td>
 			        </tr>
 		        	<tr>
 			            <td class='admin'><%=getTran(request,"web","umbilicus.status",sWebLanguage)%>&nbsp;</td>
@@ -123,6 +147,177 @@
 			                                          property="value" outputString="checked"/>><label><%=getTran(request,"web","no",sWebLanguage) %></label>
 			            </td>
 			        </tr>
+	        		<tr class='admin'>
+			            <td colspan='4'><%=getTran(request,"web","child2",sWebLanguage)%>&nbsp;<img id='img_child2' height='16px' style='vertical-align: middle' src='<%=sCONTEXTPATH%>/_img/icons/mobile/plus.png' onclick='if(this.src.indexOf("plus.png")>-1){this.src="<%=sCONTEXTPATH%>/_img/icons/mobile/minus.png";document.getElementById("child2").style.display="";}else{this.src="<%=sCONTEXTPATH%>/_img/icons/mobile/plus.png";document.getElementById("child2").style.display="none";}'>&nbsp;</td>
+	        		</tr>
+	        		<%
+	        			String sChild2Display="none",sChild3Display="none";
+	        			Iterator items = ((TransactionVO)transaction).getItems().iterator();
+	        			while(items.hasNext()){
+	        				ItemVO item = (ItemVO)items.next();
+	        				if(item.getType().endsWith("_2") && SH.c(item.getValue()).length()>0){
+	        					sChild2Display="";
+	        				}
+	        				else if(item.getType().endsWith("_3") && SH.c(item.getValue()).length()>0){
+	        					sChild3Display="";
+	        				}
+	        			}
+	        		%>
+	        		<tr id='child2' style='display: <%=sChild2Display%>'>
+	        			<td colspan='4'>
+	        				<table width='100%'>
+						        <tr>
+						            <td class='admin'><%=getTran(request,"Web.Occup","medwan.healthrecord.biometry.weight",sWebLanguage)%>&nbsp;</td>
+						            <td class='admin2'>
+						            	<%=SH.writeDefaultNumericInput(session, (TransactionVO)transaction, "ITEM_TYPE_BIOMETRY_WEIGHT_2", 10, 0, 150, sWebLanguage) %> kg
+						            </td>
+						            <td class='admin'><%=getTran(request,"Web.Occup","medwan.healthrecord.biometry.length",sWebLanguage)%>&nbsp;</td>
+						            <td class='admin2'>
+						            	<%=SH.writeDefaultNumericInput(session, (TransactionVO)transaction, "ITEM_TYPE_BIOMETRY_HEIGHT_2", 10, 0, 250, sWebLanguage) %> cm
+						            </td>
+						        </tr>
+						        <tr>
+						            <td class='admin'><%=getTran(request,"Web.Occup","medwan.healthrecord.biometry.headcircumference",sWebLanguage)%>&nbsp;</td>
+						            <td class='admin2'>
+						            	<%=SH.writeDefaultNumericInput(session, (TransactionVO)transaction, "ITEM_TYPE_BIOMETRY_HEADCIRCUMFERENCE_2", 10, 10, 100, sWebLanguage) %> cm
+						            </td>
+						            <td class='admin'><%=getTran(request,"Web.Occup","medwan.healthrecord.biometry.thoraxcircumference",sWebLanguage)%>&nbsp;</td>
+						            <td class='admin2'>
+						            	<%=SH.writeDefaultNumericInput(session, (TransactionVO)transaction, "ITEM_TYPE_BIOMETRY_THORAXCIRCUMFERENCE_2", 10, 10, 200, sWebLanguage) %> cm
+						            </td>
+						        </tr>
+						        <tr>
+						            <td class='admin'><%=getTran(request,"Web.Occup","medwan.healthrecord.biometry.armcircumference",sWebLanguage)%>&nbsp;</td>
+						            <td class='admin2' colspan='3'>
+						            	<%=SH.writeDefaultNumericInput(session, (TransactionVO)transaction, "ITEM_TYPE_ARM_CIRCUMFERENCE_2", 10, 5, 50, sWebLanguage) %> cm
+						            </td>
+						        </tr>
+					        	<tr>
+						            <td class="admin"><%=getTran(request,"web","temperature",sWebLanguage)%>&nbsp;</td>
+						            <td class='admin2'>
+						            	<%=SH.writeDefaultNumericInput(session, (TransactionVO)transaction, "ITEM_TYPE_TEMPERATURE_2", 10, 20, 50, sWebLanguage) %>
+						            <td class='admin' rowspan="2"><%=getTran(request,"web","child.status",sWebLanguage)%>&nbsp;</td>
+						            <td class="admin2" rowspan="2">
+						            	<%=SH.writeDefaultSelect(request, (TransactionVO)transaction, "ITEM_TYPE_MSAS_POSTNATAL_CHILDSTATUS_2", "msas.childstatus", sWebLanguage, "") %><br/>
+						                <%=SH.writeDefaultCheckBox((TransactionVO)transaction, request, "medwan.common.true", "ITEM_TYPE_MSAS_POSTNATAL_CHILDASPHYXIA_2", sWebLanguage, "") %><%=getTran(request,"web","asphyxia",sWebLanguage)%>
+						            </td>
+						        </tr>
+					        	<tr>
+						            <td class="admin"><%=getTran(request,"web","gender",sWebLanguage)%>&nbsp;</td>
+						            <td class='admin2'><%=SH.writeDefaultRadioButtons((TransactionVO)transaction, request, "gender", "ITEM_TYPE_MSAS_POSTNATAL_CHILDGENDER_2", sWebLanguage, false, "", "") %></td>
+						        </tr>
+					        	<tr>
+						            <td class='admin'><%=getTran(request,"web","umbilicus.status",sWebLanguage)%>&nbsp;</td>
+						            <td class="admin2">
+						            	<%=SH.writeDefaultSelect(request, (TransactionVO)transaction, "ITEM_TYPE_MSAS_POSTNATAL_UMBILICUSSTATUS_2", "msas.umbilicusstatus", sWebLanguage, "") %>
+						            </td>
+						            <td class="admin"><%=getTran(request,"web","infection.treatment",sWebLanguage)%>&nbsp;</td>
+						            <td class='admin2'>
+						            	<%=SH.writeDefaultTextInput(session, (TransactionVO)transaction, "ITEM_TYPE_MSAS_INFECTIONTREATMENT_2", 25) %>
+						            </td>
+						        </tr>
+						        <tr>
+						            <td class='admin'><%=getTran(request,"web","bcg",sWebLanguage)%>&nbsp;</td>
+						            <td class='admin2'>
+						            	<%=SH.writeDefaultDateInput(session, (TransactionVO)transaction, "ITEM_TYPE_MSAS_POSTNATAL_BCG_2", sWebLanguage, sCONTEXTPATH) %>
+						            </td>
+						            <td class='admin'><%=getTran(request,"web","polio",sWebLanguage)%>&nbsp;</td>
+						            <td class='admin2'>
+						            	<%=SH.writeDefaultDateInput(session, (TransactionVO)transaction, "ITEM_TYPE_MSAS_POSTNATAL_POLIO_2", sWebLanguage, sCONTEXTPATH) %>
+						            </td>
+						        </tr>
+						        <tr>
+						            <td class='admin'><%=getTran(request,"web","hepatitisb",sWebLanguage)%>&nbsp;</td>
+						            <td class='admin2'>
+						            	<%=SH.writeDefaultDateInput(session, (TransactionVO)transaction, "ITEM_TYPE_MSAS_POSTNATAL_HEPATITISB_2", sWebLanguage, sCONTEXTPATH) %>
+						            </td>
+						            <td class="admin"><%=getTran(request,"web","milda",sWebLanguage)%>&nbsp;</td>
+						            <td class="admin2">
+						            	<%=SH.writeDefaultRadioButtons((TransactionVO)transaction, request, "truefalse", "ITEM_TYPE_MSAS_POSTNATAL_MILDA_2", sWebLanguage, false, "", "") %>
+						            </td>
+						        </tr>
+	        				</table>
+	        			</td>
+	        		</tr>
+	        		<tr class='admin'>
+			            <td colspan='4'><%=getTran(request,"web","child3",sWebLanguage)%>&nbsp;<img id='img_child3' height='16px' style='vertical-align: middle' src='<%=sCONTEXTPATH%>/_img/icons/mobile/plus.png' onclick='if(this.src.indexOf("plus.png")>-1){this.src="<%=sCONTEXTPATH%>/_img/icons/mobile/minus.png";document.getElementById("child3").style.display="";}else{this.src="<%=sCONTEXTPATH%>/_img/icons/mobile/plus.png";document.getElementById("child3").style.display="none";}'>&nbsp;</td>
+	        		</tr>
+	        		<tr id='child3' style='display: <%=sChild3Display%>'>
+	        			<td colspan='4'>
+	        				<table width='100%'>
+						        <tr>
+						            <td class='admin'><%=getTran(request,"Web.Occup","medwan.healthrecord.biometry.weight",sWebLanguage)%>&nbsp;</td>
+						            <td class='admin2'>
+						            	<%=SH.writeDefaultNumericInput(session, (TransactionVO)transaction, "ITEM_TYPE_BIOMETRY_WEIGHT_3", 10, 0, 150, sWebLanguage) %> kg
+						            </td>
+						            <td class='admin'><%=getTran(request,"Web.Occup","medwan.healthrecord.biometry.length",sWebLanguage)%>&nbsp;</td>
+						            <td class='admin2'>
+						            	<%=SH.writeDefaultNumericInput(session, (TransactionVO)transaction, "ITEM_TYPE_BIOMETRY_HEIGHT_3", 10, 0, 250, sWebLanguage) %> cm
+						            </td>
+						        </tr>
+						        <tr>
+						            <td class='admin'><%=getTran(request,"Web.Occup","medwan.healthrecord.biometry.headcircumference",sWebLanguage)%>&nbsp;</td>
+						            <td class='admin2'>
+						            	<%=SH.writeDefaultNumericInput(session, (TransactionVO)transaction, "ITEM_TYPE_BIOMETRY_HEADCIRCUMFERENCE_3", 10, 10, 100, sWebLanguage) %> cm
+						            </td>
+						            <td class='admin'><%=getTran(request,"Web.Occup","medwan.healthrecord.biometry.thoraxcircumference",sWebLanguage)%>&nbsp;</td>
+						            <td class='admin2'>
+						            	<%=SH.writeDefaultNumericInput(session, (TransactionVO)transaction, "ITEM_TYPE_BIOMETRY_THORAXCIRCUMFERENCE_3", 10, 10, 200, sWebLanguage) %> cm
+						            </td>
+						        </tr>
+						        <tr>
+						            <td class='admin'><%=getTran(request,"Web.Occup","medwan.healthrecord.biometry.armcircumference",sWebLanguage)%>&nbsp;</td>
+						            <td class='admin2' colspan='3'>
+						            	<%=SH.writeDefaultNumericInput(session, (TransactionVO)transaction, "ITEM_TYPE_ARM_CIRCUMFERENCE_3", 10, 5, 50, sWebLanguage) %> cm
+						            </td>
+						        </tr>
+					        	<tr>
+						            <td class="admin"><%=getTran(request,"web","temperature",sWebLanguage)%>&nbsp;</td>
+						            <td class='admin2'>
+						            	<%=SH.writeDefaultNumericInput(session, (TransactionVO)transaction, "ITEM_TYPE_TEMPERATURE_3", 10, 20, 50, sWebLanguage) %>
+						            <td class='admin' rowspan="2"><%=getTran(request,"web","child.status",sWebLanguage)%>&nbsp;</td>
+						            <td class="admin2" rowspan="2">
+						            	<%=SH.writeDefaultSelect(request, (TransactionVO)transaction, "ITEM_TYPE_MSAS_POSTNATAL_CHILDSTATUS_3", "msas.childstatus", sWebLanguage, "") %><br/>
+						                <%=SH.writeDefaultCheckBox((TransactionVO)transaction, request, "medwan.common.true", "ITEM_TYPE_MSAS_POSTNATAL_CHILDASPHYXIA_3", sWebLanguage, "") %><%=getTran(request,"web","asphyxia",sWebLanguage)%>
+						            </td>
+						        </tr>
+					        	<tr>
+						            <td class="admin"><%=getTran(request,"web","gender",sWebLanguage)%>&nbsp;</td>
+						            <td class='admin2'><%=SH.writeDefaultRadioButtons((TransactionVO)transaction, request, "gender", "ITEM_TYPE_MSAS_POSTNATAL_CHILDGENDER_3", sWebLanguage, false, "", "") %></td>
+						        </tr>
+					        	<tr>
+						            <td class='admin'><%=getTran(request,"web","umbilicus.status",sWebLanguage)%>&nbsp;</td>
+						            <td class="admin2">
+						            	<%=SH.writeDefaultSelect(request, (TransactionVO)transaction, "ITEM_TYPE_MSAS_POSTNATAL_UMBILICUSSTATUS_3", "msas.umbilicusstatus", sWebLanguage, "") %>
+						            </td>
+						            <td class="admin"><%=getTran(request,"web","infection.treatment",sWebLanguage)%>&nbsp;</td>
+						            <td class='admin2'>
+						            	<%=SH.writeDefaultTextInput(session, (TransactionVO)transaction, "ITEM_TYPE_MSAS_INFECTIONTREATMENT_3", 25) %>
+						            </td>
+						        </tr>
+						        <tr>
+						            <td class='admin'><%=getTran(request,"web","bcg",sWebLanguage)%>&nbsp;</td>
+						            <td class='admin2'>
+						            	<%=SH.writeDefaultDateInput(session, (TransactionVO)transaction, "ITEM_TYPE_MSAS_POSTNATAL_BCG_3", sWebLanguage, sCONTEXTPATH) %>
+						            </td>
+						            <td class='admin'><%=getTran(request,"web","polio",sWebLanguage)%>&nbsp;</td>
+						            <td class='admin2'>
+						            	<%=SH.writeDefaultDateInput(session, (TransactionVO)transaction, "ITEM_TYPE_MSAS_POSTNATAL_POLIO_3", sWebLanguage, sCONTEXTPATH) %>
+						            </td>
+						        </tr>
+						        <tr>
+						            <td class='admin'><%=getTran(request,"web","hepatitisb",sWebLanguage)%>&nbsp;</td>
+						            <td class='admin2'>
+						            	<%=SH.writeDefaultDateInput(session, (TransactionVO)transaction, "ITEM_TYPE_MSAS_POSTNATAL_HEPATITISB_3", sWebLanguage, sCONTEXTPATH) %>
+						            </td>
+						            <td class="admin"><%=getTran(request,"web","milda",sWebLanguage)%>&nbsp;</td>
+						            <td class="admin2">
+						            	<%=SH.writeDefaultRadioButtons((TransactionVO)transaction, request, "truefalse", "ITEM_TYPE_MSAS_POSTNATAL_MILDA_3", sWebLanguage, false, "", "") %>
+						            </td>
+						        </tr>
+	        				</table>
+	        			</td>
+	        		</tr>
 					<tr>
 						<td colspan="4">
 					      	<%ScreenHelper.setIncludePage(customerInclude("healthrecord/diagnosesEncoding.jsp"),pageContext);%>
@@ -189,6 +384,13 @@
 			            <td class="admin"><%=getTran(request,"web","tv",sWebLanguage)%>&nbsp;</td>
 			            <td class="admin2" colspan='3'>
 			                <textarea rows="1" onKeyup="resizeTextarea(this,10);" class="text" cols="50" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_MOTHERTV" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_MOTHERTV" property="value"/></textarea>
+			            </td>
+			        </tr>
+		        	<tr>
+			            <td class="admin"><%=getTran(request,"web","fistula",sWebLanguage)%>&nbsp;</td>
+			            <td class="admin2" colspan='3'>
+			                <%=SH.writeDefaultCheckBoxes((TransactionVO)transaction, request, "msas.fistula", "ITEM_TYPE_MSAS_POSTNATAL_FISTULA", sWebLanguage, false) %>
+			                <br/><%=SH.writeDefaultCheckBoxes((TransactionVO)transaction, request, "msas.fistula.treatment", "ITEM_TYPE_MSAS_POSTNATAL_FISTULA_TREATMENT", sWebLanguage, false) %>
 			            </td>
 			        </tr>
 		        	<tr>

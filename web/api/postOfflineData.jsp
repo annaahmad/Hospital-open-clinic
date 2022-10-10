@@ -44,13 +44,20 @@
 			String oldid=transaction.getTransactionId()+"";
 			transaction.setTransactionId(-1);
 			checkCounter("TransactionID",Math.max(minid,Integer.parseInt(oldid)));
-			MedwanQuery.getInstance().updateTransaction(MedwanQuery.getInstance().getPersonIdFromHealthrecordId(transaction.getHealthrecordId()), transaction);
+			int personid=MedwanQuery.getInstance().getPersonIdFromHealthrecordId(transaction.getHealthrecordId());
+			MedwanQuery.getInstance().updateTransaction(personid, transaction);
 			for(int n=0;n<transaction.getAnalyses().size();n++){
 				RequestedLabAnalysis a = (RequestedLabAnalysis)transaction.getAnalyses().elementAt(n);
 				a.setServerId(transaction.getServerId()+"");
 				a.setTransactionId(transaction.getTransactionId()+"");
 				a.store();
 			}
+			// If the transaction contains a be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_LAB_OBJECTID item,
+			// then we must keep track of the value of this item so it can be updated at a later stage.
+			// store the combination personid+oldtransactionid+newtransactionid
+			// later, the itemvalue must be replaced by newtransactionid for same personid and itemvalue=oldtransactionid
+			// if it already exists, then do it right away, if not, place it in a queue
+			
 			sResult="<response type='transaction' oldid='"+oldid+"' newid='"+transaction.getTransactionId()+"'/>";
 		}
 		else{

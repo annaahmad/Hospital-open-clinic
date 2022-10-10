@@ -200,7 +200,10 @@
         </tr>
         <tr>
         	<td class='admin'><%=getTran(request,"web","admissiontype",sWebLanguage) %></td>
-        	<td class='admin2'><%=SH.writeDefaultSelect(request, (TransactionVO)transaction, "ITEM_TYPE_ADMISSIONTYPE","msas.uren.admissiontype", sWebLanguage, "") %></td>
+        	<td class='admin2'>
+        		<%=SH.writeDefaultSelect(request, (TransactionVO)transaction, "ITEM_TYPE_ADMISSIONTYPE","msas.uren.admissiontype", sWebLanguage, "") %><BR/>
+        		<%=SH.writeDefaultCheckBoxes((TransactionVO)transaction, request, "msas.uren.communityreferral", "ITEM_TYPE_MSAS_UREN_COMMUNITYREFERRAL", sWebLanguage, false) %>
+        	</td>
         	<td class='admin'><%=getTran(request,"web","comingfrom",sWebLanguage) %></td>
         	<td class='admin2'><%=SH.writeDefaultTextInput(session, (TransactionVO)transaction, "ITEM_TYPE_COMINGFROM", 50) %></td>
         </tr>
@@ -316,13 +319,18 @@
 		</tr>
 		<tr>
 	       	<td class='admin'><%=getTran(request,"msas","othertreatment",sWebLanguage) %></td>
-        	<td class='admin2' colspan='3'><%=SH.writeDefaultTextArea(session, (TransactionVO)transaction, "ITEM_TYPE_UREN_OTHERTREATMENT", 50, 1) %></td>
+        	<td class='admin2'>
+        		<%=SH.writeDefaultTextArea(session, (TransactionVO)transaction, "ITEM_TYPE_UREN_OTHERTREATMENT", 50, 1) %>
+        	</td>
+	       	<td class='admin'><%=getTran(request,"msas","atpebags",sWebLanguage) %></td>
+        	<td class='admin2'><%=SH.writeDefaultNumericInput(session, (TransactionVO)transaction, "ITEM_TYPE_UREN_ATPEBAGS", 3,0,20,sWebLanguage) %></td>
 		</tr>
 		<tr>
 	       	<td class='admin'><%=getTran(request,"msas","action",sWebLanguage) %></td>
         	<td class='admin2'><%=SH.writeDefaultTextArea(session, (TransactionVO)transaction, "ITEM_TYPE_UREN_ACTION", 50, 1) %></td>
-	       	<td class='admin'><%=getTran(request,"msas","atpebags",sWebLanguage) %></td>
-        	<td class='admin2'><%=SH.writeDefaultNumericInput(session, (TransactionVO)transaction, "ITEM_TYPE_UREN_ATPEBAGS", 3,0,20,sWebLanguage) %></td>
+        	<td class='admin2' colspan='2'>
+        		<%=SH.writeDefaultCheckBox((TransactionVO)transaction, request, "medwan.common.true", "TEM_TYPE_MSAS_MALNUTRITION_SENTTOCOMMUNITYLEVEL", "") %><%=getTran(request,"web","senttocommunitylevel",sWebLanguage) %>
+        	</td>
 		</tr>
     </table>
     <table width="100%" class="list" cellspacing="1">

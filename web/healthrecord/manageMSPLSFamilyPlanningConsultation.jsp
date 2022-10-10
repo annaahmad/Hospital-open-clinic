@@ -352,7 +352,7 @@
 		<tr>
         	<td class='admin' colspan='1'><%=getTran(request,"web","selectedmethod",sWebLanguage) %></td>
         	<td class='admin2' style='padding: 0px' colspan='1'>
-        		<%=ScreenHelper.writeDefaultSelect(request, (TransactionVO)transaction, "selectedmethod", "fp.selectedmethod", sWebLanguage, "") %>
+        		<%=ScreenHelper.writeDefaultSelect(request, (TransactionVO)transaction, "selectedmethod", "fp.selectedmethod.mspls", sWebLanguage, "") %>
         	</td>
         	<td class='admin' colspan='1'><%=getTran(request,"web","comment",sWebLanguage) %></td>
         	<td class='admin2' style='padding: 0px' colspan='1'>

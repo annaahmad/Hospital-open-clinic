@@ -567,12 +567,16 @@
             			</td>
             		</tr>
             		<tr>
-            			<td colspan='6'>
+            			<td>
                             <input type="checkbox" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_PREGNANCY_URINARYINFECTION" property="itemId"/>]>.value" value="medwan.common.true"
                             <mxs:propertyAccessorI18N name="transaction.items" scope="page"
                                                       compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_PREGNANCY_URINARYINFECTION;value=medwan.common.true"
                                                       property="value"
                                                       outputString="checked"/>><%=getTran(request,"gynecology", "urinary.infection", sWebLanguage)%>
+            			</td>
+            			<td colspan='5'>
+            				<%=SH.writeDefaultCheckBox((TransactionVO)transaction, request, "medwan.common.true", "ITEM_TYPE_DELIVERY_HISTORY_HIV", "") %>
+            				<%=getTran(request,"web","hivpositive",sWebLanguage) %>
             			</td>
             		</tr>
             		<tr>

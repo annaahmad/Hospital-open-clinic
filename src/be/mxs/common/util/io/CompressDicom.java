@@ -7,6 +7,14 @@ import java.sql.DriverManager;
 import java.text.SimpleDateFormat;
 import java.sql.Timestamp;
 import java.util.Date;
+
+import org.apache.commons.io.FileUtils;
+
+import com.pixelmed.apps.CompressDicomFiles;
+import com.pixelmed.dicom.Attribute;
+import com.pixelmed.dicom.AttributeList;
+import com.pixelmed.dicom.TagFromName;
+
 import be.openclinic.archiving.DicomUtils;
 import be.openclinic.system.SH;
 
@@ -14,8 +22,32 @@ import java.io.File;
 import be.mxs.common.util.db.MedwanQuery;
 import uk.org.primrose.vendor.standalone.PrimroseLoader;
 
-public class CompressDicom
-{
+public class CompressDicom {
+	
+	public static boolean compress(String filename) {
+		File fIn = new File(filename);
+		AttributeList attributeList = new AttributeList();
+		try {
+			attributeList.read(fIn);
+			String outfilename=Attribute.getDelimitedStringValuesOrDefault(attributeList, TagFromName.SOPInstanceUID, "");
+			new File("/tmp/"+outfilename).delete();
+			String[] files = new String[3];
+			files[0]=filename;
+			files[1]="/tmp";
+			files[2]=SH.cs("DICOMCompressionAlgoritm","jpeg-lossless");
+			CompressDicomFiles.main(files);
+			File fOut=new File("/tmp/"+outfilename);
+			if(fOut.exists() && fOut.length()>0) {
+				fIn.delete();
+				FileUtils.moveFile(fOut, fIn);
+				return true;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
     public static void main(final String[] args) {
         try {
             System.out.println("Database connection url: " + args[0]);
@@ -34,13 +66,13 @@ public class CompressDicom
                 PreparedStatement ps = conn.prepareStatement("select * from oc_pacs where oc_pacs_compresseddatetime is null limit 520");
                 ResultSet rs = ps.executeQuery();
                 System.out.println("Query executed");
-                while (rs.next() && n++ < 500) {
+                while (rs.next() && n++ < SH.ci("DICOMCompressBatchSize", 500)) {
                     String studyuid = rs.getString("oc_pacs_studyuid");
                     String series = rs.getString("oc_pacs_series");
                     String sequence = rs.getString("oc_pacs_sequence");
                     String filename = String.valueOf(SCANDIR_BASE) + "/" + SCANDIR_TO + "/" + rs.getString("oc_pacs_filename");
                     File file = new File(filename);
-                    if(new java.util.Date().getTime()-file.lastModified()<3600*1000) {
+                    if(new java.util.Date().getTime()-file.lastModified()<60000) {
                     	//File is too recent, skip it
                     	continue;
                     }
@@ -64,7 +96,7 @@ public class CompressDicom
                     	continue;
                     }
                     try {
-                        if (decompressedsize > 0L && DicomUtils.compressDicomDefault(filename)) {
+                        if (decompressedsize > 0L && compress(filename)) {
                             System.out.println(String.valueOf(totalfiles++) + ": " + filename + " compressed (gain = " + (decompressedsize - new File(filename).length()) / 1024L + " Kb - " + (decompressedsize - new File(filename).length()) * 100L / decompressedsize + "% compression)");
                             PreparedStatement ps2 = conn.prepareStatement("update oc_pacs set oc_pacs_compresseddatetime=? where oc_pacs_studyuid=? and oc_pacs_series=? and oc_pacs_sequence=?");
                             ps2.setTimestamp(1, new Timestamp(new Date().getTime()));

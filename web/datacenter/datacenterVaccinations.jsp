@@ -8,7 +8,7 @@
 	}
 	String sEnd = checkString(request.getParameter("to"));
 	if(sEnd.length()==0){
-		sEnd=new SimpleDateFormat("dd/MM/yyyy").format(new java.util.Date());
+		sEnd=SH.formatDate(new java.util.Date());
 	}
 	String sServerGroups=MedwanQuery.getInstance().getConfigString("datacenterUserServerGroups."+session.getAttribute("datacenteruser"),"");
 %>

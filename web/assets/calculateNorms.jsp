@@ -49,6 +49,7 @@
 	            <input type='button' class='button' name='calculateNormsButton' value='<%=getTran(request,"web","calculate",sWebLanguage) %>' onclick='calculateNorms()'/>
 				&nbsp;&nbsp;
 				<input type='radio' name='format' value='csv' checked/>CSV/Excel
+				<input type='radio' name='format' value='csv2' />CSV/Excel = PDF
 				<input type='radio' name='format' value='pdf'/>PDF
 				<span id='messagediv'></span>
 			</td>

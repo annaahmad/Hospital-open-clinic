@@ -42,7 +42,6 @@
     <input type="hidden" id="EditAssetUID" name="EditAssetUID" value="<%=asset.getUid()%>">
     <%=writeTableHeaderButton(getTran(request,"web","assets.infrastructure",sWebLanguage),!asset.hasHistory()?"":"<img title='"+getTranNoLink("web","history",sWebLanguage)+"' src='"+sCONTEXTPATH+"/_img/icons/icon_history2.gif' onclick='showHistory();'/>&nbsp;")%>
     
-    <input type='hidden' id='comment1'/>
     <input type='hidden' id='comment2'/>
     <input type='hidden' id='comment3'/>
     <input type='hidden' id='comment4'/>
@@ -118,6 +117,9 @@
             <td class="admin" ><%=getTran(request,"web.assets","surface",sWebLanguage)%></td>
             <td class="admin2">
                 <input type="text" class="text" id="comment17" name="comment17" size="10" maxLength="30" value="<%=checkString(asset.getComment17())%>">
+                <select name='comment19' id='comment19' class='text'>
+                	<%=SH.writeSelect(request, "gmao.surfaceunit", SH.c(asset.getComment19(),SH.cs("gmaodefaultsurfaceunit","m2")), sWebLanguage) %>
+                </select>&nbsp;
             </td>
         </tr>
         <tr>
@@ -242,7 +244,10 @@
         <tr>
             <td class="admin"><%=getTran(request,"web.assets","workcost",sWebLanguage)%>&nbsp;*</td>
             <td class="admin2">
-                <input type="text" class="text" id="purchasePrice" name="purchasePrice" size="15" maxLength="15" value="<%=asset.getPurchasePrice() %>" onKeyUp="isNumber(this);" onBlur="if(isNumber(this))setDecimalLength(this,2,true);"> <%=MedwanQuery.getInstance().getConfigParam("currency","€")%>&nbsp;
+                <input type="text" class="text" id="purchasePrice" name="purchasePrice" size="15" maxLength="15" value="<%=asset.getPurchasePrice() %>" onKeyUp="isNumber(this);" onBlur="if(isNumber(this))setDecimalLength(this,2,true);">
+                <select name='comment18' id='comment18' class='text'>
+                	<%=SH.writeSelect(request, "gmao.currency", SH.c(asset.getComment18(),SH.cs("gmaodefaultcurrency","€bif")), sWebLanguage) %>
+                </select>&nbsp;
             </td>
             <td class="admin"><%=getTran(request,"web.assets","fundingsource",sWebLanguage)%>&nbsp;*</td>
             <td class="admin2">
@@ -253,7 +258,19 @@
                 <%=writeDateField("comment14","EditForm",checkString(asset.getComment14()),sWebLanguage)%>        
             </td>                        
         </tr>
-        <input type='hidden' name='saleDate' id='saleDate'/>
+        <tr>
+            <td class="admin"><%=getTran(request,"web.assets","outofservicedate",sWebLanguage)%>&nbsp;</td>
+            <td class="admin2">
+                <%=writeDateField("saleDate","EditForm",SH.formatDate(asset.getSaleDate()),sWebLanguage)%>
+            </td>
+            <td class="admin"><%=getTran(request,"web.assets","lastworkstype",sWebLanguage)%>&nbsp;</td>
+            <td class="admin2" colspan='3'>
+            	<select class='text' name='comment1' id='comment1'>
+            		<option/>
+            		<%=SH.writeSelect(request, "asset.workstype", asset.getComment1(), sWebLanguage) %>
+            	</select>
+            </td>
+        </tr>
         <input type='hidden' name='saleValue' id='saleValue'/>
         <input type='hidden' name='saleClient' id='saleClient'/>
       

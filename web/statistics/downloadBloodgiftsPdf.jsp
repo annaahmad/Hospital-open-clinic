@@ -850,24 +850,24 @@
 		table.addCell(getTitleCellCentered("%",7));
 		table.addCell(getTitleCellCentered("Nombre",8));
 		table.addCell(getTitleCellCentered("%",7));
-		int[][] statuses = new int[4][4];
+		int[][] statuses = new int[6][4];
 		for(int n=0;n<bloodgifts.size();n++){
 			BloodGift gift = bloodgifts.elementAt(n);
 			if(gift.isNewDonor()){
-				if(gift.getHiv()>0) statuses[2][0]++; else statuses[3][0]++;
-				if(gift.getHepatitisB()>0) statuses[2][1]++; else statuses[3][1]++;
-				if(gift.getHepatitisC()>0) statuses[2][2]++; else statuses[3][2]++;
-				if(gift.getSyphilis()>0) statuses[2][3]++; else statuses[3][3]++;
+				if(gift.getHiv()>0) statuses[2][0]++; else if(gift.getHiv()==0) statuses[3][0]++; else statuses[5][0]++;
+				if(gift.getHepatitisB()>0) statuses[2][1]++; else if(gift.getHepatitisB()==0) statuses[3][1]++; else statuses[5][1]++;
+				if(gift.getHepatitisC()>0) statuses[2][2]++; else if(gift.getHepatitisC()==0) statuses[3][2]++; else statuses[5][2]++;
+				if(gift.getSyphilis()>0) statuses[2][3]++; else if(gift.getSyphilis()==0) statuses[3][3]++; else statuses[5][3]++;
 			}
 			else{
-				if(gift.getHiv()>0) statuses[0][0]++; else statuses[1][0]++;
-				if(gift.getHepatitisB()>0) statuses[0][1]++; else statuses[1][1]++;
-				if(gift.getHepatitisC()>0) statuses[0][2]++; else statuses[1][2]++;
-				if(gift.getSyphilis()>0) statuses[0][3]++; else statuses[1][3]++;
+				if(gift.getHiv()>0) statuses[0][0]++; else if(gift.getHiv()==0) statuses[1][0]++; else statuses[4][0]++;
+				if(gift.getHepatitisB()>0) statuses[0][1]++; else if(gift.getHepatitisB()==0) statuses[1][1]++; else statuses[4][1]++;
+				if(gift.getHepatitisC()>0) statuses[0][2]++; else if(gift.getHepatitisC()==0) statuses[1][2]++; else statuses[4][2]++;
+				if(gift.getSyphilis()>0) statuses[0][3]++; else if(gift.getSyphilis()==0) statuses[1][3]++; else statuses[4][3]++;
 			}
 		}		
 		cell = getValueCell("Anciens", 20);
-		cell.setRowspan(3);
+		cell.setRowspan(4);
 		table.addCell(cell);
 		table.addCell(getValueCell("Positif", 20));
 		for(int n=0;n<4;n++){
@@ -879,13 +879,18 @@
 			table.addCell(getValueCellCentered(statuses[1][n]+"", 8));
 			table.addCell(getValueCellCentered(getPercent(statuses[1][n],bloodgifts.size())+"%", 7));
 		}
+		table.addCell(getValueCell("Inconnu", 20));
+		for(int n=0;n<4;n++){
+			table.addCell(getValueCellCentered(statuses[4][n]+"", 8));
+			table.addCell(getValueCellCentered(getPercent(statuses[4][n],bloodgifts.size())+"%", 7));
+		}
 		table.addCell(getValueCellBold("Total", 20));
 		for(int n=0;n<4;n++){
-			table.addCell(getValueCellCenteredBold((statuses[0][n]+statuses[1][n])+"", 8));
-			table.addCell(getValueCellCenteredBold(getPercent(statuses[0][n]+statuses[1][n],bloodgifts.size())+"%", 7));
+			table.addCell(getValueCellCenteredBold((statuses[0][n]+statuses[1][n]+statuses[4][n])+"", 8));
+			table.addCell(getValueCellCenteredBold(getPercent(statuses[0][n]+statuses[1][n]+statuses[4][n],bloodgifts.size())+"%", 7));
 		}
 		cell = getValueCell("Nouveaux", 20);
-		cell.setRowspan(3);
+		cell.setRowspan(4);
 		table.addCell(cell);
 		table.addCell(getValueCell("Positif", 20));
 		for(int n=0;n<4;n++){
@@ -897,10 +902,15 @@
 			table.addCell(getValueCellCentered(statuses[3][n]+"", 8));
 			table.addCell(getValueCellCentered(getPercent(statuses[3][n],bloodgifts.size())+"%", 7));
 		}
+		table.addCell(getValueCell("Inconnu", 20));
+		for(int n=0;n<4;n++){
+			table.addCell(getValueCellCentered(statuses[5][n]+"", 8));
+			table.addCell(getValueCellCentered(getPercent(statuses[5][n],bloodgifts.size())+"%", 7));
+		}
 		table.addCell(getValueCell("Total", 20));
 		for(int n=0;n<4;n++){
-			table.addCell(getValueCellCenteredBold((statuses[2][n]+statuses[3][n])+"", 8));
-			table.addCell(getValueCellCenteredBold(getPercent(statuses[2][n]+statuses[3][n],bloodgifts.size())+"%", 7));
+			table.addCell(getValueCellCenteredBold((statuses[2][n]+statuses[3][n]+statuses[5][n])+"", 8));
+			table.addCell(getValueCellCenteredBold(getPercent(statuses[2][n]+statuses[3][n]+statuses[5][n],bloodgifts.size())+"%", 7));
 		}
 		doc.add(table);
 
@@ -933,7 +943,7 @@
 					}
 					
 				}
-				else { //Négatif
+				else if(gift.getHiv()==0){ //Négatif
 					if(!SH.c(gift.getGender()).equalsIgnoreCase("m")){ //Féminin
 						increaseAgeValue(gift.getAge(), nouveaux[2]);
 					}
@@ -953,7 +963,7 @@
 					}
 					
 				}
-				else { //Négatif
+				else if(gift.getHiv()==0) { //Négatif
 					if(!SH.c(gift.getGender()).equalsIgnoreCase("m")){ //Féminin
 						increaseAgeValue(gift.getAge(), anciens[2]);
 					}
@@ -1092,7 +1102,7 @@
 					}
 					
 				}
-				else { //Négatif
+				else if(gift.getHepatitisB()==0){ //Négatif
 					if(!SH.c(gift.getGender()).equalsIgnoreCase("m")){ //Féminin
 						increaseAgeValue(gift.getAge(), nouveaux[2]);
 					}
@@ -1112,7 +1122,7 @@
 					}
 					
 				}
-				else { //Négatif
+				else if(gift.getHepatitisB()==0){ //Négatif
 					if(!SH.c(gift.getGender()).equalsIgnoreCase("m")){ //Féminin
 						increaseAgeValue(gift.getAge(), anciens[2]);
 					}
@@ -1251,7 +1261,7 @@
 					}
 					
 				}
-				else { //Négatif
+				else if(gift.getHepatitisC()==0){ //Négatif
 					if(!SH.c(gift.getGender()).equalsIgnoreCase("m")){ //Féminin
 						increaseAgeValue(gift.getAge(), nouveaux[2]);
 					}
@@ -1271,7 +1281,7 @@
 					}
 					
 				}
-				else { //Négatif
+				else if(gift.getHepatitisC()==0){ //Négatif
 					if(!SH.c(gift.getGender()).equalsIgnoreCase("m")){ //Féminin
 						increaseAgeValue(gift.getAge(), anciens[2]);
 					}
@@ -1410,7 +1420,7 @@
 					}
 					
 				}
-				else { //Négatif
+				else if(gift.getSyphilis()==0){ //Négatif
 					if(!SH.c(gift.getGender()).equalsIgnoreCase("m")){ //Féminin
 						increaseAgeValue(gift.getAge(), nouveaux[2]);
 					}
@@ -1430,7 +1440,7 @@
 					}
 					
 				}
-				else { //Négatif
+				else if(gift.getSyphilis()==0){ //Négatif
 					if(!SH.c(gift.getGender()).equalsIgnoreCase("m")){ //Féminin
 						increaseAgeValue(gift.getAge(), anciens[2]);
 					}

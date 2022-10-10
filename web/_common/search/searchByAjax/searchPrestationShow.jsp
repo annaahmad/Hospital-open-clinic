@@ -146,8 +146,8 @@
 	                       .append("<td>"+sCode+"</td>")
 	                       .append("<td>"+sDescr+"</td>")
 	                       .append("<td>"+sTypeTran+"</td>")
-	                       .append("<td nowrap>"+prestation.getPriceFormatted(category)+"</td>")
-	                       .append("<td width='20%'>"+checkString(prestation.getCategoriesFormatted(category))+"</td>")
+	                       .append("<td nowrap style='font-weight: normal'>"+prestation.getPriceFormatted(category)+"</td>")
+	                       .append("<td width='20%' style='font-weight: normal'>"+checkString(prestation.getCategoriesFormatted(category)).replaceAll("\\: ", "\\:--space--")+"</td>")
 	                      .append("</tr>");
 		         }
 		         else{
@@ -156,8 +156,8 @@
 	                       .append("<td>"+sCode+"</td>")
 	                       .append("<td>"+sDescr+"</td>")
 	                       .append("<td>"+sTypeTran+"</td>")
-	                       .append("<td nowrap>"+prestation.getPriceFormatted(category)+"</td>")
-	                       .append("<td width='20%'>"+checkString(prestation.getCategoriesFormatted(category))+"</td>")
+	                       .append("<td nowrap style='font-weight: normal'>"+prestation.getPriceFormatted(category)+"</td>")
+	                       .append("<td width='20%' style='font-weight: normal'>"+checkString(prestation.getCategoriesFormatted(category)).replaceAll("\\: ", "\\:--space--")+"</td>")
 	                      .append("</tr>");
 		         }
              }
@@ -176,7 +176,7 @@
 			            <td><%=HTMLEntities.htmlentities(getTran(request,"web","categories",sWebLanguage))%></td>
 			        </tr>
 			
-			        <tbody class="hand"><%=HTMLEntities.htmlentities(sHtml.toString())%></tbody>
+			        <tbody class="hand"><%=HTMLEntities.htmlentities(sHtml.toString()).replaceAll("--space--", "&nbsp;")%></tbody>
 			    </table>
 	    
                 <%=recCount%> <%=HTMLEntities.htmlentities(getTran(request,"web","norecordsfound",sWebLanguage))%>

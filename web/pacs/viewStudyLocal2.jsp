@@ -19,8 +19,7 @@
 <IFRAME style="display:none" name="hidden-form" id='hf'></IFRAME>
 <script>
 	var url='weasis://'+encodeURI('$dicom:get -w <%=server %><%=request.getRequestURI().replaceAll(request.getServletPath(),"")%>/pacs/wadoQuery.jsp?wadouid=<%=wadoid %>');
-
-    <%	
+	<%	
     	session.setAttribute("wadoQueryStarted", "0");
 	%>
 	document.getElementById('hf').src=url;

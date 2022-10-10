@@ -477,7 +477,7 @@ function changeInsurar(){
   
   var url = '<c:url value="/financial/extraInsurarInvoiceGetPrestations.jsp"/>?ts='+new Date();
   document.getElementById('divPrestations').innerHTML = "<img src='<%=sCONTEXTPATH%>/_img/themes/<%=sUserTheme%>/ajax-loader.gif'/><br/>Loading..";
-  var pb = 'InsurarUid='+EditForm.EditInsurarUID.value+
+  var params = 'InsurarUid='+EditForm.EditInsurarUID.value+
            '&EditBegin='+EditForm.EditBegin.value+
            '&EditEnd='+EditForm.EditEnd.value+
            '&EditInvoiceService='+EditForm.EditInvoiceService.value+
@@ -485,7 +485,7 @@ function changeInsurar(){
 
   new Ajax.Request(url,{
     method: "POST",
-    postBody: pb,
+    parameters: params,
     onSuccess: function(resp){
       var s = resp.responseText;
       s=s.replace(/<1>/g,"<input type='checkbox' name='cbDebet");
@@ -493,6 +493,9 @@ function changeInsurar(){
       $('divPrestations').innerHTML = s;
       tot = tot+countDebets();
       document.getElementById('EditBalance').value = tot;
+    },
+    onError: function(){
+    	alert('error');
     }
   });
 

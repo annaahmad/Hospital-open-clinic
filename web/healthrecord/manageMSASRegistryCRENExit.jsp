@@ -205,7 +205,10 @@
 		</tr>
 		<tr>
 		   	<td class='admin'><%=getTran(request,"web","masnumber",sWebLanguage) %></td>
-		   	<td class='admin2' colspan='3'><%=SH.writeDefaultTextInput(session, (TransactionVO)transaction, "ITEM_TYPE_CREN_MAS", 20) %></td>
+		   	<td class='admin2'><%=SH.writeDefaultTextInput(session, (TransactionVO)transaction, "ITEM_TYPE_CREN_MAS", 20) %></td>
+		   	<td class='admin2' colspan='2'>
+	      		<%=SH.writeDefaultCheckBox((TransactionVO)transaction, request, "medwan.common.true", "TEM_TYPE_MSAS_MALNUTRITION_SENTTOCOMMUNITYLEVEL", "") %><%=getTran(request,"web","senttocommunitylevel",sWebLanguage) %>
+	      	</td>
 		</tr>
         <tr class='admin'><td colspan='4'><%=getTran(request,"web","anthropometry",sWebLanguage) %></td></tr>
 		<tr>

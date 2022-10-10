@@ -465,16 +465,16 @@
 		if(document.getElementById("ITEM_TYPE_CLEFS_PERINATAL_DIAG1").checked || document.getElementById('ITEM_TYPE_CLEFS_PERINATAL_SYMSPEC1').checked || document.getElementById('ITEM_TYPE_CLEFS_PERINATAL_SYMSPEC2').checked){
 			document.getElementById('cb.diag.1').className='adminselected';
 		}
-		if(document.getElementById("ITEM_TYPE_CLEFS_PERINATAL_DIAG2").checked || document.getElementById('ITEM_TYPE_CLEFS_PERINATAL_SYMSPEC3').checked || document.getElementById('ITEM_TYPE_CLEFS_PERINATAL_SYMSPEC4').checked || document.getElementById('ITEM_TYPE_CLEFS_PERINATAL_SYMSPEC5').checked || document.getElementById('ITEM_TYPE_CLEFS_PERINATAL_SYMSPEC6').checked || document.getElementById('ITEM_TYPE_CLEFS_PERINATAL_SYMSPEC7').checked || document.getElementById('ITEM_TYPE_CLEFS_PERINATAL_SYMSPEC8').checked){
+		if(document.getElementById("ITEM_TYPE_CLEFS_PERINATAL_DIAG2").checked || (document.getElementById('ITEM_TYPE_CLEFS_PERINATAL_SYMSPEC3').checked && (document.getElementById('ITEM_TYPE_CLEFS_PERINATAL_SYMSPEC4').checked || document.getElementById('ITEM_TYPE_CLEFS_PERINATAL_SYMSPEC6').checked || document.getElementById('ITEM_TYPE_CLEFS_PERINATAL_SYMSPEC7').checked || document.getElementById('ITEM_TYPE_CLEFS_PERINATAL_SYMGEN4').checked || document.getElementById('ITEM_TYPE_CLEFS_PERINATAL_SYMGEN9').checked))){
 			document.getElementById('cb.diag.2').className='adminselected';
 		}
-		if(document.getElementById("ITEM_TYPE_CLEFS_PERINATAL_DIAG3").checked || document.getElementById('ITEM_TYPE_CLEFS_PERINATAL_SYMSPEC9').checked || document.getElementById('ITEM_TYPE_CLEFS_PERINATAL_SYMSPEC10').checked || document.getElementById('ITEM_TYPE_CLEFS_PERINATAL_SYMSPEC11').checked || document.getElementById('ITEM_TYPE_CLEFS_PERINATAL_SYMSPEC12').checked){
+		if(document.getElementById("ITEM_TYPE_CLEFS_PERINATAL_DIAG3").checked || checkDepression()){
 			document.getElementById('cb.diag.3').className='adminselected';
 		}
 		if(document.getElementById("ITEM_TYPE_CLEFS_PERINATAL_DIAG4").checked || document.getElementById('ITEM_TYPE_CLEFS_PERINATAL_SYMSPEC13').checked || document.getElementById('ITEM_TYPE_CLEFS_PERINATAL_SYMSPEC14').checked){
 			document.getElementById('cb.diag.4').className='adminselected';
 		}
-		if(document.getElementById("ITEM_TYPE_CLEFS_PERINATAL_DIAG5").checked || document.getElementById('ITEM_TYPE_CLEFS_PERINATAL_SYMSPEC15').checked || document.getElementById('ITEM_TYPE_CLEFS_PERINATAL_SYMSPEC16').checked || document.getElementById('ITEM_TYPE_CLEFS_PERINATAL_SYMSPEC17').checked || document.getElementById('ITEM_TYPE_CLEFS_PERINATAL_SYMSPEC18').checked || document.getElementById('ITEM_TYPE_CLEFS_PERINATAL_SYMSPEC19').checked || document.getElementById('ITEM_TYPE_CLEFS_PERINATAL_SYMSPEC20').checked || document.getElementById('ITEM_TYPE_CLEFS_PERINATAL_SYMSPEC21').checked){
+		if(document.getElementById("ITEM_TYPE_CLEFS_PERINATAL_DIAG5").checked || checkPsychosis()){
 			document.getElementById('cb.diag.5').className='adminselected';
 		}
 		if(document.getElementById("ITEM_TYPE_CLEFS_PERINATAL_DIAG6").checked || document.getElementById('ITEM_TYPE_CLEFS_PERINATAL_SYMGEN11').checked){
@@ -482,6 +482,32 @@
 		}
 	}
 
+  function checkDepression(){
+	  nSigns=0;
+	  signs="7;4;2;1;11;8".split(";");
+	  for(n=0;n<signs.length;n++){
+		  if(document.getElementById('ITEM_TYPE_CLEFS_PERINATAL_SYMGEN'+signs[n]) && document.getElementById('ITEM_TYPE_CLEFS_PERINATAL_SYMGEN'+signs[n]).checked){
+			  nSigns++;
+		  }
+	  }
+	  signs="9;12;10;11".split(";");
+	  for(n=0;n<signs.length;n++){
+		  if(document.getElementById('ITEM_TYPE_CLEFS_PERINATAL_SYMSPEC'+signs[n]) && document.getElementById('ITEM_TYPE_CLEFS_PERINATAL_SYMSPEC'+signs[n]).checked){
+			  nSigns++;
+		  }
+	  }
+	  return nSigns>=2;
+  }
+  function checkPsychosis(){
+	  nSigns=0;
+	  signs="15;16;17".split(";");
+	  for(n=0;n<signs.length;n++){
+		  if(document.getElementById('ITEM_TYPE_CLEFS_PERINATAL_SYMSPEC'+signs[n]) && document.getElementById('ITEM_TYPE_CLEFS_PERINATAL_SYMSPEC'+signs[n]).checked){
+			  nSigns++;
+		  }
+	  }
+	  return nSigns>=1;
+  }
   function searchEncounter(){
     openPopup("/_common/search/searchEncounter.jsp&ts=<%=getTs()%>&VarCode=encounteruid&VarText=&FindEncounterPatient=<%=activePatient.personid%>");
   }

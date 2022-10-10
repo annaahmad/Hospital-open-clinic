@@ -20,6 +20,7 @@ public class BloodGift {
 	private int age;
 	private String gender=null;
 	private Date date;
+	private Date dateofbirth;
 	private String environment=null;
 	private String collectionLocation=null;
 	private String collectionUnit=null;
@@ -40,7 +41,60 @@ public class BloodGift {
 	private String bloodgroup=null;
 	private Vector reasonsForDestruction=new Vector();
 	private TransactionVO transaction;
+	private int prpPockets,cgrPockets,stPockets,cpPockets,pfcPockets;
 	
+	public int getTotalPocketsProduced() {
+		return getPfcPockets()+getPrpPockets()+getCgrPockets()+getStPockets()+getCpPockets();
+	}
+	
+	public int getPrpPockets() {
+		return prpPockets;
+	}
+
+	public void setPrpPockets(int prpPockets) {
+		this.prpPockets = prpPockets;
+	}
+
+	public int getCgrPockets() {
+		return cgrPockets;
+	}
+
+	public void setCgrPockets(int cgrPockets) {
+		this.cgrPockets = cgrPockets;
+	}
+
+	public int getStPockets() {
+		return stPockets;
+	}
+
+	public void setStPockets(int stPockets) {
+		this.stPockets = stPockets;
+	}
+
+	public int getCpPockets() {
+		return cpPockets;
+	}
+
+	public void setCpPockets(int cpPockets) {
+		this.cpPockets = cpPockets;
+	}
+
+	public int getPfcPockets() {
+		return pfcPockets;
+	}
+
+	public void setPfcPockets(int pfcPockets) {
+		this.pfcPockets = pfcPockets;
+	}
+
+	public Date getDateofbirth() {
+		return dateofbirth;
+	}
+
+	public void setDateofbirth(Date dateofbirth) {
+		this.dateofbirth = dateofbirth;
+	}
+
 	public static String getCsvReport(Date begin, Date end) {
 		StringBuffer report = new StringBuffer();
 		report.append("PERSONID;AGE;SEXE;DATE;MILIEU;LIEU_PRELEVEMENT;UNITE_COLLECTE;COLLECTE;TESTE;DISTRIBUE;TYPE_DONNEUR;COUT_MISSION;COUT_COLLATION;"+
@@ -298,6 +352,7 @@ public class BloodGift {
 				gift.setPersonid(rs.getInt("personid"));
 				gift.setGender(rs.getString("gender"));
 				gift.setDate(rs.getDate("updatetime"));
+				gift.setDateofbirth(rs.getDate("dateofbirth"));
 				gift.setAge(AdminPerson.getAgeOnDate(rs.getDate("dateofbirth"),gift.getDate()));
 				gift.setTransaction(TransactionVO.get(rs.getString("serverid"), rs.getString("transactionid")));
 				gift.setCollectionUnit();
@@ -475,6 +530,7 @@ public class BloodGift {
 			 transaction.getItemValue(sPrefix+"ITEM_TYPE_CNTSBLOODGIFT_TEMPORARYREJECTION").equalsIgnoreCase("medwan.common.true"))
 			 && transaction.getItemValue(sPrefix+"ITEM_TYPE_CNTSBLOODGIFT_FIT").equalsIgnoreCase("medwan.common.true")){
 			this.setCollected(Integer.parseInt(transaction.getItemValue(sPrefix+"ITEM_TYPE_CNTSBLOODGIFT_POCKETS")));
+			//Check if blood gift was not rejected
 			//Check if lab tests where negative
 			Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
 			try {
@@ -483,14 +539,14 @@ public class BloodGift {
 							+ " i.type='"+sPrefix+"ITEM_TYPE_LAB_OBJECTID' and i.value=?";
 				PreparedStatement ps = conn.prepareStatement(sSql);
 				ps.setInt(1, transaction.getHealthrecordId());
-				ps.setString(2, transaction.getTransactionId()+"");
+				ps.setInt(2, transaction.getTransactionId());
 				ResultSet rs = ps.executeQuery();
 				if(rs.next()) {
 					int labTransactionId = rs.getInt("transactionId");
 					this.setHiv(checkLabResult(MedwanQuery.getInstance().getConfigString("cntsHIVCode","HIV"),labTransactionId));
-					this.setHepatitisB(checkLabResult(MedwanQuery.getInstance().getConfigString("cntsHIVCode","HBS"),labTransactionId));
-					this.setHepatitisC(checkLabResult(MedwanQuery.getInstance().getConfigString("cntsHIVCode","HCV"),labTransactionId));
-					this.setSyphilis(checkLabResult(MedwanQuery.getInstance().getConfigString("cntsHIVCode","BW"),labTransactionId));
+					this.setHepatitisB(checkLabResult(MedwanQuery.getInstance().getConfigString("cntsHBSCode","HBS"),labTransactionId));
+					this.setHepatitisC(checkLabResult(MedwanQuery.getInstance().getConfigString("cntsHCVCode","HCV"),labTransactionId));
+					this.setSyphilis(checkLabResult(MedwanQuery.getInstance().getConfigString("cntsBWCode","BW"),labTransactionId));
 					if(RequestedLabAnalysis.get(transaction.getServerId(), labTransactionId,MedwanQuery.getInstance().getConfigString("cntsBloodgroupCode","ABO"))!=null &&
 							RequestedLabAnalysis.get(transaction.getServerId(), labTransactionId, MedwanQuery.getInstance().getConfigString("cntsBloodgroupCode","Rh"))!=null) {
 						this.setBloodgroup(RequestedLabAnalysis.get(transaction.getServerId(), labTransactionId,MedwanQuery.getInstance().getConfigString("cntsBloodgroupCode","ABO")).getResultValue().toUpperCase()+
@@ -499,12 +555,13 @@ public class BloodGift {
 					if(!"A+;A-;B+;B-;AB+;AB-;O+;O-".contains(this.getBloodgroup().toUpperCase())) {
 						this.setBloodgroup("");
 					}
-					if(this.getHiv()==0 && this.getHepatitisB()==0 && this.getHepatitisC()==0 && this.getSyphilis()==0) {
+
+					if(this.getBloodgroup().length()>0 || this.getHiv()>-1 || this.getHepatitisB()>-1 || this.getHepatitisC()>-1 || this.getSyphilis()>-1) {
 						this.setTested(this.getCollected());
 						rs.close();
 						ps.close();
 						//Check if pockets have been produced 
-						sSql = "select * from transactions t,items i where transactiontype='"+sPrefix+"TRANSACTION_TYPE_CNTS_LAB_RECORD' and healthrecordid=? and"
+						sSql = "select * from transactions t,items i where transactiontype='"+sPrefix+"TRANSACTION_TYPE_CNTSLAB_RECORD' and healthrecordid=? and"
 								+ " i.serverid=t.serverid and i.transactionid=t.transactionid and"
 								+ " i.type='"+sPrefix+"ITEM_TYPE_LAB_OBJECTID' and i.value=?";
 						ps = conn.prepareStatement(sSql);
@@ -514,14 +571,12 @@ public class BloodGift {
 						if(rs.next()) {
 							labTransactionId = rs.getInt("transactionId");
 							TransactionVO labTransaction = TransactionVO.get(transaction.getServerId(), labTransactionId);
-							if( Integer.parseInt(labTransaction.getItemValue(sPrefix+"ITEM_TYPE_CNTSLAB_PFCPOCKETS"))>0 ||
-							    Integer.parseInt(labTransaction.getItemValue(sPrefix+"ITEM_TYPE_CNTSLAB_PRPPOCKETS"))>0 ||
-								Integer.parseInt(labTransaction.getItemValue(sPrefix+"ITEM_TYPE_CNTSLAB_CGRPOCKETS"))>0 ||
-								Integer.parseInt(labTransaction.getItemValue(sPrefix+"ITEM_TYPE_CNTSLAB_STPOCKETS"))>0 ||
-								Integer.parseInt(labTransaction.getItemValue(sPrefix+"ITEM_TYPE_CNTSLAB_CPPOCKETS"))>0
-								) {
-								this.setDistributed(this.getCollected());
-							}
+							setPfcPockets(Integer.parseInt(labTransaction.getItemValue(sPrefix+"ITEM_TYPE_CNTSLAB_PFCPOCKETS")));
+							setPrpPockets(Integer.parseInt(labTransaction.getItemValue(sPrefix+"ITEM_TYPE_CNTSLAB_PRPPOCKETS")));
+							setCgrPockets(Integer.parseInt(labTransaction.getItemValue(sPrefix+"ITEM_TYPE_CNTSLAB_CGRPOCKETS")));
+							setStPockets(Integer.parseInt(labTransaction.getItemValue(sPrefix+"ITEM_TYPE_CNTSLAB_STPOCKETS")));
+							setCpPockets(Integer.parseInt(labTransaction.getItemValue(sPrefix+"ITEM_TYPE_CNTSLAB_CPPOCKETS")));
+							this.setDistributed(getTotalPocketsProduced());
 						}
 					}
 				}
@@ -535,14 +590,17 @@ public class BloodGift {
 		}
 	}
 	
-	private int checkLabResult(String labcode,int labTransactionId) {
+	public int checkLabResult(String labcode,int labTransactionId) {
 		RequestedLabAnalysis analysis = RequestedLabAnalysis.get(transaction.getServerId(), labTransactionId, labcode);
-		if(analysis!=null) {
-			if(MedwanQuery.getInstance().getConfigString("hivnegativevalues","négatif,négative,negatif,negative,-,neg,nég").contains(analysis.getResultValue().toLowerCase())){
+		if(analysis!=null && SH.c(analysis.getResultValue()).length()>0) {
+			if(MedwanQuery.getInstance().getConfigString("hivpositivevalues","positif,positive,+,pos").contains(analysis.getResultValue().toLowerCase())){
+				return 1;
+			}
+			else if(MedwanQuery.getInstance().getConfigString("hivnegativevalues","négatif,négative,negative,negatif,-,neg,nég").contains(analysis.getResultValue().toLowerCase())){
 				return 0;
 			}
 			else {
-				return 1;
+				return -1;
 			}
 		}
 		else {

@@ -56,9 +56,18 @@ public abstract class PDFGeneralBasic extends PDFBasic {
     private final SimpleDateFormat dateFormat = ScreenHelper.stdDateFormat;
     protected final int minNumberOfItems = 2;
     protected int fontSizePercentage = MedwanQuery.getInstance().getConfigInt("fontSizePercentage",100);
+    private int partsOfTransactionToPrint=0;
     
 
-    //--- DISPLAY TRANSACTION ITEMS ---------------------------------------------------------------
+    public int getPartsOfTransactionToPrint() {
+		return partsOfTransactionToPrint;
+	}
+
+	public void setPartsOfTransactionToPrint(int partsOfTransactionToPrint) {
+		this.partsOfTransactionToPrint = partsOfTransactionToPrint;
+	}
+
+	//--- DISPLAY TRANSACTION ITEMS ---------------------------------------------------------------
     // for debugging purposes
     protected void displayTransactionItems(TransactionVO tran){
     	Debug.println("\n#### TRANSACTION ITEMS ("+tran.getServerId()+"."+tran.getTransactionId()+") ########################################"); 
@@ -1100,6 +1109,7 @@ public abstract class PDFGeneralBasic extends PDFBasic {
         this.sProject = sProject;
         this.dateFrom = dateFrom;
         this.dateTo = dateTo;
+        this.partsOfTransactionToPrint=partsOfTransactionToPrint;
 
         // 0 = nothing, 1 = header, 2 = header + body
         if(partsOfTransactionToPrint.intValue() > 0){

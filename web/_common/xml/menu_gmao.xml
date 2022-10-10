@@ -12,6 +12,7 @@
 		<Menu labelid="statistics.activitystats.jasperReports" accessrights="printableDocuments.select" url="javascript:jasperReportsGMAO();"/>
 		<Menu labelid="statistics.norms" accessrights="printableDocuments.select" url="/main.do?Page=assets/calculateNorms.jsp"/>
 		<Menu labelid="statistics.dashboards" accessrights="printableDocuments.select" url="/main.do?Page=assets/dashboard.jsp"/>
+		<Menu labelid="dhis2report" accessrights="dhis2report.select" url="/main.do?Page=statistics/createGMAODHIS2Report.jsp"/>
 	</Menu>
 	<Menu labelid="system">
 		<Menu labelid="myProfile" url="/main.do?Page=userprofile/index.jsp"/>

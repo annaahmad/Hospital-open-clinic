@@ -425,4 +425,25 @@
 			<column colspan="20" labelid="register;examinator" source="transaction" name="user"/>
 		</columns>
 	</register>
+	<register pagesize="A3" id="15" accessright="msas.registry.report.dentist.select" transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSAS_REGISTRY_DENTIST">
+		<columns>
+			<column colspan="10" labelid="register;ordernr" source="system" name="id"/>
+			<column colspan="10" labelid="register;date" source="transaction" name="updatetime"/>
+			<column colspan="10" labelid="register;patientid" source="patient" name="personid"/>
+			<column colspan="30" labelid="register;patientfullname" source="patient" name="fullname"/>
+			<column colspan="10" labelid="register;patientage" source="patient" name="ageinyears"/>
+			<column colspan="10" labelid="register;patientgender" source="patient" name="gender"/>
+			<column colspan="30" labelid="register;patientaddress" source="patient" name="address"/>
+			<column colspan="10" labelid="register;pregnantwomen" source="transaction" name="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_CONS_PREGNANTWOMEN" translateresult="yesno"/>
+			<column colspan="30" labelid="register;motive" concatenate="1" source="transaction;transaction;transaction" name="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_DENTIST_PROBLEM;be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_DENTIST_PROBLEM2;be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_DENTIST_PROBLEM3" translateresult="msas.dentist.problems;msas.dentist.problems;msas.dentist.problems"/>
+			<column colspan="30" labelid="register;diagnosis" source="diagnosis" name="icd10withlocalcodes"/>
+			<column colspan="10" labelid="register;CAO" source="transaction" name="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_DENTIST_CAO" translateresult=""/>
+			<column colspan="10" labelid="register;CO" source="transaction" name="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_DENTIST_CO" translateresult=""/>
+			<column colspan="30" labelid="register;treatment" source="transaction" name="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_DENTIST_TREATMENT" translateresult=""/>
+			<column colspan="30" labelid="register;acts" source="transaction" name="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_DENTIST_ACTS" translateresult="msas.dentist.acts"/>
+			<column colspan="30" labelid="register;insurance" source="financial" name="insurance"/>
+			<column colspan="20" labelid="register;reference" source="transaction" name="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_DENTIST_REFERENCE" translateresult="msas.dentist.reference"/>
+			<column colspan="30" labelid="register;observations" source="transaction" name="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_DENTIST_OBSERVATION" translateresult=""/>
+		</columns>
+	</register>
 </registers>

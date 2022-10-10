@@ -553,10 +553,10 @@
 		if(document.getElementById("ITEM_TYPE_CLEFS_CHILDREN_DIAG3").checked || document.getElementById('ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC3').checked || document.getElementById('ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC4').checked){
 			document.getElementById('cb.diag.3').className='adminselected';
 		}
-		if(document.getElementById("ITEM_TYPE_CLEFS_CHILDREN_DIAG4").checked || document.getElementById('ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC5').checked || document.getElementById('ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC6').checked || document.getElementById('ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC7').checked){
+		if(document.getElementById("ITEM_TYPE_CLEFS_CHILDREN_DIAG4").checked || document.getElementById('ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC6').checked){
 			document.getElementById('cb.diag.4').className='adminselected';
 		}
-		if(document.getElementById("ITEM_TYPE_CLEFS_CHILDREN_DIAG5").checked || document.getElementById('ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC8').checked || document.getElementById('ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC9').checked || document.getElementById('ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC10').checked){
+		if(document.getElementById("ITEM_TYPE_CLEFS_CHILDREN_DIAG5").checked || document.getElementById('ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC9').checked){
 			document.getElementById('cb.diag.5').className='adminselected';
 		}
 		if(document.getElementById("ITEM_TYPE_CLEFS_CHILDREN_DIAG6").checked || document.getElementById('ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC11').checked || document.getElementById('ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC12').checked || document.getElementById('ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC12A').checked){
@@ -565,16 +565,16 @@
 		if(document.getElementById("ITEM_TYPE_CLEFS_CHILDREN_DIAG7").checked || document.getElementById('ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC13').checked || document.getElementById('ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC14').checked){
 			document.getElementById('cb.diag.7').className='adminselected';
 		}
-		if(document.getElementById("ITEM_TYPE_CLEFS_CHILDREN_DIAG8").checked || document.getElementById('ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC15').checked || document.getElementById('ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC16').checked || document.getElementById('ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC17').checked || document.getElementById('ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC18').checked || document.getElementById('ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC19').checked || document.getElementById('ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC20').checked || document.getElementById('ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC21').checked || document.getElementById('ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC22').checked){
+		if(document.getElementById("ITEM_TYPE_CLEFS_CHILDREN_DIAG8").checked || (document.getElementById('ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC15').checked && (document.getElementById('ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC16').checked || document.getElementById('ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC18').checked || document.getElementById('ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC19').checked || document.getElementById('ITEM_TYPE_CLEFS_CHILDREN_SYMGEN4').checked || document.getElementById('ITEM_TYPE_CLEFS_CHILDREN_SYMGEN10').checked || document.getElementById('ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC22').checked))){
 			document.getElementById('cb.diag.8').className='adminselected';
 		}
-		if(document.getElementById("ITEM_TYPE_CLEFS_CHILDREN_DIAG9").checked || document.getElementById('ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC23').checked || document.getElementById('ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC24').checked || document.getElementById('ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC25').checked || document.getElementById('ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC26').checked || document.getElementById('ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC27').checked){
+		if(document.getElementById("ITEM_TYPE_CLEFS_CHILDREN_DIAG9").checked || checkDepression()){
 			document.getElementById('cb.diag.9').className='adminselected';
 		}
 		if(document.getElementById("ITEM_TYPE_CLEFS_CHILDREN_DIAG10").checked || document.getElementById('ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC28').checked || document.getElementById('ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC29').checked){
 			document.getElementById('cb.diag.10').className='adminselected';
 		}
-		if(document.getElementById("ITEM_TYPE_CLEFS_CHILDREN_DIAG11").checked || document.getElementById('ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC30').checked || document.getElementById('ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC31').checked || document.getElementById('ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC32').checked || document.getElementById('ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC33').checked || document.getElementById('ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC34').checked || document.getElementById('ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC35').checked || document.getElementById('ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC36').checked){
+		if(document.getElementById("ITEM_TYPE_CLEFS_CHILDREN_DIAG11").checked || checkPsychosis()){
 			document.getElementById('cb.diag.11').className='adminselected';
 		}
 		if(document.getElementById("ITEM_TYPE_CLEFS_CHILDREN_DIAG12").checked || document.getElementById('ITEM_TYPE_CLEFS_CHILDREN_SYMGEN12').checked){
@@ -582,6 +582,32 @@
 		}
 	}
 
+  function checkDepression(){
+	  nSigns=0;
+	  signs="7;4;2;1;11;8".split(";");
+	  for(n=0;n<signs.length;n++){
+		  if(document.getElementById('ITEM_TYPE_CLEFS_CHILDREN_SYMGEN'+signs[n]) && document.getElementById('ITEM_TYPE_CLEFS_CHILDREN_SYMGEN'+signs[n]).checked){
+			  nSigns++;
+		  }
+	  }
+	  signs="23;27;24;25".split(";");
+	  for(n=0;n<signs.length;n++){
+		  if(document.getElementById('ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC'+signs[n]) && document.getElementById('ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC'+signs[n]).checked){
+			  nSigns++;
+		  }
+	  }
+	  return nSigns>=2;
+  }
+  function checkPsychosis(){
+	  nSigns=0;
+	  signs="31;30;32".split(";");
+	  for(n=0;n<signs.length;n++){
+		  if(document.getElementById('ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC'+signs[n]) && document.getElementById('ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC'+signs[n]).checked){
+			  nSigns++;
+		  }
+	  }
+	  return nSigns>=1;
+  }
   function searchEncounter(){
     openPopup("/_common/search/searchEncounter.jsp&ts=<%=getTs()%>&VarCode=encounteruid&VarText=&FindEncounterPatient=<%=activePatient.personid%>");
   }

@@ -60,7 +60,7 @@
                 <table width="100%" cellspacing="1" cellpadding="0" class="list">
                     <%-- theme --%>
                     <tr>
-                        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web","theme",sWebLanguage)%>&nbsp;*&nbsp;</td>
+                        <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"web","theme",sWebLanguage)%></td>
                         <td class="admin2">
                             <select name="UserTheme" class="text">
                                 <option value=""><%=getTranNoLink("web","choose",sWebLanguage)%></option>
@@ -78,7 +78,14 @@
                             </select>
                         </td>
                     </tr>
-                    
+                    <tr>
+                        <td class="admin"><%=getTran(request,"web","patientlist",sWebLanguage)%></td>
+                        <td class="admin2">
+                        	<select name='patientlist' id='patientlist' class='text'>
+                        		<%=SH.writeSelect(request, "patientlist", activeUser.getParameter("patientlist", "compact"), sWebLanguage) %>
+                        	</select>
+                        </td>
+					</tr>                    
                     <%-- BUTTONS --%>
                     <%=ScreenHelper.setFormButtonsStart()%>
                         <input type="button" name="saveButton" class="button" value="<%=getTranNoLink("web","save",sWebLanguage)%>" onClick="doSubmit();">
@@ -88,7 +95,7 @@
             </form>
         <%
     }
-    //--- SAVE LANGUAGE AND RETURN TO INDEX -------------------------------------------------------
+    //--- SAVE Theme AND RETURN TO INDEX -------------------------------------------------------
     else if(sAction.equals("save")){
         sUserTheme = checkString(request.getParameter("UserTheme"));
         
@@ -98,6 +105,11 @@
         // put chosen theme in activeUser
         Parameter parameter = new Parameter("UserTheme",sUserTheme);
         activeUser.removeParameter("UserTheme");
+        activeUser.updateParameter(parameter);
+        activeUser.parameters.add(parameter);
+        
+        parameter = new Parameter("patientlist",SH.p(request,"patientlist"));
+        activeUser.removeParameter("patientlist");
         activeUser.updateParameter(parameter);
         activeUser.parameters.add(parameter);
         

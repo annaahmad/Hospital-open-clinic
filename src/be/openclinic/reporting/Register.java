@@ -303,8 +303,11 @@ public class Register {
 				s=transaction.getUser().getPersonVO().getFullName();
 			}
 			else {
+				if(s.length()>0) {
+					s=",";
+				}
 				if(name.split("=").length<2) {
-					s = ScreenHelper.checkString(transaction.getItemValue(name)).replaceAll(";", ",").replaceAll("\r", "").replaceAll("\n", " ");
+					s= ScreenHelper.checkString(transaction.getItemValue(name)).replaceAll(";", ",").replaceAll("\r", "").replaceAll("\n", " ");
 				}
 				else {
 					try {
@@ -320,7 +323,7 @@ public class Register {
 								s=val+"";
 							}
 							else if(name.split("=")[1].split(":")[0].equalsIgnoreCase("morethan") && val>Double.parseDouble(name.split("=")[1].split(":")[1])) {
-								s=val+"";
+								s+=val+"";
 							}
 							else if(name.split("=")[1].split(":")[0].equalsIgnoreCase("morethanorequals") && val>=Double.parseDouble(name.split("=")[1].split(":")[1])) {
 								s=val+"";

@@ -18,6 +18,7 @@
     +writeTblChild("main.do?Page=userprofile/manageHistoryItems.jsp",getTran(request,"web.manage","manageHistoryItems",sWebLanguage),rowIdx++)
     +writeTblChild("main.do?Page=userprofile/changeTheme.jsp",getTran(request,"web.userProfile","changeTheme",sWebLanguage),rowIdx++)
     +writeTblChild("main.do?Page=userprofile/manageDefaultValues.jsp",getTran(request,"web.userProfile","manageDefaultValues",sWebLanguage),rowIdx++)
+    +writeTblChild("main.do?Page=userprofile/manageDashboards.jsp",getTran(request,"web.userProfile","manageDashboards",sWebLanguage),rowIdx++)
     +ScreenHelper.writeTblFooter()
  )
 %>

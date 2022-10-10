@@ -57,7 +57,7 @@
 		ps.execute();
 		ps.close();
 		conn.close();
-		out.println("<script>window.opener.loadComponents();window.close();</script>");
+		out.println("<script>window.opener.loadComponents('"+assetuid+"');window.close();</script>");
 		out.flush();
 	}
 	else {

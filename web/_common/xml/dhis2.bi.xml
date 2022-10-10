@@ -47,7 +47,7 @@
 			<option uid="tlPNWKJ0XWx" name="Valeur"/>
 		</categoryOptionCombo>
 		<dataelements>
-			<dataelement unique="patients" uid="0" label="Cas de décès sans diagnostic CIM-10"/>
+			<dataelement unique="patients" uid="QC2A" label="Cas de décès sans diagnostic CIM-10"/>
 		</dataelements>
 	</dataset>
 	<dataset label="QUALCHECK - Fiche 3 - Contrôle de qualité - Notification des diagnostics principaux à la sortie" type="title" color="red" uid="--3--"/>
@@ -68,7 +68,7 @@
 			<option uid="tlPNWKJ0XWx" name="Valeur"/>
 		</categoryOptionCombo>
 		<dataelements>
-			<dataelement unique="patients" uid="0" label="Sorties sans diagnostic CIM-10"/>
+			<dataelement unique="patients" uid="QC3A" label="Sorties sans diagnostic CIM-10"/>
 		</dataelements>
 	</dataset>
 	<dataset label="QUALCHECK - Fiche 4 - Contrôle de qualité - Notification des actes techniques" type="title" color="red" uid="--4--"/>
@@ -77,7 +77,7 @@
 			<option uid="tlPNWKJ0XWx" name="Valeur"/>
 		</categoryOptionCombo>
 		<dataelements>
-			<dataelement unique="patients" uid="0" missing="1" label="Protocoles opératoires sans acte technique">
+			<dataelement unique="patients" uid="QC4A" missing="1" label="Protocoles opératoires sans acte technique">
 				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_SURGICAL_ACT"/>
 			</dataelement>
 		</dataelements>
@@ -88,13 +88,13 @@
 			<option uid="tlPNWKJ0XWx" name="Valeur"/>
 		</categoryOptionCombo>
 		<dataelements>
-			<dataelement unique="patients" uid="QC0" missing="1" label="Demandes de sang sans motif">
+			<dataelement unique="patients" uid="QC5A" missing="1" label="Demandes de sang sans motif">
 				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNTS_BLOODREQUESTREASON"/>
 			</dataelement>
-			<dataelement unique="patients" uid="QC1" missing="1" label="Demandes de sang sans nombre de poches demandées">
+			<dataelement unique="patients" uid="QC5B" missing="1" label="Demandes de sang sans nombre de poches demandées">
 				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNTS_REQUESTEDNUMBEROFBAGS"/>
 			</dataelement>
-			<dataelement unique="patients" uid="QC2" missing="1" label="Demandes de sang sans nombre de poches reçues">
+			<dataelement unique="patients" uid="QC5C" missing="1" label="Demandes de sang sans nombre de poches reçues">
 				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNTS_RECEIVEDNUMBEROFBAGS"/>
 			</dataelement>
 		</dataelements>
@@ -105,12 +105,20 @@
 			<option uid="tlPNWKJ0XWx" name="Valeur"/>
 		</categoryOptionCombo>
 		<dataelements>
-			<dataelement unique="patients" uid="QC0" missing="1" label="Demandes d'imagerie sans code DHIS2">
+			<dataelement unique="patients" uid="QC6A" missing="1" label="Demandes d'imagerie sans code DHIS2">
 				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DHIS2CODE"/>
 			</dataelement>
-			<dataelement unique="patients" uid="QC1" missing="1" label="Demandes non protocollées">
+			<dataelement unique="patients" uid="QC6B" missing="1" label="Demandes non protocollées">
 				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OTHER_REQUESTS_VALIDATION"/>
 			</dataelement>
+		</dataelements>
+	</dataset>
+	<dataset label="QUALCHECK - Fiche 6 - Données manquantes|1" type="plugin" module="ocdhis2.plugins.MissingLabResults" uid="--6--">
+		<categoryOptionCombo type="default">
+			<option uid="tlPNWKJ0XWx" name="Valeur"/>
+		</categoryOptionCombo>
+		<dataelements>
+			<dataelement uid="QC6D" label="Demandes d'analyses labo sans résultats"/>
 		</dataelements>
 	</dataset>
 	<dataset label="QUALCHECK - Fiche 7 - Contrôle de qualité - Activité globale des urgences" type="title" color="red" uid="--7--"/>
@@ -119,7 +127,7 @@
 			<option uid="tlPNWKJ0XWx" name="Valeur"/>
 		</categoryOptionCombo>
 		<dataelements>
-			<dataelement unique="patients" uid="QC0" missing="1" label="Position du patient manquante">
+			<dataelement unique="patients" uid="QC7A" missing="1" label="Position du patient manquante">
 				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_RMH_PATIENTTYPE"/>
 			</dataelement>
 		</dataelements>
@@ -130,27 +138,35 @@
 			<option uid="tlPNWKJ0XWx" name="Valeur"/>
 		</categoryOptionCombo>
 		<dataelements>
-			<dataelement unique="patients" uid="0" missing="1" label="Date de naissance du nouveau-né 1">
+			<dataelement unique="patients" uid="QC8B" missing="1" label="Date de naissance du nouveau-né 1">
 				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_REANIMATION_DATE"/>
 			</dataelement>
-			<dataelement unique="patients" uid="1" missing="1" label="Type d'accouchement (Eutocique/dystocique)">
+			<dataelement unique="patients" uid="QC8C" missing="1" label="Type d'accouchement (Eutocique/dystocique)">
 				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_DELIVERYTYPE_EUSTOCIC"/>
 				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_DELIVERYTYPE_DYSTOCIC"/>
 			</dataelement>
-			<dataelement unique="patients" uid="2" missing="1" label="Accouchement réalisé par">
+			<dataelement unique="patients" uid="QC8D" missing="1" label="Accouchement réalisé par">
 				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_PERFORMEDBY"/>
 			</dataelement>
-			<dataelement unique="patients" uid="3" missing="1" label="Né vivant - mort-né">
+			<dataelement unique="patients" uid="QC8E" missing="1" label="Né vivant - mort-né">
 				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_CHILDALIVE"/>
 			</dataelement>
 		</dataelements>
 	</dataset>
-	<dataset label="QUALCHECK - Fiche 8 - Accouchements chez des hommes" notitle="1" type="item" transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_DELIVERY_MSPLS" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CONTEXT_ENCOUNTERUID" uid="--8--">
-		<categoryOptionCombo type="agegender">
-			<option uid="U8aCp07FOkl" min="0" max="999" gender="m" name="Homme"/>
+	<dataset label="QUALCHECK - Fiche 8 - Accouchements chez femmes &lt;10 ans" notitle="1" type="item" transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_DELIVERY_MSPLS" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CONTEXT_ENCOUNTERUID" uid="--8--">
+		<categoryOptionCombo type="age">
+			<option uid="tlPNWKJ0XWx" min="0" max="10" name="&lt;10 ans"/>
 		</categoryOptionCombo>
 		<dataelements>
-			<dataelement unique="patients" uid="4" label="Accouchements chez des hommes"/>
+			<dataelement unique="patients" uid="QC8A" label="Accouchements chez femmes de &lt;10 ans"/>
+		</dataelements>
+	</dataset>
+	<dataset label="QUALCHECK - Fiche 8 - Accouchements chez des hommes" notitle="1" type="item" transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_DELIVERY_MSPLS" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CONTEXT_ENCOUNTERUID" uid="--8--">
+		<categoryOptionCombo type="agegender">
+			<option uid="tlPNWKJ0XWx" min="0" max="999" gender="m" name="Homme"/>
+		</categoryOptionCombo>
+		<dataelements>
+			<dataelement unique="patients" uid="QC8F" label="Accouchements chez des hommes"/>
 		</dataelements>
 	</dataset>
 	<dataset label="QUALCHECK - Fiche 9 et 10 - Contrôle de qualité - Bloc opératoire" type="title" color="red" uid="--9--"/>
@@ -159,10 +175,10 @@
 			<option uid="tlPNWKJ0XWx" name="Valeur"/>
 		</categoryOptionCombo>
 		<dataelements>
-			<dataelement unique="patients" uid="QC0" missing="1" label="Protocoles opératoires sans actes d'anesthésie">
+			<dataelement unique="patients" uid="QC9A" missing="1" label="Protocoles opératoires sans actes d'anesthésie">
 				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_ANESTHESIA_ACT"/>
 			</dataelement>
-			<dataelement unique="patients" uid="QC1" missing="1" label="Protocoles opératoires sans actes chirurgicales">
+			<dataelement unique="patients" uid="QC9B" missing="1" label="Protocoles opératoires sans actes chirurgicales">
 				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_SURGICAL_ACT"/>
 			</dataelement>
 		</dataelements>
@@ -173,16 +189,16 @@
 			<option uid="tlPNWKJ0XWx" name="Valeur"/>
 		</categoryOptionCombo>
 		<dataelements>
-			<dataelement unique="patients" uid="QC1" missing="1" label="Demandes de sang sans nombre de poches demandées">
+			<dataelement unique="patients" uid="QC11A" missing="1" label="Demandes de sang sans nombre de poches demandées">
 				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNTS_REQUESTEDNUMBEROFBAGS"/>
 			</dataelement>
-			<dataelement unique="patients" uid="QC2" missing="1" label="Demandes de sang sans nombre de poches reçues">
+			<dataelement unique="patients" uid="QC11B" missing="1" label="Demandes de sang sans nombre de poches reçues">
 				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNTS_RECEIVEDNUMBEROFBAGS"/>
 			</dataelement>
-			<dataelement unique="patients" uid="QC3" missing="1" label="Demandes de sang sans volume demandé">
+			<dataelement unique="patients" uid="QC11C" missing="1" label="Demandes de sang sans volume demandé">
 				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNTS_REQUESTEDVOLUME"/>
 			</dataelement>
-			<dataelement unique="patients" uid="QC4" missing="1" label="Demandes de sang sans volume reçu">
+			<dataelement unique="patients" uid="QC11D" missing="1" label="Demandes de sang sans volume reçu">
 				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNTS_RECEIVEDVOLUME"/>
 			</dataelement>
 		</dataelements>
@@ -193,10 +209,10 @@
 			<option uid="tlPNWKJ0XWx" name="Valeur"/>
 		</categoryOptionCombo>
 		<dataelements>
-			<dataelement unique="patients" uid="QC0" missing="1" label="Méthode manquante">
+			<dataelement unique="patients" uid="QC12A" missing="1" label="Méthode manquante">
 				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod"/>
 			</dataelement>
-			<dataelement unique="patients" uid="QC1" missing="1" label="Autres informations manquantes">
+			<dataelement unique="patients" uid="QC12B" missing="1" label="Autres informations manquantes">
 				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.otherinformation"/>
 			</dataelement>
 		</dataelements>
@@ -207,7 +223,7 @@
 			<option uid="U8aCp07FOkl" min="0" max="999" gender="m" name="Homme"/>
 		</categoryOptionCombo>
 		<dataelements>
-			<dataelement unique="patients" uid="QC1" label="Données de grossesse enregistrées chez les hommes">
+			<dataelement unique="patients" uid="QC14A" label="Données de grossesse enregistrées chez les hommes">
 				<itemgroup calculate="itemCount" itemsneeded="1">
 					<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_RMH_PATIENTTYPE2"/>
 				</itemgroup>
@@ -220,7 +236,7 @@
 			<option uid="tlPNWKJ0XWx" name="Valeur"/>
 		</categoryOptionCombo>
 		<dataelements>
-			<dataelement unique="patients" uid="QC1" missing="1" label="Motif d'admission manquant">
+			<dataelement unique="patients" uid="QC15A" missing="1" label="Motif d'admission manquant">
 				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_SST_ADMISSIONTYPE"/>
 			</dataelement>
 		</dataelements>
@@ -1043,13 +1059,12 @@
 		</attributeOptionCombo>
 		<dataelements>
 			<dataelement calculate="potentialAdmissionDays" nolink="1" uid="mJXp4cUPbsr" label="Nombre de nuitées potentielles"/>
-			<dataelement calculate="totalAdmissionDays" outgoing="1" uid="ZhCJEUe5kTw" label="Nombre de nuits d'hospitalisation des sortants"/>
 			<dataelement calculate="itemCount" unique="patients" outgoing="1" uid="kOMHQRnCGyc" label="Nombre de décès maternels">
 				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_DECEASED_PREGNANTWOMEN" itemvalue="medwan.common.true"/>
 			</dataelement>
 		</dataelements>
 	</dataset>
-	<dataset label="DSNIS-HOP - Fiche 1 - Activité globale du service - hospitalisations - sortants" type="encounter" encountertype="admission" uid="sPSV32hVtyE">
+	<dataset label="DSNIS-HOP - Fiche 1 - Activité globale du service - hospitalisations - sortants" type="encounter" outgoing="1" encountertype="admission" uid="sPSV32hVtyE">
 		<categoryOptionCombo type="age">
 			<option uid="XLqfx8KSm1X" min="0" max="5" name="&lt; 5 ans"/>
 			<option uid="Ub6sY4UwCVV" min="5" max="999" name="&gt;= 5 ans"/>
@@ -1067,7 +1082,7 @@
 			<option uid="oURmlhrsYH6" value="oth" name="Soins intensifs"/>
 		</attributeOptionCombo>
 		<dataelements>
-			<dataelement calculate="admissionDays" nolink="1" uid="ZhCJEUe5kTw" label="Nombre de nuits d'hospitalisation"/>
+			<dataelement calculate="admissionDays" uid="ZhCJEUe5kTw" label="Nombre de nuits d'hospitalisation"/>
 		</dataelements>
 	</dataset>
 	<dataset label="DSNIS-HOP - Fiche 1 - Activité globale du service - Audits de décès maternels" type="item" transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_DEATH_AUDIT" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_DECEASED_PREGNANTWOMEN" itemvalue="medwan.common.true" uid="sPSV32hVtyE">
@@ -3970,7 +3985,7 @@
 			<option uid="gROhM9NUOYB" min="50" max="999" gender="f" name="&gt;=50 ans F"/>
 		</categoryOptionCombo>
 		<dataelements>
-			<dataelement uid="WVn1hNGT1Ke"/>
+			<dataelement uid="WVn1hNGT1Ke" label="Nombre"/>
 		</dataelements>
 	</dataset>
 	<dataset label="DSNIS-HOP - Fiche 5 - Suivi des transfusions (nombre de patients par motif)" type="item" transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_CNTS_BLOODREQUEST" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNTS_BLOODREQUESTREASON" uid="S0GpugqLOsz">
@@ -4023,7 +4038,7 @@
 			<dataelement outputtype="transactionItemValue" outputid="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNTS_REQUESTEDNUMBEROFBAGS" outputvalue="outputitemvalue" label="Autres" itemvalue="7" uid="CcJLvulPX9I"/>
 		</dataelements>
 	</dataset>
-	<dataset label="DSNIS-HOP - Fiche 5 - Suivi des transfusions (satisfaction des demandes)" type="item" transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_CNTS_BLOODREQUEST" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNTS_REQUESTEDNUMBEROFBAGS" itemValueMin="1" uid="S0GpugqLOsz">
+	<dataset label="DSNIS-HOP - Fiche 5 - Suivi des transfusions (satisfaction des demandes)" type="item" transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_CNTS_BLOODREQUEST" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNTS_REQUESTEDVOLUME" itemValueMin="1" uid="S0GpugqLOsz">
 		<attributeOptionCombo type="department">
 			<option uid="hlO1cpLBnwh" value="chi" name="Chirurgie"/>
 			<option uid="HofthMUEQV7" value="gyn" name="Gyneco-obstetrique"/>
@@ -4036,9 +4051,9 @@
 			<option uid="buBUfArFLir" value="neo" name="Neonatologie"/>
 		</attributeOptionCombo>
 		<categoryOptionCombo type="transactionitemvalue">
-			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNTS_RECEIVEDNUMBEROFBAGS" uid="sMs0VKxEPn2" outputItemValueMinPct="100" name="Totalement honorées"/>
-			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNTS_RECEIVEDNUMBEROFBAGS" uid="GcuZPYlJEqj" outputItemValueMinPct="1" outputItemValueMaxPct="99" name="Partiellement honorées"/>
-			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNTS_RECEIVEDNUMBEROFBAGS" uid="dMbaebRW8cM" outputItemValueMaxPct="0" name="Non honorées"/>
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNTS_RECEIVEDVOLUME" uid="sMs0VKxEPn2" outputItemValueMinPct="100" name="Totalement honorées"/>
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNTS_RECEIVEDVOLUME" uid="GcuZPYlJEqj" outputItemValueMinPct="1" outputItemValueMaxPct="99" name="Partiellement honorées"/>
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNTS_RECEIVEDVOLUME" uid="dMbaebRW8cM" outputItemValueMaxPct="0" name="Non honorées"/>
 		</categoryOptionCombo>
 		<dataelements>
 			<dataelement label="Nombre de demandes" uid="NCagIEXG2ba"/>
@@ -4433,7 +4448,7 @@
 		<categoryOptionCombo type="age">
 			<option uid="LSc3yHFnyXy" min="10" max="15" name="10-14 ans"/>
 			<option uid="aBwE08HeLYw" min="15" max="20" name="15-19 ans"/>
-			<option uid="jYww3vBErHW" min="20" max="25" name="20-24 ans"/>
+			<option uid="h0OqmSfURUQ" min="20" max="25" name="20-24 ans"/>
 			<option uid="HlvkpZ2MJIl" min="25" max="30" name="25-29 ans"/>
 			<option uid="E91KVIXR8ve" min="30" max="35" name="30-34 ans"/>
 			<option uid="zgJOIBoycJD" min="35" max="40" name="35-39 ans"/>
@@ -4444,9 +4459,6 @@
 		<dataelements>
 			<dataelement unique="patients" calculate="itemCount" uid="bQ35Yi7YiPQ" label="Nombre d'accouchements">
 				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_REANIMATION_DATE"/>
-			</dataelement>
-			<dataelement unique="patients" calculate="itemCount" uid="S049c48iQeu" label="Nombre d'avortements">
-				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_ABORTION" itemvalue="medwan.common.true"/>
 			</dataelement>
 			<dataelement unique="patients" calculate="itemCount" uid="YiSgN3sW9fR" label="Testées VIH en salle de travail">
 				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_PREGNANCY_DEPISTVIH" itemvalue="medwan.common.true"/>
@@ -4466,6 +4478,25 @@
 			<dataelement calculate="itemCount" unique="patients" uid="gs0gvAYs4N7" label="Eclampsie">
 				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_ECLAMPSIA" itemvalue="medwan.common.true"/>
 			</dataelement>
+		</dataelements>
+	</dataset>
+	<dataset label="DSNIS-HOP - Fiche 8 - Maternité (nombre accouchements par âge) | 1" type="plugin" module="ocdhis2.plugins.Abortions" uid="wU5C1GuLwuQ">
+		<attributeOptionCombo type="default">
+			<option uid="GKkUPluq2QJ" name="Maternité"/>
+		</attributeOptionCombo>
+		<categoryOptionCombo type="age">
+			<option uid="LSc3yHFnyXy" min="10" max="15" name="10-14 ans"/>
+			<option uid="aBwE08HeLYw" min="15" max="20" name="15-19 ans"/>
+			<option uid="h0OqmSfURUQ" min="20" max="25" name="20-24 ans"/>
+			<option uid="HlvkpZ2MJIl" min="25" max="30" name="25-29 ans"/>
+			<option uid="E91KVIXR8ve" min="30" max="35" name="30-34 ans"/>
+			<option uid="zgJOIBoycJD" min="35" max="40" name="35-39 ans"/>
+			<option uid="VdbpMB4xHmt" min="40" max="45" name="40-44 ans"/>
+			<option uid="vIomFxZNHTu" min="45" max="50" name="45-49 ans"/>
+			<option uid="LjzRme3MI8s" min="50" max="999" name="&gt;=50 ans"/>
+		</categoryOptionCombo>
+		<dataelements>
+			<dataelement uid="S049c48iQeu" label="Nombre d'avortements"/>
 		</dataelements>
 	</dataset>
 	<dataset label="DSNIS-HOP - Fiche 8 - Maternité (nombre accouchements par type)" transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_DELIVERY_MSPLS" type="item" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_REANIMATION_DATE" exactitemtype="1" uid="wU5C1GuLwuQ">
@@ -4520,7 +4551,7 @@
 				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_PREGNANCY_HIGHRISK" itemvalue="medwan.common.true"/>
 			</dataelement>
 			<dataelement calculate="itemCount" unique="patients" uid="emF0ll8UN2T" label="Mère HIV+">
-				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_PREGNANCY_VIH" itemvalue="+"/>
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_HISTORY_HIV" itemvalue="medwan.common.true"/>
 			</dataelement>
 			<dataelement calculate="itemCount" unique="patients" uid="DCldsat9Igd" label="Mise sous ARV au cours du travail">
 				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_PREGNANCY_ARV" itemvalue="medwan.common.true"/>
@@ -4713,10 +4744,10 @@
 				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_CHILD_PROPHYLAXISARV2" itemvalue="medwan.common.true;"/>
 			</dataelement>
 			<dataelement calculate="itemCount" unique="patients" itemsneeded="1" uid="ur0FrVtmhPG" label="Femmes allaitant à la première heure">
-				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_CHILD1_SURVEILLANCE_BREASTFEED30"/>
-				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_CHILD2_SURVEILLANCE_BREASTFEED30"/>
-				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_CHILD1_SURVEILLANCE_BREASTFEED1"/>
-				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_CHILD2_SURVEILLANCE_BREASTFEED1"/>
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_CHILD1_SURVEILLANCE_BREASTFEED30" itemvalue="1"/>
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_CHILD2_SURVEILLANCE_BREASTFEED30" itemvalue="1"/>
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_CHILD1_SURVEILLANCE_BREASTFEED1" itemvalue="1"/>
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_CHILD2_SURVEILLANCE_BREASTFEED1" itemvalue="1"/>
 			</dataelement>
 			<dataelement calculate="itemCount" unique="patients" uid="sc8fs4GfcOy" label="Décès maternel">
 				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERY_DEATH" itemvalue="medwan.common.true"/>
@@ -5988,7 +6019,7 @@
 			<option uid="gMo7jdfPvy5" name="Valeur"/>
 		</categoryOptionCombo>
 		<dataelements>
-			<dataelement itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNTS_REQUESTEDVOLUME" outputid="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNTS_REQUESTEDVOLUME" outputtype="transactionItemValue" comparetoitem="equals;be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNTS_RECEIVEDVOLUME" uid="CN8m5wuZy59" label="Demandes totalement honorées"/>
+			<dataelement itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNTS_REQUESTEDVOLUME" outputid="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNTS_REQUESTEDVOLUME" outputtype="transactionItemValue" comparetoitem="equalsorlessthan;be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CNTS_RECEIVEDVOLUME" uid="CN8m5wuZy59" label="Demandes totalement honorées"/>
 		</dataelements>
 	</dataset>
 	<dataset label="DSNIS-HOP - Fiche 11 - Banque de sang|2" notitle="1" type="item" transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_CNTS_BLOODREQUEST" uid="tQ6UqqNjSOM">
@@ -6345,37 +6376,62 @@
 	<dataset label="DSNIS-HOP - Fiche 12 et 13 - Activités préventives" type="title" uid="EoDCEQAjveu"/>
 	<dataset label="DSNIS-HOP - Fiche 12 et 13 - Activités préventives (Planification familiale 1 - Nouvelles acceptantes)" type="item" transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_FAMILY_PLANNING_" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" uid="EoDCEQAjveu">
 		<categoryOptionCombo type="zone">
-			<option uid="b4JXoLnf1aT" value="1|5" name="District"/>
-			<option uid="mJnnuNNzcNd" value="2" name="Hors district"/>
-			<option uid="PqC9T4Z8aHZ" value="3" name="Hors province"/>
-			<option uid="VItTaRE76s8" value="4" name="Hors Burundi"/>
+			<option uid="URywQPhLH4U" value="1" name="District"/>
+			<option uid="x57X6peeYgg" value="2" name="Hors district"/>
+			<option uid="beMLVeWDbFa" value="3" name="Hors province"/>
+			<option uid="VEoKgICToHB" value="4|5" name="Hors Burundi"/>
 		</categoryOptionCombo>
 		<dataelements>
-			<dataelement calculate="itemCount"  itemsneeded="1" uid="cgGBTu6Xm65" label="Pilules">
+			<dataelement calculate="itemCount"  itemsneeded="1" uid="cgGBTu6Xm65" label="COC">
 				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.otherinformation;be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" itemvalue="{like}1{sem};1"/>
+			</dataelement>
+		</dataelements>
+	</dataset>
+	<dataset label="DSNIS-HOP - Fiche 12 et 13 - Activités préventives (Planification familiale 1 - Nouvelles acceptantes)|a" type="item" transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_FAMILY_PLANNING_" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" uid="EoDCEQAjveu">
+		<categoryOptionCombo type="zone">
+			<option uid="PShnES6kIS0" value="1" name="District"/>
+			<option uid="wpOTtNgHaQX" value="2" name="Hors district"/>
+			<option uid="d7oF5iruem1" value="3" name="Hors province"/>
+			<option uid="AbvycvMEIEA" value="4|5" name="Hors Burundi"/>
+		</categoryOptionCombo>
+		<dataelements>
+			<dataelement calculate="itemCount"  itemsneeded="1" uid="cgGBTu6Xm65" label="COP">
 				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.otherinformation;be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" itemvalue="{like}1{sem};2"/>
+			</dataelement>
+		</dataelements>
+	</dataset>
+	<dataset label="DSNIS-HOP - Fiche 12 et 13 - Activités préventives (Planification familiale 1 - Nouvelles acceptantes)|b" type="item" transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_FAMILY_PLANNING_" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" uid="EoDCEQAjveu">
+		<categoryOptionCombo type="zone">
+			<option uid="vt3I29qpdt6" value="1" name="District"/>
+			<option uid="T0HABQueBAi" value="2" name="Hors district"/>
+			<option uid="VMfVr7uqfzD" value="3" name="Hors province"/>
+			<option uid="CQ1Zt3pElwp" value="4|5" name="Hors Burundi"/>
+		</categoryOptionCombo>
+		<dataelements>
+			<dataelement calculate="itemCount" itemsneeded="1" uid="cgGBTu6Xm65" label="DMPA-IM">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.otherinformation;be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" itemvalue="{like}1{sem};10"/>
 			</dataelement>
 		</dataelements>
 	</dataset>
 	<dataset label="DSNIS-HOP - Fiche 12 et 13 - Activités préventives (Planification familiale 1 - Nouvelles acceptantes)|1" type="item" notitle="1" transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_FAMILY_PLANNING_" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" uid="EoDCEQAjveu">
 		<categoryOptionCombo type="zone">
-			<option uid="ymAw4aNSF3Z" value="1|5" name="District"/>
-			<option uid="LqKodBL7aOH" value="2" name="Hors district"/>
-			<option uid="b2cp7y50n5j" value="3" name="Hors province"/>
-			<option uid="rQex8elGB9v" value="4" name="Hors Burundi"/>
+			<option uid="oHdK4aGjAWv" value="1" name="District"/>
+			<option uid="KBzGsWHbM2D" value="2" name="Hors district"/>
+			<option uid="zc6yXTmWZZH" value="3" name="Hors province"/>
+			<option uid="srEdmkCjtNS" value="4|5" name="Hors Burundi"/>
 		</categoryOptionCombo>
 		<dataelements>
-			<dataelement calculate="itemCount" uid="cgGBTu6Xm65" label="Injectables">
-				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.otherinformation;be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" itemvalue="{like}1{sem};3"/>
+			<dataelement calculate="itemCount" uid="cgGBTu6Xm65" label="Sayana Press">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.otherinformation;be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" itemvalue="{like}1{sem};90"/>
 			</dataelement>
 		</dataelements>
 	</dataset>
 	<dataset label="DSNIS-HOP - Fiche 12 et 13 - Activités préventives (Planification familiale 1 - Nouvelles acceptantes)|2" type="item" notitle="1" transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_FAMILY_PLANNING_" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" uid="EoDCEQAjveu">
 		<categoryOptionCombo type="zone">
-			<option uid="MA8EOs6pt6I" value="1|5" name="District"/>
-			<option uid="hTJYV3qs674" value="2" name="Hors district"/>
-			<option uid="RjYqcgQyaeK" value="3" name="Hors province"/>
-			<option uid="cwbzS2rzko1" value="4" name="Hors Burundi"/>
+			<option uid="c21fzdrQLJI" value="1" name="District"/>
+			<option uid="pHLlQM7kiNP" value="2" name="Hors district"/>
+			<option uid="MgIfHtKiA2w" value="3" name="Hors province"/>
+			<option uid="nwZjYwGSB6Z" value="4|5" name="Hors Burundi"/>
 		</categoryOptionCombo>
 		<dataelements>
 			<dataelement calculate="itemCount" uid="cgGBTu6Xm65" label="Implants">
@@ -6385,10 +6441,10 @@
 	</dataset>
 	<dataset label="DSNIS-HOP - Fiche 12 et 13 - Activités préventives (Planification familiale 1 - Nouvelles acceptantes)|3" type="item" notitle="1" transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_FAMILY_PLANNING_" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" uid="EoDCEQAjveu">
 		<categoryOptionCombo type="zone">
-			<option uid="U0LKqQ5332Z" value="1|5" name="District"/>
-			<option uid="C5Qod5RISde" value="2" name="Hors district"/>
-			<option uid="ojQrFlHLh7f" value="3" name="Hors province"/>
-			<option uid="VRYWsBtLIZT" value="4" name="Hors Burundi"/>
+			<option uid="zNkahYNwthE" value="1" name="District"/>
+			<option uid="OJPXWvXRbGh" value="2" name="Hors district"/>
+			<option uid="Aq7rAbcxJF8" value="3" name="Hors province"/>
+			<option uid="XcsS9Bh4w4o" value="4|5" name="Hors Burundi"/>
 		</categoryOptionCombo>
 		<dataelements>
 			<dataelement calculate="itemCount" uid="cgGBTu6Xm65" label="DIU">
@@ -6398,10 +6454,10 @@
 	</dataset>
 	<dataset label="DSNIS-HOP - Fiche 12 et 13 - Activités préventives (Planification familiale 1 - Nouvelles acceptantes)|4" type="item" notitle="1" transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_FAMILY_PLANNING_" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" uid="EoDCEQAjveu">
 		<categoryOptionCombo type="zone">
-			<option uid="gzjz1qRx22u" value="1|5" name="District"/>
-			<option uid="KkOsEr0LR9S" value="2" name="Hors district"/>
-			<option uid="hCc17i5WxZg" value="3" name="Hors province"/>
-			<option uid="aAP9AQ75hhT" value="4" name="Hors Burundi"/>
+			<option uid="v7GMr2dQVXb" value="1" name="District"/>
+			<option uid="Kw7MwRIMa6j" value="2" name="Hors district"/>
+			<option uid="idetwbiIy8S" value="3" name="Hors province"/>
+			<option uid="MrSW6ViLsUb" value="4|5" name="Hors Burundi"/>
 		</categoryOptionCombo>
 		<dataelements>
 			<dataelement calculate="itemCount" uid="cgGBTu6Xm65" label="Préservatifs masculins">
@@ -6411,10 +6467,10 @@
 	</dataset>
 	<dataset label="DSNIS-HOP - Fiche 12 et 13 - Activités préventives (Planification familiale 1 - Nouvelles acceptantes)|5" type="item" notitle="1" transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_FAMILY_PLANNING_" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" uid="EoDCEQAjveu">
 		<categoryOptionCombo type="zone">
-			<option uid="IWZz8EZXQDq" value="1|5" name="District"/>
-			<option uid="Fe4u2QYAJnm" value="2" name="Hors district"/>
-			<option uid="eJ4IYrTRV0Q" value="3" name="Hors province"/>
-			<option uid="gj8sdLBBUM0" value="4" name="Hors Burundi"/>
+			<option uid="PFICwLK8Ypc" value="1" name="District"/>
+			<option uid="hhSxViaU2lD" value="2" name="Hors district"/>
+			<option uid="y5VyggmObkj" value="3" name="Hors province"/>
+			<option uid="SycuFTw4o1E" value="4|5" name="Hors Burundi"/>
 		</categoryOptionCombo>
 		<dataelements>
 			<dataelement calculate="itemCount" uid="cgGBTu6Xm65" label="Préservatifs féminins">
@@ -6424,10 +6480,10 @@
 	</dataset>
 	<dataset label="DSNIS-HOP - Fiche 12 et 13 - Activités préventives (Planification familiale 1 - Nouvelles acceptantes)|6" type="item" notitle="1" transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_FAMILY_PLANNING_" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" uid="EoDCEQAjveu">
 		<categoryOptionCombo type="zone">
-			<option uid="HbFtLVbnz8h" value="1|5" name="District"/>
-			<option uid="hmnGhmxGA7k" value="2" name="Hors district"/>
-			<option uid="E1dMjygWtW0" value="3" name="Hors province"/>
-			<option uid="ggF6UXYuWv1" value="4" name="Hors Burundi"/>
+			<option uid="YeUy99vUuHv" value="1" name="District"/>
+			<option uid="E2ipIQhmudd" value="2" name="Hors district"/>
+			<option uid="kmCpXyBRVMI" value="3" name="Hors province"/>
+			<option uid="JBj0DDJtPSg" value="4|5" name="Hors Burundi"/>
 		</categoryOptionCombo>
 		<dataelements>
 			<dataelement calculate="itemCount" uid="cgGBTu6Xm65" label="Spermicides">
@@ -6437,28 +6493,32 @@
 	</dataset>
 	<dataset label="DSNIS-HOP - Fiche 12 et 13 - Activités préventives (Planification familiale 1 - Nouvelles acceptantes)|7" type="item" notitle="1" transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_FAMILY_PLANNING_" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" uid="EoDCEQAjveu">
 		<categoryOptionCombo type="zone">
-			<option uid="R5A1sXRa4LD" value="1|5" name="District"/>
-			<option uid="k6lgGAdNpOW" value="2" name="Hors district"/>
-			<option uid="axrE0PbMNCp" value="3" name="Hors province"/>
-			<option uid="ybdvK4Ti7mR" value="4" name="Hors Burundi"/>
+			<option uid="CV1zWti1qTg" value="1" name="District"/>
+			<option uid="WTH3tkiKDdo" value="2" name="Hors district"/>
+			<option uid="kigc03hfBIV" value="3" name="Hors province"/>
+			<option uid="JBj0DDJtPSg" value="4|5" name="Hors Burundi"/>
 		</categoryOptionCombo>
 		<dataelements>
 			<dataelement calculate="itemCount" itemsneeded="1" uid="cgGBTu6Xm65" label="Autres méthodes">
 				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.otherinformation;be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" itemvalue="{like}1{sem};9"/>
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.otherinformation;be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" itemvalue="{like}1{sem};91"/>
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.otherinformation;be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" itemvalue="{like}1{sem};92"/>
 				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.otherinformation;be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" itemvalue="{like}1{sem};99"/>
 			</dataelement>
 		</dataelements>
 	</dataset>
 	<dataset label="DSNIS-HOP - Fiche 12 et 13 - Activités préventives (Planification familiale 2)" type="item" transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_FAMILY_PLANNING_" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" uid="EoDCEQAjveu">
 		<categoryOptionCombo type="transactionitemvalue">
-			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" uid="OzfnZk3jsFS" outputItemValueIn="1|2" name="Pilules"/>
-			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" uid="Ee1vJlVXSsQ" outputItemValue="3" name="Injectables"/>
-			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" uid="IXvxrQ9ZuVq" outputItemValue="4" name="Implants"/>
-			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" uid="J7Prt3dMx2O" outputItemValue="5" name="DIU"/>
-			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" uid="sIIo5Y6WiRZ" outputItemValue="6" name="Préservatifs masculins"/>
-			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" uid="gnC8x5on2am" outputItemValue="7" name="Préservatifs féminins"/>
-			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" uid="fioNNAPNN82" outputItemValue="8" name="Spermicides"/>
-			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" uid="OwGBXydm5A2" outputItemValueIn="9|99" name="Autres méthodes"/>
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" uid="X14LHLPaFXs" outputItemValueIn="1" name="COC"/>
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" uid="UzGJZmvx5yC" outputItemValueIn="2" name="COP"/>
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" uid="BefWMhRfMi1" outputItemValue="10" name="DMPA-IM"/>
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" uid="aUIxX8Xohrt" outputItemValue="90" name="Sayana Press"/>
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" uid="NOrBvU8Jrac" outputItemValue="4" name="Implants"/>
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" uid="Dy62vY590oB" outputItemValue="5" name="DIU"/>
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" uid="dgaIhMXmfX6" outputItemValue="6" name="Préservatifs masculins"/>
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" uid="Q4d5yPpeVxx" outputItemValue="7" name="Préservatifs féminins"/>
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" uid="kJ9VABiiNdZ" outputItemValue="8" name="Spermicides"/>
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" uid="LsPRvav6E92" outputItemValueIn="9|91|92|99" name="Autres méthodes"/>
 		</categoryOptionCombo>
 		<dataelements>
 			<dataelement calculate="itemCount" uid="kuTbYtSy3Pp" label="Anciennes acceptantes">
@@ -6467,21 +6527,23 @@
 			<dataelement calculate="itemCount" uid="WrQQE9spKCl" label="Effets secondaires">
 				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.otherinformation" itemvalue="{like}3{sem}"/>
 			</dataelement>
-			<dataelement calculate="itemCount" uid="WrQQE9spKCl" label="Arrêt méthode">
+			<dataelement calculate="itemCount" uid="oR4UDbKZgi5" label="Arrêt méthode">
 				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.otherinformation" itemvalue="{like}4{sem}"/>
 			</dataelement>
 		</dataelements>
 	</dataset>
 	<dataset label="DSNIS-HOP - Fiche 12 et 13 - Activités préventives (Planification familiale 2)|1" notitle="1" type="item" transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_FAMILY_PLANNING_" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" uid="EoDCEQAjveu">
 		<categoryOptionCombo type="transactionitemvalue">
-			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" uid="fQZXnwBGre4" outputItemValueIn="1|2" name="Pilules"/>
-			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" uid="kI5wSvT0Fit" outputItemValue="3" name="Injectables"/>
-			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" uid="G9L1cMDCR0c" outputItemValue="4" name="Implants"/>
-			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" uid="QfG2b8vFYb8" outputItemValue="5" name="DIU"/>
-			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" uid="cNdILZ0Kt6h" outputItemValue="6" name="Préservatifs masculins"/>
-			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" uid="KvO6HhnY5b5" outputItemValue="7" name="Préservatifs féminins"/>
-			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" uid="BtaKAWNCfE2" outputItemValue="8" name="Spermicides"/>
-			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" uid="UfsoukNuNm8" outputItemValueIn="9|99" name="Autres méthodes"/>
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" uid="aKIXbyDv9Re" outputItemValueIn="1" name="COC"/>
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" uid="wzCkD25sCw8" outputItemValueIn="2" name="COP"/>
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" uid="PUYjk1iASOA" outputItemValue="10" name="DMPA-IM"/>
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" uid="EOuUlNhjVxr" outputItemValue="90" name="Sayana Press"/>
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" uid="YHKFuNZLKkC" outputItemValue="4" name="Implants"/>
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" uid="bkJ7IoT8Mtp" outputItemValue="5" name="DIU"/>
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" uid="E1VlwvWKQIw" outputItemValue="6" name="Préservatifs masculins"/>
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" uid="zWQAN35WL2c" outputItemValue="7" name="Préservatifs féminins"/>
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" uid="BvJbkLCMiFF" outputItemValue="8" name="Spermicides"/>
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" uid="HSK2gOwMkYF" outputItemValueIn="9|91|92|99" name="Autres méthodes"/>
 		</categoryOptionCombo>
 		<dataelements>
 			<dataelement calculate="itemCount" uid="ULJZwUWqHBt" label="PVVIH NA">
@@ -6491,14 +6553,16 @@
 	</dataset>
 	<dataset label="DSNIS-HOP - Fiche 12 et 13 - Activités préventives (Planification familiale 2)|2" notitle="1" type="item" transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_FAMILY_PLANNING_" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" uid="EoDCEQAjveu">
 		<categoryOptionCombo type="transactionitemvalue">
-			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" uid="x3OXKLRpA2m" outputItemValueIn="1|2" name="Pilules"/>
-			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" uid="Dk21vftvqZY" outputItemValue="3" name="Injectables"/>
-			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" uid="eDF5LS1G0XY" outputItemValue="4" name="Implants"/>
-			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" uid="eWIBovpyt2r" outputItemValue="5" name="DIU"/>
-			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" uid="PMWGjoRpu37" outputItemValue="6" name="Préservatifs masculins"/>
-			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" uid="IJDqGfhePIE" outputItemValue="7" name="Préservatifs féminins"/>
-			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" uid="HGyqJAzqqDH" outputItemValue="8" name="Spermicides"/>
-			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" uid="XxewQatUma4" outputItemValueIn="9|99" name="Autres méthodes"/>
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" uid="mKutT8v0mlC" outputItemValueIn="1" name="COC"/>
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" uid="HNUcvfMLtKr" outputItemValueIn="2" name="COP"/>
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" uid="FOyvqCJAtLK" outputItemValue="10" name="DMPA-IM"/>
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" uid="zB4IzIvS967" outputItemValue="90" name="Sayana Press"/>
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" uid="QaZg1KZMyx7" outputItemValue="4" name="Implants"/>
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" uid="rS2DZPGlhyp" outputItemValue="5" name="DIU"/>
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" uid="vhwwkOCStO0" outputItemValue="6" name="Préservatifs masculins"/>
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" uid="jTpyzODAZ5z" outputItemValue="7" name="Préservatifs féminins"/>
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" uid="bvo8MjDXaXT" outputItemValue="8" name="Spermicides"/>
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" uid="yUYdy88atVV" outputItemValueIn="9|91|92|99" name="Autres méthodes"/>
 		</categoryOptionCombo>
 		<dataelements>
 			<dataelement calculate="itemCount" uid="ULJZwUWqHBt" label="PVVIH AA">
@@ -6520,50 +6584,97 @@
 			<dataelement calculate="itemCount" uid="vbBHpGD82aG" label="Nombre de femmes accompagnées par partenaire">
 				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.otherinformation" itemvalue="{like}9{sem}"/>
 			</dataelement>
-			<dataelement calculate="itemCount" uid="URRV3GKDJa1" label="Quantité d'injectables administrées par TPS">
+			<dataelement calculate="itemCount" uid="URRV3GKDJa1" label="Quantité DMPA IM administrée par TPS">
 				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.otherinformation" itemvalue="{like}8{sem}"/>
 			</dataelement>
-			<dataelement calculate="itemCount" uid="fYGNeFrLuCR" label="Contraceptifs d'urgence">
-				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.otherinformation" itemvalue="{like}10{sem}"/>
+			<dataelement calculate="itemCount" uid="GP94P3IZ9NW" label="Quantité Sayana Press administrée par TPS">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.otherinformation" itemvalue="{like}11{sem}"/>
 			</dataelement>
 		</dataelements>
 	</dataset>
 	<dataset label="DSNIS-HOP - Fiche 12 et 13 - Activités préventives (Planification familiale 4 - Nouvelles acceptantes)" type="item" transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_FAMILY_PLANNING_" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" uid="EoDCEQAjveu">
 		<categoryOptionCombo type="age">
-			<option uid="uMhZDyeSR7v" min="10" max="15" name="10-14 ans"/>
-			<option uid="ctjOMVVcGCT" min="15" max="20" name="15-19 ans"/>
-			<option uid="Ssp8uRxisB3" min="20" max="25" name="20-24 ans"/>
-			<option uid="vsOyofGxdmf" min="25" max="50" name="25-49 ans"/>
-			<option uid="GfuWhIgfTuM" min="50" max="999" name="&gt;=50 ans"/>
+			<option uid="h56v81SZrt3" min="10" max="15" name="10-14 ans"/>
+			<option uid="oCHxI4Qg2gY" min="15" max="20" name="15-19 ans"/>
+			<option uid="ksAHm93zmUf" min="20" max="25" name="20-24 ans"/>
+			<option uid="ssFku8kCYaz" min="25" max="30" name="25-29 ans"/>
+			<option uid="flZVc2WLFEf" min="30" max="35" name="30-34 ans"/>
+			<option uid="fQ66vih4R5E" min="35" max="40" name="35-39 ans"/>
+			<option uid="HjSTi9Io1fA" min="40" max="45" name="40-44 ans"/>
+			<option uid="fclnmKWVcvR" min="45" max="50" name="45-49 ans"/>
+			<option uid="G0QpRnv3DUt" min="50" max="999" name="&gt;=50 ans"/>
 		</categoryOptionCombo>
 		<dataelements>
-			<dataelement calculate="itemCount"  itemsneeded="1" uid="YkeyWltVeWD" label="Pilules">
+			<dataelement calculate="itemCount"  itemsneeded="1" uid="YkeyWltVeWD" label="COC">
 				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.otherinformation;be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" itemvalue="{like}1{sem};1"/>
+			</dataelement>
+		</dataelements>
+	</dataset>
+	<dataset label="DSNIS-HOP - Fiche 12 et 13 - Activités préventives (Planification familiale 4 - Nouvelles acceptantes)|a" type="item" transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_FAMILY_PLANNING_" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" uid="EoDCEQAjveu">
+		<categoryOptionCombo type="age">
+			<option uid="XPGhE4De5J2" min="10" max="15" name="10-14 ans"/>
+			<option uid="PQiEh7H7wGB" min="15" max="20" name="15-19 ans"/>
+			<option uid="JVgxS7XaFS8" min="20" max="25" name="20-24 ans"/>
+			<option uid="e9oTwpHlKVP" min="25" max="30" name="25-29 ans"/>
+			<option uid="H7vbcupiA6A" min="30" max="35" name="30-34 ans"/>
+			<option uid="e2HDby1ygIh" min="35" max="40" name="35-39 ans"/>
+			<option uid="oBktHAWtTtk" min="40" max="45" name="40-44 ans"/>
+			<option uid="tujy2eQE5oM" min="45" max="50" name="45-49 ans"/>
+			<option uid="maaI8WI9Ytu" min="50" max="999" name="&gt;=50 ans"/>
+		</categoryOptionCombo>
+		<dataelements>
+			<dataelement calculate="itemCount"  itemsneeded="1" uid="YkeyWltVeWD" label="COP">
 				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.otherinformation;be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" itemvalue="{like}1{sem};2"/>
 			</dataelement>
 		</dataelements>
 	</dataset>
 	<dataset label="DSNIS-HOP - Fiche 12 et 13 - Activités préventives (Planification familiale 4 - Nouvelles acceptantes)|1" type="item" notitle="1" transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_FAMILY_PLANNING_" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" uid="EoDCEQAjveu">
 		<categoryOptionCombo type="age">
-			<option uid="LfUKPj2d7op" min="10" max="15" name="10-14 ans"/>
-			<option uid="OfR2JIUJslq" min="15" max="20" name="15-19 ans"/>
-			<option uid="Zguhj0YMvAx" min="20" max="25" name="20-24 ans"/>
-			<option uid="ZZBVfabx8R9" min="25" max="50" name="25-49 ans"/>
-			<option uid="B9YeDLSHEDH" min="50" max="999" name="&gt;=50 ans"/>
+			<option uid="DAga5RD4IrW" min="10" max="15" name="10-14 ans"/>
+			<option uid="NL2B4tZdVub" min="15" max="20" name="15-19 ans"/>
+			<option uid="bZ2vywBl1mz" min="20" max="25" name="20-24 ans"/>
+			<option uid="dBId1rFB9pc" min="25" max="30" name="25-29 ans"/>
+			<option uid="TWD0WUKU0e5" min="30" max="35" name="30-34 ans"/>
+			<option uid="q5kbwHqoErn" min="35" max="40" name="35-39 ans"/>
+			<option uid="IY6tTRiizUS" min="40" max="45" name="40-44 ans"/>
+			<option uid="XZ8OQEFEi7n" min="45" max="50" name="45-49 ans"/>
+			<option uid="jtSsGMpRJGv" min="50" max="999" name="&gt;=50 ans"/>
 		</categoryOptionCombo>
 		<dataelements>
-			<dataelement calculate="itemCount" uid="YkeyWltVeWD" label="Injectables">
-				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.otherinformation;be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" itemvalue="{like}1{sem};3"/>
+			<dataelement calculate="itemCount" uid="YkeyWltVeWD" label="DMPA-IM">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.otherinformation;be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" itemvalue="{like}1{sem};10"/>
+			</dataelement>
+		</dataelements>
+	</dataset>
+	<dataset label="DSNIS-HOP - Fiche 12 et 13 - Activités préventives (Planification familiale 4 - Nouvelles acceptantes)|1b" type="item" notitle="1" transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_FAMILY_PLANNING_" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" uid="EoDCEQAjveu">
+		<categoryOptionCombo type="age">
+			<option uid="qOrsIgBTJB4" min="10" max="15" name="10-14 ans"/>
+			<option uid="TtYo6iKEyep" min="15" max="20" name="15-19 ans"/>
+			<option uid="ztqj2pefGj0" min="20" max="25" name="20-24 ans"/>
+			<option uid="jnxPD8GhKg2" min="25" max="30" name="25-29 ans"/>
+			<option uid="IaI0AS4mubk" min="30" max="35" name="30-34 ans"/>
+			<option uid="Y7Ag6E6dtuP" min="35" max="40" name="35-39 ans"/>
+			<option uid="GmrtM9ZBZQs" min="40" max="45" name="40-44 ans"/>
+			<option uid="SmPVMt4DKZD" min="45" max="50" name="45-49 ans"/>
+			<option uid="V9wXzyx8mFH" min="50" max="999" name="&gt;=50 ans"/>
+		</categoryOptionCombo>
+		<dataelements>
+			<dataelement calculate="itemCount" uid="YkeyWltVeWD" label="Sayana Press">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.otherinformation;be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" itemvalue="{like}1{sem};90"/>
 			</dataelement>
 		</dataelements>
 	</dataset>
 	<dataset label="DSNIS-HOP - Fiche 12 et 13 - Activités préventives (Planification familiale 4 - Nouvelles acceptantes)|2" type="item" notitle="1" transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_FAMILY_PLANNING_" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" uid="EoDCEQAjveu">
 		<categoryOptionCombo type="age">
-			<option uid="qAjujiZTqUv" min="10" max="15" name="10-14 ans"/>
-			<option uid="teOLrrpsSG4" min="15" max="20" name="15-19 ans"/>
-			<option uid="BjNcmik7cM2" min="20" max="25" name="20-24 ans"/>
-			<option uid="YIL9uLPEYZM" min="25" max="50" name="25-49 ans"/>
-			<option uid="BtfJYJKQ1H4" min="50" max="999" name="&gt;=50 ans"/>
+			<option uid="RCf3w1bdKyN" min="10" max="15" name="10-14 ans"/>
+			<option uid="caofw7tLnxS" min="15" max="20" name="15-19 ans"/>
+			<option uid="firJcv6ux9m" min="20" max="25" name="20-24 ans"/>
+			<option uid="jLWLqrZ4KSX" min="25" max="30" name="25-29 ans"/>
+			<option uid="DFBWMwhCWKI" min="30" max="35" name="30-34 ans"/>
+			<option uid="GEjM9zkSlQJ" min="35" max="40" name="35-39 ans"/>
+			<option uid="iUMfLIpp2qM" min="40" max="45" name="40-44 ans"/>
+			<option uid="mEN5PdB7zKz" min="45" max="50" name="45-49 ans"/>
+			<option uid="MPqfKZLzUed" min="50" max="999" name="&gt;=50 ans"/>
 		</categoryOptionCombo>
 		<dataelements>
 			<dataelement calculate="itemCount" uid="YkeyWltVeWD" label="Implants">
@@ -6573,25 +6684,15 @@
 	</dataset>
 	<dataset label="DSNIS-HOP - Fiche 12 et 13 - Activités préventives (Planification familiale 4 - Nouvelles acceptantes)|3" type="item" notitle="1" transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_FAMILY_PLANNING_" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" uid="EoDCEQAjveu">
 		<categoryOptionCombo type="age">
-			<option uid="yRsp24PcWH5" min="10" max="15" name="10-14 ans"/>
-			<option uid="J19pQCOic7V" min="15" max="20" name="15-19 ans"/>
-			<option uid="bLxiUcQP5Ex" min="20" max="25" name="20-24 ans"/>
-			<option uid="D9HJ6H1IYYp" min="25" max="50" name="25-49 ans"/>
-			<option uid="yZdDceXxIfh" min="50" max="999" name="&gt;=50 ans"/>
-		</categoryOptionCombo>
-		<dataelements>
-			<dataelement calculate="itemCount" uid="YkeyWltVeWD" label="Contraceptifs d'urgence">
-				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.otherinformation;be.mxs.common.model.vo.healthrecord.IConstants.otherinformation" itemvalue="{like}1{sem};{like}10{sem}"/>
-			</dataelement>
-		</dataelements>
-	</dataset>
-	<dataset label="DSNIS-HOP - Fiche 12 et 13 - Activités préventives (Planification familiale 4 - Nouvelles acceptantes)|3" type="item" notitle="1" transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_FAMILY_PLANNING_" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" uid="EoDCEQAjveu">
-		<categoryOptionCombo type="age">
-			<option uid="nsDe5GZ1tbw" min="10" max="15" name="10-14 ans"/>
-			<option uid="LzC20iMPOZE" min="15" max="20" name="15-19 ans"/>
-			<option uid="wMIvKNSlq64" min="20" max="25" name="20-24 ans"/>
-			<option uid="BhHpRxwV3Pv" min="25" max="50" name="25-49 ans"/>
-			<option uid="IuvUKgSlrZx" min="50" max="999" name="&gt;=50 ans"/>
+			<option uid="C0uDUl41QKl" min="10" max="15" name="10-14 ans"/>
+			<option uid="yCITwuB8Aqn" min="15" max="20" name="15-19 ans"/>
+			<option uid="FiFtFyaWZV1" min="20" max="25" name="20-24 ans"/>
+			<option uid="tODRxfuBIYc" min="25" max="30" name="25-29 ans"/>
+			<option uid="y8GziqkMctw" min="30" max="35" name="30-34 ans"/>
+			<option uid="AZqB7IpO1je" min="35" max="40" name="35-39 ans"/>
+			<option uid="aizryz7uQiO" min="40" max="45" name="40-44 ans"/>
+			<option uid="RMBEInSMZzy" min="45" max="50" name="45-49 ans"/>
+			<option uid="D7zfRR2GTOd" min="50" max="999" name="&gt;=50 ans"/>
 		</categoryOptionCombo>
 		<dataelements>
 			<dataelement calculate="itemCount" uid="YkeyWltVeWD" label="DIU">
@@ -6601,11 +6702,15 @@
 	</dataset>
 	<dataset label="DSNIS-HOP - Fiche 12 et 13 - Activités préventives (Planification familiale 4 - Nouvelles acceptantes)|4" type="item" notitle="1" transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_FAMILY_PLANNING_" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" uid="EoDCEQAjveu">
 		<categoryOptionCombo type="age">
-			<option uid="R1PTAbmIKtX" min="10" max="15" name="10-14 ans"/>
-			<option uid="mwo3AdZfIK7" min="15" max="20" name="15-19 ans"/>
-			<option uid="f5xvq1awoRV" min="20" max="25" name="20-24 ans"/>
-			<option uid="uezv0F8NG35" min="25" max="50" name="25-49 ans"/>
-			<option uid="Y7Lfad3cHyF" min="50" max="999" name="&gt;=50 ans"/>
+			<option uid="Lwtcifcf5t4" min="10" max="15" name="10-14 ans"/>
+			<option uid="pqz6m9RiRqm" min="15" max="20" name="15-19 ans"/>
+			<option uid="IxELRbw7Q0t" min="20" max="25" name="20-24 ans"/>
+			<option uid="X617Bn8G3Sc" min="25" max="30" name="25-29 ans"/>
+			<option uid="ZEXWzTPQ0Jj" min="30" max="35" name="30-34 ans"/>
+			<option uid="sT1DQ3BtPw3" min="35" max="40" name="35-39 ans"/>
+			<option uid="IrdO1vURZj0" min="40" max="45" name="40-44 ans"/>
+			<option uid="bd51LoSLhw5" min="45" max="50" name="45-49 ans"/>
+			<option uid="UzwvAStQi4A" min="50" max="999" name="&gt;=50 ans"/>
 		</categoryOptionCombo>
 		<dataelements>
 			<dataelement calculate="itemCount" uid="YkeyWltVeWD" label="Préservatifs masculins">
@@ -6615,11 +6720,15 @@
 	</dataset>
 	<dataset label="DSNIS-HOP - Fiche 12 et 13 - Activités préventives (Planification familiale 4 - Nouvelles acceptantes)|5" type="item" notitle="1" transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_FAMILY_PLANNING_" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" uid="EoDCEQAjveu">
 		<categoryOptionCombo type="age">
-			<option uid="iRQwHKr2Dd0" min="10" max="15" name="10-14 ans"/>
-			<option uid="MTqw202ONnW" min="15" max="20" name="15-19 ans"/>
-			<option uid="NJAz3MnQQ0u" min="20" max="25" name="20-24 ans"/>
-			<option uid="BllecE6ER7O" min="25" max="50" name="25-49 ans"/>
-			<option uid="Swqdd0l01LD" min="50" max="999" name="&gt;=50 ans"/>
+			<option uid="KnzcCCNhDIi" min="10" max="15" name="10-14 ans"/>
+			<option uid="loUZGDOse85" min="15" max="20" name="15-19 ans"/>
+			<option uid="AEBddEFhM8e" min="20" max="25" name="20-24 ans"/>
+			<option uid="sqXZVDSX2Du" min="25" max="30" name="25-29 ans"/>
+			<option uid="qbuAznbWCq1" min="30" max="35" name="30-34 ans"/>
+			<option uid="tZ8DXyV3UfE" min="35" max="40" name="35-39 ans"/>
+			<option uid="I8dYb1549Lm" min="40" max="45" name="40-44 ans"/>
+			<option uid="FTXGRcf9Mga" min="45" max="50" name="45-49 ans"/>
+			<option uid="wU2ACBeE0uY" min="50" max="999" name="&gt;=50 ans"/>
 		</categoryOptionCombo>
 		<dataelements>
 			<dataelement calculate="itemCount" uid="YkeyWltVeWD" label="Préservatifs féminins">
@@ -6629,11 +6738,15 @@
 	</dataset>
 	<dataset label="DSNIS-HOP - Fiche 12 et 13 - Activités préventives (Planification familiale 4 - Nouvelles acceptantes)|6" type="item" notitle="1" transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_FAMILY_PLANNING_" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" uid="EoDCEQAjveu">
 		<categoryOptionCombo type="age">
-			<option uid="rHSYa0nOvpe" min="10" max="15" name="10-14 ans"/>
-			<option uid="u9sB6sBdg5i" min="15" max="20" name="15-19 ans"/>
-			<option uid="UwS65EB87L8" min="20" max="25" name="20-24 ans"/>
-			<option uid="qaDPcfB9iaJ" min="25" max="50" name="25-49 ans"/>
-			<option uid="Kq2eg8bgc1U" min="50" max="999" name="&gt;=50 ans"/>
+			<option uid="YsZV0ui8KHw" min="10" max="15" name="10-14 ans"/>
+			<option uid="kvlCBaXtR6B" min="15" max="20" name="15-19 ans"/>
+			<option uid="vgDos8FIMHV" min="20" max="25" name="20-24 ans"/>
+			<option uid="LrLZOFE1Ycd" min="25" max="30" name="25-29 ans"/>
+			<option uid="BAjX5HktMvE" min="30" max="35" name="30-34 ans"/>
+			<option uid="AlRsnid1LPK" min="35" max="40" name="35-39 ans"/>
+			<option uid="qgI9rOJDfjN" min="40" max="45" name="40-44 ans"/>
+			<option uid="ZTJ830fcTla" min="45" max="50" name="45-49 ans"/>
+			<option uid="zuDNbqsfCNj" min="50" max="999" name="&gt;=50 ans"/>
 		</categoryOptionCombo>
 		<dataelements>
 			<dataelement calculate="itemCount" uid="YkeyWltVeWD" label="Spermicides">
@@ -6643,16 +6756,396 @@
 	</dataset>
 	<dataset label="DSNIS-HOP - Fiche 12 et 13 - Activités préventives (Planification familiale 4 - Nouvelles acceptantes)|7" type="item" notitle="1" transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_FAMILY_PLANNING_" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" uid="EoDCEQAjveu">
 		<categoryOptionCombo type="age">
-			<option uid="ikPVvGNgxIw" min="10" max="15" name="10-14 ans"/>
-			<option uid="cZ7B3URMnSm" min="15" max="20" name="15-19 ans"/>
-			<option uid="mMnBdxUpaiQ" min="20" max="25" name="20-24 ans"/>
-			<option uid="mKdJFQVMuCa" min="25" max="50" name="25-49 ans"/>
-			<option uid="qXM3M0lYkbj" min="50" max="999" name="&gt;=50 ans"/>
+			<option uid="cM9ClAzQXM9" min="10" max="15" name="10-14 ans"/>
+			<option uid="wvLXrSSVy7p" min="15" max="20" name="15-19 ans"/>
+			<option uid="sDeXE2PPnDJ" min="20" max="25" name="20-24 ans"/>
+			<option uid="vpH8RdE91pV" min="25" max="30" name="25-29 ans"/>
+			<option uid="mDNSOJopb6J" min="30" max="35" name="30-34 ans"/>
+			<option uid="RtBnlNPg1j3" min="35" max="40" name="35-39 ans"/>
+			<option uid="yK7V55dClPv" min="40" max="45" name="40-44 ans"/>
+			<option uid="DHVH12jB1HT" min="45" max="50" name="45-49 ans"/>
+			<option uid="CTE91e1iarg" min="50" max="999" name="&gt;=50 ans"/>
 		</categoryOptionCombo>
 		<dataelements>
 			<dataelement calculate="itemCount" itemsneeded="1" uid="YkeyWltVeWD" label="Autres méthodes">
 				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.otherinformation;be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" itemvalue="{like}1{sem};9"/>
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.otherinformation;be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" itemvalue="{like}1{sem};91"/>
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.otherinformation;be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" itemvalue="{like}1{sem};92"/>
 				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.otherinformation;be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" itemvalue="{like}1{sem};99"/>
+			</dataelement>
+		</dataelements>
+	</dataset>
+	<dataset label="DSNIS-HOP - Fiche 12 et 13 - Activités préventives (Planification familiale 5)" type="item" transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_FAMILY_PLANNING_" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.selectedmethod" uid="EoDCEQAjveu">
+		<categoryOptionCombo type="age">
+			<option uid="jPy080qtWmZ" min="10" max="15" name="10-14 ans"/>
+			<option uid="bDs0iHoQvmi" min="15" max="20" name="15-19 ans"/>
+			<option uid="jYww3vBErHW" min="20" max="25" name="20-24 ans"/>
+			<option uid="YwpHxLvHRD1" min="25" max="30" name="25-29 ans"/>
+			<option uid="aaRpDBBaak8" min="30" max="35" name="30-34 ans"/>
+			<option uid="N340PlTeZqN" min="35" max="40" name="35-39 ans"/>
+			<option uid="P0s8Dc4ktmw" min="40" max="45" name="40-44 ans"/>
+			<option uid="dDVzqDAh2GT" min="45" max="50" name="45-49 ans"/>
+			<option uid="kwVj0M7dxcf" min="50" max="999" name="&gt;=50 ans"/>
+		</categoryOptionCombo>
+		<dataelements>
+			<dataelement calculate="itemCount" uid="fYGNeFrLuCR" label="Contraceptifs d'urgence">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.otherinformation" itemvalue="{like}10{sem}"/>
+			</dataelement>
+		</dataelements>
+	</dataset>
+	<dataset label="15 DSNIS Activités préventives : CPN et CPoN 2020" type="title" uid="LCxddqU2Qqx"/>
+	<dataset label="15 DSNIS Activités préventives : CPN"  type="encounter" encountertype="visit" transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" uid="LCxddqU2Qqx">
+		<categoryOptionCombo type="zone">
+			<option uid="MDkOkN6SD8A" value="1" name="District - AR"/>
+			<option uid="vxFU4n3A1P7" value="5" name="District - HAR"/>
+			<option uid="TevRFfJfqUw" value="2" name="Hors district"/>
+			<option uid="ryxFt2qd6MA" value="3" name="Hors province"/>
+			<option uid="pQTjP0wgke9" value="4" name="Hors Burundi"/>
+		</categoryOptionCombo>
+		<dataelements>
+			<dataelement unique="encounters" calculate="itemCount" uid="CJi5bewIsNN" label="Nb visites CPN 1">
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CPNNUMBER" itemvalue="1"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="SKit63CLTux" label="Nb visites CPN 2">
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CPNNUMBER" itemvalue="2"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="bJ75Lbz0Qss" label="Nb visites CPN 3">
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CPNNUMBER" itemvalue="3"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="J5fW63Jsd04" label="Nb visites CPN 4+">
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CPNNUMBER" itemvalue="{morethan}3"/>
+			</dataelement>
+		</dataelements>
+	</dataset>
+	<dataset label="15 DSNIS Activités préventives : CPN par tranche d'âge"  type="encounter" encountertype="visit" transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" uid="LCxddqU2Qqx">
+		<attributeOptionCombo type="default">
+			<option uid="GKkUPluq2QJ" name="Item"/>
+		</attributeOptionCombo>
+		<categoryOptionCombo type="age">
+			<option uid="LSc3yHFnyXy" min="10" max="15" name="10-14 ans"/>
+			<option uid="aBwE08HeLYw" min="15" max="20" name="15-19 ans"/>
+			<option uid="h0OqmSfURUQ" min="20" max="25" name="20-24 ans"/>
+			<option uid="HlvkpZ2MJIl" min="25" max="30" name="25-29 ans"/>
+			<option uid="E91KVIXR8ve" min="30" max="35" name="30-34 ans"/>
+			<option uid="zgJOIBoycJD" min="35" max="40" name="35-39 ans"/>
+			<option uid="VdbpMB4xHmt" min="40" max="45" name="40-44 ans"/>
+			<option uid="vIomFxZNHTu" min="45" max="50" name="45-49 ans"/>
+			<option uid="LjzRme3MI8s" min="50" max="999" name="&gt;=50 ans"/>
+		</categoryOptionCombo>
+		<dataelements>
+			<dataelement unique="encounters" calculate="itemCount" uid="nPtYwMy10We" label="CPN 1">
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CPNNUMBER" itemvalue="1"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="yBTldGdrNMR" label="VIH+ avant grossesse reçu en CPN1">
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CPNNUMBER" itemvalue="1"/>
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_HIVBEFOREPREGNANCY" itemvalue="1{sem}"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="FN4e3yViFZB" label="Total dépistées en CPN1 et ayant récupéré les résultats">
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CPNNUMBER" itemvalue="1"/>
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_RESULTRECEIVED" itemvalue="1{sem}"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="eup8aCNUiAu" label="Dépistées VIH+ en CPN1">
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CPNNUMBER" itemvalue="1"/>
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_HIVSCREENING" itemvalue="1"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="V0bprZ9GlhX" label="Dépistées positives pour la syphilis en CPN1">
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CPNNUMBER" itemvalue="1"/>
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_SYPHILISSCREENING" itemvalue="1"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="zWYIDvdhsC5" label="Dépistées positives pour la syphilis en CPN1 et mis sous traitement">
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CPNNUMBER" itemvalue="1"/>
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_SYPHILISSCREENING" itemvalue="1"/>
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_SYPHILISTREATMENT" itemvalue="1{sem}"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="ETo9ZR7fFu6" label="Hors CPN 1 (=CPN 2,3, 4 et plus)">
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CPNNUMBER" itemvalue="{morethan}1"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="bDITc8CYEG0" label="Nb de fe dépistées au VIH hors CPN1">
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CPNNUMBER" itemvalue="{morethan}1"/>
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_HIVSCREENING"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="tGjCzWMXuf8" label="Nb de fe dépistées VIH+ hors CPN1">
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CPNNUMBER" itemvalue="{morethan}1"/>
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_HIVSCREENING" itemvalue="1"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="h9XhH0U1Mxe" label="Nb de fe dépistées VIH+ hors CPN1 et mises sous ARV">
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CPNNUMBER" itemvalue="{morethan}1"/>
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_HIVSCREENING" itemvalue="1"/>
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PUTONARV" itemvalue="1{sem}"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="LSWja4mKvUU" label="Nb de fe dépistées à l'hépatite B">
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_HEPATITISBSCREENING"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="DPxDusLAFDq" label="Nb de fe dépistées positives à l'hépatite B">
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_HEPATITISBSCREENING" itemvalue="1"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="S0Vqdvp9zk4" label="Nb de fe déjà sous traitement de l'hépatite virale B">
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_HEPATITISBTREATMENT" itemvalue="1{sem}"/>
+			</dataelement>
+		</dataelements>
+	</dataset>
+	<dataset label="15 DSNIS Activités préventives : CPN par tranche d'âge|1"  type="encounter" encountertype="visit" transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" uid="LCxddqU2Qqx">
+		<attributeOptionCombo type="default">
+			<option uid="GKkUPluq2QJ" name="Item"/>
+		</attributeOptionCombo>
+		<categoryOptionCombo type="age">
+			<option uid="jPy080qtWmZ" min="10" max="15" name="10-14 ans"/>
+			<option uid="bDs0iHoQvmi" min="15" max="20" name="15-19 ans"/>
+			<option uid="jYww3vBErHW" min="20" max="25" name="20-24 ans"/>
+			<option uid="YwpHxLvHRD1" min="25" max="30" name="25-29 ans"/>
+			<option uid="aaRpDBBaak8" min="30" max="35" name="30-34 ans"/>
+			<option uid="N340PlTeZqN" min="35" max="40" name="35-39 ans"/>
+			<option uid="P0s8Dc4ktmw" min="40" max="45" name="40-44 ans"/>
+			<option uid="dDVzqDAh2GT" min="45" max="50" name="45-49 ans"/>
+			<option uid="kwVj0M7dxcf" min="50" max="999" name="&gt;=50 ans"/>
+		</categoryOptionCombo>
+		<dataelements>
+			<dataelement unique="encounters" calculate="itemCount" uid="MsJ0YQ177rt" label="Fe en CPN1 déjà sous ARV">
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CPNNUMBER" itemvalue="1"/>
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ARVSINCE" itemvalue="1"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="ydmnpqsllO0" label="Dépistées VIH+ en CPN1 et mise sous ARV">
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CPNNUMBER" itemvalue="1"/>
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_HIVSCREENING" itemvalue="1"/>
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PUTONARV" itemvalue="1{sem}"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="srZ0HKekmXv" label="Dépistées pour la syphilis en CPN1">
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CPNNUMBER" itemvalue="1"/>
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_SYPHILISSCREENING"/>
+			</dataelement>
+		</dataelements>
+	</dataset>
+	<dataset label="15 DSNIS Activités préventives : CPN1 sans risque"  type="encounter" encountertype="visit" transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" uid="LCxddqU2Qqx">
+		<categoryOptionCombo type="default">
+			<option uid="MQd8Usf9T1P" name="Nombre de cas"/>
+		</categoryOptionCombo>
+		<dataelements>
+			<dataelement unique="encounters" calculate="itemCount" uid="Lw3tmAfEB9t" label="Trim 1">
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CPNNUMBER" itemvalue="1"/>
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_TRIMESTER" itemvalue="1{sem}"/>
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_HASRISK" itemvalue="0{sem}"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="OBXjDxh1GD7" label="Trim 2">
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CPNNUMBER" itemvalue="1"/>
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_TRIMESTER" itemvalue="2{sem}"/>
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_HASRISK" itemvalue="0{sem}"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="n0xbulE37u4" label="Trim 3">
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CPNNUMBER" itemvalue="1"/>
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_TRIMESTER" itemvalue="3{sem}"/>
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_HASRISK" itemvalue="0{sem}"/>
+			</dataelement>
+		</dataelements>
+	</dataset>
+	<dataset label="15 DSNIS Activités préventives : CPN1 avec risque"  type="encounter" encountertype="visit" transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" uid="LCxddqU2Qqx">
+		<categoryOptionCombo type="default">
+			<option uid="fk9RUzFSGPz" name="Nombre de cas"/>
+		</categoryOptionCombo>
+		<dataelements>
+			<dataelement unique="encounters" calculate="itemCount" uid="Lw3tmAfEB9t" label="Trim 1">
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CPNNUMBER" itemvalue="1"/>
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_TRIMESTER" itemvalue="1{sem}"/>
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_HASRISK" itemvalue="1{sem}"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="OBXjDxh1GD7" label="Trim 2">
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CPNNUMBER" itemvalue="1"/>
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_TRIMESTER" itemvalue="2{sem}"/>
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_HASRISK" itemvalue="1{sem}"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="n0xbulE37u4" label="Trim 3">
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CPNNUMBER" itemvalue="1"/>
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_TRIMESTER" itemvalue="3{sem}"/>
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_HASRISK" itemvalue="1{sem}"/>
+			</dataelement>
+		</dataelements>
+	</dataset>
+	<dataset label="15 DSNIS Activités préventives : Femmes enceintes ayant reçu le Td durant la grossesse"  type="encounter" encountertype="visit" transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" uid="LCxddqU2Qqx">
+		<categoryOptionCombo type="default">
+			<option uid="GKkUPluq2QJ" name="Nombre de cas"/>
+		</categoryOptionCombo>
+		<dataelements>
+			<dataelement unique="encounters" calculate="itemCount" uid="vHEHp5Kod5w" label="Femmes protégées avant grossese">
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_VACCCOMPLETE" itemvalue="1{sem}"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="FSpJGQQCTuw" label="Td 1">
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_VAT" itemvalue="1"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="BfQd9LT66Lq" label="Td 2">
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_VAT" itemvalue="2"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="EyxDLyST1BO" label="Td 3">
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_VAT" itemvalue="3"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="OLbVEw4uXpI" label="Td 4">
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_VAT" itemvalue="4"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="Y75FyIyTkb3" label="Td 5">
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_VAT" itemvalue="5"/>
+			</dataelement>
+		</dataelements>
+	</dataset>
+	<dataset label="15 DSNIS Activités préventives : Autres indicateurs"  type="encounter" encountertype="visit" transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" uid="LCxddqU2Qqx">
+		<categoryOptionCombo type="default">
+			<option uid="GKkUPluq2QJ" name="Nombre de cas"/>
+		</categoryOptionCombo>
+		<dataelements>
+			<dataelement unique="encounters" calculate="itemCount" uid="CZwF141N3gX" label="Référées">
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_REFERRAL" itemvalue="1{sem}"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="EQ0h0Qz5EJr" label="Accompagnées par leur partenaire pendant la CPN">
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_WITHPARTNER" itemvalue="1{sem}"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="le8uDicw5vb" label="Diabète connu avant grossesse">
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DISEASEBEFOREPREGNANCY" itemvalue="{like}1{sem}"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="xJAaHtUUC5Z" label="Diabète connu pendant grossesse">
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DISEASEBEFOREPREGNANCY" itemvalue="{like}2{sem}"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="RUWNygUJsQu" label="HTA connu avant grossesse">
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DISEASEBEFOREPREGNANCY" itemvalue="{like}3{sem}"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="MgQf3DID8bc" label="HTA connu pendant grossesse">
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DISEASEBEFOREPREGNANCY" itemvalue="{like}4{sem}"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="tTINImpOzM3" label="Avec anémie testée">
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DISEASEBEFOREPREGNANCY" itemvalue="{like}5{sem}"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="wN8ke7A4R4A" label="avec anémie modérée (7 à 9,9 gm/dl)">
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DISEASEBEFOREPREGNANCY" itemvalue="{like}6{sem}"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="ObFB6PiDNlx" label="avec anémie sévère (&lt; 7 gm/dl)">
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DISEASEBEFOREPREGNANCY" itemvalue="{like}7{sem}"/>
+			</dataelement>
+			<dataelement unique="encounters" maxage="25" calculate="itemCount" uid="bT5czA3rXfg" label="CPN1 précoce chez l'adolescente (10-24 ans)">
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CPNNUMBER" itemvalue="1"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="LvMN1UOKLVC" label="dépistées pour la malnutrition (MUAC)">
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MALNUTRITIONSCREENING"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="Yc0tlpRTK7n" label="dépistées pour la malnutrition (MUAC &lt; 21 cm)">
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MALNUTRITIONSCREENING" itemvalue="2"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="n7NxonerJTb" label="Nb couples sérodiscordants">
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_SERODISCORDANT" itemvalue="1{sem}"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="QbWsh4ukL4f" label="Fe dont le partenaire a été testé au VIH">
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PARTNERSCREENING" itemvalue="1{sem}"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="JeTsNTJaQDq" label="Fe dont le partenaire a été testé pour Syphilis">
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PARTNERSCREENING_SYPHILIS" itemvalue="1{sem}"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="JeTsNTJaQDq" label="Fe dont le partenaire a été testé pour Syphilis">
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PARTNERSCREENING_SYPHILIS" itemvalue="1{sem}"/>
+			</dataelement>
+		</dataelements>
+	</dataset>
+	<dataset label="15 DSNIS Activités préventives : Femmes ayant reçu"  type="encounter" encountertype="visit" transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" uid="LCxddqU2Qqx">
+		<categoryOptionCombo type="default">
+			<option uid="GKkUPluq2QJ" name="Nombre de cas"/>
+		</categoryOptionCombo>
+		<dataelements>
+			<dataelement unique="encounters" calculate="itemCount" uid="k6IOPMTmIjf" label="une moustiquaire (MIILDA)">
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PREVENTION" itemvalue="{like}1{sem}"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="DcZoQs30xH2" label="le fer">
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PREVENTION" itemvalue="{like}2{sem}"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="NLyOJA1bBJS" label="Albendazole">
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PREVENTION" itemvalue="{like}3{sem}"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="KrqYfwzAQqT" label="TPIg 1">
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_TIPIG" itemvalue="1"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="RfObyYyGVNA" label="TPIg 2">
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_TIPIG" itemvalue="2"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="vnLk8gFLmgS" label="TPIg 3 et +">
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_TIPIG" itemvalue="{morethan}2"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="vPDI1SByHfm" label="Un counseling PF">
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_COUNSELING" itemvalue="1{sem}"/>
+			</dataelement>
+		</dataelements>
+	</dataset>
+	<dataset label="15 DSNIS Activités préventives : CPoN"  type="encounter" encountertype="visit" transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPONHOSP" uid="LCxddqU2Qqx">
+		<categoryOptionCombo type="zone">
+			<option uid="lsCim6dmwZx" value="1" name="District - AR"/>
+			<option uid="ed0DNwZikyi" value="5" name="District - HAR"/>
+			<option uid="cv9UpO96dk3" value="2" name="Hors district"/>
+			<option uid="MXC0Tj5JIFM" value="3" name="Hors province"/>
+			<option uid="UKaYgen7EqE" value="4" name="Hors Burundi"/>
+		</categoryOptionCombo>
+		<dataelements>
+			<dataelement unique="encounters" calculate="itemCount" uid="RYYCIBCP8Pe" label="Dans les 2 jours post accouchement">
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPONHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERYDAYS" itemvalue="{lessthan}3"/>
+			</dataelement>
+		</dataelements>
+	</dataset>
+	<dataset label="15 DSNIS Activités préventives : CPoN|1"  type="encounter" encountertype="visit" transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPONHOSP" uid="LCxddqU2Qqx">
+		<categoryOptionCombo type="zone">
+			<option uid="tK75oCI8fur" value="1" name="District - AR"/>
+			<option uid="TwuRjtLzs2I" value="5" name="District - HAR"/>
+			<option uid="R1fLYNMbW9u" value="2" name="Hors district"/>
+			<option uid="HeZd3ySf1i9" value="3" name="Hors province"/>
+			<option uid="Ol7DUaKNlQW" value="4" name="Hors Burundi"/>
+		</categoryOptionCombo>
+		<dataelements>
+			<dataelement unique="encounters" calculate="itemCount" uid="RYYCIBCP8Pe" label="Dans les 3 à 14 jours">
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPONHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERYDAYS" itemvalue="{morethan}2"/>
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPONHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERYDAYS" itemvalue="{lessthan}14"/>
+			</dataelement>
+		</dataelements>
+	</dataset>
+	<dataset label="15 DSNIS Activités préventives : CPoN|2"  type="encounter" encountertype="visit" transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPONHOSP" uid="LCxddqU2Qqx">
+		<categoryOptionCombo type="zone">
+			<option uid="UZGLUgRdyxM" value="1" name="District - AR"/>
+			<option uid="aTSEtrusE0y" value="5" name="District - HAR"/>
+			<option uid="Aiy7CueeM8z" value="2" name="Hors district"/>
+			<option uid="inMH4Tn9nde" value="3" name="Hors province"/>
+			<option uid="eVvWCxxchnR" value="4" name="Hors Burundi"/>
+		</categoryOptionCombo>
+		<dataelements>
+			<dataelement unique="encounters" calculate="itemCount" uid="RYYCIBCP8Pe" label="Après 14 jours">
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPONHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERYDAYS" itemvalue="{morethan}13"/>
+			</dataelement>
+		</dataelements>
+	</dataset>
+	<dataset label="15 DSNIS Activités préventives : CPoN Autres indicateurs"  type="encounter" encountertype="visit" transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPONHOSP" uid="LCxddqU2Qqx">
+		<categoryOptionCombo type="default">
+			<option uid="GKkUPluq2QJ" name="Nombre de cas"/>
+		</categoryOptionCombo>
+		<dataelements>
+			<dataelement unique="encounters" calculate="itemCount" uid="TNN1dlJTGF9" label="Nb de femmes à problèmes détectées">
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPONHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_HASPROBLEMS" itemvalue="1{sem}"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="GdUn2hksHXK" label="Nb de femmes dépistées VIH">
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPONHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_HIVSCREENING"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="EdsVXcajAum" label="Nb de femmes dépistées VIH+">
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPONHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_HIVSCREENING" itemvalue="1"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="ac3dUX60rNd" label="Nb de femmes mises sous ARV">
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPONHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ONART" itemvalue="1{sem}"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="uzsFwPnxGOJ" label="Cas d'Infections puerpérales">
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPONHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PUERPERALINFECTION" itemvalue="1{sem}"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="ywo3I4ixhiM" label="Femmes ayant reçu vitamine A à la CPoN">
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPONHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_VITAMINA" itemvalue="1{sem}"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="NvUUY65qbOv" label="Nb de femmes adhérentes à PF">
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPONHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_FAMILYPLANNING" itemvalue="1{sem}"/>
+			</dataelement>
+			<dataelement unique="encounters" itemsneeded="2" calculate="itemCount" uid="rkFf63WqWqo" label="Nb de femmes sous ARV ayant adhérées à PF">
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPONHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PUTONART" itemvalue="1{sem}"/>
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPONHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ONART" itemvalue="1{sem}"/>
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPONHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_FAMILYPLANNING" itemvalue="1{sem}"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="gbIDVZh2EhC" label="Nb de femmes ayant des signes évocateurs de fistules obstétricales">
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPONHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_VVFSIGNS" itemvalue="1{sem}"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="t5Yx6Jtr0eh" label="Nb enfants ayant bénéficié la CPoN dans les 48h">
+				<item transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPONHOSP" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DELIVERYDAYS" itemvalue="{lessthan}3"/>
 			</dataelement>
 		</dataelements>
 	</dataset>
@@ -6669,7 +7162,6 @@
 			<option uid="iSViL67tigT" value="oph" name="Ophtalmologie"/>
 			<option uid="TUKn6BQQ1kZ" value="ped" name="Pediatrie"/>
 			<option uid="hNxaaaFgAFq" value="kin" name="Rehabilitation-Kinesitherapie"/>
-			<option uid="yi5TSjCXC1y" value="urg" name="Urgences"/>
 		</attributeOptionCombo>
 		<categoryOptionCombo type="zone">
 			<option uid="YvCUIPUKLle" value="1" name="District - AR"/>
@@ -6694,7 +7186,6 @@
 			<option uid="iSViL67tigT" value="oph" name="Ophtalmologie"/>
 			<option uid="TUKn6BQQ1kZ" value="ped" name="Pediatrie"/>
 			<option uid="hNxaaaFgAFq" value="kin" name="Rehabilitation-Kinesitherapie"/>
-			<option uid="yi5TSjCXC1y" value="urg" name="Urgences"/>
 		</attributeOptionCombo>
 		<categoryOptionCombo type="zone">
 			<option uid="AJ1mSBEZVRL" value="1" name="District - AR"/>
@@ -6719,7 +7210,6 @@
 			<option uid="iSViL67tigT" value="oph" name="Ophtalmologie"/>
 			<option uid="TUKn6BQQ1kZ" value="ped" name="Pediatrie"/>
 			<option uid="hNxaaaFgAFq" value="kin" name="Rehabilitation-Kinesitherapie"/>
-			<option uid="yi5TSjCXC1y" value="urg" name="Urgences"/>
 		</attributeOptionCombo>
 		<categoryOptionCombo type="zone">
 			<option uid="jOUfbSve14z" value="1" name="District - AR"/>
@@ -6744,7 +7234,6 @@
 			<option uid="iSViL67tigT" value="oph" name="Ophtalmologie"/>
 			<option uid="TUKn6BQQ1kZ" value="ped" name="Pediatrie"/>
 			<option uid="hNxaaaFgAFq" value="kin" name="Rehabilitation-Kinesitherapie"/>
-			<option uid="yi5TSjCXC1y" value="urg" name="Urgences"/>
 		</attributeOptionCombo>
 		<categoryOptionCombo type="zone">
 			<option uid="a8b3m1mZ9W2" value="1" name="District - AR"/>
@@ -6769,7 +7258,6 @@
 			<option uid="iSViL67tigT" value="oph" name="Ophtalmologie"/>
 			<option uid="TUKn6BQQ1kZ" value="ped" name="Pediatrie"/>
 			<option uid="hNxaaaFgAFq" value="kin" name="Rehabilitation-Kinesitherapie"/>
-			<option uid="yi5TSjCXC1y" value="urg" name="Urgences"/>
 		</attributeOptionCombo>
 		<categoryOptionCombo type="zone">
 			<option uid="r2GZuXWPS31" value="1" name="District - AR"/>
@@ -6794,7 +7282,6 @@
 			<option uid="iSViL67tigT" value="oph" name="Ophtalmologie"/>
 			<option uid="TUKn6BQQ1kZ" value="ped" name="Pediatrie"/>
 			<option uid="hNxaaaFgAFq" value="kin" name="Rehabilitation-Kinesitherapie"/>
-			<option uid="yi5TSjCXC1y" value="urg" name="Urgences"/>
 		</attributeOptionCombo>
 		<categoryOptionCombo type="zone">
 			<option uid="EIRgo01aGkk" value="1" name="District - AR"/>
@@ -6819,7 +7306,6 @@
 			<option uid="iSViL67tigT" value="oph" name="Ophtalmologie"/>
 			<option uid="TUKn6BQQ1kZ" value="ped" name="Pediatrie"/>
 			<option uid="hNxaaaFgAFq" value="kin" name="Rehabilitation-Kinesitherapie"/>
-			<option uid="yi5TSjCXC1y" value="urg" name="Urgences"/>
 		</attributeOptionCombo>
 		<categoryOptionCombo type="zone">
 			<option uid="QuXsLJnKt3r" value="1" name="District - AR"/>
@@ -6844,7 +7330,6 @@
 			<option uid="iSViL67tigT" value="oph" name="Ophtalmologie"/>
 			<option uid="TUKn6BQQ1kZ" value="ped" name="Pediatrie"/>
 			<option uid="hNxaaaFgAFq" value="kin" name="Rehabilitation-Kinesitherapie"/>
-			<option uid="yi5TSjCXC1y" value="urg" name="Urgences"/>
 		</attributeOptionCombo>
 		<categoryOptionCombo type="zone">
 			<option uid="JWPfEq2ZiaO" value="1" name="District - AR"/>
@@ -6869,7 +7354,6 @@
 			<option uid="iSViL67tigT" value="oph" name="Ophtalmologie"/>
 			<option uid="TUKn6BQQ1kZ" value="ped" name="Pediatrie"/>
 			<option uid="hNxaaaFgAFq" value="kin" name="Rehabilitation-Kinesitherapie"/>
-			<option uid="yi5TSjCXC1y" value="urg" name="Urgences"/>
 		</attributeOptionCombo>
 		<categoryOptionCombo type="zone">
 			<option uid="YCN4xm8LZY3" value="1" name="District - AR"/>
@@ -6894,7 +7378,6 @@
 			<option uid="iSViL67tigT" value="oph" name="Ophtalmologie"/>
 			<option uid="TUKn6BQQ1kZ" value="ped" name="Pediatrie"/>
 			<option uid="hNxaaaFgAFq" value="kin" name="Rehabilitation-Kinesitherapie"/>
-			<option uid="yi5TSjCXC1y" value="urg" name="Urgences"/>
 		</attributeOptionCombo>
 		<categoryOptionCombo type="zone">
 			<option uid="a06rVD4gRQy" value="1" name="District - AR"/>
@@ -6919,7 +7402,6 @@
 			<option uid="iSViL67tigT" value="oph" name="Ophtalmologie"/>
 			<option uid="TUKn6BQQ1kZ" value="ped" name="Pediatrie"/>
 			<option uid="hNxaaaFgAFq" value="kin" name="Rehabilitation-Kinesitherapie"/>
-			<option uid="yi5TSjCXC1y" value="urg" name="Urgences"/>
 		</attributeOptionCombo>
 		<categoryOptionCombo type="zone">
 			<option uid="nqolRzauXwf" value="1" name="District - AR"/>
@@ -6944,7 +7426,6 @@
 			<option uid="iSViL67tigT" value="oph" name="Ophtalmologie"/>
 			<option uid="TUKn6BQQ1kZ" value="ped" name="Pediatrie"/>
 			<option uid="hNxaaaFgAFq" value="kin" name="Rehabilitation-Kinesitherapie"/>
-			<option uid="yi5TSjCXC1y" value="urg" name="Urgences"/>
 		</attributeOptionCombo>
 		<categoryOptionCombo type="zone">
 			<option uid="oWwXUioM1k4" value="1" name="District - AR"/>
@@ -6969,7 +7450,6 @@
 			<option uid="iSViL67tigT" value="oph" name="Ophtalmologie"/>
 			<option uid="TUKn6BQQ1kZ" value="ped" name="Pediatrie"/>
 			<option uid="hNxaaaFgAFq" value="kin" name="Rehabilitation-Kinesitherapie"/>
-			<option uid="yi5TSjCXC1y" value="urg" name="Urgences"/>
 		</attributeOptionCombo>
 		<categoryOptionCombo type="agegender">
 			<option uid="U8aCp07FOkl" min="0" max="999" gender="m" name="Homme"/>
@@ -6991,7 +7471,6 @@
 			<option uid="iSViL67tigT" value="oph" name="Ophtalmologie"/>
 			<option uid="TUKn6BQQ1kZ" value="ped" name="Pediatrie"/>
 			<option uid="hNxaaaFgAFq" value="kin" name="Rehabilitation-Kinesitherapie"/>
-			<option uid="yi5TSjCXC1y" value="urg" name="Urgences"/>
 		</attributeOptionCombo>
 		<categoryOptionCombo type="agegender">
 			<option uid="PlTdJYtk9mS" min="0" max="999" gender="m" name="Homme"/>
@@ -7013,7 +7492,6 @@
 			<option uid="iSViL67tigT" value="oph" name="Ophtalmologie"/>
 			<option uid="TUKn6BQQ1kZ" value="ped" name="Pediatrie"/>
 			<option uid="hNxaaaFgAFq" value="kin" name="Rehabilitation-Kinesitherapie"/>
-			<option uid="yi5TSjCXC1y" value="urg" name="Urgences"/>
 		</attributeOptionCombo>
 		<categoryOptionCombo type="agegender">
 			<option uid="vMR1S7Xf8A6" min="0" max="999" gender="m" name="Homme"/>
@@ -7035,7 +7513,6 @@
 			<option uid="iSViL67tigT" value="oph" name="Ophtalmologie"/>
 			<option uid="TUKn6BQQ1kZ" value="ped" name="Pediatrie"/>
 			<option uid="hNxaaaFgAFq" value="kin" name="Rehabilitation-Kinesitherapie"/>
-			<option uid="yi5TSjCXC1y" value="urg" name="Urgences"/>
 		</attributeOptionCombo>
 		<categoryOptionCombo type="agegender">
 			<option uid="N1Zr3qfbsCL" min="0" max="999" gender="m" name="Homme"/>
@@ -7057,7 +7534,6 @@
 			<option uid="iSViL67tigT" value="oph" name="Ophtalmologie"/>
 			<option uid="TUKn6BQQ1kZ" value="ped" name="Pediatrie"/>
 			<option uid="hNxaaaFgAFq" value="kin" name="Rehabilitation-Kinesitherapie"/>
-			<option uid="yi5TSjCXC1y" value="urg" name="Urgences"/>
 		</attributeOptionCombo>
 		<categoryOptionCombo type="agegender">
 			<option uid="ZGJflSG6UwE" min="0" max="999" gender="m" name="Homme"/>
@@ -7079,7 +7555,6 @@
 			<option uid="iSViL67tigT" value="oph" name="Ophtalmologie"/>
 			<option uid="TUKn6BQQ1kZ" value="ped" name="Pediatrie"/>
 			<option uid="hNxaaaFgAFq" value="kin" name="Rehabilitation-Kinesitherapie"/>
-			<option uid="yi5TSjCXC1y" value="urg" name="Urgences"/>
 		</attributeOptionCombo>
 		<categoryOptionCombo type="agegender">
 			<option uid="Hug5t6xZVoh" min="0" max="999" gender="m" name="Homme"/>
@@ -7101,7 +7576,6 @@
 			<option uid="iSViL67tigT" value="oph" name="Ophtalmologie"/>
 			<option uid="TUKn6BQQ1kZ" value="ped" name="Pediatrie"/>
 			<option uid="hNxaaaFgAFq" value="kin" name="Rehabilitation-Kinesitherapie"/>
-			<option uid="yi5TSjCXC1y" value="urg" name="Urgences"/>
 		</attributeOptionCombo>
 		<categoryOptionCombo type="agegender">
 			<option uid="fz2nTLdb2PJ" min="0" max="999" gender="m" name="Homme"/>
@@ -7123,7 +7597,6 @@
 			<option uid="iSViL67tigT" value="oph" name="Ophtalmologie"/>
 			<option uid="TUKn6BQQ1kZ" value="ped" name="Pediatrie"/>
 			<option uid="hNxaaaFgAFq" value="kin" name="Rehabilitation-Kinesitherapie"/>
-			<option uid="yi5TSjCXC1y" value="urg" name="Urgences"/>
 		</attributeOptionCombo>
 		<categoryOptionCombo type="agegender">
 			<option uid="Sxn0D250lCS" min="0" max="999" gender="m" name="Homme"/>
@@ -7145,7 +7618,6 @@
 			<option uid="iSViL67tigT" value="oph" name="Ophtalmologie"/>
 			<option uid="TUKn6BQQ1kZ" value="ped" name="Pediatrie"/>
 			<option uid="hNxaaaFgAFq" value="kin" name="Rehabilitation-Kinesitherapie"/>
-			<option uid="yi5TSjCXC1y" value="urg" name="Urgences"/>
 		</attributeOptionCombo>
 		<categoryOptionCombo type="agegender">
 			<option uid="BXplpwIpqbT" min="0" max="999" gender="m" name="Homme"/>
@@ -7167,7 +7639,6 @@
 			<option uid="iSViL67tigT" value="oph" name="Ophtalmologie"/>
 			<option uid="TUKn6BQQ1kZ" value="ped" name="Pediatrie"/>
 			<option uid="hNxaaaFgAFq" value="kin" name="Rehabilitation-Kinesitherapie"/>
-			<option uid="yi5TSjCXC1y" value="urg" name="Urgences"/>
 		</attributeOptionCombo>
 		<categoryOptionCombo type="agegender">
 			<option uid="DHSRF6zTUCB" min="0" max="999" gender="m" name="Homme"/>
@@ -7189,7 +7660,6 @@
 			<option uid="iSViL67tigT" value="oph" name="Ophtalmologie"/>
 			<option uid="TUKn6BQQ1kZ" value="ped" name="Pediatrie"/>
 			<option uid="hNxaaaFgAFq" value="kin" name="Rehabilitation-Kinesitherapie"/>
-			<option uid="yi5TSjCXC1y" value="urg" name="Urgences"/>
 		</attributeOptionCombo>
 		<categoryOptionCombo type="agegender">
 			<option uid="hS6Tv3YxNfR" min="0" max="999" gender="m" name="Homme"/>
@@ -7211,7 +7681,6 @@
 			<option uid="iSViL67tigT" value="oph" name="Ophtalmologie"/>
 			<option uid="TUKn6BQQ1kZ" value="ped" name="Pediatrie"/>
 			<option uid="hNxaaaFgAFq" value="kin" name="Rehabilitation-Kinesitherapie"/>
-			<option uid="yi5TSjCXC1y" value="urg" name="Urgences"/>
 		</attributeOptionCombo>
 		<categoryOptionCombo type="agegender">
 			<option uid="GOV8QlzHstb" min="0" max="999" gender="m" name="Homme"/>
@@ -7233,7 +7702,6 @@
 			<option uid="iSViL67tigT" value="oph" name="Ophtalmologie"/>
 			<option uid="TUKn6BQQ1kZ" value="ped" name="Pediatrie"/>
 			<option uid="hNxaaaFgAFq" value="kin" name="Rehabilitation-Kinesitherapie"/>
-			<option uid="yi5TSjCXC1y" value="urg" name="Urgences"/>
 		</attributeOptionCombo>
 		<categoryOptionCombo type="age">
 			<option uid="hdW79u4HG4n" min="0" max="1" name="0-11 mois"/>
@@ -7265,7 +7733,6 @@
 			<option uid="iSViL67tigT" value="oph" name="Ophtalmologie"/>
 			<option uid="TUKn6BQQ1kZ" value="ped" name="Pediatrie"/>
 			<option uid="hNxaaaFgAFq" value="kin" name="Rehabilitation-Kinesitherapie"/>
-			<option uid="yi5TSjCXC1y" value="urg" name="Urgences"/>
 		</attributeOptionCombo>
 		<categoryOptionCombo type="zone">
 			<option uid="MDkOkN6SD8A" value="1" name="District - AR"/>
@@ -7280,7 +7747,7 @@
 			<dataelement unique="encounters" outputtype="transactionItemValue" outputid="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_RMH_PATIENTTYPE4" outputItemValue="1;" uid="hQw1iAmOOl9" label="Patients PVVIH"/>
 		</dataelements>
 	</dataset>
-	<dataset label="DSNIS-HOP - Fiche 14 - Consultations ambulatoires (cas par mode d'arrivée)" type="encounter" encountertype="visit" incoming="1" uid="BlvDmrE2I4L">
+	<dataset label="DSNIS-HOP - Fiche 14 - Consultations ambulatoires (cas par mode d'arrivée)" type="encounter" diagnosisrequired="1" encountertype="visit" incoming="1" uid="BlvDmrE2I4L">
 		<attributeOptionCombo type="department">
 			<option uid="bvYCT9fPMMc" value="chi" name="Chirurgie"/>
 			<option uid="scMXOQSSdDc" value="con" name="consultation"/>
@@ -7292,7 +7759,6 @@
 			<option uid="iSViL67tigT" value="oph" name="Ophtalmologie"/>
 			<option uid="TUKn6BQQ1kZ" value="ped" name="Pediatrie"/>
 			<option uid="hNxaaaFgAFq" value="kin" name="Rehabilitation-Kinesitherapie"/>
-			<option uid="yi5TSjCXC1y" value="urg" name="Urgences"/>
 		</attributeOptionCombo>
 		<categoryOptionCombo type="origin">
 			<option uid="XQxobLpM71T" value="healthcenter" name="Par CDS"/>
@@ -7302,7 +7768,7 @@
 			<dataelement unique="encounters" uid="V4oQapFj8hP" label="Nombre de cas référés"/>
 		</dataelements>
 	</dataset>
-	<dataset label="DSNIS-HOP - Fiche 14 - Consultations ambulatoires (cas par mode de sortie)" type="encounter" encountertype="visit" incoming="1" uid="BlvDmrE2I4L">
+	<dataset label="DSNIS-HOP - Fiche 14 - Consultations ambulatoires (cas par mode de sortie)" type="encounter" diagnosisrequired="1" encountertype="visit" incoming="1" uid="BlvDmrE2I4L">
 		<attributeOptionCombo type="department">
 			<option uid="bvYCT9fPMMc" value="chi" name="Chirurgie"/>
 			<option uid="scMXOQSSdDc" value="con" name="consultation"/>
@@ -7314,7 +7780,6 @@
 			<option uid="iSViL67tigT" value="oph" name="Ophtalmologie"/>
 			<option uid="TUKn6BQQ1kZ" value="ped" name="Pediatrie"/>
 			<option uid="hNxaaaFgAFq" value="kin" name="Rehabilitation-Kinesitherapie"/>
-			<option uid="yi5TSjCXC1y" value="urg" name="Urgences"/>
 		</attributeOptionCombo>
 		<categoryOptionCombo type="outcome">
 			<option uid="iiX9rcRsZPL" value="better" name="Amélioré/Retour à domicile"/>
@@ -7339,7 +7804,6 @@
 			<option uid="iSViL67tigT" value="oph" name="Ophtalmologie"/>
 			<option uid="TUKn6BQQ1kZ" value="ped" name="Pediatrie"/>
 			<option uid="hNxaaaFgAFq" value="kin" name="Rehabilitation-Kinesitherapie"/>
-			<option uid="yi5TSjCXC1y" value="urg" name="Urgences"/>
 		</attributeOptionCombo>
 		<categoryOptionCombo type="default">
 			<option uid="GKkUPluq2QJ" name="Default"/>
@@ -7362,7 +7826,6 @@
 			<option uid="iSViL67tigT" value="oph" name="Ophtalmologie"/>
 			<option uid="TUKn6BQQ1kZ" value="ped" name="Pediatrie"/>
 			<option uid="hNxaaaFgAFq" value="kin" name="Rehabilitation-Kinesitherapie"/>
-			<option uid="yi5TSjCXC1y" value="urg" name="Urgences"/>
 		</attributeOptionCombo>
 		<categoryOptionCombo type="age">
 			<option uid="GKkUPluq2QJ" min="0" max="5" name="Default"/>
@@ -7385,7 +7848,6 @@
 			<option uid="iSViL67tigT" value="oph" name="Ophtalmologie"/>
 			<option uid="TUKn6BQQ1kZ" value="ped" name="Pediatrie"/>
 			<option uid="hNxaaaFgAFq" value="kin" name="Rehabilitation-Kinesitherapie"/>
-			<option uid="yi5TSjCXC1y" value="urg" name="Urgences"/>
 		</attributeOptionCombo>
 		<categoryOptionCombo type="age">
 			<option uid="t3eEbkLledV" min="10" max="15" name="10-14 ans"/>

@@ -51,8 +51,8 @@
             if(!serviceStock.getUid().equalsIgnoreCase(sExcludeServiceStockUid)){
                 sServiceName = getTranNoLink("Service", serviceStock.getServiceUid(),sWebLanguage);
                 sManagerName = "";
-                if(serviceStock.getStockManager()!=null){
-                	sManagerName=serviceStock.getStockManager().lastname+" "+serviceStock.getStockManager().firstname;
+                if(serviceStock.getStockManagerUid()!=null){
+                	sManagerName=User.getFullUserName(serviceStock.getStockManagerUid());
                 }
 
                 // supplyingService

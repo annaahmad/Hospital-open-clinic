@@ -5,6 +5,7 @@ import be.mxs.common.util.db.ObjectCacheFactory;
 import be.mxs.common.util.system.Debug;
 import be.mxs.common.util.system.ScreenHelper;
 import be.openclinic.pharmacy.ServiceStock;
+import be.openclinic.system.SH;
 import be.openclinic.adt.Bed;
 
 import java.sql.*;
@@ -846,6 +847,25 @@ public void setUsers(String users) {
         MedwanQuery.getInstance().services.put(this.code,this);
 
         return bReturn;
+    }
+    
+    public static Hashtable getCostCenters() {
+    	Hashtable costcenters = new Hashtable();
+    	try {
+    		Connection conn = SH.getAdminConnection();
+    		PreparedStatement ps = conn.prepareStatement("select serviceid,costcenter from services where length(costcenter)>0");
+    		ResultSet rs = ps.executeQuery();
+    		while(rs.next()) {
+    			costcenters.put(rs.getString("serviceid"), rs.getString("costcenter"));
+    		}
+    		rs.close();
+    		ps.close();
+    		conn.close();
+    	}
+    	catch(Exception e) {
+    		e.printStackTrace();
+    	}
+    	return costcenters;
     }
 
     //--- GET SERVICE -----------------------------------------------------------------------------

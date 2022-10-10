@@ -1,6 +1,7 @@
 package be.openclinic.assets;
 
 import be.openclinic.common.OC_Object;
+import net.admin.Service;
 import be.mxs.common.util.db.MedwanQuery;
 import be.mxs.common.util.system.Debug;
 import be.mxs.common.util.system.HTMLEntities;
@@ -1191,7 +1192,7 @@ public class MaintenancePlan extends OC_Object {
                 sSql+= " AND OC_MAINTENANCEPLAN_TYPE = '"+findItem.type+"'";
             }
             if(ScreenHelper.checkString(findItem.getTag()).length() > 0){
-                sSql+= " AND OC_ASSET_SERVICE like '"+findItem.getTag()+"%'";
+                sSql+= " AND OC_ASSET_SERVICE in ("+Service.getChildIdsAsString(findItem.getTag())+")";
             }
             if(ScreenHelper.checkString(findItem.operator).length() > 0){
                 sSql+= " AND OC_MAINTENANCEPLAN_OPERATOR LIKE '%"+findItem.operator+"%'";

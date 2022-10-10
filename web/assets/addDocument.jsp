@@ -19,7 +19,7 @@
         try{
             if(formFile!=null){
         	    String sFileName = formFile.getFilename();
-                if(formFile.isAcceptableUploadFileExtension()){
+                if(!formFile.isAcceptableUploadFileExtension()){
                 	%>
                 	<script>
                 		alert("<%=getTranNoLink("web","forbiddenfiletype",sWebLanguage)%>");

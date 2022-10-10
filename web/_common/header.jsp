@@ -129,7 +129,7 @@
 						   	    	    	<img style='vertical-align: bottom' height='45px' src='<%=bgi%>'/><br/>
 						   	    	    	<span style='white-space: nowrap;font-size: 9px'><%=sVersion %></span>
 							   	    	    <% if(MedwanQuery.getInstance().getConfigString("TestEdition").equals("1")){ %>
-							   	    	    <img height='35px' style="position: absolute;bottom: -65px;right:-120px;" src="<c:url value='/_img/themes/default/stamp_test.gif'/>" alt=""/>
+								   	    	    <img height='35px' style="position: absolute;top: 45px;left: 30px;" src="<c:url value='/_img/themes/default/stamp_test.gif'/>" alt=""/>
 							   	    	    <%} %>
 							   	    	</div>
 					   	    	    </center>

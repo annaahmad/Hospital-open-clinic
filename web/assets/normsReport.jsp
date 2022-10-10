@@ -100,7 +100,75 @@
 	    os.flush();
 	    os.close();
 	}
-	if(checkString(request.getParameter("format")).equalsIgnoreCase("pdf")){
+	else if(checkString(request.getParameter("format")).equalsIgnoreCase("csv2")){
+		SortedMap normsdb = new TreeMap();
+		StringBuffer report = new StringBuffer();
+		String norms="";
+		//We calculate all norms for all services that descend form the root service
+		getNorms(serviceid,normsdb,structures);
+		//Now we've got all norms for all structures starting from serviceid and lower
+		//Run through each of the structures
+		Iterator services = normsdb.keySet().iterator();
+		while(services.hasNext()){
+			String activeserviceid = (String)services.next();
+			Service service = Service.getService(activeserviceid);
+			int numberofnorms=0,numberofcompliantnorms=0;
+			//Write full service name to report
+			report.append(service.getFullyQualifiedName(sWebLanguage)+"\n");
+			//Write norm headers to report
+			report.append(ScreenHelper.getTranNoLink("asset", "nomenclature", sWebLanguage)+";");
+			report.append(ScreenHelper.getTranNoLink("asset", "norm", sWebLanguage)+";");
+			report.append(ScreenHelper.getTranNoLink("asset", "minimum", sWebLanguage)+";");
+			report.append(ScreenHelper.getTranNoLink("asset", "existing", sWebLanguage)+";");
+			report.append(ScreenHelper.getTranNoLink("asset", "nonfunctional", sWebLanguage)+";");
+			report.append(ScreenHelper.getTranNoLink("asset", "compliant", sWebLanguage)+"\n");
+			//Now we must run through all the norms and show the results of the relevant ones
+			SortedMap servicenorms = (SortedMap)normsdb.get(activeserviceid);
+			Iterator iservicenorms = servicenorms.keySet().iterator();
+			while(iservicenorms.hasNext()){
+				String sn_nomenclature = (String)iservicenorms.next();
+				if(norms.length()==0 || (norms+";").contains(sn_nomenclature)){
+					String sn_result = ScreenHelper.checkString((String)servicenorms.get(sn_nomenclature));
+					if(sn_result.split(";").length>1){
+						numberofnorms++;
+						double sn_minimumquantity = Double.parseDouble(sn_result.split(";")[0]);
+						double sn_foundquantity = Double.parseDouble(sn_result.split(";")[1]);
+						double sn_nonfunctional = Double.parseDouble(sn_result.split(";")[2]);
+						report.append(sn_nomenclature.toUpperCase() + ";");
+						report.append(ScreenHelper.getTranNoLink("admin.nomenclature.asset", sn_nomenclature, sWebLanguage)+ ";");
+						report.append(new Double(sn_minimumquantity).intValue()+";");
+						report.append(sn_foundquantity==0?"0;":new Double(sn_foundquantity).intValue()+";");
+						report.append(sn_nonfunctional==0?"0;":new Double(sn_nonfunctional).intValue()+";");
+						if(sn_foundquantity>=sn_minimumquantity){
+							report.append(ScreenHelper.getTranNoLink("web", "yes", sWebLanguage));
+						}
+						else{
+							report.append(ScreenHelper.getTranNoLink("web", "no", sWebLanguage));
+						}
+						report.append("\n");
+						if(sn_foundquantity<sn_minimumquantity){
+						}
+						else{
+							numberofcompliantnorms++;
+						}
+					}
+				}
+			}
+			report.append(ScreenHelper.getTranNoLink("web", "conformityscore", sWebLanguage)+": ");
+			report.append((numberofcompliantnorms*100/numberofnorms)+"%\n\n");
+		}
+		session.setAttribute("normsreport","done");
+	    response.setContentType("application/octet-stream; charset=windows-1252");
+	    response.setHeader("Content-Disposition", "Attachment;Filename=\"OpenClinicStatistic"+new SimpleDateFormat("yyyyMMddHHmmss").format(new java.util.Date())+".csv\"");
+	    ServletOutputStream os = response.getOutputStream();
+	    byte[] b = report.toString().getBytes();
+	    for(int n=0; n<b.length; n++){
+	        os.write(b[n]);
+	    }
+	    os.flush();
+	    os.close();
+	}
+	else if(checkString(request.getParameter("format")).equalsIgnoreCase("pdf")){
 		try{
 			PDFAssetNormGenerator report = new PDFAssetNormGenerator(activeUser,checkString((String)session.getAttribute("activeProjectTitle")).toLowerCase());
 			ByteArrayOutputStream baosPDF = report.generatePDFDocumentBytes(request, serviceid, snorm, structures,sWebLanguage);

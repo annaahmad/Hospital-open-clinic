@@ -5,6 +5,7 @@ import be.openclinic.common.OC_Object;
 import be.openclinic.common.ObjectReference;
 import be.openclinic.pharmacy.Product;
 import be.openclinic.pharmacy.ServiceStock;
+import be.openclinic.system.SH;
 import be.mxs.common.util.db.MedwanQuery;
 import be.mxs.common.util.system.ScreenHelper;
 import be.mxs.common.util.system.Debug;
@@ -439,6 +440,7 @@ public class Prescription extends OC_Object{
                     // date end
                     if(this.end!=null) ps.setTimestamp(5,new java.sql.Timestamp(end.getTime()));
                     else               ps.setNull(5,Types.TIMESTAMP);
+                    
 
                     if(this.getTimeUnit().length() > 0) ps.setString(6,this.getTimeUnit());
                     else                                ps.setNull(6,Types.VARCHAR);

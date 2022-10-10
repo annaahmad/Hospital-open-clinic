@@ -92,6 +92,7 @@
 		else{
 			document.getElementById("paymentButton").disabled= true;
 		    var params = 	"prestations="+prestationlist+
+							"&defaultExtraInsurar="+(document.getElementById('defaultExtraInsurar') && document.getElementById('defaultExtraInsurar').checked?"1":"0")+
 		    				"&wicketuid="+document.getElementById('wicketuid').value+
 		    				"&amount="+document.getElementById('amount').value+
 		    				"&encounteruid="+document.getElementById('encounteruid').value+
@@ -123,12 +124,12 @@
 	}
 
 	function doPrintReceipt(){
-        var url = "<c:url value='/financial/createPatientInvoiceReceiptPdf.jsp'/>?InvoiceUid="+document.getElementById('invoiceuid').value+"&ts=<%=getTs()%>&PrintLanguage=<%=sWebLanguage%>";
+        var url = "<c:url value='/financial/createPatientInvoiceReceiptPdf.jsp'/>?InvoiceUid="+document.getElementById('invoiceuid').value+"&ts=<%=getTs()%>&PrintLanguage=<%=sWebLanguage%>&defaultExtraInsurar="+(document.getElementById('defaultExtraInsurar') && document.getElementById('defaultExtraInsurar').checked?"1":"0");
         window.open(url,"PatientInvoicePdf<%=new java.util.Date().getTime()%>","height=600,width=900,toolbar=yes,status=no,scrollbars=yes,resizable=yes,menubar=yes");
 	}
 	
     function doPrintInvoice(){
-        var url = "<c:url value='/financial/createPatientInvoicePdf.jsp'/>?Proforma=no&InvoiceUid="+document.getElementById('invoiceuid').value+"&ts=<%=getTs()%>&PrintLanguage=<%=sWebLanguage%>";
+        var url = "<c:url value='/financial/createPatientInvoicePdf.jsp'/>?Proforma=no&InvoiceUid="+document.getElementById('invoiceuid').value+"&ts=<%=getTs()%>&PrintLanguage=<%=sWebLanguage%>&defaultExtraInsurar="+(document.getElementById('defaultExtraInsurar') && document.getElementById('defaultExtraInsurar').checked?"1":"0");
         window.open(url,"PatientInvoicePdf<%=new java.util.Date().getTime()%>","height=600,width=900,toolbar=yes,status=no,scrollbars=yes,resizable=yes,menubar=yes");
     }
 

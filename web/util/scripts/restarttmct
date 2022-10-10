@@ -3,3 +3,5 @@ mv /var/tomcat/logs/catalina.out /var/tomcat/logs/catalina.out-`date +%Y_%m_%d_%
 find /var/tomcat/logs -name "*" -mtime +8 -exec rm -f {} \;
 cd /var/tomcat/bin
 ./startup.sh
+
+

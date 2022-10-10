@@ -34,6 +34,10 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
@@ -148,9 +152,9 @@ public class ScreenHelper {
     }
     
     public static long nightsBetween(java.util.Date begin,java.util.Date end){
-    	long nights = 0;
+    	long nights = 1;
     	if(!formatDate(begin).equals(formatDate(end)) && end.after(begin)){
-    		nights=TimeUnit.DAYS.convert(end.getTime()-begin.getTime(), TimeUnit.MILLISECONDS);
+    		nights=1+ChronoUnit.DAYS.between(begin.toInstant().atZone(ZoneId.systemDefault()).toLocalDate(), end.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
     	}
     	return nights;
     }
@@ -323,7 +327,7 @@ public class ScreenHelper {
     public static java.util.Date endOfDay(java.util.Date date){
     	if(date!=null){
     		try {
-				return new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(new SimpleDateFormat("dd/MM/yyyy").format(date)+" 23:59:59");
+				return new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(formatDate(date)+" 23:59:59");
 			} catch (ParseException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -617,7 +621,7 @@ public class ScreenHelper {
     public static java.util.Date endOfDay(String sDate) throws ParseException{
     	java.util.Date date = null;
     	date = parseDate(sDate);
-    	date = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(new SimpleDateFormat("dd/MM/yyyy").format(date)+" 23:59:59");
+    	date = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(formatDate(date)+" 23:59:59");
     	return date;
     }
     
@@ -2485,6 +2489,11 @@ public static String removeAccents(String sTest){
     	return writeDefaultCheckBoxes(transaction, request, sLabelType, sName, sWebLanguage, sorted, sEvent,"");
     }
     public static String writeDefaultCheckBoxes(TransactionVO transaction,HttpServletRequest request,String sLabelType, String sName, String sWebLanguage, boolean sorted, String sEvent,String separator){
+		boolean bMandatory=false;
+		if(sName.startsWith("!")) {
+			bMandatory=true;
+			sName=sName.substring(1);
+		}
     	if(transaction.getItem("be.mxs.common.model.vo.healthrecord.IConstants."+sName)==null){
     		return("Unknown item: <a href='javascript:createTransactionItem(\""+transaction.getTransactionType()+"\",\"be.mxs.common.model.vo.healthrecord.IConstants."+sName+"\");'>"+sName+"</a>");
     	}
@@ -2541,7 +2550,7 @@ public static String removeAccents(String sTest){
 	                        sLabelValue = (String)hSelected.get(sLabelID);
 	                    }
 
-	                    s.append("<label style='display: inline-block;'><input "+setRightClickMini(request.getSession(), sName)+" "+(checkString((String)request.getSession().getAttribute("editmode")).equalsIgnoreCase("1")?"title='"+sName+"' ":"")+sEvent+" onclick='updateMultiCheckbox(this,\""+sName+"\",\""+sLabelID+"\")' type='checkbox' name='"+sName+"."+sLabelID+"' id='"+sName+"."+sLabelID+"' value='"+sLabelID+"'");
+	                    s.append("<label style='display: inline-block;'><input "+(bMandatory?"data-mandatory='1'":"")+" "+setRightClickMini(request.getSession(), sName)+" "+(checkString((String)request.getSession().getAttribute("editmode")).equalsIgnoreCase("1")?"title='"+sName+"' ":"")+sEvent+" onclick='removeOutline(this);updateMultiCheckbox(this,\""+sName+"\",\""+sLabelID+"\")' type='checkbox' name='"+sName+"."+sLabelID+"' id='"+sName+"."+sLabelID+"' value='"+sLabelID+"'");
 	                    if(arrayContains(sSelected,sLabelID,";")){
 	                        s.append(" checked");
 	                    }
@@ -2555,13 +2564,18 @@ public static String removeAccents(String sTest){
     }
     
     public static String writeDefaultRadioButtons(TransactionVO transaction,HttpServletRequest request,String sLabelType, String sName, String sWebLanguage, boolean sorted, String sEvent, String separator){
+		boolean bMandatory=false;
+		if(sName.startsWith("!")) {
+			bMandatory=true;
+			sName=sName.substring(1);
+		}
     	if(transaction.getItem("be.mxs.common.model.vo.healthrecord.IConstants."+sName)==null){
     		return("Unknown item: <a href='javascript:createTransactionItem(\""+transaction.getTransactionType()+"\",\"be.mxs.common.model.vo.healthrecord.IConstants."+sName+"\");'>"+sName+"</a>");
     	}
     	else{
 	    	String sSelected = transaction.getItem("be.mxs.common.model.vo.healthrecord.IConstants."+sName).getValue();
     		StringBuffer s = new StringBuffer();
-    		s.append(writeDefaultHiddenInput(transaction, sName));
+    		s.append(writeDefaultHiddenInput(transaction, sName,bMandatory));
 	        if(request!=null && checkString((String)request.getSession().getAttribute("editmode")).equalsIgnoreCase("1")){
 	    		saveTransactionItemTranslation(transaction.getTransactionType(), "be.mxs.common.model.vo.healthrecord.IConstants."+sName, sLabelType);
 	        	s.append("<img width='16' src='"+request.getRequestURI().replaceAll(request.getServletPath(),"")+"/_img/icons/icon_plus.png' onclick='window.open(\""+request.getRequestURI().replaceAll(request.getServletPath(),"")+"/popup.jsp?Page=system/manageTranslations.jsp&FindLabelType="+sLabelType+"&find=1\",\"popup\",\"toolbar=no,status=yes,scrollbars=yes,resizable=yes,width=800,height=500,menubar=no\")'/>");
@@ -2612,7 +2626,7 @@ public static String removeAccents(String sTest){
 	                        sLabelValue = (String)hSelected.get(sLabelID);
 	                    }
 
-	                    s.append("<label style='display: inline-block;'><input "+setRightClickMini(request.getSession(), sName)+" "+sEvent+" ondblclick='uncheckRadio(this)' onclick='document.getElementById(\""+sName+"\").value=\""+sLabelID+";\";' type='radio' name='"+sName+".radio' id='"+sName+"."+sLabelID+"' value='"+sLabelID+"'");
+	                    s.append("<label style='display: inline-block;'><input "+setRightClickMini(request.getSession(), sName)+" "+sEvent+" ondblclick='document.getElementById(\""+sName+"\").value=\"\";uncheckRadio(this)' onclick='removeOutline(this);document.getElementById(\""+sName+"\").value=\""+sLabelID+";\";' type='radio' name='"+sName+".radio' id='"+sName+"."+sLabelID+"' value='"+sLabelID+"'");
 	                    if(arrayContains(sSelected,sLabelID,";")){
 	                        s.append(" checked");
 	                    }
@@ -2672,6 +2686,11 @@ public static String removeAccents(String sTest){
     }
     
     public static String writeDefaultTextInput(HttpSession session, TransactionVO transaction, String sName,int cols,String event){
+    	boolean bMandatory=false;
+    	if(sName.startsWith("!")) {
+    		sName=sName.substring(1);
+    		bMandatory=true;
+    	}
     	if(transaction.getItem("be.mxs.common.model.vo.healthrecord.IConstants."+sName)==null){
     		return("Unknown item: <a href='javascript:createTransactionItem(\""+transaction.getTransactionType()+"\",\"be.mxs.common.model.vo.healthrecord.IConstants."+sName+"\");'>"+sName+"</a>");
     	}
@@ -2679,6 +2698,9 @@ public static String removeAccents(String sTest){
 	    	StringBuffer s = new StringBuffer();
 	    	s.append("<input type='text' id='"+sName+"' ");
 	    	s.append(setRightClick(session,sName));
+	    	if(bMandatory) {
+	    		s.append(" "+SH.cdm()+" ");
+	    	}
 	    	s.append(" class='text' size='"+cols+"' name='currentTransactionVO.items.<ItemVO[hashCode="+transaction.getItem("be.mxs.common.model.vo.healthrecord.IConstants."+sName).getItemId()+"]>.value'");
 	    	s.append(" value='"+transaction.getItem("be.mxs.common.model.vo.healthrecord.IConstants."+sName).getValue()+"' "+event+"/>");
 	    	return s.toString();
@@ -2686,12 +2708,20 @@ public static String removeAccents(String sTest){
     }
     
     public static String writeDefaultTextInputNoClass(HttpSession session, TransactionVO transaction, String sName,int cols,String event){
+    	boolean bMandatory=false;
+    	if(sName.startsWith("!")) {
+    		sName=sName.substring(1);
+    		bMandatory=true;
+    	}
     	if(transaction.getItem("be.mxs.common.model.vo.healthrecord.IConstants."+sName)==null){
     		return("Unknown item: <a href='javascript:createTransactionItem(\""+transaction.getTransactionType()+"\",\"be.mxs.common.model.vo.healthrecord.IConstants."+sName+"\");'>"+sName+"</a>");
     	}
     	else{
 	    	StringBuffer s = new StringBuffer();
 	    	s.append("<input type='text' id='"+sName+"' ");
+	    	if(bMandatory) {
+	    		s.append(" "+SH.cdm()+" ");
+	    	}
 	    	s.append(" size='"+cols+"' name='currentTransactionVO.items.<ItemVO[hashCode="+transaction.getItem("be.mxs.common.model.vo.healthrecord.IConstants."+sName).getItemId()+"]>.value'");
 	    	s.append(" value='"+transaction.getItem("be.mxs.common.model.vo.healthrecord.IConstants."+sName).getValue()+"' "+event+"/>");
 	    	return s.toString();
@@ -2722,11 +2752,20 @@ public static String removeAccents(String sTest){
 		return null;
     }
 
+    public static java.util.Date getBeginOfMonth(){
+		return getBeginOfMonth(new java.util.Date());
+    }
+
     public static java.util.Date getBeginOfNextMonth(java.util.Date date){
 		return getBeginOfMonth(new java.util.Date(getBeginOfMonth(date).getTime()+32*getTimeDay()));
     }
 
     public static String writeDefaultTextInputSticky(HttpSession session, TransactionVO transaction, String sName,int cols){
+    	boolean bMandatory=false;
+    	if(sName.startsWith("!")) {
+    		sName=sName.substring(1);
+    		bMandatory=true;
+    	}
     	if(transaction.getItem("be.mxs.common.model.vo.healthrecord.IConstants."+sName)==null){
     		return("Unknown item: <a href='javascript:createTransactionItem(\""+transaction.getTransactionType()+"\",\"be.mxs.common.model.vo.healthrecord.IConstants."+sName+"\");'>"+sName+"</a>");
     	}
@@ -2741,6 +2780,9 @@ public static String removeAccents(String sTest){
 	    	StringBuffer s = new StringBuffer();
 	    	s.append("<input type='text' id='"+sName+"' ");
 	    	s.append(setRightClick(session,sName));
+	    	if(bMandatory) {
+	    		s.append(" "+SH.cdm()+" ");
+	    	}
 	    	s.append(" class='text' size='"+cols+"' name='currentTransactionVO.items.<ItemVO[hashCode="+transaction.getItem("be.mxs.common.model.vo.healthrecord.IConstants."+sName).getItemId()+"]>.value'");
 	    	s.append(" value='"+sValue+"'/>");
 	    	return s.toString();
@@ -2748,6 +2790,11 @@ public static String removeAccents(String sTest){
     }
     
     public static String writeDefaultTextInputSticky(HttpSession session, TransactionVO transaction, String sName,int cols,String onblur){
+    	boolean bMandatory=false;
+    	if(sName.startsWith("!")) {
+    		sName=sName.substring(1);
+    		bMandatory=true;
+    	}
     	if(transaction.getItem("be.mxs.common.model.vo.healthrecord.IConstants."+sName)==null){
     		return("Unknown item: <a href='javascript:createTransactionItem(\""+transaction.getTransactionType()+"\",\"be.mxs.common.model.vo.healthrecord.IConstants."+sName+"\");'>"+sName+"</a>");
     	}
@@ -2762,6 +2809,9 @@ public static String removeAccents(String sTest){
 	    	StringBuffer s = new StringBuffer();
 	    	s.append("<input type='text' id='"+sName+"' ");
 	    	s.append(setRightClick(session,sName));
+	    	if(bMandatory) {
+	    		s.append(" "+SH.cdm()+" ");
+	    	}
 	    	s.append(" class='text' size='"+cols+"' name='currentTransactionVO.items.<ItemVO[hashCode="+transaction.getItem("be.mxs.common.model.vo.healthrecord.IConstants."+sName).getItemId()+"]>.value'");
 	    	s.append(" value='"+sValue+"'"+(onblur.length()>0?" onblur=\""+onblur+"\"":"")+"/>");
 	    	return s.toString();
@@ -2769,6 +2819,11 @@ public static String removeAccents(String sTest){
     }
     
     public static String writeDefaultTextInputCenter(HttpSession session, TransactionVO transaction, String sName,int cols){
+    	boolean bMandatory=false;
+    	if(sName.startsWith("!")) {
+    		sName=sName.substring(1);
+    		bMandatory=true;
+    	}
     	if(transaction.getItem("be.mxs.common.model.vo.healthrecord.IConstants."+sName)==null){
     		return("Unknown item: <a href='javascript:createTransactionItem(\""+transaction.getTransactionType()+"\",\"be.mxs.common.model.vo.healthrecord.IConstants."+sName+"\");'>"+sName+"</a>");
     	}
@@ -2776,6 +2831,9 @@ public static String removeAccents(String sTest){
 	    	StringBuffer s = new StringBuffer();
 	    	s.append("<input type='text' id='"+sName+"' ");
 	    	s.append(setRightClickCenter(session,sName));
+	    	if(bMandatory) {
+	    		s.append(" "+SH.cdm()+" ");
+	    	}
 	    	s.append(" class='textcenter' size='"+cols+"' name='currentTransactionVO.items.<ItemVO[hashCode="+transaction.getItem("be.mxs.common.model.vo.healthrecord.IConstants."+sName).getItemId()+"]>.value'");
 	    	s.append(" value='"+transaction.getItem("be.mxs.common.model.vo.healthrecord.IConstants."+sName).getValue()+"'/>");
 	    	return s.toString();
@@ -2811,6 +2869,11 @@ public static String removeAccents(String sTest){
     }
     
     public static String writeDefaultDateInput(HttpSession session, TransactionVO transaction, String sName, String language,String contextpath){
+    	boolean bMandatory=false;
+    	if(sName.startsWith("!")) {
+    		sName=sName.substring(1);
+    		bMandatory=true;
+    	}
     	if(transaction.getItem("be.mxs.common.model.vo.healthrecord.IConstants."+sName)==null){
     		return("Unknown item: <a href='javascript:createTransactionItem(\""+transaction.getTransactionType()+"\",\"be.mxs.common.model.vo.healthrecord.IConstants."+sName+"\");'>"+sName+"</a>");
     	}
@@ -2818,6 +2881,9 @@ public static String removeAccents(String sTest){
 	    	StringBuffer s = new StringBuffer();
 	    	s.append("<input type='text' id='"+sName+"' ");
 	    	s.append(setRightClick(session,sName));
+	    	if(bMandatory) {
+	    		s.append(" "+SH.cdm()+" ");
+	    	}
 	    	s.append(" class='text' size='12' maxlength='10' name='currentTransactionVO.items.<ItemVO[hashCode="+transaction.getItem("be.mxs.common.model.vo.healthrecord.IConstants."+sName).getItemId()+"]>.value'");
 	    	s.append(" onblur='checkDate(this);' value='"+transaction.getItem("be.mxs.common.model.vo.healthrecord.IConstants."+sName).getValue()+"'/>");
 	    	s.append("<script>writeMyDate('"+sName+"', '"+contextpath+"/_img/icons/icon_agenda.png', '"+ScreenHelper.getTranNoLink("web","PutToday",language)+"');</script>");
@@ -2826,6 +2892,11 @@ public static String removeAccents(String sTest){
     }
     
     public static String writeDefaultDateInput(HttpSession session, TransactionVO transaction, String sName, String language,String contextpath, String event){
+    	boolean bMandatory=false;
+    	if(sName.startsWith("!")) {
+    		sName=sName.substring(1);
+    		bMandatory=true;
+    	}
     	if(transaction.getItem("be.mxs.common.model.vo.healthrecord.IConstants."+sName)==null){
     		return("Unknown item: <a href='javascript:createTransactionItem(\""+transaction.getTransactionType()+"\",\"be.mxs.common.model.vo.healthrecord.IConstants."+sName+"\");'>"+sName+"</a>");
     	}
@@ -2833,6 +2904,9 @@ public static String removeAccents(String sTest){
 	    	StringBuffer s = new StringBuffer();
 	    	s.append("<input type='text' id='"+sName+"' ");
 	    	s.append(setRightClick(session,sName));
+	    	if(bMandatory) {
+	    		s.append(" "+SH.cdm()+" ");
+	    	}
 	    	s.append(" class='text' size='12' maxlength='10' name='currentTransactionVO.items.<ItemVO[hashCode="+transaction.getItem("be.mxs.common.model.vo.healthrecord.IConstants."+sName).getItemId()+"]>.value'");
 	    	s.append(" onblur='checkDate(this);' "+event+" value='"+transaction.getItem("be.mxs.common.model.vo.healthrecord.IConstants."+sName).getValue()+"'/>");
 	    	s.append("<script>writeMyDate('"+sName+"', '"+contextpath+"/_img/icons/icon_agenda.png', '"+ScreenHelper.getTranNoLink("web","PutToday",language)+"');</script>");
@@ -2885,10 +2959,28 @@ public static String removeAccents(String sTest){
     	}
     }
     
+    public static String writeDefaultHiddenInput(TransactionVO tran, String sName, boolean bMandatory){
+    	if(tran.getItem("be.mxs.common.model.vo.healthrecord.IConstants."+sName)==null){
+    		return("Unknown item: <a href='javascript:createTransactionItem(\""+tran.getTransactionType()+"\",\"be.mxs.common.model.vo.healthrecord.IConstants."+sName+"\");'>"+sName+"</a>");
+    	}
+    	else{
+	    	StringBuffer s = new StringBuffer();
+	    	s.append("<input type='hidden' "+(bMandatory?"data-mandatory='1'":"")+" id='"+sName+"' ");
+	    	s.append(" name='currentTransactionVO.items.<ItemVO[hashCode="+tran.getItem("be.mxs.common.model.vo.healthrecord.IConstants."+sName).getItemId()+"]>.value'");
+	    	s.append(" value='"+tran.getItem("be.mxs.common.model.vo.healthrecord.IConstants."+sName).getValue().replaceAll("'", "´")+"'/>");
+	    	return s.toString();
+    	}
+    }
+    
     public static String writeDefaultSelect(HttpServletRequest request,TransactionVO transaction, String sName,String type, String language, String sEvent){
     	return writeDefaultSelect(request, transaction, sName, type, language, sEvent, "");
     }
     public static String writeDefaultSelect(HttpServletRequest request,TransactionVO transaction, String sName,String type, String language, String sEvent,String sDefault){
+    	boolean bMandatory=false;
+    	if(sName.startsWith("!")) {
+    		sName=sName.substring(1);
+    		bMandatory=true;
+    	}
     	if(transaction.getItem("be.mxs.common.model.vo.healthrecord.IConstants."+sName)==null){
     		return("Unknown item: <a href='javascript:createTransactionItem(\""+transaction.getTransactionType()+"\",\"be.mxs.common.model.vo.healthrecord.IConstants."+sName+"\");'>"+sName+"</a>");
     	}
@@ -2897,13 +2989,13 @@ public static String removeAccents(String sTest){
 	    	String itemValue=checkString(transaction.getItem("be.mxs.common.model.vo.healthrecord.IConstants."+sName).getValue());
 	        if(request!=null && checkString((String)request.getSession().getAttribute("editmode")).equalsIgnoreCase("1")){
 	    		saveTransactionItemTranslation(transaction.getTransactionType(), "be.mxs.common.model.vo.healthrecord.IConstants."+sName, type);
-		    	s.append("<select style='vertical-align: top' title='"+sName+"' "+setRightClickMini(request.getSession(),sName)+" name='currentTransactionVO.items.<ItemVO[hashCode="+transaction.getItem("be.mxs.common.model.vo.healthrecord.IConstants."+sName).getItemId()+"]>.value' style='border:2px solid black; border-style: dotted' id='"+sName+"' onclick='window.open(\""+request.getRequestURI().replaceAll(request.getServletPath(),"")+"/popup.jsp?Page=system/manageTranslations.jsp&FindLabelType="+type+"&find=1\",\"popup\",\"toolbar=no,status=yes,scrollbars=yes,resizable=yes,width=800,height=500,menubar=no\")'>");
+		    	s.append("<select style='vertical-align: top' "+(bMandatory?"data-mandatory='1'":"")+" title='"+sName+"' "+setRightClickMini(request.getSession(),sName)+" name='currentTransactionVO.items.<ItemVO[hashCode="+transaction.getItem("be.mxs.common.model.vo.healthrecord.IConstants."+sName).getItemId()+"]>.value' style='border:2px solid black; border-style: dotted' id='"+sName+"' onclick='window.open(\""+request.getRequestURI().replaceAll(request.getServletPath(),"")+"/popup.jsp?Page=system/manageTranslations.jsp&FindLabelType="+type+"&find=1\",\"popup\",\"toolbar=no,status=yes,scrollbars=yes,resizable=yes,width=800,height=500,menubar=no\")'>");
 		    	s.append(" <option/>");
 		    	s.append(writeSelect(request,type,itemValue.length()==0 && checkString(sDefault).length()>0?sDefault:itemValue,language));
 		    	s.append("</select>");
 	        }
 	        else{
-		    	s.append("<select style='vertical-align: top' "+(request==null?"":setRightClickNoClass(request.getSession(),sName)+" ")+sEvent+" class='text' id='"+sName+"' ");
+		    	s.append("<select style='vertical-align: top' "+(bMandatory?"data-mandatory='1'":"")+" "+(request==null?"":setRightClickNoClass(request.getSession(),sName)+" ")+sEvent+" class='text' id='"+sName+"' ");
 		    	s.append(" name='currentTransactionVO.items.<ItemVO[hashCode="+transaction.getItem("be.mxs.common.model.vo.healthrecord.IConstants."+sName).getItemId()+"]>.value'>");
 		    	s.append(" <option/>");
 		    	s.append(writeSelect(request,type,itemValue.length()==0 && checkString(sDefault).length()>0?sDefault:itemValue,language));
@@ -2971,6 +3063,11 @@ public static String removeAccents(String sTest){
     }
     
     public static String writeDefaultNumericInput(HttpSession session, TransactionVO transaction, String sName,int cols,String language, String onChange){
+    	boolean bMandatory=false;
+    	if(sName.startsWith("!")) {
+    		sName=sName.substring(1);
+    		bMandatory=true;
+    	}
     	if(transaction.getItem("be.mxs.common.model.vo.healthrecord.IConstants."+sName)==null){
     		return("Unknown item: <a href='javascript:createTransactionItem(\""+transaction.getTransactionType()+"\",\"be.mxs.common.model.vo.healthrecord.IConstants."+sName+"\");'>"+sName+"</a>");
     	}
@@ -2978,6 +3075,9 @@ public static String removeAccents(String sTest){
 	    	StringBuffer s = new StringBuffer();
 	    	s.append("<input type='text' id='"+sName+"' ");
 	    	s.append(setRightClick(session, sName,onChange));
+	    	if(bMandatory) {
+	    		s.append(" "+SH.cdm()+" ");
+	    	}
 	    	s.append(" class='text' size='"+cols+"' name='currentTransactionVO.items.<ItemVO[hashCode="+transaction.getItem("be.mxs.common.model.vo.healthrecord.IConstants."+sName).getItemId()+"]>.value' ");
 	    	s.append(" value='"+transaction.getItem("be.mxs.common.model.vo.healthrecord.IConstants."+sName).getValue()+"' onblur='isNumber(this)'/>");
 	    	return s.toString();
@@ -3003,6 +3103,11 @@ public static String removeAccents(String sTest){
     }
     
     public static String writeDefaultVisualNumericInput(HttpSession session, TransactionVO transaction, String sName,int cols,String language,String contextpath, String onChange){
+    	boolean bMandatory=false;
+    	if(sName.startsWith("!")) {
+    		sName=sName.substring(1);
+    		bMandatory=true;
+    	}
     	if(transaction.getItem("be.mxs.common.model.vo.healthrecord.IConstants."+sName)==null){
     		return("Unknown item: <a href='javascript:createTransactionItem(\""+transaction.getTransactionType()+"\",\"be.mxs.common.model.vo.healthrecord.IConstants."+sName+"\");'>"+sName+"</a>");
     	}
@@ -3011,6 +3116,9 @@ public static String removeAccents(String sTest){
 	    	s.append("<label style='display: inline-block;'><img onclick='document.getElementById(\""+sName+"\").value=document.getElementById(\""+sName+"\").value*1-1;document.getElementById(\""+sName+"\").onchange();' style='vertical-align:bottom;' src='"+contextpath+"/_img/icons/mobile/decrease.png' height='16px'/>");
 	    	s.append("<input type='text' id='"+sName+"' ");
 	    	s.append(setRightClick(session, sName, onChange));
+	    	if(bMandatory) {
+	    		s.append(" "+SH.cdm()+" ");
+	    	}
 	    	s.append(" class='text' style='text-align: center;' size='"+cols+"' name='currentTransactionVO.items.<ItemVO[hashCode="+transaction.getItem("be.mxs.common.model.vo.healthrecord.IConstants."+sName).getItemId()+"]>.value' ");
 	    	s.append(" value='"+transaction.getItem("be.mxs.common.model.vo.healthrecord.IConstants."+sName).getValue()+"' onblur='isNumber(this)'/>");
 	    	s.append("<img onclick='document.getElementById(\""+sName+"\").value=document.getElementById(\""+sName+"\").value*1+1;document.getElementById(\""+sName+"\").onchange();' style='vertical-align:top;' src='"+contextpath+"/_img/icons/mobile/increase.png' height='16px'/></label>");
@@ -3019,6 +3127,11 @@ public static String removeAccents(String sTest){
     }
     
     public static String writeDefaultNumericInput(HttpSession session, TransactionVO transaction, String sName,int cols,double min,double max,String language){
+    	boolean bMandatory=false;
+    	if(sName.startsWith("!")) {
+    		sName=sName.substring(1);
+    		bMandatory=true;
+    	}
     	if(transaction.getItem("be.mxs.common.model.vo.healthrecord.IConstants."+sName)==null){
     		return("Unknown item: <a href='javascript:createTransactionItem(\""+transaction.getTransactionType()+"\",\"be.mxs.common.model.vo.healthrecord.IConstants."+sName+"\");'>"+sName+"</a>");
     	}
@@ -3026,6 +3139,9 @@ public static String removeAccents(String sTest){
 	    	StringBuffer s = new StringBuffer();
 	    	s.append("<input type='text' id='"+sName+"' ");
 	    	s.append(setRightClick(session, sName));
+	    	if(bMandatory) {
+	    		s.append(" "+SH.cdm()+" ");
+	    	}
 	    	s.append(" class='text' size='"+cols+"' name='currentTransactionVO.items.<ItemVO[hashCode="+transaction.getItem("be.mxs.common.model.vo.healthrecord.IConstants."+sName).getItemId()+"]>.value' ");
 	    	s.append(" value='"+transaction.getItem("be.mxs.common.model.vo.healthrecord.IConstants."+sName).getValue()+"' onblur='if(!this.value==\"\" && !isNumberLimited(this,"+min+","+max+")){this.value=\"\";alert(\""+getTranNoLink("web","valueoutofrange",language)+": "+min+" - "+max+"\");this.focus();}'/>");
 	    	return s.toString();
@@ -3033,6 +3149,11 @@ public static String removeAccents(String sTest){
     }
     
     public static String writeDefaultNumericInput(HttpSession session, TransactionVO transaction, String sName,int cols,double min,double max,String language, String sOnBlur){
+    	boolean bMandatory=false;
+    	if(sName.startsWith("!")) {
+    		sName=sName.substring(1);
+    		bMandatory=true;
+    	}
     	if(transaction.getItem("be.mxs.common.model.vo.healthrecord.IConstants."+sName)==null){
     		return("Unknown item: <a href='javascript:createTransactionItem(\""+transaction.getTransactionType()+"\",\"be.mxs.common.model.vo.healthrecord.IConstants."+sName+"\");'>"+sName+"</a>");
     	}
@@ -3040,6 +3161,9 @@ public static String removeAccents(String sTest){
 	    	StringBuffer s = new StringBuffer();
 	    	s.append("<input type='text' id='"+sName+"' ");
 	    	s.append(setRightClick(session, sName));
+	    	if(bMandatory) {
+	    		s.append(" "+SH.cdm()+" ");
+	    	}
 	    	s.append(" class='text' size='"+cols+"' name='currentTransactionVO.items.<ItemVO[hashCode="+transaction.getItem("be.mxs.common.model.vo.healthrecord.IConstants."+sName).getItemId()+"]>.value' ");
 	    	s.append(" value='"+transaction.getItem("be.mxs.common.model.vo.healthrecord.IConstants."+sName).getValue()+"' onblur='if(!this.value==\"\" && !isNumberLimited(this,"+min+","+max+")){this.value=\"\";alert(\""+getTranNoLink("web","valueoutofrange",language)+": "+min+" - "+max+"\");this.focus();}else{"+sOnBlur+";}'/>");
 	    	return s.toString();
@@ -3047,12 +3171,20 @@ public static String removeAccents(String sTest){
     }
     
     public static String writeDefaultNumericInput(HttpSession session, TransactionVO transaction, String sName,int cols,double min,double max,String language, String sOnBlur, String sOnEvent){
+    	boolean bMandatory=false;
+    	if(sName.startsWith("!")) {
+    		sName=sName.substring(1);
+    		bMandatory=true;
+    	}
     	if(transaction.getItem("be.mxs.common.model.vo.healthrecord.IConstants."+sName)==null){
     		return("Unknown item: <a href='javascript:createTransactionItem(\""+transaction.getTransactionType()+"\",\"be.mxs.common.model.vo.healthrecord.IConstants."+sName+"\");'>"+sName+"</a>");
     	}
     	else{
 	    	StringBuffer s = new StringBuffer();
 	    	s.append("<input type='text' id='"+sName+"' ");
+	    	if(bMandatory) {
+	    		s.append(" "+SH.cdm()+" ");
+	    	}
 	    	s.append(" class='text' size='"+cols+"' name='currentTransactionVO.items.<ItemVO[hashCode="+transaction.getItem("be.mxs.common.model.vo.healthrecord.IConstants."+sName).getItemId()+"]>.value' ");
 	    	s.append(" value='"+transaction.getItem("be.mxs.common.model.vo.healthrecord.IConstants."+sName).getValue()+"' onblur='if(!this.value==\"\" && !isNumberLimited(this,"+min+","+max+")){this.value=\"\";alert(\""+getTranNoLink("web","valueoutofrange",language)+": "+min+" - "+max+"\");this.focus();}else{"+sOnBlur+";}' "+sOnEvent+"/>");
 	    	return s.toString();
@@ -3735,6 +3867,14 @@ public static String removeAccents(String sTest){
         return sString;
     }
 
+    public static int checkInteger(Integer i,Integer defaultValue){
+        // om geen 'null' weer te geven
+        if(i==null){
+            return defaultValue;
+        }
+        return i;
+    }
+
     public static String checkString(StringBuffer sString){
         // om geen 'null' weer te geven
     	String s="";
@@ -3839,8 +3979,25 @@ public static String removeAccents(String sTest){
     //--- FORMAT DATE -----------------------------------------------------------------------------
     public static String formatDate(java.util.Date dDate){
         String sDate = "";
+        try {
+	        if(dDate!=null){
+	            sDate = stdDateFormat.format(dDate);
+	        }
+        }
+        catch(Exception e) {
+        	e.printStackTrace();
+        }
+        return sDate;
+    } 
+    
+    public static String formatPrice(double d) {
+    	return SH.cs("currency","EUR")+" "+ new DecimalFormat(SH.cs("priceFormat", "#")).format(d);
+    }
+    
+    public static String formatDate(java.time.LocalDateTime dDate){
+        String sDate = "";
         if(dDate!=null){
-            sDate = stdDateFormat.format(dDate);
+            sDate = dDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
         }
         return sDate;
     } 
@@ -3849,6 +4006,14 @@ public static String removeAccents(String sTest){
         String sDate = "";
         if(dDate!=null){
             sDate = dateFormat.format(dDate);
+        }
+        return sDate;
+    }
+
+    public static String formatDate(java.time.LocalDateTime dDate, String dateFormat){
+        String sDate = "";
+        if(dDate!=null){
+            sDate = dDate.format(DateTimeFormatter.ofPattern(dateFormat));
         }
         return sDate;
     }
@@ -4151,6 +4316,14 @@ public static String removeAccents(String sTest){
             sDate = formatDate(dDate);
         }
         return sDate;
+    }
+    
+    public static java.sql.Date toSQLDate(java.util.Date date){
+    	return new java.sql.Date(date.getTime());
+    }
+
+    public static java.sql.Timestamp toSQLTimestamp(java.util.Date date){
+    	return new java.sql.Timestamp(date.getTime());
     }
 
     //--- GET SQL DATE ----------------------------------------------------------------------------

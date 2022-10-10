@@ -193,6 +193,10 @@
         <permission type="examination" id="1216">occup.ndhadmission</permission>
         <permission type="examination" id="1217">cnts.supervision</permission>
         <permission type="examination" id="1218">cnts.hemovigilance</permission>
+        <permission type="examination" id="1227">clefs.adults</permission>
+        <permission type="examination" id="1228">clefs.children</permission>
+        <permission type="examination" id="1229">clefs.perinatal</permission>
+        <permission type="examination" id="1230">msas.registry.dentist</permission>
     </application>
     <application type="Web" id="newexaminations">
         <permission type="web" id="globalexaminations">examinations.global</permission>
@@ -413,6 +417,10 @@
     <application type="Web" id="executive">
         <permission type="web" id="bedoccupation">occup.bedoccupation</permission>
         <permission type="web" id="executive">executive</permission>
+        <permission type="web" id="sysadmindashboard">sa.dashboard</permission>
+        <permission type="web" id="managementdashboard">management.dashboard</permission>
+        <permission type="web" id="supervisiondashboard">supervision.dashboard</permission>
+        <permission type="web" id="mydashboard">my.dashboard</permission>
     </application>
     <application type="Web" id="mpi">
         <permission type="web" id="mpi.mpi">mpi.mpi</permission>
@@ -531,5 +539,15 @@
     	<permission type="web" id="msas.registry.report.consultations">msas.registry.report.consultations</permission>
     	<permission type="web" id="msas.registry.report.healthychildren">msas.registry.report.healthychildren</permission>
     	<permission type="web" id="msas.registry.report.postnatal">msas.registry.report.postnatal</permission>
+    	<permission type="web" id="msas.registry.report.deliveries">msas.registry.report.deliveries</permission>
+    	<permission type="web" id="msas.registry.report.prenatal">msas.registry.report.prenatal</permission>
+    	<permission type="web" id="msas.registry.report.deceased">msas.registry.report.deceased</permission>
+    	<permission type="web" id="msas.registry.report.abortion">msas.registry.report.abortion</permission>
+    	<permission type="web" id="msas.registry.report.sickchildren">msas.registry.report.sickchildren</permission>
+    	<permission type="web" id="msas.registry.report.admission">msas.registry.report.admission</permission>
+    	<permission type="web" id="msas.registry.report.familyplanning">msas.registry.report.familyplanning</permission>
+    	<permission type="web" id="msas.registry.report.cren">msas.registry.report.cren</permission>
+    	<permission type="web" id="msas.registry.report.uren">msas.registry.report.uren</permission>
+    	<permission type="web" id="msas.registry.report.dentist">msas.registry.report.dentist</permission>
     </application>
 </permissions>

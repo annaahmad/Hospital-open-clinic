@@ -133,6 +133,77 @@
   var ie = document.all;
   var ns6 = document.getElementById && !document.all;
   
+  	if(document.getElementById("transactionForm")){
+	  	document.getElementById("transactionForm").onclick=function(){
+		  	var nodelist= document.querySelectorAll("textarea,input,select");
+		  	for(n=0;n<nodelist.length;n++){
+		  		if(nodelist[n].dataset.mandatory && nodelist[n].dataset.mandatory=="1"){
+		  			var bOk=false;
+		  			if(nodelist[n].type && nodelist[n].type=='checkbox'){
+		  				if(nodelist[n].checked){
+		  					bOk=true;
+		  				}
+		  				else{
+			  				for(i=0;i<nodelist.length;i++){
+			  					if(nodelist[i].id.startsWith(nodelist[n].id.split(".")[0]+".")){
+			  						if(nodelist[i].checked){
+			  							bOk=true;
+			  							break;
+			  						}
+			  					}
+			  				}
+		  				}
+		  			}
+		  			else if(nodelist[n].value.trim().length>0){
+		  				bOk=true;
+		  			}
+		  			else if(nodelist[n].dataset.alternateids){
+		  				var fields=nodelist[n].dataset.alternateids.split(",");
+		  				for(i=0;i<fields.length && !bOk;i++){
+		  					if(document.getElementById(fields[i]) && document.getElementById(fields[i]).value.length>0){
+		  						bOk=true;
+		  					}
+		  				}
+		  			}
+		  			if(!bOk){
+			  			if(nodelist[n].type=='hidden'){
+			  				for(i=0;i<nodelist.length;i++){
+			  					if(nodelist[i].id.startsWith(nodelist[n].id+".")){
+			  						nodelist[i].style.outline='3px solid red';
+			  					}
+			  				}
+			  			}
+			  			else if(nodelist[n].type=='checkbox'){
+			  				for(i=0;i<nodelist.length;i++){
+			  					if(nodelist[i].id.startsWith(nodelist[n].id.split(".")[0]+".")){
+			  						nodelist[i].style.outline='3px solid red';
+			  					}
+			  				}
+			  			}
+			  			else{
+	  						nodelist[n].style.outline='3px solid red';
+			  			}
+		  			}
+		  		}
+		  	}
+		  	<%	if(SH.ci("enforceReasonForEncounterBeforeClinicalDataEntry",0)==1){ %>
+					if(document.getElementById("rfe") && document.getElementById("rfe").innerHTML.trim().length==0){
+						document.getElementById("rfe").style.height='16';
+						document.getElementById("rfe").style.outline='3px solid red';
+					}
+			<%	}	  %>
+	  	}
+  	}
+  	if(document.getElementById("transactionForm") && document.getElementById("transactionForm").onclick){
+  		document.getElementById("transactionForm").onclick();
+  	}
+<%	if(SH.ci("enforceReasonForEncounterBeforeClinicalDataEntry",0)==1){ %>
+		if(document.getElementById("rfe") && document.getElementById("rfe").innerHTML.trim().length==0){
+			document.getElementById("rfe").style.height='16';
+			document.getElementById("rfe").style.outline='3px solid red';
+		}
+<%	}	  %>
+
   function hideKeywordDivs(){
 	  var divs = document.getElementsByTagName("div");
 	  for(var i = 0; i < divs.length; i++){

@@ -43,13 +43,19 @@
 	        	<table width='100%'>
 			        <tr>
 			            <td class="admin"><%=getTran(request,"web", "mothername", sWebLanguage)%></td>
-			            <td colspan="3" class="admin2">
+			            <td class="admin2">
 			                <textarea rows="1" onKeyup="resizeTextarea(this,10);" class="text" cols="50" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_CONSPED_MOTHERNAME" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_CONSPED_MOTHERNAME" property="value"/></textarea>
 			            </td>
+			            <td class='admin'><%=getTran(request,"web","newcase",sWebLanguage) %></td>
+			            <td class='admin2'><%=SH.writeDefaultRadioButtons((TransactionVO)transaction, request, "yesno", "ITEM_TYPE_MSAS_CONS_NEWCASE", sWebLanguage, false, "", "") %></td>
+			        </tr>
+			        <tr style='display: <%=SH.c(activePatient.getID("natreg")).length()==0 || ((TransactionVO)transaction).getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_CONS_SENTTOCIVILREGISTRATION").length()>0?"":"none"%>'>
+			            <td class="adminred"><b><%=getTran(request,"web", "natregmissing", sWebLanguage)%></b></td>
+			            <td class='admin2' colspan='3'><%=getTran(request,"web", "senttocivilregistration", sWebLanguage)%> <%=SH.writeDefaultRadioButtons((TransactionVO)transaction, request, "yesno", "ITEM_TYPE_MSAS_CONS_SENTTOCIVILREGISTRATION", sWebLanguage, false, "", "") %></td>
 			        </tr>
 			        <tr class='admin'><td colspan="4"><%=getTran(request,"web","vaccination",sWebLanguage) %></td></tr>
 			        <tr>
-			        	<td colspan='2'>
+			        	<td colspan='4'>
 			        		<table width='100%'>
 						        <tr class='admin'><td colspan='18'><%=getTran(request,"web","vaccinations",sWebLanguage) %></td></tr>
 						        <tr>
@@ -67,26 +73,25 @@
 			        	</td>
 			        </tr>
 			        <tr class='admin'><td colspan="4"><%=getTran(request,"web","screening",sWebLanguage) %></td></tr>
-		        	<tr>
-			            <td class="admin"><%=getTran(request,"web","oedema",sWebLanguage)%>&nbsp;</td>
-			            <td class="admin2" colspan='3'>
-			            	<%=SH.writeDefaultRadioButtons((TransactionVO)transaction, request, "yesno", "ITEM_TYPE_OEDEMA", sWebLanguage, false, "", "") %>
-			            </td>
-					</tr>			       	
 					<tr>
 						<td class='admin2' colspan='4'><%writeVitalSigns(pageContext); %></td>
 					</tr>	
 					<tr>
 						<td class='admin'><%=getTran(request,"web","other",sWebLanguage) %></td>
 						<td class='admin2'><%=SH.writeDefaultCheckBoxes((TransactionVO)transaction,request,"msas.healthychildren.other","ITEM_TYPE_HEALTHYCHILDREN_OTHER",sWebLanguage,true) %></td>
-					</tr>		       
-					<tr>
 						<td class='admin'><%=getTran(request,"web","nutrition",sWebLanguage) %></td>
-						<td class='admin2'><%=SH.writeDefaultRadioButtons((TransactionVO)transaction,request,"msas.healthychildren.nutrition","ITEM_TYPE_HEALTHYCHILDREN_NUTRITION",sWebLanguage,true,"","") %></td>
+						<td class='admin2'>
+							<%=SH.writeDefaultRadioButtons((TransactionVO)transaction,request,"msas.healthychildren.nutrition","ITEM_TYPE_HEALTHYCHILDREN_NUTRITION",sWebLanguage,true,"","") %><br/>
+							<%=SH.writeDefaultCheckBox((TransactionVO)transaction, request, "medwan.common.true", "TEM_TYPE_MSAS_MALNUTRITION_SENTTOCOMMUNITYLEVEL", "") %><%=getTran(request,"web","senttocommunitylevel",sWebLanguage) %>
+						</td>
 					</tr>		
 					<tr>
+			            <td class="admin"><%=getTran(request,"web","oedema",sWebLanguage)%>&nbsp;</td>
+			            <td class="admin2">
+			            	<%=SH.writeDefaultRadioButtons((TransactionVO)transaction, request, "yesno", "ITEM_TYPE_OEDEMA", sWebLanguage, false, "", "") %>
+			            </td>
 						<td class='admin'><%=getTran(request,"web","observation",sWebLanguage) %></td>
-			            <td colspan="3" class="admin2">
+			            <td class="admin2">
 			                <%=SH.writeDefaultTextArea(session, (TransactionVO)transaction, "ITEM_TYPE_HEALTHYCHILDREN_OBSERVATION", 50, 1) %>
 			            </td>
 					</tr>       

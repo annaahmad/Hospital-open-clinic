@@ -3154,7 +3154,43 @@ public class Encounter extends OC_Object {
     	return encounter;
     }
     
-    //--- GET LAST ENCOUNTER ----------------------------------------------------------------------
+    public static Encounter getLastEncounterBefore(String personid, java.util.Date date){
+    	Encounter encounter = null;
+    	
+    	PreparedStatement ps = null;
+        ResultSet rs = null;
+        Connection conn = null;
+        
+        try{
+            conn = MedwanQuery.getInstance().getOpenclinicConnection();
+        	String sSql = "select * from OC_ENCOUNTERS where OC_ENCOUNTER_PATIENTUID=? and oc_encounter_begindate<=?"+
+                          " order by OC_ENCOUNTER_BEGINDATE DESC";
+        	ps = conn.prepareStatement(sSql);
+        	ps.setString(1,personid);
+        	ps.setTimestamp(2, SH.getSQLTimestamp(date));
+        	rs = ps.executeQuery();
+        	if(rs.next()){
+        		encounter = Encounter.get(rs.getString("OC_ENCOUNTER_SERVERID")+"."+rs.getString("OC_ENCOUNTER_OBJECTID"));
+        	}
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        finally{
+            try{
+                if(rs!=null) rs.close();
+                if(ps!=null) ps.close();
+                if(conn!=null) conn.close();
+            }
+            catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+        
+    	return encounter;
+    }
+    
+    //--- GET FIRST ENCOUNTER ----------------------------------------------------------------------
     public static Encounter getFirstEncounter(String personid){
     	Encounter encounter = null;
     	

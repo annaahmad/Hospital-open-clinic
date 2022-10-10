@@ -1766,7 +1766,7 @@ public class Planning extends OC_Object {
 						String sResult = ScreenHelper.getTranNoLink("web", "patientappointmentcancellationemailcontent", MedwanQuery.getInstance().getConfigString("warnPatientBeforeScheduledAppointmentLanguage","en"));
 						sResult=sResult.replaceAll("#patientname#", patient.getFullName());
 						sResult=sResult.replaceAll("#appointmentdate#", new SimpleDateFormat("dd/MM/yyyy HH:mm").format(rs.getTimestamp("oc_planning_planneddate")));
-						sResult=sResult.replaceAll("#paymentdeadline#", new SimpleDateFormat("dd/MM/yyyy").format(rs.getTimestamp("oc_planning_confirmationdate")));
+						sResult=sResult.replaceAll("#paymentdeadline#", SH.formatDate(rs.getTimestamp("oc_planning_confirmationdate")));
 						MessageNotifier.SpoolMessage(MedwanQuery.getInstance().getOpenclinicCounter("OC_MESSAGES"), "simplemail", sResult, sendto, "appointmentreminder", MedwanQuery.getInstance().getConfigString("warnPatientBeforeScheduledAppointmentLanguage","en"));
 						Planning.storeCancellationWarningSent(planninguid, new java.util.Date());
 					}
@@ -1782,7 +1782,7 @@ public class Planning extends OC_Object {
 						String sResult = MedwanQuery.getInstance().getLabel("web", "patientappointmentcancellationsmscontent", MedwanQuery.getInstance().getConfigString("warnPatientBeforeScheduledAppointmentLanguage","en"));
 						sResult=sResult.replaceAll("#patientname#", patient.getFullName());
 						sResult=sResult.replaceAll("#appointmentdate#", new SimpleDateFormat("dd/MM/yyyy HH:mm").format(rs.getTimestamp("oc_planning_planneddate")));
-						sResult=sResult.replaceAll("#paymentdeadline#", new SimpleDateFormat("dd/MM/yyyy").format(rs.getTimestamp("oc_planning_confirmationdate")));
+						sResult=sResult.replaceAll("#paymentdeadline#", SH.formatDate(rs.getTimestamp("oc_planning_confirmationdate")));
 						MessageNotifier.SpoolMessage(MedwanQuery.getInstance().getOpenclinicCounter("OC_MESSAGES"), "sms", sResult, sendto, "appointmentreminder", MedwanQuery.getInstance().getConfigString("warnPatientBeforeScheduledAppointmentLanguage","en"));
 						Planning.storeCancellationWarningSent(planninguid, new java.util.Date());
 					}

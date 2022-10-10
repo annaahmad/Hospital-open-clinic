@@ -4308,6 +4308,9 @@ public class MedwanQuery {
 	        		else if(values[n].startsWith("{morethan}")){
 	        			sSql+=" and i.value>?";
 	        		}
+	        		else if(values[n].startsWith("{morethanorequal}")){
+	        			sSql+=" and i.value>=?";
+	        		}
 	        		else if(values[n].startsWith("{like}")){
 	        			sSql+=" and i.value like '%'||?||'%'";
 	        		}
@@ -4320,7 +4323,75 @@ public class MedwanQuery {
 	        	ps.setString(2, encounterUid);
 	        	ps.setString(3, types[n]);
 	        	if(values.length>n && values[n].length()>0){
-	        		ps.setString(4, values[n].replaceAll("\\{lessthan\\}","").replaceAll("\\{morethan\\}","").replaceAll("\\{like\\}","").replaceAll("\\{sem\\}",";"));
+	        		ps.setString(4, values[n].replaceAll("\\{lessthan\\}","").replaceAll("\\{morethan\\}","").replaceAll("\\{morethanorequal\\}","").replaceAll("\\{like\\}","").replaceAll("\\{sem\\}",";"));
+	        	}
+	        	ResultSet rs = ps.executeQuery();
+	        	if(rs.next()){
+	        		bHasItem=true;
+	        	}
+	        	else{
+	        		bHasItem=false;
+	        	}
+	        	rs.close();
+	        	ps.close();
+	        	if(!bHasItem){
+	        		break;
+	        	}
+        	}
+        	conn.close();
+        }
+        catch(Exception e){
+        	e.printStackTrace();
+        }
+        return bHasItem;	
+    }
+    
+    public boolean hasItemPeriod(String encounterUid,String itemType,String itemValue,java.util.Date begin,java.util.Date end){
+        boolean bHasItem=false;
+        Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+        try{
+        	String[] types = itemType.split(";");
+        	String[] values = itemValue.split(";");
+        	for(int n=0;n<types.length;n++){
+	        	String sSql="select i.* from items i,items i2, transactions t, oc_encounters e, healthrecord h"
+	        			+ " where "
+	        			+ " e.oc_encounter_objectid=? and"
+	        			+ " h.personid="+MedwanQuery.getInstance().convert("int", "e.oc_encounter_patientuid")+" and"
+	        			+ " t.healthrecordid=h.healthrecordid and"
+	        			+ " i2.serverid=t.serverid and"
+	        			+ " i2.transactionid=t.transactionid and"
+	        			+ " i2.type='be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CONTEXT_ENCOUNTERUID' and"
+	        			+ " i2.value=? and"
+	        			+ " i.serverid=t.serverid and"
+	        			+ " i.transactionid=t.transactionid and"
+	        			+ " t.updatetime >= ? and"
+	        			+ " t.updatetime < ? and"
+	        			+ " i.type=?";
+	        	if(values.length>n && values[n].length()>0){
+	        		if(values[n].startsWith("{lessthan}")){
+	        			sSql+=" and i.value<?";
+	        		}
+	        		else if(values[n].startsWith("{morethan}")){
+	        			sSql+=" and i.value>?";
+	        		}
+	        		else if(values[n].startsWith("{morethanorequal}")){
+	        			sSql+=" and i.value>=?";
+	        		}
+	        		else if(values[n].startsWith("{like}")){
+	        			sSql+=" and i.value like '%'||?||'%'";
+	        		}
+	        		else{
+	        			sSql+=" and i.value=?";
+	        		}
+	        	}
+	        	PreparedStatement ps = conn.prepareStatement(sSql);
+	        	ps.setInt(1, Integer.parseInt(encounterUid.split("\\.")[1]));
+	        	ps.setString(2, encounterUid);
+	        	ps.setTimestamp(3, SH.getSQLTimestamp(begin));
+	        	ps.setTimestamp(4, SH.getSQLTimestamp(end));
+	        	ps.setString(5, types[n]);
+	        	if(values.length>n && values[n].length()>0){
+	        		ps.setString(6, values[n].replaceAll("\\{lessthan\\}","").replaceAll("\\{morethan\\}","").replaceAll("\\{morethanorequal\\}","").replaceAll("\\{like\\}","").replaceAll("\\{sem\\}",";"));
 	        	}
 	        	ResultSet rs = ps.executeQuery();
 	        	if(rs.next()){
@@ -4371,6 +4442,9 @@ public class MedwanQuery {
 		        		else if(values[n].startsWith("{morethan}")){
 		        			sSql+=" and i.value*1>?";
 		        		}
+		        		else if(values[n].startsWith("{morethanorequal}")){
+		        			sSql+=" and i.value*1>=?";
+		        		}
 		        		else if(values[n].startsWith("{like}")){
 		        			sSql+=" and i.value like '%'||?||'%'";
 		        		}
@@ -4386,7 +4460,140 @@ public class MedwanQuery {
 		        	ps.setString(2, encounterUid);
 		        	ps.setString(3, types[n]);
 		        	if(values.length>n && values[n].length()>0){
-		        		ps.setString(4, values[n].replaceAll("\\{lessthan\\}","").replaceAll("\\{morethan\\}","").replaceAll("\\{like\\}","").replaceAll("\\{sem\\}",";"));
+		        		ps.setString(4, values[n].replaceAll("\\{lessthan\\}","").replaceAll("\\{morethan\\}","").replaceAll("\\{morethanorequal\\}","").replaceAll("\\{like\\}","").replaceAll("\\{sem\\}",";"));
+		        	}
+		        	ResultSet rs = ps.executeQuery();
+		        	if(rs.next()){
+		        		bHasItem=true;
+		        	}
+		        	else{
+		        		bHasItem=false;
+		        	}
+		        	rs.close();
+		        	ps.close();
+		        	if(!bHasItem){
+		        		break;
+		        	}
+	        	}
+        	}
+        	conn.close();
+        }
+        catch(Exception e){
+        	e.printStackTrace();
+        }
+        return bHasItem;	
+    }
+    public boolean hasItem(String itemType,String itemValue, int transactionid){
+        boolean bHasItem=false;
+        Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+        try{
+        	String[] types = itemType.split(";");
+        	String[] values = itemValue.split(";");
+            for(int n=0;n<types.length;n++){
+	        	String sSql="select i.* from items i, transactions t"
+	        			+ " where "
+	        			+ " i.serverid=t.serverid and"
+	        			+ " i.transactionid=t.transactionid and"
+	        			+ " t.transactionid=? and"
+	        			+ " i.type=?";
+	        	if(values.length>n && values[n].length()>0){
+	        		if(values[n].startsWith("{lessthan}")){
+	        			sSql+=" and i.value*1<?";
+	        		}
+	        		else if(values[n].startsWith("{morethan}")){
+	        			sSql+=" and i.value*1>?";
+	        		}
+	        		else if(values[n].startsWith("{morethanorequal}")){
+	        			sSql+=" and i.value*1>=?";
+	        		}
+	        		else if(values[n].startsWith("{like}")){
+	        			sSql+=" and i.value like '%'||?||'%'";
+	        		}
+	        		else{
+	        			sSql+=" and i.value=?";
+	        		}
+	        	}
+	        	//System.out.println("transactionid="+transactionid);
+	        	//System.out.println("itemtype="+types[n]);
+	        	//System.out.println("itemtypevalue="+(values.length>n?values[n]:""));
+	        	PreparedStatement ps = conn.prepareStatement(sSql);
+	        	ps.setInt(1, transactionid);
+	        	ps.setString(2, types[n]);
+	        	if(values.length>n && values[n].length()>0){
+	        		ps.setString(3, values[n].replaceAll("\\{lessthan\\}","").replaceAll("\\{morethan\\}","").replaceAll("\\{morethanorequal\\}","").replaceAll("\\{like\\}","").replaceAll("\\{sem\\}",";"));
+	        	}
+	        	ResultSet rs = ps.executeQuery();
+	        	if(rs.next()){
+	        		bHasItem=true;
+	        	}
+	        	else{
+	        		bHasItem=false;
+	        	}
+	        	//System.out.println("found="+bHasItem);
+	        	rs.close();
+	        	ps.close();
+	        	if(!bHasItem){
+	        		break;
+	        	}
+        	}
+        	conn.close();
+        }
+        catch(Exception e){
+        	e.printStackTrace();
+        }
+        return bHasItem;	
+    }
+    public boolean hasItemPeriod(String encounterUid,String itemType,String itemValue, String transactionType,java.util.Date begin,java.util.Date end){
+        boolean bHasItem=false;
+        Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+        try{
+        	String[] transactionTypes = transactionType.split(";");
+        	String[] types = itemType.split(";");
+        	String[] values = itemValue.split(";");
+        	for(int i=0;i<transactionTypes.length;i++){
+	            for(int n=0;n<types.length;n++){
+		        	String sSql="select i.* from items i,items i2, transactions t, oc_encounters e, healthrecord h"
+		        			+ " where "
+		        			+ " e.oc_encounter_objectid=? and"
+		        			+ " h.personid="+MedwanQuery.getInstance().convert("int", "e.oc_encounter_patientuid")+" and"
+		        			+ " t.healthrecordid=h.healthrecordid and"
+		        			+ " i2.serverid=t.serverid and"
+		        			+ " i2.transactionid=t.transactionid and"
+		        			+ " i2.type='be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CONTEXT_ENCOUNTERUID' and"
+		        			+ " i2.value=? and"
+		        			+ " i.serverid=t.serverid and"
+		        			+ " i.transactionid=t.transactionid and"
+		        			+ " t.updatetime>=? and"
+		        			+ " t.updatetime<? and"
+		        			+ " i.type=?";
+		        	if(values.length>n && values[n].length()>0){
+		        		if(values[n].startsWith("{lessthan}")){
+		        			sSql+=" and i.value*1<?";
+		        		}
+		        		else if(values[n].startsWith("{morethan}")){
+		        			sSql+=" and i.value*1>?";
+		        		}
+		        		else if(values[n].startsWith("{morethanorequal}")){
+		        			sSql+=" and i.value*1>=?";
+		        		}
+		        		else if(values[n].startsWith("{like}")){
+		        			sSql+=" and i.value like '%'||?||'%'";
+		        		}
+		        		else{
+		        			sSql+=" and i.value=?";
+		        		}
+		        	}
+		        	if(SH.c(transactionTypes[i]).length()>0) {
+	        			sSql+=" and t.transactiontype='"+transactionTypes[i]+"'";
+		        	}
+		        	PreparedStatement ps = conn.prepareStatement(sSql);
+		        	ps.setInt(1, Integer.parseInt(encounterUid.split("\\.")[1]));
+		        	ps.setString(2, encounterUid);
+		        	ps.setTimestamp(3, SH.getSQLTimestamp(begin));
+		        	ps.setTimestamp(4, SH.getSQLTimestamp(end));
+		        	ps.setString(5, types[n]);
+		        	if(values.length>n && values[n].length()>0){
+		        		ps.setString(6, values[n].replaceAll("\\{lessthan\\}","").replaceAll("\\{morethan\\}","").replaceAll("\\{morethanorequal\\}","").replaceAll("\\{like\\}","").replaceAll("\\{sem\\}",";"));
 		        	}
 		        	ResultSet rs = ps.executeQuery();
 		        	if(rs.next()){
@@ -4441,6 +4648,9 @@ public class MedwanQuery {
 		        		else if(theValue.startsWith("{morethan}")){
 		        			sSql+=" and i.value*1>?";
 		        		}
+		        		else if(theValue.startsWith("{morethanorequal}")){
+		        			sSql+=" and i.value*1>=?";
+		        		}
 		        		else if(theValue.startsWith("{like}")){
 		        			sSql+=" and i.value like '%'||?||'%'";
 		        		}
@@ -4456,7 +4666,7 @@ public class MedwanQuery {
 		        	ps.setString(2, encounterUid);
 		        	ps.setString(3, types[n]);
 		        	if(theValue.length()>0){
-		        		ps.setString(4, theValue.replaceAll("\\{lessthan\\}","").replaceAll("\\{morethan\\}","").replaceAll("\\{like\\}","").replaceAll("\\{sem\\}",";"));
+		        		ps.setString(4, theValue.replaceAll("\\{lessthan\\}","").replaceAll("\\{morethan\\}","").replaceAll("\\{morethanorequal\\}","").replaceAll("\\{like\\}","").replaceAll("\\{sem\\}",";"));
 		        	}
 		        	ResultSet rs = ps.executeQuery();
 		        	if(rs.next()){
@@ -4509,6 +4719,9 @@ public class MedwanQuery {
     	        		else if(values[n].startsWith("{morethan}")){
     	        			sSql+=" and i.value>?";
     	        		}
+    	        		else if(values[n].startsWith("{morethanorequal}")){
+    	        			sSql+=" and i.value>=?";
+    	        		}
     	        		else{
     	        			sSql+=" and i.value=?";
     	        		}
@@ -4525,7 +4738,7 @@ public class MedwanQuery {
         	for(int n=0;n<types.length;n++){
 	        	ps.setString(3+n*2, types[n]);
 	        	if(values.length>n && values[n].length()>0){
-	        		ps.setString(4+n*2, values[n].replaceAll("\\{lessthan\\}","").replaceAll("\\{morethan\\}",""));
+	        		ps.setString(4+n*2, values[n].replaceAll("\\{lessthan\\}","").replaceAll("\\{morethan\\}","").replaceAll("\\{morethanorequal\\}",""));
 	        	}
 	        	else{
 	        		ps.setInt(4+n*2, 1);

@@ -86,6 +86,9 @@
             <td class="admin"/>
             <td class="admin2">
                 <input class="button" type="button" name="printLabelsButton" value="<%=getTranNoLink("Web","printlabels",sWebLanguage)%>" onclick="printLabels();"/>&nbsp;
+                <% if(((TransactionVO)transaction).getTransactionId()>0){ %>
+                	<input class="button" type="button" name="printRequestButton" value="<%=getTranNoLink("Web","printrequest",sWebLanguage)%>" onclick="printRequest();"/>&nbsp;
+                <% } %>
                 <button accesskey="<%=ScreenHelper.getAccessKey(getTranNoLink("accesskey","save",sWebLanguage))%>" class="buttoninvisible" onclick="doSave();"></button>
 				<%if(MedwanQuery.getInstance().getConfigInt("allowMultipleImagingRequestsPerOrder",0)==1){ %>
                 	<input type="button" class="button" value="<%=getTranNoLink("web.occup","add_new_demand",sWebLanguage)%>" name="buttonAddDemand" onclick="addDemand();"/>
@@ -145,17 +148,11 @@
 			        </tr>
 				  <%-- DHIS2 CODE --%>
 				  <%	if(MedwanQuery.getInstance().getConfigInt("enableDHIS2",0)==1){ %>
-				          	<%	if(MedwanQuery.getInstance().getConfigInt("enableBurundi",0)==1){ %>
-					           	<tr>
-					           		<td class='admin2'>
-					           			<%=ScreenHelper.writeDefaultSelect(request, (TransactionVO)transaction, "ITEM_TYPE_DHIS2CODE1", "dhis2examcodesimaging", sWebLanguage, "") %>
-					           		</td>
-					           	</tr>
-				           <%	}
-				          		else {
-				          	%>
-				              <tr><td class='admin2'><input type="text" class="text" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_DHIS2CODE1" property="itemId"/>]>.value" size="80" maxlength="250" value="<%=checkString(sessionContainerWO.getCurrentTransactionVO().getItemValue(sPREFIX+"ITEM_TYPE_DHIS2CODE1"))%>"></td></tr>
-				              <%	} %>
+		           	<tr>
+		           		<td class='admin2'>
+		           			<%=ScreenHelper.writeDefaultSelect(request, (TransactionVO)transaction, "ITEM_TYPE_DHIS2CODE1", "dhis2examcodesimaging", sWebLanguage, "") %>
+		           		</td>
+		           	</tr>
 				  <%	} %>
 				  </table>
             </td>
@@ -881,6 +878,10 @@
     var url = "<c:url value="/healthrecord/createImagingLabelPdf.jsp"/>?imageid="+document.getElementById("rxid").value+"&trandate="+document.getElementById("trandate").value+"&examination="+document.getElementById("examination").options[document.getElementById("examination").selectedIndex].text+"&ts=<%=getTs()%>";
     window.open(url,"Popup"+new Date().getTime(),"toolbar=no, status=yes, scrollbars=yes, resizable=yes, width=400, height=300, menubar=no").moveTo((screen.width-400)/2,(screen.height-300)/2);
   }
+  function printRequest(){
+    var url = "<c:url value="/healthrecord/createPdf.jsp"/>?actionField=print&limitVisibility=3&tranAndServerID_1=<%=((TransactionVO)transaction).getTransactionId()+"_"+((TransactionVO)transaction).getServerId()%>&PrintLanguage="+transactionForm.PrintLanguage.value+"&ts=<%=getTs()%>";
+    window.open(url,"Popup"+new Date().getTime(),"toolbar=no, status=yes, scrollbars=yes, resizable=yes, width=800, height=600, menubar=no").moveTo((screen.width-800)/2,(screen.height-600)/2);
+  }
 
   <%-- SUBMIT FORM --%>
   function submitForm(){
@@ -1012,4 +1013,7 @@
           }
       }
   %>
+  function searchEncounter(){
+	    openPopup("/_common/search/searchEncounter.jsp&ts=<%=getTs()%>&Varcode=encounteruid&VarText=&FindEncounterPatient=<%=activePatient.personid%>");
+	  }
 </script>

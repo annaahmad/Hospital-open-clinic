@@ -274,7 +274,7 @@ public class PDFPrescriptionGenerator extends PDFOfficialBasic {
 	            //Identification of prescriber
                 // - barcode
                 PdfContentByte cb = docWriter.getDirectContent();
-                Barcode39 barcode39 = new Barcode39();
+                Barcode128 barcode39 = new Barcode128();
                 barcode39.setCode(ScreenHelper.checkString(user.getParameter("organisationid")));
                 Image image = barcode39.createImageWithBarcode(cb, null, null);
                 cell = new PdfPCell(image);

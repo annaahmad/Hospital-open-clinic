@@ -101,7 +101,7 @@
 			            <td nowrap><b><%=getTran(request,"openclinic.chuk","sao2",sWebLanguage)%>:</b></td><td nowrap><input <%=setRightClick(session,"[GENERAL.ANAMNESE]ITEM_TYPE_SATURATION")%> type="text" class="text" size="5" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.[GENERAL.ANAMNESE]ITEM_TYPE_SATURATION" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.[GENERAL.ANAMNESE]ITEM_TYPE_SATURATION" property="value"/>"/> %</td>
 			            <td nowrap><b><%=getTran(request,"web","abdomencircumference",sWebLanguage)%>:</b></td><td nowrap><input <%=setRightClick(session,"ITEM_TYPE_ABDOMENCIRCUMFERENCE")%> type="text" class="text" size="5" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ABDOMENCIRCUMFERENCE" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ABDOMENCIRCUMFERENCE" property="value"/>"/> cm</td>
 			            <td nowrap><b><%=getTran(request,"web","fhr",sWebLanguage)%>:</b></td><td nowrap><input <%=setRightClick(session,"ITEM_TYPE_FOETAL_HEARTRATE")%> type="text" class="text" size="5" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_FOETAL_HEARTRATE" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_FOETAL_HEARTRATE" property="value"/>"/></td>
-			            <td nowrap><b><%=getTran(request,"web","armcircumferenceshort",sWebLanguage)%>:</b></td><td nowrap><input <%=setRightClick(session,"ITEM_TYPE_ARM_CIRCUMFERENCE")%> type="text" class="text" size="5" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ARM_CIRCUMFERENCE" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ARM_CIRCUMFERENCE" property="value"/>"/> cm</td>
+			            <td nowrap><b><%=getTran(request,"web","armcircumferenceshort",sWebLanguage)%>:</b></td><td nowrap><%= SH.writeDefaultNumericInput(session, (TransactionVO)transaction, "ITEM_TYPE_ARM_CIRCUMFERENCE", 5, 0, 100, sWebLanguage) %> cm</td>
 	                </tr>
             		<tr>
             			<td nowrap colspan='2'><b><%=getTran(request,"Web.Occup","medwan.healthrecord.cardial.pression-arterielle",sWebLanguage)%>:</b></td>
@@ -320,12 +320,25 @@
          						<tr onclick='selectKeywords("","","","keywords")'>
 			         				<td class='admin2'>
 						                <%= SH.writeDefaultCheckBox((TransactionVO)transaction, request, "medwan.common.true", "ITEM_TYPE_RMH_SMALLSURGERY", "") %>
-						                <%=getTran(request,"web","smallsurgery",sWebLanguage) %>
+						                <b><%=getTran(request,"web","smallsurgery",sWebLanguage) %></b> =>
+						                <%= SH.writeDefaultCheckBoxes((TransactionVO)transaction, request, "smallsurgery.type", "ITEM_TYPE_RMH_SMALLSURGERYTYPE", sWebLanguage, true) %>
 									</td>
 								</tr>
          						<tr onclick='selectKeywords("","","","keywords")'>
 			         				<td class='admin2'>
 						                <textarea <%=SH.cdm() %> onKeyup="resizeTextarea(this,10);limitChars(this,5000);" <%=setRightClick(session,"ITEM_TYPE_RMH_TREATMENT")%> class="text" cols="80" rows="2" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_RMH_TREATMENT" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_RMH_TREATMENT" property="value"/></textarea>
+									</td>
+								</tr>
+							</table>
+			            </td>
+			        </tr>
+			        <tr>
+			            <td class="admin"><%=getTran(request,"Web.Occup","rmh.differential.diagnosis",sWebLanguage)%>&nbsp;</td>
+			            <td>
+         					<table width='100%'>
+         						<tr onclick='selectKeywords("","","","keywords")'>
+			         				<td class='admin2'>
+			         					<%=SH.writeDefaultTextArea(session, (TransactionVO)transaction, "ITEM_TYPE_RMH_DIFFDIAGNOSIS", 80,2) %>
 									</td>
 								</tr>
 							</table>

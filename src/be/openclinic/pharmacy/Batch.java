@@ -566,11 +566,20 @@ public class Batch extends OC_Object{
         String sSelect;
         Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
         try {
-        	sSelect="SELECT * FROM OC_BATCHES,oc_productstocks WHERE OC_STOCK_OBJECTID=replace(OC_BATCH_PRODUCTSTOCKUID,'1.','') and oc_stock_productuid=? and OC_BATCH_END>=? and OC_BATCH_END<? and OC_BATCH_LEVEL>0 order by OC_BATCH_END";
+        	sSelect="SELECT * FROM OC_BATCHES,oc_productstocks p, oc_servicestocks s"+
+        			" WHERE p.OC_STOCK_OBJECTID=replace(OC_BATCH_PRODUCTSTOCKUID,'1.','')"+
+                    " and s.OC_STOCK_OBJECTID=replace(p.OC_STOCK_SERVICESTOCKUID,'1.','')"+
+                    " and (s.OC_STOCK_END is NULL or s.OC_STOCK_END>?)"+
+        			" and p.oc_stock_productuid=?"+
+        			" and OC_BATCH_END>=?"+
+        			" and OC_BATCH_END<?"+
+        			" and OC_BATCH_LEVEL>0"+
+        			" order by OC_BATCH_END";
             ps = oc_conn.prepareStatement(sSelect);
-            ps.setString(1, productUid);
-            ps.setTimestamp(2, new java.sql.Timestamp(begin.getTime()));
-            ps.setTimestamp(3, new java.sql.Timestamp(end.getTime()));
+            ps.setTimestamp(1, new java.sql.Timestamp(begin.getTime()));
+            ps.setString(2, productUid);
+            ps.setTimestamp(3, new java.sql.Timestamp(begin.getTime()));
+            ps.setTimestamp(4, new java.sql.Timestamp(end.getTime()));
             rs=ps.executeQuery();
             while(rs.next()){
             	batches.add(rs.getString("oc_batch_serverid")+"."+rs.getString("oc_batch_objectid")+";"+rs.getString("oc_stock_productuid")+";"+ScreenHelper.formatDate(rs.getDate("OC_BATCH_END"))+";"+rs.getString("OC_BATCH_NUMBER")+";"+rs.getString("OC_BATCH_LEVEL"));

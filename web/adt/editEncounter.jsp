@@ -428,6 +428,7 @@
 	            	if(sEditEncounterUID.split("\\.").length<=1 ||sEditEncounterType.length()==0){
 	            %>
 	                <select class='text' id='EditEncounterType' name='EditEncounterType' onchange="checkEncounterType();">
+	                	<option/>
 	                    <%
 	                        String encountertypes = MedwanQuery.getInstance().getConfigString("encountertypes","admission,visit");
 	                        String sOptions[] = encountertypes.split(",");
@@ -928,8 +929,12 @@
 	      EditEncounterForm.EditEncounterOutcome.focus();
 	    }
 	    else if(EditEncounterForm.EditEncounterOrigin.value==""){
-	      alertDialog("web","encounter_invalid_origin");
-	      EditEncounterForm.EditEncounterOrigin.focus();
+		      alertDialog("web","encounter_invalid_origin");
+		      EditEncounterForm.EditEncounterOrigin.focus();
+	    }
+	    else if(EditEncounterForm.EditEncounterType.value==""){
+		      alertDialog("web","encounter_missingtype");
+		      EditEncounterForm.EditEncounterType.focus();
 	    }
 	    else if(EditEncounterForm.EditEncounterServiceName.value==""){
 	      alertDialog("web","no_encounter_service");

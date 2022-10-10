@@ -247,7 +247,7 @@ public class UpdateTransactionAction extends org.apache.struts.action.Action {
                 else {
                 	if(newTransactionVO.getTransactionId()<0 
             			&& new SimpleDateFormat("HH:mm").format(newTransactionVO.getUpdateTime()).equalsIgnoreCase("00:00")
-            			&& new SimpleDateFormat("dd/MM/yyyy").format(newTransactionVO.getUpdateTime()).equalsIgnoreCase(new SimpleDateFormat("dd/MM/yyyy").format(new java.util.Date()))
+            			&& SH.formatDate(newTransactionVO.getUpdateTime()).equalsIgnoreCase(new SimpleDateFormat("dd/MM/yyyy").format(new java.util.Date()))
             			) {
                 		newTransactionVO.setUpdateTime(newTransactionVO.getCreationDate());
                 	}

@@ -290,6 +290,15 @@
     }
   }
   
+  function searchEncounter(){
+    openPopup("/_common/search/searchEncounter.jsp&ts=<%=getTs()%>&VarCode=encounteruid&VarText=&FindEncounterPatient=<%=activePatient.personid%>");
+  }
+
+  if( document.getElementById('encounteruid').value=="" <%=request.getParameter("nobuttons")==null?"":" && 1==0"%>){
+  	alertDialogDirectText('<%=getTranNoLink("web","no.encounter.linked",sWebLanguage)%>');
+  	searchEncounter();
+  }	
+
   checkprocedure();
 </script>
 

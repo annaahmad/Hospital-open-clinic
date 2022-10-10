@@ -60,9 +60,18 @@ public class GeneralPDFCreator extends PDFCreator {
     protected final BaseColor innerBorderColor = BaseColor.LIGHT_GRAY;
     protected final BaseColor BGCOLOR_LIGHT = new BaseColor(240,240,240); // light gray
     protected int fontSizePercentage = MedwanQuery.getInstance().getConfigInt("fontSizePercentage",100);
+    private int partsOfTransactionToPrint=2;
 
 
-    //--- CONSTRUCTOR -----------------------------------------------------------------------------
+    public int getPartsOfTransactionToPrint() {
+		return partsOfTransactionToPrint;
+	}
+
+	public void setPartsOfTransactionToPrint(int partsOfTransactionToPrint) {
+		this.partsOfTransactionToPrint = partsOfTransactionToPrint;
+	}
+
+	//--- CONSTRUCTOR -----------------------------------------------------------------------------
     public GeneralPDFCreator(SessionContainerWO sessionContainerWO, User user, AdminPerson patient,
     		                 String sProject, String sProjectDir, Date dateFrom, Date dateTo, String sPrintLanguage){
         this.user = user;
@@ -140,7 +149,7 @@ public class GeneralPDFCreator extends PDFCreator {
 
             //*** TRANSACTIONS ********************************************************************
             this.transactionVO = MedwanQuery.getInstance().loadTransaction(Integer.parseInt(transactionserverid.split("\\_")[0]),Integer.parseInt(transactionserverid.split("\\_")[1]));
-            loadTransaction(transactionVO,2); // 2 = print whole transaction
+            loadTransaction(transactionVO,partsOfTransactionToPrint); // 2 = print whole transaction
             
             doc.add(new Paragraph(" "));
             printSignature();
@@ -234,9 +243,11 @@ public class GeneralPDFCreator extends PDFCreator {
             //printWarnings(sessionContainerWO);
             doc.add(new Paragraph(" "));
 
-            //*** VACCINATION CARD ****************************************************************
-            new be.mxs.common.util.pdf.general.oc.examinations.PDFVaccinationCard().printCard(doc,sessionContainerWO,transactionVO,patient,req,sProject,sPrintLanguage,new Integer(partsOfTransactionToPrint));
-
+            if(getPartsOfTransactionToPrint()<3) {
+	            //*** VACCINATION CARD ****************************************************************
+	            new be.mxs.common.util.pdf.general.oc.examinations.PDFVaccinationCard().printCard(doc,sessionContainerWO,transactionVO,patient,req,sProject,sPrintLanguage,new Integer(partsOfTransactionToPrint));
+            }
+            
             //*** TRANSACTIONS ********************************************************************
             Enumeration e = req.getParameterNames();
             String paramName, paramValue, sTranID, sServerID;
@@ -254,16 +265,18 @@ public class GeneralPDFCreator extends PDFCreator {
                     sServerID = paramValue.substring(paramValue.indexOf("_")+1);
 
                     this.transactionVO = MedwanQuery.getInstance().loadTransaction(Integer.parseInt(sServerID),Integer.parseInt(sTranID));
-                    loadTransaction(transactionVO,2); // 2 = print whole transaction
+                    loadTransaction(transactionVO,getPartsOfTransactionToPrint()); // 2 = print whole transaction
                 }
             }
 
             if(!transactionIDsSpecified){
-                printTransactions(filterApplied,partsOfTransactionToPrint);
+                printTransactions(filterApplied,getPartsOfTransactionToPrint());
             }
             
             doc.add(new Paragraph(" "));
-            printSignature();
+            if(getPartsOfTransactionToPrint()<3) {
+            	printSignature();
+            }
         }
 		catch(DocumentException dex){
 			baosPDF.reset();

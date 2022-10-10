@@ -1289,6 +1289,16 @@ public class PDFLabResultGenerator extends PDFOfficialBasic {
 			                subTable.addCell(cell);
 	                	}
                 	}
+	                //Nu gaan we na of er een extra lijn met commentaar moet worden afgedrukt
+	                if(!MedwanQuery.getInstance().getLabel("labanalysis.refcomment",analysisCode,user.person.language).equalsIgnoreCase(analysisCode)){
+	                	cell=createLabelCourier("", labResultFontSize, 41, fonttype);
+		                subTable.addCell(cell);
+		                
+	                	cell=createLabelCourier(MedwanQuery.getInstance().getLabel("labanalysis.refcomment",analysisCode,user.person.language),labResultFontSize,59,Font.NORMAL);
+		                cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
+		                cell.setVerticalAlignment(PdfPCell.ALIGN_TOP);
+		                subTable.addCell(cell);
+	                }
 
                 	Vector history = requestedLabAnalysis.getResultsHistory(user);
                 	for(int n=0;n<history.size();n++){

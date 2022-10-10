@@ -1,4 +1,4 @@
-<%@page import="be.openclinic.finance.Insurance"%>
+	<%@page import="be.openclinic.finance.Insurance"%>
 <%@page errorPage="/includes/error.jsp"%>
 <%@include file="/includes/validateUser.jsp"%>
 <%=sJSPROTOTYPE %>
@@ -59,6 +59,9 @@
 		var url = "";
 		if(field.id=="prestationname"){
 			url = "prestation="+field.value;
+		}
+		if(document.getElementById('defaultExtraInsurar') && document.getElementById('defaultExtraInsurar').checked){
+			url += "&defaultExtraInsurar=1";
 		}
 		return url;
 	}

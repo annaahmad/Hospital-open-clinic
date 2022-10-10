@@ -1,3 +1,4 @@
+<%@page import="be.openclinic.finance.Insurance"%>
 <%@page import="java.util.*"%>
 <%@page errorPage="/includes/error.jsp"%>
 <%@include file="/includes/validateUser.jsp"%>
@@ -38,7 +39,15 @@
         sDateOfBirth = checkString(activePatient.dateOfBirth);
 
         sNewimmat = activePatient.getID("immatnew").trim();
-        sArchiveFileCode = activePatient.getID("archiveFileCode").trim();
+        if(SH.ci("enableSearchOnHealthInsurance",0)==1){
+        	Insurance insurance = Insurance.getMostInterestingInsuranceForPatient(activePatient.personid,true);
+        	if(insurance!=null){
+        		sArchiveFileCode = insurance.getInsuranceNr();
+        	}
+        }
+        else{
+        	sArchiveFileCode = activePatient.getID("archiveFileCode").trim();
+        }
         sNatreg = activePatient.getID("natreg").trim();
         sDistrict = checkString(activePatient.getActivePrivate().district).trim();
         sCity = checkString(activePatient.getActivePrivate().city).trim();
@@ -63,6 +72,7 @@
             sUnitText = getTran(request,"service",sUnit,sWebLanguage);
         }
     }
+    
 %>
 
 <table width="90%" onKeyDown='checkKeyDown(event);'>
@@ -117,20 +127,28 @@
             </td>
             <td align="right" nowrap><%=getTran(request,"Web", "immatnew", sWebLanguage)%>&nbsp;<input class='<%=setFocus("immatnew",sDefaultFocus)%>' type='TEXT' style='text-transform:uppercase' name='findimmatnew' id='findimmatnew' value="<%=sNewimmat%>" size='20' onblur='limitLength(this);'></td>
             <%
-                if(activePatient!=null && activePatient.getID("archiveFileCode").length() > 0){
+	            if(SH.ci("enableSearchOnHealthInsurance",0)==1){
             %>
-            <td align="right" nowrap>
-                <a href="javascript:showArchiveCode();"><%=getTran(request,"Web","archiveFileCode",sWebLanguage)%></a>
-                &nbsp;<input class='<%=setFocus("archiveFileCode",sDefaultFocus)%>' type='TEXT' style='text-transform:uppercase' name='findArchiveFileCode' value="<%=sArchiveFileCode%>" size='17' onblur='limitLength(this);'>
-            </td>
+		            <td align="right" nowrap>
+		                <%=getTran(request,"Web","healthInsuranceCode",sWebLanguage)%>
+		                &nbsp;<input class='<%=setFocus("archiveFileCode",sDefaultFocus)%>' type='TEXT' name='findArchiveFileCode' value="<%=sArchiveFileCode%>" size='25' onblur='limitLength(this);'>
+		            </td>
+            <%
+	            }
+	            else if(activePatient!=null && activePatient.getID("archiveFileCode").length() > 0){
+            %>
+		            <td align="right" nowrap>
+		                <a href="javascript:showArchiveCode();"><%=getTran(request,"Web","archiveFileCode",sWebLanguage)%></a>
+		                &nbsp;<input class='<%=setFocus("archiveFileCode",sDefaultFocus)%>' type='TEXT' style='text-transform:uppercase' name='findArchiveFileCode' value="<%=sArchiveFileCode%>" size='17' onblur='limitLength(this);'>
+		            </td>
             <%
 	            }
 	            else{
             %>
-            <td align="right" nowrap>
-                <%=getTran(request,"Web","archiveFileCode",sWebLanguage)%>
-                &nbsp;<input class='<%=setFocus("archiveFileCode",sDefaultFocus)%>' type='text' style='<%=activePatient!=null?"background-color: #ff9999;":""%>text-transform:uppercase' name='findArchiveFileCode' value="<%=sArchiveFileCode%>" size='17' onblur='limitLength(this);'>
-            </td>
+		            <td align="right" nowrap>
+		                <%=getTran(request,"Web","archiveFileCode",sWebLanguage)%>
+		                &nbsp;<input class='<%=setFocus("archiveFileCode",sDefaultFocus)%>' type='text' style='<%=activePatient!=null?"background-color: #ff9999;":""%>text-transform:uppercase' name='findArchiveFileCode' value="<%=sArchiveFileCode%>" size='17' onblur='limitLength(this);'>
+		            </td>
             <%
                 }
             %>

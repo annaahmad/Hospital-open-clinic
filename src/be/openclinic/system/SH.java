@@ -20,6 +20,8 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.text.SimpleDateFormat;
+import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
@@ -83,6 +85,82 @@ public class SH extends ScreenHelper {
 	
 	public static String c(String s) {
 		return checkString(s);
+	}
+	
+	public static void syslog(Object s) {
+		System.out.println(new SimpleDateFormat("mm:ss:SSS").format(new java.util.Date())+" ||SYSLOG|| "+s);
+	}
+	
+	public static int sumIntegerValuesForTokenStartingWithKey(Hashtable<String,Integer> h, String token) {
+		int sum = 0;
+		Enumeration<String> e = h.keys();
+		while(e.hasMoreElements()) {
+			String k = e.nextElement();
+			if(token.toLowerCase().startsWith(k.toLowerCase())) {
+				sum+=h.get(k);
+			}
+		}
+		return sum;
+	}
+	
+	public static int sumIntegerValuesForKeyLike(Hashtable<String,Integer> h, String s) {
+		int sum = 0;
+		Enumeration<String> e = h.keys();
+		while(e.hasMoreElements()) {
+			String k = e.nextElement();
+			if(k.toLowerCase().startsWith(s.toLowerCase())) {
+				sum+=h.get(k);
+			}
+		}
+		return sum;
+	}
+	
+	public static boolean hasParentKey(Hashtable h, String key) {
+		if(h.get(key)!=null) return true;
+		Enumeration<String> e = h.keys();
+		while(e.hasMoreElements()) {
+			String k = e.nextElement();
+			if(key.toLowerCase().startsWith(k.toLowerCase())) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public static String getParentValue(Hashtable h, String key) {
+		if(h.get(key)!=null) return (String)h.get(key);
+		Enumeration<String> e = h.keys();
+		while(e.hasMoreElements()) {
+			String k = e.nextElement();
+			if(key.toLowerCase().startsWith(k.toLowerCase())) {
+				return (String)h.get(k);
+			}
+		}
+		return null;
+	}
+	
+	public static double sumDoubleValuesForTokenStartingWithKey(Hashtable<String,Double> h, String token) {
+		double sum = 0;
+		Enumeration<String> e = h.keys();
+		while(e.hasMoreElements()) {
+			String k = e.nextElement();
+			if(token.toLowerCase().startsWith(k.toLowerCase())) {
+				sum+=h.get(k);
+			}
+		}
+		return sum;
+	}
+	
+	public static double sumDoubleValuesForKeyLike(Hashtable<String,Double> h, String s) {
+		double sum = 0;
+		Enumeration<String> e = h.keys();
+		while(e.hasMoreElements()) {
+			String k = e.nextElement();
+			if(k.toLowerCase().startsWith(s.toLowerCase())) {
+				sum+=h.get(k);
+			}
+		}
+		return sum;
 	}
 	
 	public static String c(StringBuffer s) {

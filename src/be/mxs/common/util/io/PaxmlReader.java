@@ -57,7 +57,7 @@ public class PaxmlReader {
 			System.exit(0);
 		}
 		Collection<File> files = FileUtils.listFiles(new File(args[1]), new WildcardFileFilter("*.paxml"), null);
-		System.out.println(processid+" - Found "+files.size()+" files");
+		System.out.println(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date())+" "+processid+" - Found "+files.size()+" files");
 		Iterator<File> iFiles = files.iterator();
 		while(iFiles.hasNext()) {
 			File file = iFiles.next();

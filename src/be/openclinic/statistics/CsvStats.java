@@ -51,11 +51,14 @@ public class CsvStats {
                     }
                     try{
                     	Object o = resultSet.getObject(n+1);
-                    	if(o.getClass().getName().indexOf("Date")>-1){
-                    		result.append(ScreenHelper.formatDate((java.sql.Date)o));
+                    	if(o.getClass().getName().indexOf("LocalDateTime")>-1){
+                    		result.append(ScreenHelper.formatDate((java.time.LocalDateTime)o,"dd/MM/yyyy HH:mm:ss"));
                     	}
                     	else if(o.getClass().getName().indexOf("Timestamp")>-1 || o.getClass().getName().indexOf("DateTime")>-1){
-                    		result.append(new java.text.SimpleDateFormat("dd/MM/yyyy hh:MM:ss").format((java.sql.Timestamp)o));
+                    		result.append(new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format((java.sql.Timestamp)o));
+                    	}
+                    	else if(o.getClass().getName().indexOf("Date")>-1){
+                    		result.append(ScreenHelper.formatDate((java.sql.Date)o));
                     	}
                     	else{
                     		result.append((o+"").replaceAll(";", ","));

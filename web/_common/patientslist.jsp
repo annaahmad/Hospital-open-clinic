@@ -1,3 +1,4 @@
+<%@page import="be.openclinic.finance.Insurance"%>
 <%@page import="org.dom4j.DocumentException,
                 java.util.*,
                 be.openclinic.adt.Encounter,
@@ -24,21 +25,19 @@
            sRSIndex = checkString(request.getParameter("RSIndex"));
 
     /// DEBUG /////////////////////////////////////////////////////////////////////////////////////
-    if(Debug.enabled){
-        Debug.println("\n************************ _common/patientslist.jsp *********************");
-        Debug.println("sAction      : "+sAction);
-        Debug.println("sRSIndex     : "+sRSIndex);
-        Debug.println("simmatnew    : "+simmatnew);
-        Debug.println("sArchiveFileCode : "+sArchiveFileCode);
-        Debug.println("sPersonID    : "+sPersonID);
-        Debug.println("snatreg      : "+snatreg);
-        Debug.println("sName        : "+sName);
-        Debug.println("sFirstname   : "+sFirstname);
-        Debug.println("sDateOfBirth : "+sDateOfBirth);
-        Debug.println("sDistrict    : "+sDistrict);
-        Debug.println("sSector      : "+sSector);
-        Debug.println("sUnit        : "+sUnit+"\n");
-    }
+    Debug.println("\n************************ _common/patientslist.jsp *********************");
+    Debug.println("sAction      : "+sAction);
+    Debug.println("sRSIndex     : "+sRSIndex);
+    Debug.println("simmatnew    : "+simmatnew);
+    Debug.println("sArchiveFileCode : "+sArchiveFileCode);
+    Debug.println("sPersonID    : "+sPersonID);
+    Debug.println("snatreg      : "+snatreg);
+    Debug.println("sName        : "+sName);
+    Debug.println("sFirstname   : "+sFirstname);
+    Debug.println("sDateOfBirth : "+sDateOfBirth);
+    Debug.println("sDistrict    : "+sDistrict);
+    Debug.println("sSector      : "+sSector);
+    Debug.println("sUnit        : "+sUnit+"\n");
     ///////////////////////////////////////////////////////////////////////////////////////////////
 
     List lResults = null;
@@ -56,13 +55,11 @@
             lResults = AdminPerson.getUserVisits(activeUser.userid);
         } 
         else if(sUnit.length() > 0){
-        	//sDateOfBirth = ScreenHelper.convertToEUDate(sDateOfBirth); // to match with EU-date in database
             lResults = AdminPerson.getPatientsInEncounterServiceUID(simmatnew,sArchiveFileCode,snatreg,sName,sFirstname,sDateOfBirth,sUnit,sPersonID,sDistrict,sSector);
         } 
         else{
             if((simmatnew+sArchiveFileCode+snatreg+sName+sFirstname+sDateOfBirth+sPersonID+sDistrict+sSector).length()>0){
-            	//sDateOfBirth = ScreenHelper.convertToEUDate(sDateOfBirth); // to match with EU-date in database
-            	lResults = AdminPerson.getAllPatients(simmatnew,sArchiveFileCode,snatreg,sName,sFirstname,sDateOfBirth,sPersonID,sDistrict,iMaxResultSet,sSector);
+            	lResults = AdminPerson.getAllPatients(simmatnew,sArchiveFileCode,snatreg,sName,sFirstname,sDateOfBirth,sPersonID,sDistrict,SH.ci("maxNumberOfPatientsInResultSet",10000),sSector);
             }
             else {
             	lResults = new ArrayList();
@@ -141,9 +138,15 @@
         AdminPerson tempPat;
         Encounter enc;
         boolean bShowCity=(MedwanQuery.getInstance().getConfigInt("showCityInPatientsList",0)==1);
+        HashSet pats = new HashSet();
 
         while((iOverallCounter+iCounter) < lResults.size() && iCounter < iMaxResultSet){
             tempPat = (AdminPerson) lResults.get(iCounter+iOverallCounter);
+            if(pats.contains(tempPat.personid)){
+            	iCounter++;
+            	continue;
+            }
+            pats.add(tempPat.personid);
             sTmpServiceID = "";
             sBed="";
 
@@ -220,49 +223,100 @@
                 }
             }
             sCity="";
-            if(bShowCity){
-            	String[] privateDetails= new String[5];
+        	String[] privateDetails= new String[20];
+            if(bShowCity || activeUser.getParameter("patientlist", "compact").equalsIgnoreCase("extended")){
             	AdminPrivateContact.getPrivateDetails(tempPat.personid, privateDetails);
             	sCity="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;("+checkString(privateDetails[4])+")";
             }
-            sResult.append(" class=list"+sInactive+sClass+" >"
+            sResult.append(" class='list"+sInactive+sClass+"'>"
                    +"<td><img src='"+sCONTEXTPATH+"/_img/icons/icon_view.png' alt='"+getTranNoLink("Web","view",sWebLanguage)+"'></td>"
-                   +"<td>"+checkString(sImmatNew)+"</td>"
-                   +"<td>"+checkString(sNatReg)+"</td>"
+                   +"<td>"+checkString(sImmatNew)+"</td>");
+		           if(SH.ci("enableSearchOnHealthInsurance",0)==1){
+		        	   sResult.append("<td>"+SH.c((String)tempPat.adminextends.get("insurancenr"))+"</td>");
+		           }
+		           sResult.append("<td>"+checkString(sNatReg)+"</td>"
                    +"<td><b>"+checkString(tempPat.lastname)+"  "+checkString(tempPat.firstname)+"</b>"+sCity+"</td>"
                    +"<td>"+checkString(tempPat.gender.toUpperCase())+"</td>"
                    +"<td>"+tempPat.dateOfBirth+"</td>"
                    +""+sTmpServiceID
                    +"</tr>");
-
+            if(activeUser.getParameter("patientlist", "compact").equalsIgnoreCase("extended")){
+            	//Add an extra line of patient information
+				String post="",village="",district="",address=SH.c(privateDetails[3]),ins="",phone="";
+    			Insurance insurance = Insurance.getMostInterestingInsuranceForPatient(tempPat.personid);
+    			if(insurance!=null){
+    				ins=insurance.getInsurar().getName();
+    				if(SH.c(insurance.getInsuranceNr()).length()>0){
+    					ins+=": "+insurance.getInsuranceNr();
+    				}
+    			}
+    			String sSmallFontStyle="color: #4975A7;font-weight: bold";
+    			if(sInactive.length()>0){
+    				sSmallFontStyle="color: #4975A7";
+    			}
+                sResult.append("<tr onClick='window.location.href=\""+sLink+"\";' class='list"+sInactive+sClass+"small'><td colspan='3'/><td>"+getTran(request,"web","address",sWebLanguage)+": <font style='"+sSmallFontStyle+"'>"+SH.c(privateDetails[3])+"</font></td><td colspan='2'>"+getTran(request,"web","district",sWebLanguage)+": <font style='"+sSmallFontStyle+"'>"+SH.c(privateDetails[14])+"</font></td><td>"+getTran(request,"web","telephone",sWebLanguage)+": <font style='"+sSmallFontStyle+"'>"+SH.c(privateDetails[7]).trim()+" "+SH.c(privateDetails[9]).trim()+"</font></td><td colspan='2'>"+getTran(request,"web","city",sWebLanguage)+": <font style='"+sSmallFontStyle+"'>"+SH.c(privateDetails[4]).trim()+"</font></td><td><font style='"+sSmallFontStyle+"'>"+ins+"</font></td></tr>");
+            }
             iCounter++;
         }
 
         String sNext = "", sPrevious = "&nbsp;";
         if(iOverallCounter > 0){
-            sPrevious = "<A href='#' class='previousButton' title='"+getTranNoLink("Web","Previous",sWebLanguage)
-                   +"' OnClick=\"SF.RSIndex.value='"+(iOverallCounter - iCounter - (iMaxResultSet - iCounter))+"';SF.ListAction.value='Previous';SF.submit();\">"
-                   +"&nbsp;</a>";
+            sPrevious = "<a href='#' title='"+getTranNoLink("Web","begin",sWebLanguage)
+            +"' OnClick=\"SF.RSIndex.value='0';SF.ListAction.value='Previous';SF.submit();\">"
+            +"<img height='10px' src='"+sCONTEXTPATH+"/_img/themes/default/arrow-doubleleft.gif' border='0'></a>";
+            sPrevious += "&nbsp;<a href='#' title='"+getTranNoLink("Web","Previous",sWebLanguage)
+            +"' OnClick=\"SF.RSIndex.value='"+(iOverallCounter - iCounter - (iMaxResultSet - iCounter))+"';SF.ListAction.value='Previous';SF.submit();\">"
+            +"<img height='10px' src='"+sCONTEXTPATH+"/_img/themes/default/arrow-left.gif' border='0'></a>";
         }
         if(lResults.size() > iOverallCounter+iCounter){
             sNext = "<a href='#' title='"+getTranNoLink("Web","Next",sWebLanguage)+"' OnClick=\"SF.RSIndex.value='"
-                   +(iOverallCounter+iCounter)+"';SF.ListAction.value='Next';SF.submit();\"><img src='"+sCONTEXTPATH+"/_img/themes/default/arrow-right.gif' border='0'></a>";
+                    +(iOverallCounter+iCounter)+"';SF.ListAction.value='Next';SF.submit();\"><img height='10px' src='"+sCONTEXTPATH+"/_img/themes/default/arrow-right.gif' border='0'></a>";
+            sNext += "&nbsp;<a href='#' title='"+getTranNoLink("Web","end",sWebLanguage)+"' OnClick=\"SF.RSIndex.value='"
+                    +(lResults.size()-iMaxResultSet)+"';SF.ListAction.value='Next';SF.submit();\"><img height='10px' src='"+sCONTEXTPATH+"/_img/themes/default/arrow-doubleright.gif' border='0'></a>";
         }
         
         if(iCounter==0){
             // display 'no results' message
             %><tr><td><%=getTran(request,"web","nopatientsfound",sWebLanguage)%></td></tr><%
         }
-        else if(iOverallCounter+iCounter==1 && !bRS && sLink.length()>0){
+        else if(pats.size()==1 && !bRS && sLink.length()>0){
             %><script>window.location.href = "<c:url value=''/><%=sLink%>";</script><%
         }
         else{
+        	String sTableClass="sortable";
+        	if(activeUser.getParameter("patientlist", "compact").equalsIgnoreCase("extended")){
+        		sTableClass="";
+        	}
+
             %>
-				<table width="100%" cellspacing="0" class="sortable" id="searchresults">
+                <%-- previous, patient-count, next --%>
+                <div style="text-align:right;padding:2px;">
+                    <%                    
+                        if(sPrevious.trim().length()>0){
+                            %><%=sPrevious%>&nbsp;&nbsp;<%
+      		            }
+                    %>
+                    
+                    <%=getTran(request,"web","patients",sWebLanguage)+" "+(iOverallCounter+1)+"-"+(iOverallCounter+iCounter)+" "+getTran(request,"web","of",sWebLanguage)+" "+lResults.size()%>
+                
+                    <%                    
+                        if(sNext.trim().length()>0){
+                            %>&nbsp;&nbsp;<a class="topButton" href="#topp">&nbsp;</a><%=sNext%><%
+      		            }
+                    %>
+                </div>
+				<table width="100%" cellspacing="0" class="<%=sTableClass %>" id="searchresults">
 				    <%-- header --%>
 				    <tr height="20" class="admin">
-				        <td><%=sPrevious%></td>
+				        <td></td>
 				        <td><%=getTran(request,"Web","immatnew",sWebLanguage)%></td>
+				        <%
+				        	if(SH.ci("enableSearchOnHealthInsurance",0)==1){
+				        		%>
+				        		<td><%=getTran(request,"Web","healthInsuranceCode",sWebLanguage)%></td>
+				        		<%
+				        	}
+				        %>
 				        <td><%=getTran(request,"Web","natreg.short",sWebLanguage)%></td>
 				        <td><%=getTran(request,"Web","name",sWebLanguage)%></td>
 				        <td><%=getTran(request,"Web","gender",sWebLanguage)%>&nbsp;</td>
@@ -277,10 +331,8 @@
 				                <%
 				            }
 				
-				            if(sNext.trim().length()>0){
-				                %><td width="1%" align="right"><%=sNext%></td><%
-				            }
 				        %>
+				        <td></td>
 				    </tr>
 				    <tbody class="hand"><%=sResult.toString()%></tbody>
 				</table>
@@ -289,11 +341,11 @@
                 <div style="text-align:right;padding:2px;">
                     <%                    
                         if(sPrevious.trim().length()>0){
-                            %><div style="text-align:left;"><%=sPrevious%>&nbsp;&nbsp;</div><%
+                            %><%=sPrevious%>&nbsp;&nbsp;<%
       		            }
                     %>
                     
-                    <%=getTran(request,"web","totalpatients",sWebLanguage)+": "+lResults.size()%>
+                    <%=getTran(request,"web","patients",sWebLanguage)+" "+(iOverallCounter+1)+"-"+(iOverallCounter+iCounter)+" "+getTran(request,"web","of",sWebLanguage)+" "+lResults.size()%>
                 
                     <%                    
                         if(sNext.trim().length()>0){
@@ -324,7 +376,9 @@
 	            %>
 	            <img src="<%=sCONTEXTPATH%>/_img/themes/default/pijl.gif"/>&nbsp;<a href="<c:url value='/main.jsp'/>?Page=_common/patient/patientEditCompact.jsp&lastname=<%=sName%>&firstname=<%=sFirstname%>&dateofbirth=<%=sDateOfBirth%>"><%=getTran(request,"web","new_patient",sWebLanguage)%></a><br>
 	            <%} %>
-	            <img src="<%=sCONTEXTPATH%>/_img/themes/default/pijl.gif"/>&nbsp;<a href="<c:url value='/_common/patient/patienteditSave.jsp'/>?Lastname=<%=sName%>&Firstname=<%=sFirstname%>&DateOfBirth=<%=sDateOfBirth%>&NatReg=<%=snatreg%>&ImmatNew=<%=simmatnew%>&PDistrict=<%=sDistrict%>&PBegin=<%=getDate()%>&NextPage=planning/findPlanning.jsp&SavePatientEditForm=ok"><%=getTran(request,"web","create_person_and_go_to_agenda",sWebLanguage)%></a>
+	            <%if(SH.ci("enableFastPatientAgendaCreate",0)==1){ %>
+		            <img src="<%=sCONTEXTPATH%>/_img/themes/default/pijl.gif"/>&nbsp;<a href="<c:url value='/_common/patient/patienteditSave.jsp'/>?Lastname=<%=sName%>&Firstname=<%=sFirstname%>&DateOfBirth=<%=sDateOfBirth%>&NatReg=<%=snatreg%>&ImmatNew=<%=simmatnew%>&PDistrict=<%=sDistrict%>&PBegin=<%=getDate()%>&NextPage=planning/findPlanning.jsp&SavePatientEditForm=ok"><%=getTran(request,"web","create_person_and_go_to_agenda",sWebLanguage)%></a>
+	            <%} %>
 	        <%
         }
     }

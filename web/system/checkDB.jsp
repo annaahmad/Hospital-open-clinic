@@ -6,7 +6,8 @@
                 java.text.SimpleDateFormat,
                 java.util.HashMap,
                 java.util.Iterator,
-                be.mxs.common.util.system.Debug,
+                be.mxs.common.util.system.*,
+                be.openclinic.system.*,
                 java.util.Vector,
                 java.io.IOException,java.sql.*,be.mxs.common.util.system.ScreenHelper" %>
 <%@page errorPage="/includes/error.jsp"%>
@@ -650,29 +651,33 @@
                 comment(out, "Parsing table <b>" + table.attribute("name").getValue() + "</b> in database " + table.attribute("db").getValue(), 1);
                 //Checking existence of table
                 //First select right connection
+                String dbname=null;
 
                 if (table.attribute("db").getValue().equalsIgnoreCase("ocadmin")) {
 
                     connectionCheck = lad_conn;
+                    dbname=SH.cs("admindbName", "ocadmin_dbo");
 
                 } else if (table.attribute("db").getValue().equalsIgnoreCase("openclinic")) {
 
                     connectionCheck = loc_conn;
+                    dbname=SH.cs("openclinicdbName", "openclinic_dbo");
 
 	            } else if (table.attribute("db").getValue().equalsIgnoreCase("stats")) {
 	
 	                connectionCheck = sta_conn;
-	
+                    dbname=SH.cs("statsdbName", "ocstats_dbo");
+
 	            }
 
                 //Now verify existence of table
                 databaseMetaData = connectionCheck.getMetaData();
-                rsCheck = databaseMetaData.getTables(null, null, table.attribute("name").getValue(), null);
+                rsCheck = databaseMetaData.getTables(dbname, null, table.attribute("name").getValue(), null);
 
                 boolean tableExists=rsCheck.next();
 
                 if (!tableExists){
-                    rsCheck=databaseMetaData.getTables(null, null, table.attribute("name").getValue().toLowerCase(), null);
+                    rsCheck=databaseMetaData.getTables(dbname, null, table.attribute("name").getValue().toLowerCase(), null);
                     tableExists=rsCheck.next();
                 }
 
@@ -687,14 +692,14 @@
                                 versionColumn = column;
                             }
                             if (request.getParameter("verify") != null) {
-                                rsCheck = databaseMetaData.getColumns(null, null, table.attribute("name").getValue(), column.attribute("name").getValue());
+                                rsCheck = databaseMetaData.getColumns(dbname, null, table.attribute("name").getValue(), column.attribute("name").getValue());
                                 boolean columnExists=rsCheck.next();
                                 if(!columnExists){
-                                    rsCheck = databaseMetaData.getColumns(null, null, table.attribute("name").getValue().toLowerCase(), column.attribute("name").getValue());
+                                    rsCheck = databaseMetaData.getColumns(dbname, null, table.attribute("name").getValue().toLowerCase(), column.attribute("name").getValue());
                                     columnExists=rsCheck.next();
                                 }
                                 if(!columnExists){
-                                    rsCheck = databaseMetaData.getColumns(null, null, table.attribute("name").getValue().toLowerCase(), column.attribute("name").getValue().toLowerCase());
+                                    rsCheck = databaseMetaData.getColumns(dbname, null, table.attribute("name").getValue().toLowerCase(), column.attribute("name").getValue().toLowerCase());
                                     columnExists=rsCheck.next();
                                 }
                                 if (!columnExists) {
@@ -774,7 +779,7 @@
                         while (indexes.hasNext()) {
                             try {
                                 index = (Element) indexes.next();
-                                rsCheck = databaseMetaData.getIndexInfo(null, null, table.attribute("name").getValue(), (index.attribute("unique") != null && index.attribute("unique").getValue().equalsIgnoreCase("1")), false);
+                                rsCheck = databaseMetaData.getIndexInfo(dbname, null, table.attribute("name").getValue(), (index.attribute("unique") != null && index.attribute("unique").getValue().equalsIgnoreCase("1")), false);
                                 indexFound = false;
                                 while (rsCheck.next()) {
                                     indexname = rsCheck.getString("INDEX_NAME");
@@ -1676,17 +1681,21 @@
                             s = sql.getText().replaceAll("@admin@", MedwanQuery.getInstance().getConfigString("admindbName","ocadmin")).replaceAll("@openclinic@", MedwanQuery.getInstance().getConfigString("openclinicdbName","openclinic"));
                         }
                     }
+                    String dbname=null;
                     if (s.trim().length() > 0) {
                         if (view.attribute("db").getValue().equalsIgnoreCase("ocadmin")) {
                             connectionCheck = lad_conn;
+                            dbname=SH.cs("admindbName", "ocadmin_dbo");
                         } else if (view.attribute("db").getValue().equalsIgnoreCase("openclinic")) {
                             connectionCheck = loc_conn;
+                            dbname=SH.cs("openclinicdbName", "openclinic_dbo");
 	                    } else if (view.attribute("db").getValue().equalsIgnoreCase("stats")) {
 	                        connectionCheck = sta_conn;
+	                        dbname=SH.cs("statsdbName", "ocstats_dbo");
                     	}
                         //Now verify existence of view
                         databaseMetaData = connectionCheck.getMetaData();
-                        rsCheck = databaseMetaData.getTables(null, null, view.attribute("name").getValue(), null);
+                        rsCheck = databaseMetaData.getTables(dbname, null, view.attribute("name").getValue(), null);
                         bCreate = true;
                         if (rsCheck.next()) {
                             if (view.attribute("drop") != null && view.attribute("drop").getValue().equalsIgnoreCase("1")) {
@@ -1748,17 +1757,21 @@
                             s = sql.getText().replaceAll("@admin@", MedwanQuery.getInstance().getConfigString("admindbName","ocadmin")).replaceAll("@openclinic@", MedwanQuery.getInstance().getConfigString("openclinicdbName","openclinic"));
                         }
                     }
+                    String dbname=null;
                     if (s.trim().length() > 0) {
                         if (proc.attribute("db").getValue().equalsIgnoreCase("admin")) {
                             connectionCheck = lad_conn;
+                            dbname=SH.cs("admindbName", "ocadmin_dbo");
                         } else if (proc.attribute("db").getValue().equalsIgnoreCase("occup")) {
                             connectionCheck = loc_conn;
+                            dbname=SH.cs("openclinicdbName", "openclinic_dbo");
 	                    } else if (proc.attribute("db").getValue().equalsIgnoreCase("stats")) {
 	                        connectionCheck = sta_conn;
+	                        dbname=SH.cs("statsdbName", "ocstats_dbo");
 	                	}
                         //Now verify existence of view
                         databaseMetaData = connectionCheck.getMetaData();
-                        rsCheck = databaseMetaData.getProcedures(null, null, proc.attribute("name").getValue());
+                        rsCheck = databaseMetaData.getProcedures(dbname, null, proc.attribute("name").getValue());
                         bCreate = true;
                         if (rsCheck.next()) {
                             if (proc.attribute("drop") != null && proc.attribute("drop").getValue().equalsIgnoreCase("1")) {

@@ -22,6 +22,7 @@ import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
+import be.mayele.Module;
 import be.mxs.common.model.vo.healthrecord.ItemVO;
 import be.mxs.common.util.db.MedwanQuery;
 import be.mxs.common.util.system.Debug;
@@ -47,7 +48,66 @@ public class DHIS2Exporter {
 	private HashSet patientrecords;
 	private JspWriter jspWriter=null;
 	private boolean bHasContent;
+	private Hashtable pluginParameters = new Hashtable();
 	
+	public boolean setPluginParameter(String key, String value) {
+		if(SH.c(key).length()>0 && value!=null) {
+			pluginParameters.put(key, value);
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	
+	public void resetPluginParameters() {
+		pluginParameters = new Hashtable();
+	}
+	
+	public String getPluginParameter(String key) {
+		return (String)pluginParameters.get(key);
+	}
+	
+	public Hashtable getDepartmentmaps() {
+		return departmentmaps;
+	}
+
+	public void setDepartmentmaps(Hashtable departmentmaps) {
+		this.departmentmaps = departmentmaps;
+	}
+
+	public String getUids() {
+		return uids;
+	}
+
+	public void setUids(String uids) {
+		this.uids = uids;
+	}
+
+	public HashSet getPatientrecords() {
+		return patientrecords;
+	}
+
+	public void setPatientrecords(HashSet patientrecords) {
+		this.patientrecords = patientrecords;
+	}
+
+	public boolean isbHasContent() {
+		return bHasContent;
+	}
+
+	public void setbHasContent(boolean bHasContent) {
+		this.bHasContent = bHasContent;
+	}
+
+	public Hashtable getPluginParameters() {
+		return pluginParameters;
+	}
+
+	public void setPluginParameters(Hashtable pluginParameters) {
+		this.pluginParameters = pluginParameters;
+	}
+
 	public DHIS2Exporter() {
 		super();
 		DHIS2Helper.activeDataSet="";
@@ -117,9 +177,16 @@ public class DHIS2Exporter {
 		Debug.print("Searching for "+sValue+" in "+sArray);
 		String[] items = sArray.split(separator);
 		for(int n=0;n<items.length;n++){
-			if(sValue.equals(items[n])){
-				Debug.println(" - Found!");
-				return true;
+			if(items[n].contains("{like}")) {
+				if(sValue.contains(items[n].replaceAll("\\{like\\}", ""))) {
+					return true;
+				}
+			}
+			else {
+				if(sValue.equals(items[n])){
+					Debug.println(" - Found!");
+					return true;
+				}
 			}
 		}
 		Debug.println(" - Not found...");
@@ -233,6 +300,10 @@ public class DHIS2Exporter {
 				else if(dataset.attributeValue("type").equalsIgnoreCase("pharmacy")){
 					Debug.println("Exporting dataset "+dataset.attributeValue("uid"));
 					exportDatasetRecord(dataset,new Vector(),dataelementuid,optionuid,attributeoptionuid);
+				}
+				else if(dataset.attributeValue("type").equalsIgnoreCase("itemplugin") || dataset.attributeValue("type").equalsIgnoreCase("plugin")){
+					Debug.println("Exporting dataset "+dataset.attributeValue("uid"));
+					exportPluginDatasetRecord(dataset,dataelementuid,optionuid,attributeoptionuid);
 				}
 			}
 		}
@@ -350,17 +421,16 @@ public class DHIS2Exporter {
 					jspWriter.print("<script>document.getElementById('progressBar').style.width='"+(n*100/nTotalSets)+"%';</script>");
 					jspWriter.flush();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
 			if(uids.length()==0||uids.contains(dataset.attributeValue("uid"))){
 				if(dataset.attributeValue("type").equalsIgnoreCase("diagnosis")){
-					Debug.println("Exporting dataset "+dataset.attributeValue("uid"));
+					Debug.println("Exporting diagnosis dataset "+dataset.attributeValue("uid"));
 					exportDataset(dataset,diagnosisItems);
 				}
 				else if(dataset.attributeValue("type").equalsIgnoreCase("encounter")){
-					Debug.println("Exporting dataset "+dataset.attributeValue("uid"));
+					Debug.println("Exporting encounter dataset "+dataset.attributeValue("uid"));
 					if(ScreenHelper.checkString(dataset.attributeValue("outgoing")).equals("1")){
 						exportDataset(dataset,lastEncounterItems);
 					}
@@ -369,27 +439,35 @@ public class DHIS2Exporter {
 					}
 				}
 				else if(dataset.attributeValue("type").equalsIgnoreCase("technicalactivity")){
-					Debug.println("Exporting dataset "+dataset.attributeValue("uid"));
+					Debug.println("Exporting technicalactivity dataset "+dataset.attributeValue("uid"));
 					exportDataset(dataset,technicalActivityItems);
 				}
 				else if(dataset.attributeValue("type").equalsIgnoreCase("item")){
-					Debug.println("Exporting dataset "+dataset.attributeValue("uid"));
+					Debug.println("Exporting item dataset "+dataset.attributeValue("uid"));
 					Vector items = loadItems(dataset);
 					exportDataset(dataset,items);
 				}
 				else if(dataset.attributeValue("type").equalsIgnoreCase("lasttransactionitem")){
-					Debug.println("Exporting dataset "+dataset.attributeValue("uid"));
+					Debug.println("Exporting lasttransactionitem dataset "+dataset.attributeValue("uid"));
 					Vector items = loadLastTransactionItems(dataset);
 					exportDataset(dataset,items);
 				}
 				else if(dataset.attributeValue("type").equalsIgnoreCase("lab")){
-					Debug.println("Exporting dataset "+dataset.attributeValue("uid"));
+					Debug.println("Exporting lab dataset "+dataset.attributeValue("uid"));
 					Vector items = loadLab(dataset);
 					exportDataset(dataset,items);
 				}
 				else if(dataset.attributeValue("type").equalsIgnoreCase("pharmacy")){
-					Debug.println("Exporting dataset "+dataset.attributeValue("uid"));
+					Debug.println("Exporting pharmacy dataset "+dataset.attributeValue("uid"));
 					exportDataset(dataset,new Vector(),initialquantities,averageconsumptions,consumptions,productoperations);
+				}
+				else if(dataset.attributeValue("type").equalsIgnoreCase("plugin") || dataset.attributeValue("type").equalsIgnoreCase("itemplugin")){
+					Debug.println("Exporting plugin dataset "+dataset.attributeValue("uid"));
+					exportPluginDataset(dataset);
+				}
+				else if(dataset.attributeValue("type").equalsIgnoreCase("genericplugin")){
+					Debug.println("Exporting dataset "+dataset.attributeValue("uid"));
+					exportGenericPluginDataset(dataset);
 				}
 			}
 		}
@@ -419,6 +497,160 @@ public class DHIS2Exporter {
 		this.jspWriter = jspWriter;
 	}
 
+	private void exportGenericPluginDataset(Element dataset) {
+		// We need to load the plugin items here. They have a fixed format:
+		// 0: hint
+		// 1: value
+		// 2: category
+		Vector items = new Vector();
+		DHIS2Plugin plugin;
+		try {
+			plugin = (DHIS2Plugin)(Class.forName(dataset.attributeValue("module")).newInstance());
+			if(SH.c(dataset.attributeValue("parameters")).length()>0) {
+				String[] pars = dataset.attributeValue("parameters").split(";");
+				for(int n=0;n<pars.length;n++) {
+					setPluginParameter(pars[n].split("=")[0], pars[n].split("=")[1]);
+				}
+			}
+			items = plugin.getResults(begin, end, dataset, pluginParameters);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+		
+		Element attributeOptionCombo = dataset.element("attributeOptionCombo");
+		if(attributeOptionCombo!=null){
+			Vector selectedItems = new Vector();
+			String attributeOptionComboType=attributeOptionCombo.attributeValue("type");
+			//Iterator through all attributeOptionCombo values
+			Iterator iattributeOptionComboValues = attributeOptionCombo.elementIterator();
+			while(iattributeOptionComboValues.hasNext()){
+				selectedItems = new Vector();
+				Element attributeOptionComboValue=(Element)iattributeOptionComboValues.next();
+				//For the time being, only department exists as attributeOptionComboType
+				if(attributeOptionComboType.equalsIgnoreCase("department")){
+					String department=attributeOptionComboValue.attributeValue("value");
+					Debug.println("Exporting attributeOptionType "+attributeOptionCombo.attributeValue("type")+" - "+department);
+					for(int n=0;n<items.size();n++){
+						boolean bAddItem=false;
+						String item = (String)items.elementAt(n);
+						if(department==null || department.length()==0){
+							bAddItem=true;
+						}
+						else if(ScreenHelper.checkString((String)departmentmaps.get(item.split(";")[2].toLowerCase())).length()>0 && department.contains(ScreenHelper.checkString((String)departmentmaps.get(item.split(";")[2].toLowerCase())))){
+							bAddItem=true;
+						}
+						if(bAddItem){
+							selectedItems.add(item);
+						}
+					}
+				}
+				else if(attributeOptionComboType.equalsIgnoreCase("genericplugin")){
+					String attribute=attributeOptionComboValue.attributeValue("value");
+					Debug.println("Exporting attributeOptionType "+attributeOptionCombo.attributeValue("type")+" - "+attribute);
+					for(int n=0;n<items.size();n++){
+						boolean bAddItem=false;
+						String item = (String)items.elementAt(n);
+						if(attribute==null || attribute.length()==0){
+							bAddItem=true;
+						}
+						else if(attribute.equalsIgnoreCase(item.split(";")[2])){
+							bAddItem=true;
+						}
+						if(bAddItem){
+							selectedItems.add(item);
+						}
+					}
+				}
+				exportGenericPluginDataset(selectedItems,dataset,attributeOptionComboValue.attributeValue("uid"));
+			}
+		}
+		else{
+			exportGenericPluginDataset(items,dataset,"");
+		}
+	}
+	
+	private void exportPluginDataset(Element dataset) {
+		// We need to load the plugin items here. They have a fixed format:
+		// 0: personid
+		// 1: gender
+		// 2: dateofbirth
+		// 3: value
+		// 4: date
+		// 5: service
+		// 6: itemid
+		Vector items = new Vector();
+		DHIS2Plugin plugin;
+		try {
+			plugin = (DHIS2Plugin)(Class.forName(dataset.attributeValue("module")).newInstance());
+			if(SH.c(dataset.attributeValue("parameters")).length()>0) {
+				String[] pars = dataset.attributeValue("parameters").split(";");
+				for(int n=0;n<pars.length;n++) {
+					setPluginParameter(pars[n].split("=")[0], pars[n].split("=")[1]);
+				}
+			}
+			items = plugin.getItems(begin, end, dataset, pluginParameters);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+		
+		Element attributeOptionCombo = dataset.element("attributeOptionCombo");
+		String department=null;
+		if(attributeOptionCombo!=null){
+			Vector selectedItems = new Vector();
+			String attributeOptionComboType=attributeOptionCombo.attributeValue("type");
+			//Iterator through all attributeOptionCombo values
+			Iterator iattributeOptionComboValues = attributeOptionCombo.elementIterator();
+			while(iattributeOptionComboValues.hasNext()){
+				selectedItems = new Vector();
+				Element attributeOptionComboValue=(Element)iattributeOptionComboValues.next();
+				//For the time being, only department exists as attributeOptionComboType
+				if(attributeOptionComboType.equalsIgnoreCase("department")){
+					department=attributeOptionComboValue.attributeValue("value");
+					Debug.println("Exporting attributeOptionType "+attributeOptionCombo.attributeValue("type")+" - "+department);
+				}
+				for(int n=0;n<items.size();n++){
+					boolean bAddItem=false;
+					String item = (String)items.elementAt(n);
+					if(ScreenHelper.checkString(dataset.attributeValue("ondate")).equalsIgnoreCase("begin")){
+						try{
+							java.util.Date begindate = new SimpleDateFormat("yyyyMMddHHmm").parse(item.split(";")[4]);
+							if(begindate.after(begin)){
+								continue;
+							}
+						}
+						catch(Exception e){
+							continue;
+						}
+					}
+					if(ScreenHelper.checkString(dataset.attributeValue("beforedate")).equalsIgnoreCase("begin")){
+						try{
+							java.util.Date begindate = new SimpleDateFormat("yyyyMMddHHmm").parse(item.split(";")[4]);
+							if(!begindate.before(begin)){
+								continue;
+							}
+						}
+						catch(Exception e){
+							continue;
+						}
+					}
+					if(department==null || department.length()==0){
+						bAddItem=true;
+					}
+					else if(ScreenHelper.checkString((String)departmentmaps.get(item.split(";")[5])).length()>0 && department.contains(ScreenHelper.checkString((String)departmentmaps.get(item.split(";")[5])))){
+						bAddItem=true;
+					}
+					if(bAddItem){
+						selectedItems.add(item);
+					}
+				}
+				exportPluginDataset(selectedItems,dataset,attributeOptionComboValue.attributeValue("uid"));
+			}
+		}
+		else{
+			exportPluginDataset(items,dataset,"");
+		}
+	}
+	
 	private void exportDataset(Element dataset,Vector items, Hashtable initialquantities,Hashtable averageconsumptions,Hashtable consumptions,Hashtable productoperations){
 		Element attributeOptionCombo = dataset.element("attributeOptionCombo");
 		String department=null;
@@ -498,16 +730,23 @@ public class DHIS2Exporter {
 					if(department==null || department.length()==0){
 						bAddItem=true;
 					}
-					else if(dataset.attributeValue("type").equalsIgnoreCase("diagnosis") && department!=null && department.equalsIgnoreCase(ScreenHelper.checkString((String)departmentmaps.get(item.split(";")[6])))){
+					else if(dataset.attributeValue("type").equalsIgnoreCase("diagnosis") && department!=null && ScreenHelper.checkString((String)departmentmaps.get(item.split(";")[6])).length()>0 && department.contains(ScreenHelper.checkString((String)departmentmaps.get(item.split(";")[6])))){
 						bAddItem=true;
 					}
-					else if(dataset.attributeValue("type").equalsIgnoreCase("encounter") && department!=null && department.equalsIgnoreCase(ScreenHelper.checkString((String)departmentmaps.get(item.split(";")[4])))){
+					else if(dataset.attributeValue("type").equalsIgnoreCase("encounter") && department!=null && ScreenHelper.checkString((String)departmentmaps.get(item.split(";")[4])).length()>0 && department.contains(ScreenHelper.checkString((String)departmentmaps.get(item.split(";")[4])))){
+						if(SH.c(dataset.attributeValue("diagnosisrequired")).equalsIgnoreCase("1")) {
+							if(Diagnosis.selectDiagnoses("", "", SH.getServerId()+"."+item.split(";")[1], "", "", "", "", "", "", "", "", "", "").size()>0) {
+								bAddItem=true;
+							}
+						}
+						else {
+							bAddItem=true;
+						}
+					}
+					else if(dataset.attributeValue("type").equalsIgnoreCase("technicalactivity") && department!=null && ScreenHelper.checkString((String)departmentmaps.get(item.split(";")[4])).length()>0 && department.contains(ScreenHelper.checkString((String)departmentmaps.get(item.split(";")[4])))){
 						bAddItem=true;
 					}
-					else if(dataset.attributeValue("type").equalsIgnoreCase("technicalactivity") && department!=null && department.equalsIgnoreCase(ScreenHelper.checkString((String)departmentmaps.get(item.split(";")[4])))){
-						bAddItem=true;
-					}
-					else if((dataset.attributeValue("type").equalsIgnoreCase("item")|| dataset.attributeValue("type").equalsIgnoreCase("lasttransactionitem")) && department!=null && department.equalsIgnoreCase(ScreenHelper.checkString((String)departmentmaps.get(item.split(";")[4])))){
+					else if((dataset.attributeValue("type").equalsIgnoreCase("item")|| dataset.attributeValue("type").equalsIgnoreCase("lasttransactionitem")) && department!=null && ScreenHelper.checkString((String)departmentmaps.get(item.split(";")[4])).length()>0 && department.contains(ScreenHelper.checkString((String)departmentmaps.get(item.split(";")[4])))){
 						bAddItem=true;
 					}
 					if(bAddItem){
@@ -619,22 +858,40 @@ public class DHIS2Exporter {
 								continue;
 							}
 						}
+						if(ScreenHelper.checkString(dataset.attributeValue("afterdate")).equalsIgnoreCase("end")){
+							try{
+								java.util.Date enddate = new SimpleDateFormat("yyyyMMddHHmm").parse(item.split(";")[9]);
+								if(!enddate.after(end)){
+									continue;
+								}
+							}
+							catch(Exception e){
+								continue;
+							}
+						}
 						if(department==null || department.length()==0){
 							bAddItem=true;
 						}
-						else if(dataset.attributeValue("type").equalsIgnoreCase("diagnosis") && department!=null && department.equalsIgnoreCase(ScreenHelper.checkString((String)departmentmaps.get(item.split(";")[6])))){
+						else if(dataset.attributeValue("type").equalsIgnoreCase("diagnosis") && department!=null && ScreenHelper.checkString((String)departmentmaps.get(item.split(";")[6])).length()>0 && department.contains(ScreenHelper.checkString((String)departmentmaps.get(item.split(";")[6])))){
 							bAddItem=true;
 						}
-						else if(dataset.attributeValue("type").equalsIgnoreCase("encounter") && department!=null && department.equalsIgnoreCase(ScreenHelper.checkString((String)departmentmaps.get(item.split(";")[4])))){
+						else if(dataset.attributeValue("type").equalsIgnoreCase("encounter") && department!=null && ScreenHelper.checkString((String)departmentmaps.get(item.split(";")[4])).length()>0 && department.contains(ScreenHelper.checkString((String)departmentmaps.get(item.split(";")[4])))){
+							if(SH.c(dataset.attributeValue("diagnosisrequired")).equalsIgnoreCase("1")) {
+								if(Diagnosis.selectDiagnoses("", "", SH.getServerId()+"."+item.split(";")[1], "", "", "", "", "", "", "", "", "", "").size()>0) {
+									bAddItem=true;
+								}
+							}
+							else {
+								bAddItem=true;
+							}
+						}
+						else if(dataset.attributeValue("type").equalsIgnoreCase("technicalactivity") && department!=null && ScreenHelper.checkString((String)departmentmaps.get(item.split(";")[4])).length()>0 && department.contains(ScreenHelper.checkString((String)departmentmaps.get(item.split(";")[4])))){
 							bAddItem=true;
 						}
-						else if(dataset.attributeValue("type").equalsIgnoreCase("technicalactivity") && department!=null && department.equalsIgnoreCase(ScreenHelper.checkString((String)departmentmaps.get(item.split(";")[4])))){
+						else if(dataset.attributeValue("type").equalsIgnoreCase("item") && department!=null && ScreenHelper.checkString((String)departmentmaps.get(item.split(";")[4])).length()>0 && department.contains(ScreenHelper.checkString((String)departmentmaps.get(item.split(";")[4])))){
 							bAddItem=true;
 						}
-						else if(dataset.attributeValue("type").equalsIgnoreCase("item") && department!=null && department.equalsIgnoreCase(ScreenHelper.checkString((String)departmentmaps.get(item.split(";")[4])))){
-							bAddItem=true;
-						}
-						else if(dataset.attributeValue("type").equalsIgnoreCase("lasttransactionitem") && department!=null && department.equalsIgnoreCase(ScreenHelper.checkString((String)departmentmaps.get(item.split(";")[4])))){
+						else if(dataset.attributeValue("type").equalsIgnoreCase("lasttransactionitem") && department!=null && ScreenHelper.checkString((String)departmentmaps.get(item.split(";")[4])).length()>0 && department.contains(ScreenHelper.checkString((String)departmentmaps.get(item.split(";")[4])))){
 							bAddItem=true;
 						}
 						if(bAddItem){
@@ -655,6 +912,9 @@ public class DHIS2Exporter {
 					}
 					else if(dataset.attributeValue("type").equalsIgnoreCase("lab")){
 						exportLabDatasetRecords(selectedItems,dataset,dataelementuid,optionuid);
+					}
+					else if(dataset.attributeValue("type").equalsIgnoreCase("itemplugin") || dataset.attributeValue("type").equalsIgnoreCase("plugin")){
+						exportPluginDatasetRecords(selectedItems,dataset,dataelementuid,optionuid);
 					}
 				}
 			}
@@ -702,6 +962,64 @@ public class DHIS2Exporter {
 			else if(dataset.attributeValue("type").equalsIgnoreCase("lab")){
 				exportLabDatasetRecords(selectedItems,dataset,dataelementuid,optionuid);
 			}
+			else if(dataset.attributeValue("type").equalsIgnoreCase("itemplugin") || dataset.attributeValue("type").equalsIgnoreCase("plugin")){
+				exportPluginDatasetRecords(selectedItems,dataset,dataelementuid,optionuid);
+			}
+		}
+	}
+	
+	private void exportPluginDatasetRecord(Element dataset,String dataelementuid,String optionuid,String attributeoptionuid){
+		Vector items = new Vector();
+		DHIS2Plugin plugin;
+		try {
+			plugin = (DHIS2Plugin)(Class.forName(dataset.attributeValue("module")).newInstance());
+			if(SH.c(dataset.attributeValue("parameters")).length()>0) {
+				String[] pars = dataset.attributeValue("parameters").split(";");
+				for(int n=0;n<pars.length;n++) {
+					setPluginParameter(pars[n].split("=")[0], pars[n].split("=")[1]);
+				}
+			}
+			items = plugin.getItems(begin, end, dataset,pluginParameters);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+
+		Element attributeOptionCombo = dataset.element("attributeOptionCombo");
+		String department=null;
+		if(attributeOptionCombo!=null){
+			Vector selectedItems = new Vector();
+			String attributeOptionComboType=attributeOptionCombo.attributeValue("type");
+			//Iterator through all attributeOptionCombo values
+			Iterator iattributeOptionComboValues = attributeOptionCombo.elementIterator();
+			while(iattributeOptionComboValues.hasNext()){
+				selectedItems = new Vector();
+				Element attributeOptionComboValue=(Element)iattributeOptionComboValues.next();
+				if(attributeoptionuid.length()==0||attributeoptionuid.equals(attributeOptionComboValue.attributeValue("uid"))){
+					//For the time being, only department exists as attributeOptionComboType
+					if(attributeOptionComboType.equalsIgnoreCase("department")){
+						department=attributeOptionComboValue.attributeValue("value");
+						Debug.println("Exporting attributeOptionType "+attributeOptionCombo.attributeValue("type")+" - "+department);
+					}
+					for(int n=0;n<items.size();n++){
+						boolean bAddItem=false;
+						String item = (String)items.elementAt(n);
+
+						if(department==null || department.length()==0){
+							bAddItem=true;
+						}
+						else if(ScreenHelper.checkString((String)departmentmaps.get(item.split(";")[5])).length()>0 && department.contains(ScreenHelper.checkString((String)departmentmaps.get(item.split(";")[5])))){
+							bAddItem=true;
+						}
+						if(bAddItem){
+							selectedItems.add(item);
+						}
+					}
+					exportPluginDatasetRecords(selectedItems,dataset,dataelementuid,optionuid);
+				}
+			}
+		}
+		else{
+			exportPluginDatasetRecords(items,dataset,dataelementuid,optionuid);
 		}
 	}
 	
@@ -709,6 +1027,7 @@ public class DHIS2Exporter {
 		String gender=null;
 		String origin=null;
 		String outcome=null;
+		String department=null;
 		double minAge=-999;
 		double maxAge=-999;
 		//This is where we create the DataValueSet
@@ -735,7 +1054,7 @@ public class DHIS2Exporter {
 					gender=categoryOptionComboValue.attributeValue("value");
 					Debug.println("Exporting categoryOptionType "+categoryOptionCombo.attributeValue("type")+" - "+gender);
 				}
-				else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("agegender")){
+				else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("agegender") || categoryOptionCombo.attributeValue("type").equalsIgnoreCase("agegenderinmonths")){
 					minAge=Double.parseDouble(categoryOptionComboValue.attributeValue("min"));
 					maxAge=Double.parseDouble(categoryOptionComboValue.attributeValue("max"));
 					gender=categoryOptionComboValue.attributeValue("gender");
@@ -748,6 +1067,10 @@ public class DHIS2Exporter {
 				else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("outcome")){
 					outcome=categoryOptionComboValue.attributeValue("value");
 					Debug.println("Exporting categoryOptionType "+categoryOptionCombo.attributeValue("type")+" - "+outcome);
+				}
+				else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("department")){
+					department=categoryOptionComboValue.attributeValue("value");
+					Debug.println("Exporting categoryOptionType "+categoryOptionCombo.attributeValue("type")+" - "+department);
 				}
 				for(int n=0;n<items.size();n++){
 					String item = (String)items.elementAt(n);
@@ -794,7 +1117,8 @@ public class DHIS2Exporter {
 						double year = 365*day;
 						try{
 							Date dateofbirth = ScreenHelper.parseDate(item.split(";")[3]);
-							if(dateofbirth!=null && (begin.getTime()-dateofbirth.getTime())/year>=minAge && (begin.getTime()-dateofbirth.getTime())/year<maxAge){
+							Date begindate = new SimpleDateFormat("yyyyMMddHHmm").parse(item.split(";")[13]);
+							if(dateofbirth!=null && (begindate.getTime()-dateofbirth.getTime())/year>=minAge && (begindate.getTime()-dateofbirth.getTime())/year<maxAge){
 								selectedItems.add(item);
 							}
 						}
@@ -807,7 +1131,22 @@ public class DHIS2Exporter {
 						double year = 365*day;
 						try{
 							Date dateofbirth = ScreenHelper.parseDate(item.split(";")[3]);
-							if((begin.getTime()-dateofbirth.getTime())/year>=minAge && (begin.getTime()-dateofbirth.getTime())/year<maxAge){
+							Date begindate = new SimpleDateFormat("yyyyMMddHHmm").parse(item.split(";")[13]);
+							if((begindate.getTime()-dateofbirth.getTime())/year>=minAge && (begindate.getTime()-dateofbirth.getTime())/year<maxAge){
+								selectedItems.add(item);
+							}
+						}
+						catch(Exception e){
+							e.printStackTrace();
+						}
+					}
+					else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("agegenderinmonths") && gender!=null && inArray(item.split(";")[2].toLowerCase(),gender.toLowerCase()) && minAge>-999 && maxAge>-1){
+						long day = 24*3600*1000;
+						double year = 365*day;
+						try{
+							Date dateofbirth = ScreenHelper.parseDate(item.split(";")[3]);
+							Date begindate = new SimpleDateFormat("yyyyMMddHHmm").parse(item.split(";")[13]);
+							if((begindate.getTime()-dateofbirth.getTime())*12/year>=minAge && (begindate.getTime()-dateofbirth.getTime())*12/year<maxAge){
 								selectedItems.add(item);
 							}
 						}
@@ -819,6 +1158,9 @@ public class DHIS2Exporter {
 						selectedItems.add(item);
 					}
 					else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("outcome") && outcome!=null && inArray(item.split(";")[8].toLowerCase(),outcome.toLowerCase())){
+						selectedItems.add(item);
+					}
+					else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("department") && department!=null && ScreenHelper.checkString((String)departmentmaps.get(item.split(";")[6])).length()>0 && department.contains(ScreenHelper.checkString((String)departmentmaps.get(item.split(";")[6])))){
 						selectedItems.add(item);
 					}
 					else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("default")){
@@ -855,6 +1197,7 @@ public class DHIS2Exporter {
 		double maxAge=-999;
 		String origin=null;
 		String outcome=null;
+		String department=null;
 
 		//First we check if any categoryOptionCombo has been defined
 		Element categoryOptionCombo = dataset.element("categoryOptionCombo");
@@ -873,7 +1216,7 @@ public class DHIS2Exporter {
 						gender=categoryOptionComboValue.attributeValue("value");
 						Debug.println("Exporting categoryOptionType "+categoryOptionCombo.attributeValue("type")+" - "+gender);
 					}
-					else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("agegender")){
+					else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("agegender") || categoryOptionCombo.attributeValue("type").equalsIgnoreCase("agegenderinmonths")){
 						minAge=Double.parseDouble(categoryOptionComboValue.attributeValue("min"));
 						maxAge=Double.parseDouble(categoryOptionComboValue.attributeValue("max"));
 						gender=categoryOptionComboValue.attributeValue("gender");
@@ -886,6 +1229,10 @@ public class DHIS2Exporter {
 					else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("outcome")){
 						outcome=categoryOptionComboValue.attributeValue("value");
 						Debug.println("Exporting categoryOptionType "+categoryOptionCombo.attributeValue("type")+" - "+outcome);
+					}
+					else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("department")){
+						department=categoryOptionComboValue.attributeValue("value");
+						Debug.println("Exporting categoryOptionType "+categoryOptionCombo.attributeValue("type")+" - "+department);
 					}
 					for(int n=0;n<items.size();n++){
 						String item = (String)items.elementAt(n);
@@ -932,7 +1279,8 @@ public class DHIS2Exporter {
 							double year = 365*day;
 							try{
 								Date dateofbirth = ScreenHelper.parseDate(item.split(";")[3]);
-								if(dateofbirth!=null && (begin.getTime()-dateofbirth.getTime())/year>=minAge && (begin.getTime()-dateofbirth.getTime())/year<maxAge){
+								Date begindate = new SimpleDateFormat("yyyyMMddHHmm").parse(item.split(";")[13]);
+								if(dateofbirth!=null && (begindate.getTime()-dateofbirth.getTime())/year>=minAge && (begindate.getTime()-dateofbirth.getTime())/year<maxAge){
 									selectedItems.add(item);
 								}
 							}
@@ -945,7 +1293,22 @@ public class DHIS2Exporter {
 							double year = 365*day;
 							try{
 								Date dateofbirth = ScreenHelper.parseDate(item.split(";")[3]);
-								if((begin.getTime()-dateofbirth.getTime())/year>=minAge && (begin.getTime()-dateofbirth.getTime())/year<maxAge){
+								Date begindate = new SimpleDateFormat("yyyyMMddHHmm").parse(item.split(";")[13]);
+								if((begindate.getTime()-dateofbirth.getTime())/year>=minAge && (begindate.getTime()-dateofbirth.getTime())/year<maxAge){
+									selectedItems.add(item);
+								}
+							}
+							catch(Exception e){
+								e.printStackTrace();
+							}
+						}
+						else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("agegenderinmonths") && gender!=null && inArray(item.split(";")[2].toLowerCase(),gender.toLowerCase()) && minAge>-999 && maxAge>-1){
+							long day = 24*3600*1000;
+							double year = 365*day;
+							try{
+								Date dateofbirth = ScreenHelper.parseDate(item.split(";")[3]);
+								Date begindate = new SimpleDateFormat("yyyyMMddHHmm").parse(item.split(";")[13]);
+								if((begindate.getTime()-dateofbirth.getTime())*12/year>=minAge && (begindate.getTime()-dateofbirth.getTime())*12/year<maxAge){
 									selectedItems.add(item);
 								}
 							}
@@ -957,6 +1320,9 @@ public class DHIS2Exporter {
 							selectedItems.add(item);
 						}
 						else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("outcome") && outcome!=null && inArray(item.split(";")[8].toLowerCase(),outcome.toLowerCase())){
+							selectedItems.add(item);
+						}
+						else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("department") && department!=null && ScreenHelper.checkString((String)departmentmaps.get(item.split(";")[6])).length()>0 && department.contains(ScreenHelper.checkString((String)departmentmaps.get(item.split(";")[6])))){
 							selectedItems.add(item);
 						}
 						else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("default")){
@@ -978,6 +1344,7 @@ public class DHIS2Exporter {
 		double maxAge=-999;
 		String origin=null;
 		String outcome=null;
+		String department=null;
 		String zone=null;
 		//This is where we create the DataValueSet
         DataValueSet dataValueSet = new DataValueSet();
@@ -1003,7 +1370,7 @@ public class DHIS2Exporter {
 					gender=categoryOptionComboValue.attributeValue("value");
 					Debug.println("Exporting categoryOptionType "+categoryOptionCombo.attributeValue("type")+" - "+gender);
 				}
-				else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("agegender")){
+				else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("agegender")||categoryOptionCombo.attributeValue("type").equalsIgnoreCase("agegenderinmonths")){
 					minAge=Double.parseDouble(categoryOptionComboValue.attributeValue("min"));
 					maxAge=Double.parseDouble(categoryOptionComboValue.attributeValue("max"));
 					gender=categoryOptionComboValue.attributeValue("gender");
@@ -1016,6 +1383,10 @@ public class DHIS2Exporter {
 				else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("outcome")){
 					outcome=categoryOptionComboValue.attributeValue("value");
 					Debug.println("Exporting categoryOptionType "+categoryOptionCombo.attributeValue("type")+" - "+outcome);
+				}
+				else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("department")){
+					department=categoryOptionComboValue.attributeValue("value");
+					Debug.println("Exporting categoryOptionType "+categoryOptionCombo.attributeValue("type")+" - "+department);
 				}
 				else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("zone")){
 					zone=categoryOptionComboValue.attributeValue("value");
@@ -1058,6 +1429,12 @@ public class DHIS2Exporter {
 							e.printStackTrace();
 						}
 					}
+					if(SH.c(dataset.attributeValue("hasnatreg")).equalsIgnoreCase("1") && item.split(";")[13].length()==0) {
+						continue;
+					}
+					else if(SH.c(dataset.attributeValue("hasnatreg")).equalsIgnoreCase("0") && item.split(";")[13].length()>0) {
+						continue;
+					}
 					if(dataset.attributeValue("type").equalsIgnoreCase("encounter") && ScreenHelper.checkString(dataset.attributeValue("mortality")).equalsIgnoreCase("true") && !item.split(";")[5].startsWith("dead")){
 						continue;
 					}
@@ -1076,7 +1453,8 @@ public class DHIS2Exporter {
 						double year = 365*day;
 						try{
 							Date dateofbirth = ScreenHelper.parseDate(item.split(";")[3]);
-							if(dateofbirth!=null && (begin.getTime()-dateofbirth.getTime())/year>=minAge && (begin.getTime()-dateofbirth.getTime())/year<maxAge){
+							Date begindate = new SimpleDateFormat("yyyyMMddHHmm").parse(item.split(";")[8]);
+							if(dateofbirth!=null && (begindate.getTime()-dateofbirth.getTime())/year>=minAge && (begindate.getTime()-dateofbirth.getTime())/year<maxAge){
 								selectedItems.add(item);
 							}
 						}
@@ -1089,7 +1467,22 @@ public class DHIS2Exporter {
 						double year = 365*day;
 						try{
 							Date dateofbirth = ScreenHelper.parseDate(item.split(";")[3]);
-							if((begin.getTime()-dateofbirth.getTime())/year>=minAge && (begin.getTime()-dateofbirth.getTime())/year<maxAge){
+							Date begindate = new SimpleDateFormat("yyyyMMddHHmm").parse(item.split(";")[8]);
+							if((begindate.getTime()-dateofbirth.getTime())/year>=minAge && (begindate.getTime()-dateofbirth.getTime())/year<maxAge){
+								selectedItems.add(item);
+							}
+						}
+						catch(Exception e){
+							e.printStackTrace();
+						}
+					}
+					else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("agegenderinmonths") && gender!=null && inArray(item.split(";")[2].toLowerCase(),gender.toLowerCase()) && minAge>-999 && maxAge>-1){
+						long day = 24*3600*1000;
+						double year = 365*day;
+						try{
+							Date dateofbirth = ScreenHelper.parseDate(item.split(";")[3]);
+							Date begindate = new SimpleDateFormat("yyyyMMddHHmm").parse(item.split(";")[8]);
+							if((begindate.getTime()-dateofbirth.getTime())*12/year>=minAge && (begindate.getTime()-dateofbirth.getTime())*12/year<maxAge){
 								selectedItems.add(item);
 							}
 						}
@@ -1104,6 +1497,9 @@ public class DHIS2Exporter {
 						selectedItems.add(item);
 					}
 					else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("outcome") && outcome!=null && inArray(item.split(";")[5].toLowerCase(),outcome.toLowerCase())){
+						selectedItems.add(item);
+					}
+					else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("department") && department!=null && ScreenHelper.checkString((String)departmentmaps.get(item.split(";")[4])).length()>0 && department.contains(ScreenHelper.checkString((String)departmentmaps.get(item.split(";")[4])))){
 						selectedItems.add(item);
 					}
 					else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("default")){
@@ -1141,6 +1537,7 @@ public class DHIS2Exporter {
 		double maxAge=-999;
 		String origin=null;
 		String outcome=null;
+		String department=null;
 		//This is where we create the DataValueSet
         DataValueSet dataValueSet = new DataValueSet();
         dataValueSet.setDataSet(dataset.attributeValue("uid"));
@@ -1165,7 +1562,7 @@ public class DHIS2Exporter {
 					gender=categoryOptionComboValue.attributeValue("value");
 					Debug.println("Exporting categoryOptionType "+categoryOptionCombo.attributeValue("type")+" - "+gender);
 				}
-				else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("agegender")){
+				else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("agegender")||categoryOptionCombo.attributeValue("type").equalsIgnoreCase("agegenderinmonths")){
 					minAge=Double.parseDouble(categoryOptionComboValue.attributeValue("min"));
 					maxAge=Double.parseDouble(categoryOptionComboValue.attributeValue("max"));
 					gender=categoryOptionComboValue.attributeValue("gender");
@@ -1179,6 +1576,10 @@ public class DHIS2Exporter {
 					outcome=categoryOptionComboValue.attributeValue("value");
 					Debug.println("Exporting categoryOptionType "+categoryOptionCombo.attributeValue("type")+" - "+outcome);
 				}
+				else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("department")){
+					department=categoryOptionComboValue.attributeValue("value");
+					Debug.println("Exporting categoryOptionType "+categoryOptionCombo.attributeValue("type")+" - "+department);
+				}
 				Debug.println("Checking "+items.size()+" items...");
 				for(int n=0;n<items.size();n++){
 					String item = (String)items.elementAt(n);
@@ -1191,7 +1592,8 @@ public class DHIS2Exporter {
 						double year = 365*day;
 						try{
 							Date dateofbirth = ScreenHelper.parseDate(item.split(";")[3]);
-							if(dateofbirth!=null && (begin.getTime()-dateofbirth.getTime())/year>=minAge && (begin.getTime()-dateofbirth.getTime())/year<maxAge){
+							Date begindate = SH.parseDate(item.split(";")[9]);
+							if(dateofbirth!=null && (begindate.getTime()-dateofbirth.getTime())/year>=minAge && (begindate.getTime()-dateofbirth.getTime())/year<maxAge){
 								selectedItems.add(item);
 							}
 						}
@@ -1204,7 +1606,22 @@ public class DHIS2Exporter {
 						double year = 365*day;
 						try{
 							Date dateofbirth = ScreenHelper.parseDate(item.split(";")[3]);
-							if((begin.getTime()-dateofbirth.getTime())/year>=minAge && (begin.getTime()-dateofbirth.getTime())/year<maxAge){
+							Date begindate = SH.parseDate(item.split(";")[9]);
+							if((begindate.getTime()-dateofbirth.getTime())/year>=minAge && (begindate.getTime()-dateofbirth.getTime())/year<maxAge){
+								selectedItems.add(item);
+							}
+						}
+						catch(Exception e){
+							e.printStackTrace();
+						}
+					}
+					else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("agegenderinmonths") && gender!=null && inArray(item.split(";")[2].toLowerCase(),gender.toLowerCase()) && minAge>-999 && maxAge>-1){
+						long day = 24*3600*1000;
+						double year = 365*day;
+						try{
+							Date dateofbirth = ScreenHelper.parseDate(item.split(";")[3]);
+							Date begindate = SH.parseDate(item.split(";")[9]);
+							if((begindate.getTime()-dateofbirth.getTime())*12/year>=minAge && (begindate.getTime()-dateofbirth.getTime())*12/year<maxAge){
 								selectedItems.add(item);
 							}
 						}
@@ -1216,6 +1633,9 @@ public class DHIS2Exporter {
 						selectedItems.add(item);
 					}
 					else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("outcome") && outcome!=null && inArray(item.split(";")[5].toLowerCase(),outcome.toLowerCase())){
+						selectedItems.add(item);
+					}
+					else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("department") && department!=null && ScreenHelper.checkString((String)departmentmaps.get(item.split(";")[4])).length()>0 && department.contains(ScreenHelper.checkString((String)departmentmaps.get(item.split(";")[4])))){
 						selectedItems.add(item);
 					}
 					else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("default")){
@@ -1253,6 +1673,7 @@ public class DHIS2Exporter {
 		double maxAge=-999;
 		String origin=null;
 		String outcome=null;
+		String department=null;
 		String zone=null;
 		//This is where we create the DataValueSet
         DataValueSet dataValueSet = new DataValueSet();
@@ -1278,7 +1699,7 @@ public class DHIS2Exporter {
 					gender=categoryOptionComboValue.attributeValue("value");
 					Debug.println("Exporting categoryOptionType "+categoryOptionCombo.attributeValue("type")+" - "+gender);
 				}
-				else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("agegender")){
+				else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("agegender")||categoryOptionCombo.attributeValue("type").equalsIgnoreCase("agegenderinmonths")){
 					minAge=Double.parseDouble(categoryOptionComboValue.attributeValue("min"));
 					maxAge=Double.parseDouble(categoryOptionComboValue.attributeValue("max"));
 					gender=categoryOptionComboValue.attributeValue("gender");
@@ -1295,6 +1716,10 @@ public class DHIS2Exporter {
 				else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("outcome")){
 					outcome=categoryOptionComboValue.attributeValue("value");
 					Debug.println("Exporting categoryOptionType "+categoryOptionCombo.attributeValue("type")+" - "+outcome);
+				}
+				else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("department")){
+					department=categoryOptionComboValue.attributeValue("value");
+					Debug.println("Exporting categoryOptionType "+categoryOptionCombo.attributeValue("type")+" - "+department);
 				}
 				Debug.println("Checking "+items.size()+" items...");
 				for(int n=0;n<items.size();n++){
@@ -1332,6 +1757,21 @@ public class DHIS2Exporter {
 							e.printStackTrace();
 						}
 					}
+					else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("agegenderinmonths") && gender!=null && inArray(item.split(";")[2].toLowerCase(),gender.toLowerCase()) && minAge>-999 && maxAge>-999){
+						long day = 24*3600*1000;
+						double year = 365*day;
+						try{
+							Date dateofbirth = ScreenHelper.parseDate(item.split(";")[3]);
+							Date itemdate = new SimpleDateFormat("yyyyMMddHHmm").parse(item.split(";")[15]);
+							double age=(itemdate.getTime()-dateofbirth.getTime())*12/year;
+							if(age>=minAge && age<maxAge){
+								selectedItems.add(item);
+							}
+						}
+						catch(Exception e){
+							e.printStackTrace();
+						}
+					}
 					else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("origin") && origin!=null && inArray(item.split(";")[7].toLowerCase(),origin.toLowerCase())){
 						selectedItems.add(item);
 					}
@@ -1341,6 +1781,9 @@ public class DHIS2Exporter {
 					else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("outcome") && outcome!=null && inArray(item.split(";")[5].toLowerCase(),outcome.toLowerCase())){
 						selectedItems.add(item);
 					}
+					else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("department") && department!=null && ScreenHelper.checkString((String)departmentmaps.get(item.split(";")[4])).length()>0 && department.contains(ScreenHelper.checkString((String)departmentmaps.get(item.split(";")[4])))){
+						selectedItems.add(item);
+					}
 					else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("transactionitemvalue")){
 						ItemVO tItem = null;
 						tItem=MedwanQuery.getInstance().getItem(Integer.parseInt(item.split(";")[10]), Integer.parseInt(item.split(";")[11]), categoryOptionComboValue.attributeValue("itemtype"));
@@ -1348,6 +1791,7 @@ public class DHIS2Exporter {
 							continue;
 						}
 						else{
+							tItem.setValue(tItem.getValue().replaceAll(";", "{semicolon}"));
 							String minval=ScreenHelper.checkString(categoryOptionComboValue.attributeValue("outputItemValueMin"));
 							String maxval=ScreenHelper.checkString(categoryOptionComboValue.attributeValue("outputItemValueMax"));
 							String matchval=ScreenHelper.checkString(categoryOptionComboValue.attributeValue("outputItemValue"));
@@ -1507,7 +1951,7 @@ public class DHIS2Exporter {
 					gender=categoryOptionComboValue.attributeValue("value");
 					Debug.println("Exporting categoryOptionType "+categoryOptionCombo.attributeValue("type")+" - "+gender);
 				}
-				else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("agegender")){
+				else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("agegender")||categoryOptionCombo.attributeValue("type").equalsIgnoreCase("agegenderinmonths")){
 					minAge=Double.parseDouble(categoryOptionComboValue.attributeValue("min"));
 					maxAge=Double.parseDouble(categoryOptionComboValue.attributeValue("max"));
 					gender=categoryOptionComboValue.attributeValue("gender");
@@ -1529,7 +1973,8 @@ public class DHIS2Exporter {
 						double year = 365*day;
 						try{
 							Date dateofbirth = ScreenHelper.parseDate(item.split(";")[2]);
-							if(dateofbirth!=null && (begin.getTime()-dateofbirth.getTime())/year>=minAge && (begin.getTime()-dateofbirth.getTime())/year<maxAge){
+							Date begindate = new SimpleDateFormat("yyyyMMddHHmm").parse(item.split(";")[7]);
+							if(dateofbirth!=null && (begindate.getTime()-dateofbirth.getTime())/year>=minAge && (begindate.getTime()-dateofbirth.getTime())/year<maxAge){
 								selectedItems.add(item);
 							}
 						}
@@ -1542,7 +1987,22 @@ public class DHIS2Exporter {
 						double year = 365*day;
 						try{
 							Date dateofbirth = ScreenHelper.parseDate(item.split(";")[2]);
-							if((begin.getTime()-dateofbirth.getTime())/year>=minAge && (begin.getTime()-dateofbirth.getTime())/year<maxAge){
+							Date begindate = new SimpleDateFormat("yyyyMMddHHmm").parse(item.split(";")[7]);
+							if((begindate.getTime()-dateofbirth.getTime())/year>=minAge && (begindate.getTime()-dateofbirth.getTime())/year<maxAge){
+								selectedItems.add(item);
+							}
+						}
+						catch(Exception e){
+							e.printStackTrace();
+						}
+					}
+					else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("agegenderinmonths") && gender!=null && inArray(item.split(";")[1].toLowerCase(),gender.toLowerCase()) && minAge>-999 && maxAge>-999){
+						long day = 24*3600*1000;
+						double year = 365*day;
+						try{
+							Date dateofbirth = ScreenHelper.parseDate(item.split(";")[2]);
+							Date begindate = new SimpleDateFormat("yyyyMMddHHmm").parse(item.split(";")[7]);
+							if((begindate.getTime()-dateofbirth.getTime())*12/year>=minAge && (begindate.getTime()-dateofbirth.getTime())*12/year<maxAge){
 								selectedItems.add(item);
 							}
 						}
@@ -1583,6 +2043,182 @@ public class DHIS2Exporter {
 			}
 		}
 	}
+	private void exportPluginDataset(Vector items,Element dataset, String attributeOptionComboUid){
+		String gender=null;
+		double minAge=-999;
+		double maxAge=-999;
+		String origin=null;
+		String outcome=null;
+		String invalue=null;
+		//This is where we create the DataValueSet
+        DataValueSet dataValueSet = new DataValueSet();
+        dataValueSet.setDataSet(dataset.attributeValue("uid"));
+        dataValueSet.setOrgUnit(MedwanQuery.getInstance().getConfigString("dhis2_orgunit",""));
+        dataValueSet.setPeriod(new SimpleDateFormat("yyyyMM").format(begin));
+        dataValueSet.setCompleteDate(new SimpleDateFormat("yyyy-MM-dd").format(end));
+        dataValueSet.setAttributeOptionCombo(attributeOptionComboUid);
+
+		//First we check if any categoryOptionCombo has been defined
+		Element categoryOptionCombo = dataset.element("categoryOptionCombo");
+		if(categoryOptionCombo!=null){
+			Iterator icategoryOptionCombo = categoryOptionCombo.elementIterator(); //option elements
+			while(icategoryOptionCombo.hasNext()){
+				Vector selectedItems = new Vector();
+				Element categoryOptionComboValue = (Element)icategoryOptionCombo.next(); //categoryOptionComboValue = option element
+				if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("age")){
+					minAge=Double.parseDouble(categoryOptionComboValue.attributeValue("min"));
+					maxAge=Double.parseDouble(categoryOptionComboValue.attributeValue("max"));
+					Debug.println("Exporting categoryOptionType "+categoryOptionCombo.attributeValue("type")+" - "+minAge+"->"+maxAge);
+				}
+				else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("gender")){
+					gender=categoryOptionComboValue.attributeValue("value");
+					Debug.println("Exporting categoryOptionType "+categoryOptionCombo.attributeValue("type")+" - "+gender);
+				}
+				else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("agegender")||categoryOptionCombo.attributeValue("type").equalsIgnoreCase("agegenderinmonths")){
+					minAge=Double.parseDouble(categoryOptionComboValue.attributeValue("min"));
+					maxAge=Double.parseDouble(categoryOptionComboValue.attributeValue("max"));
+					gender=categoryOptionComboValue.attributeValue("gender");
+					Debug.println("Exporting categoryOptionType "+categoryOptionCombo.attributeValue("type")+" - "+minAge+"->"+maxAge+ " | "+gender);
+				}
+				else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("invalue")){
+					invalue=categoryOptionComboValue.attributeValue("value");
+					Debug.println("Exporting categoryOptionType "+categoryOptionCombo.attributeValue("type")+" - "+invalue);
+				}
+				Debug.println("Checking "+items.size()+" items...");
+				for(int n=0;n<items.size();n++){
+					String item = (String)items.elementAt(n);
+					Debug.println("Checking item: "+item);
+					if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("gender") && gender!=null && gender.equalsIgnoreCase(item.split(";")[1])){
+						selectedItems.add(item);
+					}
+					else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("age") && minAge>-999 && maxAge>-999){
+						long day = 24*3600*1000;
+						double year = 365*day;
+						try{
+							Date dateofbirth = ScreenHelper.parseDate(item.split(";")[2]);
+							Date begindate = new SimpleDateFormat("yyyyMMddHHmm").parse(item.split(";")[4]);
+							if(dateofbirth!=null && (begindate.getTime()-dateofbirth.getTime())/year>=minAge && (begindate.getTime()-dateofbirth.getTime())/year<maxAge){
+								selectedItems.add(item);
+							}
+						}
+						catch(Exception e){
+							e.printStackTrace();
+						}
+					}
+					else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("agegender") && gender!=null && gender.equalsIgnoreCase(item.split(";")[1]) && minAge>-999 && maxAge>-999){
+						long day = 24*3600*1000;
+						double year = 365*day;
+						try{
+							Date dateofbirth = ScreenHelper.parseDate(item.split(";")[2]);
+							Date begindate = new SimpleDateFormat("yyyyMMddHHmm").parse(item.split(";")[4]);
+							if((begindate.getTime()-dateofbirth.getTime())/year>=minAge && (begindate.getTime()-dateofbirth.getTime())/year<maxAge){
+								selectedItems.add(item);
+							}
+						}
+						catch(Exception e){
+							e.printStackTrace();
+						}
+					}
+					else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("agegenderinmonths") && gender!=null && inArray(item.split(";")[1].toLowerCase(),gender.toLowerCase()) && minAge>-999 && maxAge>-999){
+						long day = 24*3600*1000;
+						double year = 365*day;
+						try{
+							Date dateofbirth = ScreenHelper.parseDate(item.split(";")[2]);
+							Date begindate = new SimpleDateFormat("yyyyMMddHHmm").parse(item.split(";")[4]);
+							if((begindate.getTime()-dateofbirth.getTime())*12/year>=minAge && (begindate.getTime()-dateofbirth.getTime())*12/year<maxAge){
+								selectedItems.add(item);
+							}
+						}
+						catch(Exception e){
+							e.printStackTrace();
+						}
+					}
+					else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("invalue")){
+						if(item.split(";").length>3 && item.split(";")[3].length()>0 && invalue.toLowerCase().contains(item.split(";")[3].toLowerCase())) {
+							selectedItems.add(item);
+						}
+					}
+					else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("default")){
+						selectedItems.add(item);
+					}
+				}
+				exportPluginDatasetSeries(selectedItems,dataset,attributeOptionComboUid,categoryOptionComboValue.attributeValue("uid"),dataValueSet);
+			}
+		}
+		else{
+			exportPluginDatasetSeries(items,dataset,attributeOptionComboUid,"",dataValueSet);
+		}
+		if(MedwanQuery.getInstance().getConfigInt("sendFullDHIS2DataSets",0)==1 || dataValueSet.getDataValues().size()>0){
+			try {
+				Debug.println(dataValueSet.toXMLString());
+			} catch (JAXBException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			//Send message to DHIS2 server
+			if(exportFormat.equalsIgnoreCase("dhis2server")){
+				DHIS2Helper.sendToServer(dataValueSet,dataset.attributeValue("label"),jspWriter);
+			}
+			else if(exportFormat.equalsIgnoreCase("html")){
+				html.append(DHIS2Helper.toHtml(dataValueSet,"default",language,dataset.attributeValue("label")));
+				html.append("<p/>");
+				bHasContent=true;
+			}
+		}
+	}
+	
+	private void exportGenericPluginDataset(Vector items,Element dataset, String attributeOptionComboUid){
+		String category=null;
+		//This is where we create the DataValueSet
+        DataValueSet dataValueSet = new DataValueSet();
+        dataValueSet.setDataSet(dataset.attributeValue("uid"));
+        dataValueSet.setOrgUnit(MedwanQuery.getInstance().getConfigString("dhis2_orgunit",""));
+        dataValueSet.setPeriod(new SimpleDateFormat("yyyyMM").format(begin));
+        dataValueSet.setCompleteDate(new SimpleDateFormat("yyyy-MM-dd").format(end));
+        dataValueSet.setAttributeOptionCombo(attributeOptionComboUid);
+
+		//First we check if any categoryOptionCombo has been defined
+		Element categoryOptionCombo = dataset.element("categoryOptionCombo");
+		if(categoryOptionCombo!=null){
+			Iterator icategoryOptionCombo = categoryOptionCombo.elementIterator(); //option elements
+			while(icategoryOptionCombo.hasNext()){
+				Vector selectedItems = new Vector();
+				Element categoryOptionComboValue = (Element)icategoryOptionCombo.next(); //categoryOptionComboValue = option element
+				if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("genericplugin")){
+					category=categoryOptionComboValue.attributeValue("value");
+					Debug.println("Exporting categoryOptionType "+categoryOptionCombo.attributeValue("type"));
+				}
+				for(int n=0;n<items.size();n++){
+					String item = (String)items.elementAt(n);
+					Debug.println("Checking item: "+item);
+					if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("genericplugin") && category!=null && category.equalsIgnoreCase(item.split(";")[1])){
+						selectedItems.add(item);
+					}
+				}
+				exportGenericPluginDatasetSeries(selectedItems,dataset,attributeOptionComboUid,categoryOptionComboValue.attributeValue("uid"),dataValueSet);
+			}
+		}
+		else{
+			exportGenericPluginDatasetSeries(items,dataset,attributeOptionComboUid,"",dataValueSet);
+		}
+		if(MedwanQuery.getInstance().getConfigInt("sendFullDHIS2DataSets",0)==1 || dataValueSet.getDataValues().size()>0){
+			try {
+				Debug.println(dataValueSet.toXMLString());
+			} catch (JAXBException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			//Send message to DHIS2 server
+			if(exportFormat.equalsIgnoreCase("dhis2server")){
+				DHIS2Helper.sendToServer(dataValueSet,dataset.attributeValue("label"),jspWriter);
+			}
+			else if(exportFormat.equalsIgnoreCase("html")){
+				html.append(DHIS2Helper.toHtml(dataValueSet,"default",language,dataset.attributeValue("label")));
+				html.append("<p/>");
+				bHasContent=true;
+			}
+		}
+	}
 	
 	private void exportEncounterDatasetRecords(Vector items,Element dataset, String dataelementuid,String optionuid){
 		String gender=null;
@@ -1590,6 +2226,7 @@ public class DHIS2Exporter {
 		double maxAge=-999;
 		String origin=null;
 		String outcome=null;
+		String department=null;
 		String zone=null;
 
 		//First we check if any categoryOptionCombo has been defined
@@ -1609,7 +2246,7 @@ public class DHIS2Exporter {
 						gender=categoryOptionComboValue.attributeValue("value");
 						Debug.println("Exporting categoryOptionType "+categoryOptionCombo.attributeValue("type")+" - "+gender);
 					}
-					else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("agegender")){
+					else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("agegender")||categoryOptionCombo.attributeValue("type").equalsIgnoreCase("agegenderinmonths")){
 						minAge=Double.parseDouble(categoryOptionComboValue.attributeValue("min"));
 						maxAge=Double.parseDouble(categoryOptionComboValue.attributeValue("max"));
 						gender=categoryOptionComboValue.attributeValue("gender");
@@ -1626,6 +2263,10 @@ public class DHIS2Exporter {
 					else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("outcome")){
 						outcome=categoryOptionComboValue.attributeValue("value");
 						Debug.println("Exporting categoryOptionType "+categoryOptionCombo.attributeValue("type")+" - "+outcome);
+					}
+					else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("department")){
+						department=categoryOptionComboValue.attributeValue("value");
+						Debug.println("Exporting categoryOptionType "+categoryOptionCombo.attributeValue("type")+" - "+department);
 					}
 					Debug.println("Checking "+items.size()+" items...");
 					for(int n=0;n<items.size();n++){
@@ -1655,6 +2296,10 @@ public class DHIS2Exporter {
 								}
 								else if(dataset.attributeValue("type").equalsIgnoreCase("encounter")){
 									end = new SimpleDateFormat("yyyyMMddHHmm").parse(item.split(";")[9]);
+									java.util.Date now = new SimpleDateFormat("yyyyMMddHHmm").parse(item.split(";")[12]);
+									if(!end.before(now)) {
+										continue;
+									}
 								}
 								if(end.before(this.begin) || end.after(this.end)){
 									continue;
@@ -1663,6 +2308,12 @@ public class DHIS2Exporter {
 							catch (Exception e){
 								e.printStackTrace();
 							}
+						}
+						if(SH.c(dataset.attributeValue("hasnatreg")).equalsIgnoreCase("1") && item.split(";")[13].length()==0) {
+							continue;
+						}
+						else if(SH.c(dataset.attributeValue("hasnatreg")).equalsIgnoreCase("0") && item.split(";")[13].length()>0) {
+							continue;
 						}
 						if(ScreenHelper.checkString(dataset.attributeValue("missing")).equals("diagnosis")){
 							if(Diagnosis.selectDiagnoses("", "", MedwanQuery.getInstance().getServerId()+"."+item.split(";")[1], "", "", "", "", "", "", "", "", "icd10", "").size()>0) {
@@ -1677,7 +2328,8 @@ public class DHIS2Exporter {
 							double year = 365*day;
 							try{
 								Date dateofbirth = ScreenHelper.parseDate(item.split(";")[3]);
-								if(dateofbirth!=null && (begin.getTime()-dateofbirth.getTime())/year>=minAge && (begin.getTime()-dateofbirth.getTime())/year<maxAge){
+								Date begindate = new SimpleDateFormat("yyyyMMddHHmm").parse(item.split(";")[8]);
+								if(dateofbirth!=null && (begindate.getTime()-dateofbirth.getTime())/year>=minAge && (begindate.getTime()-dateofbirth.getTime())/year<maxAge){
 									selectedItems.add(item);
 								}
 							}
@@ -1690,7 +2342,22 @@ public class DHIS2Exporter {
 							double year = 365*day;
 							try{
 								Date dateofbirth = ScreenHelper.parseDate(item.split(";")[3]);
-								if((begin.getTime()-dateofbirth.getTime())/year>=minAge && (begin.getTime()-dateofbirth.getTime())/year<maxAge){
+								Date begindate = new SimpleDateFormat("yyyyMMddHHmm").parse(item.split(";")[8]);
+								if((begindate.getTime()-dateofbirth.getTime())/year>=minAge && (begindate.getTime()-dateofbirth.getTime())/year<maxAge){
+									selectedItems.add(item);
+								}
+							}
+							catch(Exception e){
+								e.printStackTrace();
+							}
+						}
+						else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("agegenderinmonths") && gender!=null && inArray(item.split(";")[2].toLowerCase(),gender.toLowerCase()) && minAge>-999 && maxAge>-1){
+							long day = 24*3600*1000;
+							double year = 365*day;
+							try{
+								Date dateofbirth = ScreenHelper.parseDate(item.split(";")[3]);
+								Date begindate = new SimpleDateFormat("yyyyMMddHHmm").parse(item.split(";")[13]);
+								if((begindate.getTime()-dateofbirth.getTime())*12/year>=minAge && (begindate.getTime()-dateofbirth.getTime())*12/year<maxAge){
 									selectedItems.add(item);
 								}
 							}
@@ -1705,6 +2372,9 @@ public class DHIS2Exporter {
 							selectedItems.add(item);
 						}
 						else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("outcome") && outcome!=null && inArray(item.split(";")[5].toLowerCase(),outcome.toLowerCase())){
+							selectedItems.add(item);
+						}
+						else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("department") && department!=null && ScreenHelper.checkString((String)departmentmaps.get(item.split(";")[4])).length()>0 && department.contains(ScreenHelper.checkString((String)departmentmaps.get(item.split(";")[4])))){
 							selectedItems.add(item);
 						}
 						else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("default")){
@@ -1726,6 +2396,7 @@ public class DHIS2Exporter {
 		double maxAge=-999;
 		String origin=null;
 		String outcome=null;
+		String department=null;
 
 		//First we check if any categoryOptionCombo has been defined
 		Element categoryOptionCombo = dataset.element("categoryOptionCombo");
@@ -1744,7 +2415,7 @@ public class DHIS2Exporter {
 						gender=categoryOptionComboValue.attributeValue("value");
 						Debug.println("Exporting categoryOptionType "+categoryOptionCombo.attributeValue("type")+" - "+gender);
 					}
-					else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("agegender")){
+					else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("agegender")||categoryOptionCombo.attributeValue("type").equalsIgnoreCase("agegenderinmonths")){
 						minAge=Double.parseDouble(categoryOptionComboValue.attributeValue("min"));
 						maxAge=Double.parseDouble(categoryOptionComboValue.attributeValue("max"));
 						gender=categoryOptionComboValue.attributeValue("gender");
@@ -1758,6 +2429,10 @@ public class DHIS2Exporter {
 						outcome=categoryOptionComboValue.attributeValue("value");
 						Debug.println("Exporting categoryOptionType "+categoryOptionCombo.attributeValue("type")+" - "+outcome);
 					}
+					else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("department")){
+						department=categoryOptionComboValue.attributeValue("value");
+						Debug.println("Exporting categoryOptionType "+categoryOptionCombo.attributeValue("type")+" - "+department);
+					}
 					Debug.println("Checking "+items.size()+" items...");
 					for(int n=0;n<items.size();n++){
 						String item = (String)items.elementAt(n);
@@ -1770,7 +2445,8 @@ public class DHIS2Exporter {
 							double year = 365*day;
 							try{
 								Date dateofbirth = ScreenHelper.parseDate(item.split(";")[3]);
-								if(dateofbirth!=null && (begin.getTime()-dateofbirth.getTime())/year>=minAge && (begin.getTime()-dateofbirth.getTime())/year<maxAge){
+								Date begindate = SH.parseDate(item.split(";")[9]);
+								if(dateofbirth!=null && (begindate.getTime()-dateofbirth.getTime())/year>=minAge && (begindate.getTime()-dateofbirth.getTime())/year<maxAge){
 									selectedItems.add(item);
 								}
 							}
@@ -1783,7 +2459,22 @@ public class DHIS2Exporter {
 							double year = 365*day;
 							try{
 								Date dateofbirth = ScreenHelper.parseDate(item.split(";")[3]);
-								if((begin.getTime()-dateofbirth.getTime())/year>=minAge && (begin.getTime()-dateofbirth.getTime())/year<maxAge){
+								Date begindate = SH.parseDate(item.split(";")[9]);
+								if((begindate.getTime()-dateofbirth.getTime())/year>=minAge && (begindate.getTime()-dateofbirth.getTime())/year<maxAge){
+									selectedItems.add(item);
+								}
+							}
+							catch(Exception e){
+								e.printStackTrace();
+							}
+						}
+						else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("agegenderinmonths") && gender!=null && inArray(item.split(";")[2].toLowerCase(),gender.toLowerCase()) && minAge>-999 && maxAge>-1){
+							long day = 24*3600*1000;
+							double year = 365*day;
+							try{
+								Date dateofbirth = ScreenHelper.parseDate(item.split(";")[3]);
+								Date begindate = SH.parseDate(item.split(";")[9]);
+								if((begindate.getTime()-dateofbirth.getTime())*12/year>=minAge && (begindate.getTime()-dateofbirth.getTime())*12/year<maxAge){
 									selectedItems.add(item);
 								}
 							}
@@ -1795,6 +2486,9 @@ public class DHIS2Exporter {
 							selectedItems.add(item);
 						}
 						else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("outcome") && outcome!=null && inArray(item.split(";")[5].toLowerCase(),outcome.toLowerCase())){
+							selectedItems.add(item);
+						}
+						else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("department") && department!=null && ScreenHelper.checkString((String)departmentmaps.get(item.split(";")[4])).length()>0 && department.contains(ScreenHelper.checkString((String)departmentmaps.get(item.split(";")[4])))){
 							selectedItems.add(item);
 						}
 						else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("default")){
@@ -1849,7 +2543,7 @@ public class DHIS2Exporter {
 						gender=categoryOptionComboValue.attributeValue("value");
 						Debug.println("Exporting categoryOptionType "+categoryOptionCombo.attributeValue("type")+" - "+gender);
 					}
-					else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("agegender")){
+					else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("agegender")||categoryOptionCombo.attributeValue("type").equalsIgnoreCase("agegenderinmonths")){
 						minAge=Double.parseDouble(categoryOptionComboValue.attributeValue("min"));
 						maxAge=Double.parseDouble(categoryOptionComboValue.attributeValue("max"));
 						gender=categoryOptionComboValue.attributeValue("gender");
@@ -1870,7 +2564,8 @@ public class DHIS2Exporter {
 							double year = 365*day;
 							try{
 								Date dateofbirth = ScreenHelper.parseDate(item.split(";")[2]);
-								if(dateofbirth!=null && (begin.getTime()-dateofbirth.getTime())/year>=minAge && (begin.getTime()-dateofbirth.getTime())/year<maxAge){
+								Date begindate = new SimpleDateFormat("yyyyMMddHHmm").parse(item.split(";")[7]);
+								if(dateofbirth!=null && (begindate.getTime()-dateofbirth.getTime())/year>=minAge && (begindate.getTime()-dateofbirth.getTime())/year<maxAge){
 									selectedItems.add(item);
 								}
 							}
@@ -1883,7 +2578,22 @@ public class DHIS2Exporter {
 							double year = 365*day;
 							try{
 								Date dateofbirth = ScreenHelper.parseDate(item.split(";")[2]);
-								if((begin.getTime()-dateofbirth.getTime())/year>=minAge && (begin.getTime()-dateofbirth.getTime())/year<maxAge){
+								Date begindate = new SimpleDateFormat("yyyyMMddHHmm").parse(item.split(";")[7]);
+								if((begindate.getTime()-dateofbirth.getTime())/year>=minAge && (begindate.getTime()-dateofbirth.getTime())/year<maxAge){
+									selectedItems.add(item);
+								}
+							}
+							catch(Exception e){
+								e.printStackTrace();
+							}
+						}
+						else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("agegenderinmonths") && gender!=null && inArray(item.split(";")[2].toLowerCase(),gender.toLowerCase()) && minAge>-999 && maxAge>-1){
+							long day = 24*3600*1000;
+							double year = 365*day;
+							try{
+								Date dateofbirth = ScreenHelper.parseDate(item.split(";")[2]);
+								Date begindate = new SimpleDateFormat("yyyyMMddHHmm").parse(item.split(";")[7]);
+								if((begindate.getTime()-dateofbirth.getTime())*12/year>=minAge && (begindate.getTime()-dateofbirth.getTime())*12/year<maxAge){
 									selectedItems.add(item);
 								}
 							}
@@ -1909,12 +2619,115 @@ public class DHIS2Exporter {
 		}
 	}
 	
+	private void exportPluginDatasetRecords(Vector items,Element dataset, String dataelementuid,String optionuid){
+		String gender=null;
+		double minAge=-999;
+		double maxAge=-999;
+		String origin=null;
+		String outcome=null;
+		String invalue=null;
+
+		//First we check if any categoryOptionCombo has been defined
+		Element categoryOptionCombo = dataset.element("categoryOptionCombo");
+		if(categoryOptionCombo!=null){
+			Iterator icategoryOptionCombo = categoryOptionCombo.elementIterator();
+			while(icategoryOptionCombo.hasNext()){
+				Vector selectedItems = new Vector();
+				Element categoryOptionComboValue = (Element)icategoryOptionCombo.next();
+				if(optionuid.length()==0||optionuid.equals(categoryOptionComboValue.attributeValue("uid"))){
+					if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("age")){
+						minAge=Double.parseDouble(categoryOptionComboValue.attributeValue("min"));
+						maxAge=Double.parseDouble(categoryOptionComboValue.attributeValue("max"));
+						Debug.println("Exporting categoryOptionType "+categoryOptionCombo.attributeValue("type")+" - "+minAge+"->"+maxAge);
+					}
+					else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("gender")){
+						gender=categoryOptionComboValue.attributeValue("value");
+						Debug.println("Exporting categoryOptionType "+categoryOptionCombo.attributeValue("type")+" - "+gender);
+					}
+					else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("agegender")||categoryOptionCombo.attributeValue("type").equalsIgnoreCase("agegenderinmonths")){
+						minAge=Double.parseDouble(categoryOptionComboValue.attributeValue("min"));
+						maxAge=Double.parseDouble(categoryOptionComboValue.attributeValue("max"));
+						gender=categoryOptionComboValue.attributeValue("gender");
+						Debug.println("Exporting categoryOptionType "+categoryOptionCombo.attributeValue("type")+" - "+minAge+"->"+maxAge+ " | "+gender);
+					}
+					else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("invalue")){
+						invalue=categoryOptionComboValue.attributeValue("value");
+					}
+
+					Debug.println("Checking "+items.size()+" items...");
+					for(int n=0;n<items.size();n++){
+						String item = (String)items.elementAt(n);
+						Debug.println("Checking item: "+item);
+						if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("gender") && gender!=null && gender.equalsIgnoreCase(item.split(";")[1])){
+							selectedItems.add(item);
+						}
+						else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("age") && minAge>-999 && maxAge>-1){
+							long day = 24*3600*1000;
+							double year = 365*day;
+							try{
+								Date dateofbirth = ScreenHelper.parseDate(item.split(";")[2]);
+								Date begindate = new SimpleDateFormat("yyyyMMddHHmm").parse(item.split(";")[4]);
+								if(dateofbirth!=null && (begindate.getTime()-dateofbirth.getTime())/year>=minAge && (begindate.getTime()-dateofbirth.getTime())/year<maxAge){
+									selectedItems.add(item);
+								}
+							}
+							catch(Exception e){
+								e.printStackTrace();
+							}
+						}
+						else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("agegender") && gender!=null && gender.equalsIgnoreCase(item.split(";")[1]) && minAge>-999 && maxAge>-1){
+							long day = 24*3600*1000;
+							double year = 365*day;
+							try{
+								Date dateofbirth = ScreenHelper.parseDate(item.split(";")[2]);
+								Date begindate = new SimpleDateFormat("yyyyMMddHHmm").parse(item.split(";")[4]);
+								if((begindate.getTime()-dateofbirth.getTime())/year>=minAge && (begindate.getTime()-dateofbirth.getTime())/year<maxAge){
+									selectedItems.add(item);
+								}
+							}
+							catch(Exception e){
+								e.printStackTrace();
+							}
+						}
+						else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("agegenderinmonths") && gender!=null && inArray(item.split(";")[2].toLowerCase(),gender.toLowerCase()) && minAge>-999 && maxAge>-1){
+							long day = 24*3600*1000;
+							double year = 365*day;
+							try{
+								Date dateofbirth = ScreenHelper.parseDate(item.split(";")[2]);
+								Date begindate = new SimpleDateFormat("yyyyMMddHHmm").parse(item.split(";")[4]);
+								if((begindate.getTime()-dateofbirth.getTime())*12/year>=minAge && (begindate.getTime()-dateofbirth.getTime())*12/year<maxAge){
+									selectedItems.add(item);
+								}
+							}
+							catch(Exception e){
+								e.printStackTrace();
+							}
+						}
+						else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("invalue")){
+							if(item.split(";").length>3 && item.split(";")[3].length()>0 && invalue.toLowerCase().contains(item.split(";")[3].toLowerCase())) {
+								selectedItems.add(item);
+							}
+						}
+						else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("default")){
+							selectedItems.add(item);
+						}
+					}
+					exportPluginDatasetSeriesRecords(selectedItems,dataset,dataelementuid);
+				}
+			}
+		}
+		else{
+			exportPluginDatasetSeriesRecords(items,dataset,dataelementuid);
+		}
+	}
+	
 	private void exportItemDatasetRecords(Vector items,Element dataset, String dataelementuid,String optionuid){
 		String gender=null;
 		double minAge=-999;
 		double maxAge=-999;
 		String origin=null;
 		String outcome=null;
+		String department=null;
 		String zone=null;
 
 		//First we check if any categoryOptionCombo has been defined
@@ -1934,7 +2747,7 @@ public class DHIS2Exporter {
 						gender=categoryOptionComboValue.attributeValue("value");
 						Debug.println("Exporting categoryOptionType "+categoryOptionCombo.attributeValue("type")+" - "+gender);
 					}
-					else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("agegender")){
+					else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("agegender")||categoryOptionCombo.attributeValue("type").equalsIgnoreCase("agegenderinmonths")){
 						minAge=Double.parseDouble(categoryOptionComboValue.attributeValue("min"));
 						maxAge=Double.parseDouble(categoryOptionComboValue.attributeValue("max"));
 						gender=categoryOptionComboValue.attributeValue("gender");
@@ -1951,6 +2764,10 @@ public class DHIS2Exporter {
 					else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("outcome")){
 						outcome=categoryOptionComboValue.attributeValue("value");
 						Debug.println("Exporting categoryOptionType "+categoryOptionCombo.attributeValue("type")+" - "+outcome);
+					}
+					else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("department")){
+						department=categoryOptionComboValue.attributeValue("value");
+						Debug.println("Exporting categoryOptionType "+categoryOptionCombo.attributeValue("type")+" - "+department);
 					}
 					Debug.println("Checking "+items.size()+" items...");
 					for(int n=0;n<items.size();n++){
@@ -1987,6 +2804,20 @@ public class DHIS2Exporter {
 								e.printStackTrace();
 							}
 						}
+						else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("agegenderinmonths") && gender!=null && inArray(item.split(";")[2].toLowerCase(),gender.toLowerCase()) && minAge>-999 && maxAge>-1){
+							long day = 24*3600*1000;
+							double year = 365*day;
+							try{
+								Date dateofbirth = ScreenHelper.parseDate(item.split(";")[3]);
+								Date itemdate = new SimpleDateFormat("yyyyMMddHHmm").parse(item.split(";")[15]);
+								if((itemdate.getTime()-dateofbirth.getTime())*12/year>=minAge && (itemdate.getTime()-dateofbirth.getTime())*12/year<maxAge){
+									selectedItems.add(item);
+								}
+							}
+							catch(Exception e){
+								e.printStackTrace();
+							}
+						}
 						else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("origin") && origin!=null && inArray(item.split(";")[7].toLowerCase(),origin.toLowerCase())){
 							selectedItems.add(item);
 						}
@@ -1996,6 +2827,9 @@ public class DHIS2Exporter {
 						else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("outcome") && outcome!=null && inArray(item.split(";")[5].toLowerCase(),outcome.toLowerCase())){
 							selectedItems.add(item);
 						}
+						else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("department") && department!=null && ScreenHelper.checkString((String)departmentmaps.get(item.split(";")[4])).length()>0 && department.contains(ScreenHelper.checkString((String)departmentmaps.get(item.split(";")[4])))){
+							selectedItems.add(item);
+						}
 						else if(categoryOptionCombo.attributeValue("type").equalsIgnoreCase("transactionitemvalue")){
 							ItemVO tItem = null;
 							tItem=MedwanQuery.getInstance().getItem(Integer.parseInt(item.split(";")[10]), Integer.parseInt(item.split(";")[11]), categoryOptionComboValue.attributeValue("itemtype"));
@@ -2003,6 +2837,7 @@ public class DHIS2Exporter {
 								continue;
 							}
 							else{
+								tItem.setValue(tItem.getValue().replaceAll(";", "{semicolon}"));
 								String minval=ScreenHelper.checkString(categoryOptionComboValue.attributeValue("outputItemValueMin"));
 								String maxval=ScreenHelper.checkString(categoryOptionComboValue.attributeValue("outputItemValueMax"));
 								String matchval=ScreenHelper.checkString(categoryOptionComboValue.attributeValue("outputItemValue"));
@@ -2115,8 +2950,9 @@ public class DHIS2Exporter {
 					double year = 365*day;
 					try{
 						Date dateofbirth = ScreenHelper.parseDate(item.split(";")[3]);
+						Date begindate = new SimpleDateFormat("yyyyMMddHHmm").parse(item.split(";")[8]);
 						double maxAge = Double.parseDouble(dataelement.attributeValue("maxage"));
-						if(dateofbirth==null || (begin.getTime()-dateofbirth.getTime())/year>=maxAge){
+						if(dateofbirth==null || (begindate.getTime()-dateofbirth.getTime())/year>=maxAge){
 							continue;
 						}
 					}
@@ -2124,8 +2960,54 @@ public class DHIS2Exporter {
 						continue;
 					}
 				}
+				if(ScreenHelper.checkString(dataelement.attributeValue("minageinmonths")).length()>0){
+					long day = 24*3600*1000;
+					double year = 365*day;
+					try{
+						Date dateofbirth = ScreenHelper.parseDate(item.split(";")[3]);
+						Date begindate = new SimpleDateFormat("yyyyMMddHHmm").parse(item.split(";")[8]);
+						double minAge = Double.parseDouble(dataelement.attributeValue("minageinmonths"));
+						if(dateofbirth==null || (begindate.getTime()-dateofbirth.getTime())*12/year<minAge){
+							continue;
+						}
+					}
+					catch(Exception e){
+						continue;
+					}
+				}
+				if(ScreenHelper.checkString(dataelement.attributeValue("maxageinmonths")).length()>0){
+					long day = 24*3600*1000;
+					double year = 365*day;
+					try{
+						Date dateofbirth = ScreenHelper.parseDate(item.split(";")[3]);
+						Date begindate = new SimpleDateFormat("yyyyMMddHHmm").parse(item.split(";")[8]);
+						double maxAge = Double.parseDouble(dataelement.attributeValue("maxageinmonths"));
+						if(dateofbirth==null || (begindate.getTime()-dateofbirth.getTime())*12/year>=maxAge){
+							continue;
+						}
+					}
+					catch(Exception e){
+						continue;
+					}
+				}
+				if(SH.c(dataelement.attributeValue("hasnatreg")).equalsIgnoreCase("1") && item.split(";")[13].length()==0) {
+					continue;
+				}
+				else if(SH.c(dataelement.attributeValue("hasnatreg")).equalsIgnoreCase("0") && item.split(";")[13].length()>0) {
+					continue;
+				}
 				if(ScreenHelper.checkString(dataelement.attributeValue("gender")).length()>0){
 					if(!inArray(item.split(";")[2].toLowerCase(),dataelement.attributeValue("gender").toLowerCase())){
+						continue;
+					}
+				}
+				if(ScreenHelper.checkString(dataelement.attributeValue("outcome")).length()>0){
+					if(!inArray(item.split(";")[5].toLowerCase(),dataelement.attributeValue("outcome").toLowerCase())){
+						continue;
+					}
+				}
+				if(ScreenHelper.checkString(dataelement.attributeValue("origin")).length()>0){
+					if(!inArray(item.split(";")[7].toLowerCase(),dataelement.attributeValue("origin").toLowerCase())){
 						continue;
 					}
 				}
@@ -2157,7 +3039,8 @@ public class DHIS2Exporter {
 						if(ScreenHelper.checkString(dataelement.attributeValue("outgoing")).equals("1")){
 							try{
 								java.util.Date end =  new SimpleDateFormat("yyyyMMddHHmm").parse(item.split(";")[9]);
-								if(end.before(this.begin) || end.after(this.end)){
+								java.util.Date now =  new SimpleDateFormat("yyyyMMddHHmm").parse(item.split(";")[12]);
+								if(!end.before(now) ||  end.before(this.begin) || end.after(this.end)){
 									continue;
 								}
 							}
@@ -2165,7 +3048,11 @@ public class DHIS2Exporter {
 								e.printStackTrace();
 							}
 						}
-						if(ScreenHelper.checkString(dataelement.attributeValue("calculate")).equalsIgnoreCase("potentialAdmissionDays")){
+						if(ScreenHelper.checkString(dataelement.attributeValue("calculate")).equalsIgnoreCase("totalbeds")){
+							uidcounter=getBedCountForDepartment(item.split(";")[4]);
+							break;
+						}
+						else if(ScreenHelper.checkString(dataelement.attributeValue("calculate")).equalsIgnoreCase("potentialAdmissionDays")){
 							uidcounter=getBedCountForDepartment(item.split(";")[4])*ScreenHelper.nightsBetween(begin,end);
 							break;
 						}
@@ -2263,9 +3150,12 @@ public class DHIS2Exporter {
 							}
 						}
 						else if(ScreenHelper.checkString(dataelement.attributeValue("calculate")).equalsIgnoreCase("itemCount")){
-							int nNeeded=0;
+							int nNeeded=0,nMaxItems=-99;
 							if(ScreenHelper.checkString(dataelement.attributeValue("itemsneeded")).length()>0){
 								nNeeded=Integer.parseInt(ScreenHelper.checkString(dataelement.attributeValue("itemsneeded")));
+							}
+							if(ScreenHelper.checkString(dataelement.attributeValue("maxitems")).length()>0){
+								nMaxItems=Integer.parseInt(ScreenHelper.checkString(dataelement.attributeValue("maxitems")));
 							}
 							int nFound=0;
 							Iterator iItems = dataelement.elementIterator("item");
@@ -2290,11 +3180,11 @@ public class DHIS2Exporter {
 									nFound=-1;
 									break;
 								}
-								if(nNeeded==0 && !bExists){
+								if(nMaxItems<0 && nNeeded==0 && !bExists){
 									nFound=-1;
 									break;
 								}
-								else if(nNeeded==0){
+								else if(nNeeded==0 && bExists && bExists){
 									nFound++;
 								}
 								else if(nNeeded>0 && bExists){
@@ -2302,6 +3192,10 @@ public class DHIS2Exporter {
 									if(nFound>=nNeeded && !ScreenHelper.checkString(dataelement.attributeValue("countall")).equals("1")){
 										break;
 									}
+								}
+								else if(nMaxItems>=0 && nFound>nMaxItems) {
+									nFound=-1;
+									break;
 								}
 							}
 							if(nFound>=nNeeded){
@@ -2425,7 +3319,9 @@ public class DHIS2Exporter {
 							Vector<ProductStock> productStocks=ProductStock.find(MedwanQuery.getInstance().getConfigString("centralPharmacyServiceStockCode"), product.getUid(), "", "", "", "", "", "", "", "", "", "", "");	
 							for(int p=0;p<productStocks.size();p++) {
 								ProductStock stock = productStocks.elementAt(p);
-								value+=stock.getTotalUnitsInForPeriod(begin, end);
+								if(stock.getServiceStock().getEnd()==null || stock.getServiceStock().getEnd().after(begin)){
+									value+=stock.getTotalUnitsInForPeriod(begin, end);
+								}
 							}
 						}
 					}
@@ -2443,7 +3339,9 @@ public class DHIS2Exporter {
 							Vector<ProductStock> productStocks=ProductStock.find(MedwanQuery.getInstance().getConfigString("centralPharmacyServiceStockCode"), product.getUid(), "", "", "", "", "", "", "", "", "", "", "");	
 							for(int p=0;p<productStocks.size();p++) {
 								ProductStock stock = productStocks.elementAt(p);
-								value+=stock.getLevel(end);
+								if(stock.getServiceStock().getEnd()==null || stock.getServiceStock().getEnd().after(begin)){
+									value+=stock.getLevel(end);
+								}
 							}
 						}
 					}
@@ -2453,7 +3351,7 @@ public class DHIS2Exporter {
 							Vector<ProductStock> productStocks=ProductStock.find("", product.getUid(), "", "", "", "", "", "", "", "", "", "", "");	
 							for(int p=0;p<productStocks.size();p++) {
 								ProductStock stock = productStocks.elementAt(p);
-								if(!stock.getServiceStockUid().equalsIgnoreCase(MedwanQuery.getInstance().getConfigString("centralPharmacyServiceStockCode"))) {
+								if((stock.getServiceStock().getEnd()==null || stock.getServiceStock().getEnd().after(begin)) && !stock.getServiceStockUid().equalsIgnoreCase(MedwanQuery.getInstance().getConfigString("centralPharmacyServiceStockCode"))) {
 									value+=stock.getCorrectedLevel(end);
 								}
 							}
@@ -2523,7 +3421,7 @@ public class DHIS2Exporter {
 			for(int n=0;n<items.size();n++){
 				String item = (String)items.elementAt(n);
 				if(SH.c(dataelement.attributeValue("invalue")).length()==0 || (item.split(";").length>6 && item.split(";")[6].length()>0 && dataelement.attributeValue("invalue").toLowerCase().contains(item.split(";")[6].toLowerCase()))) {
-					if(inArray(item.split(";")[3].toLowerCase(), dataelement.attributeValue("code").toLowerCase())){
+					if(dataelement.attributeValue("code")==null || inArray(item.split(";")[3].toLowerCase(), dataelement.attributeValue("code").toLowerCase())){
 						uniqueexams.add(item.split(";")[5]);
 					}
 				}
@@ -2533,6 +3431,49 @@ public class DHIS2Exporter {
 			}
 			else if(MedwanQuery.getInstance().getConfigInt("sendFullDHIS2DataSets",0)==1) {
 				dataValueSet.getDataValues().add(new DataValue(dataelement.attributeValue("uid"),dataelement.attributeValue("categoryoptionuid")!=null?dataelement.attributeValue("categoryoptionuid"):categoryOptionUid," ",""));
+			}
+		}
+	}
+	
+	private void exportPluginDatasetSeries(Vector items,Element dataset,String attributeOptionComboUid,String categoryOptionUid, DataValueSet dataValueSet){
+		Iterator i = dataset.element("dataelements").elementIterator("dataelement");
+		while(i.hasNext()){
+			Element dataelement = (Element)i.next();
+			HashSet results = new HashSet();
+			for(int n=0;n<items.size();n++){
+				String item = (String)items.elementAt(n);
+				if(SH.c(dataelement.attributeValue("itemvalue")).length()==0 || item.split(";")[3].toUpperCase().startsWith(dataelement.attributeValue("itemvalue").toUpperCase())) {
+					results.add(item.split(";")[6]);
+				}
+			}
+			if(MedwanQuery.getInstance().getConfigInt("cleanDHIS2DataSets",0)==0 && results.size()>0){
+				dataValueSet.getDataValues().add(new DataValue(dataelement.attributeValue("uid"),dataelement.attributeValue("categoryoptionuid")!=null?dataelement.attributeValue("categoryoptionuid"):categoryOptionUid,results.size()+"",""));
+			}
+			else if(MedwanQuery.getInstance().getConfigInt("sendFullDHIS2DataSets",0)==1) {
+				dataValueSet.getDataValues().add(new DataValue(dataelement.attributeValue("uid"),dataelement.attributeValue("categoryoptionuid")!=null?dataelement.attributeValue("categoryoptionuid"):categoryOptionUid," ",""));
+			}
+		}
+	}
+	
+	private void exportGenericPluginDatasetSeries(Vector items,Element dataset,String attributeOptionComboUid,String categoryOptionUid, DataValueSet dataValueSet){
+		Iterator i = dataset.element("dataelements").elementIterator("dataelement");
+		while(i.hasNext()){
+			Element dataelement = (Element)i.next();
+			for(int n=0;n<items.size();n++){
+				String item = (String)items.elementAt(n);
+				int value = 0;
+				try {
+					value=Integer.parseInt(item.split(";")[0]);
+				}
+				catch(Exception e) {
+					e.printStackTrace();
+				}
+				if(MedwanQuery.getInstance().getConfigInt("cleanDHIS2DataSets",0)==0 && value>0){
+					dataValueSet.getDataValues().add(new DataValue(dataelement.attributeValue("uid"),dataelement.attributeValue("categoryoptionuid")!=null?dataelement.attributeValue("categoryoptionuid"):categoryOptionUid,value+"",""));
+				}
+				else if(MedwanQuery.getInstance().getConfigInt("sendFullDHIS2DataSets",0)==1) {
+					dataValueSet.getDataValues().add(new DataValue(dataelement.attributeValue("uid"),dataelement.attributeValue("categoryoptionuid")!=null?dataelement.attributeValue("categoryoptionuid"):categoryOptionUid," ",""));
+				}
 			}
 		}
 	}
@@ -2581,18 +3522,71 @@ public class DHIS2Exporter {
 						continue;
 					}
 				}
+				if(ScreenHelper.checkString(dataelement.attributeValue("minageinmonths")).length()>0){
+					try{
+						double minAge = Double.parseDouble(dataelement.attributeValue("minageinmonths"));
+						long day = 24*3600*1000;
+						double year = 365*day;
+						Date dateofbirth = ScreenHelper.parseDate(item.split(";")[3]);
+						if(dateofbirth!=null && (begin.getTime()-dateofbirth.getTime())*12/year<minAge){
+							continue;
+						}
+					}
+					catch(Exception e){
+						continue;
+					}
+				}
+				if(ScreenHelper.checkString(dataelement.attributeValue("maxageinmonths")).length()>0){
+					try{
+						double maxAge = Double.parseDouble(dataelement.attributeValue("maxageinmonths"));
+						long day = 24*3600*1000;
+						double year = 365*day;
+						Date dateofbirth = ScreenHelper.parseDate(item.split(";")[3]);
+						if(dateofbirth!=null && (begin.getTime()-dateofbirth.getTime())*12/year>=maxAge){
+							continue;
+						}
+					}
+					catch(Exception e){
+						continue;
+					}
+				}
 				if(ScreenHelper.checkString(dataelement.attributeValue("gender")).length()>0){
 					if(!inArray(item.split(";")[2].toLowerCase(),dataelement.attributeValue("gender").toLowerCase())){
 						continue;
 					}
 				}
+				if(ScreenHelper.checkString(dataelement.attributeValue("outcome")).length()>0){
+					if(!inArray(item.split(";")[5].toLowerCase(),dataelement.attributeValue("outcome").toLowerCase())){
+						continue;
+					}
+				}
+				if(ScreenHelper.checkString(dataelement.attributeValue("origin")).length()>0){
+					if(!inArray(item.split(";")[7].toLowerCase(),dataelement.attributeValue("origin").toLowerCase())){
+						continue;
+					}
+				}
+				if(ScreenHelper.checkString(dataelement.attributeValue("itemvaluemin")).length()>0){
+					try {
+						if(Double.parseDouble(item.split(";")[8])<Double.parseDouble(dataelement.attributeValue("itemvaluemin"))){
+							continue;
+						}
+					}
+					catch(Exception e) {
+						e.printStackTrace();
+					}
+				}
+				if(ScreenHelper.checkString(dataelement.attributeValue("itemvaluemax")).length()>0){
+					try {
+						if(Double.parseDouble(item.split(";")[8])>=Double.parseDouble(dataelement.attributeValue("itemvaluemax"))){
+							continue;
+						}
+					}
+					catch(Exception e) {
+						e.printStackTrace();
+					}
+				}
 				if(!bMortality || item.split(";")[5].startsWith("dead")){
 					if(sEncounterType.length()==0 || ScreenHelper.checkString(item.split(";")[6]).equalsIgnoreCase(sEncounterType)){
-						if(SH.c(dataelement.attributeValue("itemvalue")).length()>0){
-							System.out.println("itemvalue="+dataelement.attributeValue("itemvalue"));
-							System.out.println("item[8]="+item.split(";")[8].toLowerCase());
-							System.out.println("inarray="+inArray(item.split(";")[8].toLowerCase(), dataelement.attributeValue("itemvalue").toLowerCase()));
-						}
 						if(ScreenHelper.checkString(dataelement.attributeValue("itemvalue")).length()==0 || inArray(item.split(";")[8].toLowerCase(), dataelement.attributeValue("itemvalue").toLowerCase())){
 							if(ScreenHelper.checkString(dataelement.attributeValue("itemtype")).length()==0 || inArray(item.split(";")[9].toLowerCase(), dataelement.attributeValue("itemtype").toLowerCase())){
 								if(ScreenHelper.checkString(dataelement.attributeValue("outputtype")).equals("transactionItemValue")){
@@ -2605,6 +3599,7 @@ public class DHIS2Exporter {
 										}
 										else{
 											double value = 0;
+											tItem.setValue(tItem.getValue().replaceAll(";", "{semicolon}"));
 											String minval=ScreenHelper.checkString(dataelement.attributeValue("outputItemValueMin"));
 											String maxval=ScreenHelper.checkString(dataelement.attributeValue("outputItemValueMax"));
 											String matchval=ScreenHelper.checkString(dataelement.attributeValue("outputItemValue"));
@@ -2675,6 +3670,44 @@ public class DHIS2Exporter {
 														if(otheritem!=null){
 															double othervalue=Double.parseDouble(otheritem.getValue());
 															if(value!=othervalue){
+																continue;
+															}
+														}
+														else{
+															continue;
+														}
+													}
+													catch(Exception r){
+														r.printStackTrace();
+														continue;
+													}
+												}
+												else if(ScreenHelper.checkString(dataelement.attributeValue("comparetoitem")).startsWith("equalsorgreaterthan;")){
+													try{
+														value=Double.parseDouble(tItem.getValue());
+														ItemVO otheritem =MedwanQuery.getInstance().getItem(Integer.parseInt(item.split(";")[10]), Integer.parseInt(item.split(";")[11]), dataelement.attributeValue("comparetoitem").split(";")[1]);
+														if(otheritem!=null){
+															double othervalue=Double.parseDouble(otheritem.getValue());
+															if(value<othervalue){
+																continue;
+															}
+														}
+														else{
+															continue;
+														}
+													}
+													catch(Exception r){
+														r.printStackTrace();
+														continue;
+													}
+												}
+												else if(ScreenHelper.checkString(dataelement.attributeValue("comparetoitem")).startsWith("equalsorlessthan;")){
+													try{
+														value=Double.parseDouble(tItem.getValue());
+														ItemVO otheritem =MedwanQuery.getInstance().getItem(Integer.parseInt(item.split(";")[10]), Integer.parseInt(item.split(";")[11]), dataelement.attributeValue("comparetoitem").split(";")[1]);
+														if(otheritem!=null){
+															double othervalue=Double.parseDouble(otheritem.getValue());
+															if(value>othervalue){
 																continue;
 															}
 														}
@@ -2794,15 +3827,18 @@ public class DHIS2Exporter {
 									}
 								}
 								else if(ScreenHelper.checkString(dataelement.attributeValue("calculate")).equalsIgnoreCase("itemCount")){
-									int nNeeded=0;
+									int nNeeded=0,nMaxItems=-99;
 									if(ScreenHelper.checkString(dataelement.attributeValue("itemsneeded")).length()>0){
 										nNeeded=Integer.parseInt(ScreenHelper.checkString(dataelement.attributeValue("itemsneeded")));
+									}
+									if(ScreenHelper.checkString(dataelement.attributeValue("maxitems")).length()>0){
+										nMaxItems=Integer.parseInt(ScreenHelper.checkString(dataelement.attributeValue("maxitems")));
 									}
 									int nFound=0;
 									Iterator iItems = dataelement.elementIterator("item");
 									while(iItems.hasNext()){
 										Element itemelement = (Element)iItems.next();
-										String sItemType=itemelement.attributeValue("itemtype");
+										String sItemType=SH.c(itemelement.attributeValue("itemtype"));
 										String sItemValue=ScreenHelper.checkString(itemelement.attributeValue("itemvalue"));
 										//Now we look for the existence of this item
 										boolean bExists=false;
@@ -2811,21 +3847,34 @@ public class DHIS2Exporter {
 												bExists=MedwanQuery.getInstance().hasSingleItem(MedwanQuery.getInstance().getConfigString("serverId")+"."+item.split(";")[1], sItemType, sItemValue,itemelement.attributeValue("transactiontype"));
 											}
 											else {
-												bExists=MedwanQuery.getInstance().hasItem(MedwanQuery.getInstance().getConfigString("serverId")+"."+item.split(";")[1], sItemType, sItemValue,itemelement.attributeValue("transactiontype"));
+												if(SH.c(itemelement.attributeValue("matchperiod")).equalsIgnoreCase("1")) {
+													bExists=MedwanQuery.getInstance().hasItemPeriod(MedwanQuery.getInstance().getConfigString("serverId")+"."+item.split(";")[1], sItemType, sItemValue,itemelement.attributeValue("transactiontype"),begin,end);
+												}
+												else {
+													bExists=MedwanQuery.getInstance().hasItem(MedwanQuery.getInstance().getConfigString("serverId")+"."+item.split(";")[1], sItemType, sItemValue,itemelement.attributeValue("transactiontype"));
+												}
 											}
 										}
 										else {
-											bExists=MedwanQuery.getInstance().hasItem(MedwanQuery.getInstance().getConfigString("serverId")+"."+item.split(";")[1], sItemType, sItemValue);
+											if(SH.c(itemelement.attributeValue("matchperiod")).equalsIgnoreCase("1")) {
+												bExists=MedwanQuery.getInstance().hasItemPeriod(MedwanQuery.getInstance().getConfigString("serverId")+"."+item.split(";")[1], sItemType, sItemValue,begin,end);
+											}
+											else if(SH.c(itemelement.attributeValue("sametransaction")).equalsIgnoreCase("1")) {
+												bExists=MedwanQuery.getInstance().hasItem(sItemType, sItemValue,Integer.parseInt(item.split(";")[11]));
+											}
+											else {
+												bExists=MedwanQuery.getInstance().hasItem(MedwanQuery.getInstance().getConfigString("serverId")+"."+item.split(";")[1], sItemType, sItemValue);
+											}
 										}
 										if(SH.c(itemelement.attributeValue("mandatory")).equalsIgnoreCase("1") && !bExists) {
 											nFound=-1;
 											break;
 										}
-										if(nNeeded==0 && !bExists){
+										if(nMaxItems<0 && nNeeded==0 && !bExists){
 											nFound=-1;
 											break;
 										}
-										else if(nNeeded==0){
+										else if(nNeeded==0 && bExists){
 											nFound++;
 										}
 										else if(nNeeded>0 && bExists){
@@ -2833,6 +3882,10 @@ public class DHIS2Exporter {
 											if(nFound>=nNeeded && !ScreenHelper.checkString(dataelement.attributeValue("countall")).equals("1")){
 												break;
 											}
+										}
+										else if(nMaxItems>=0 && nFound>nMaxItems) {
+											nFound=-1;
+											break;
 										}
 									}
 									if(nFound>=nNeeded){
@@ -2882,32 +3935,48 @@ public class DHIS2Exporter {
 										bOK = false;
 										Element itemGroup = (Element)iItemGroups.next();
 										if(ScreenHelper.checkString(itemGroup.attributeValue("calculate")).equalsIgnoreCase("itemCount")){
-											int nNeeded=0;
+											int nNeeded=0,nMaxItems=-99;
 											if(ScreenHelper.checkString(itemGroup.attributeValue("itemsneeded")).length()>0){
 												nNeeded=Integer.parseInt(ScreenHelper.checkString(itemGroup.attributeValue("itemsneeded")));
+											}
+											if(ScreenHelper.checkString(dataelement.attributeValue("maxitems")).length()>0){
+												nMaxItems=Integer.parseInt(ScreenHelper.checkString(dataelement.attributeValue("maxitems")));
 											}
 											int nFound=0;
 											Iterator iItems = itemGroup.elementIterator("item");
 											while(iItems.hasNext()){
 												Element itemelement = (Element)iItems.next();
-												String sItemType=itemelement.attributeValue("itemtype");
+												String sItemType=SH.c(itemelement.attributeValue("itemtype"));
 												String sItemValue=ScreenHelper.checkString(itemelement.attributeValue("itemvalue"));
 												//Now we look for the existence of this item
 												boolean bExists=false;
 												if(ScreenHelper.checkString(itemelement.attributeValue("transactiontype")).length()>0) {
-													bExists=MedwanQuery.getInstance().hasItem(MedwanQuery.getInstance().getConfigString("serverId")+"."+item.split(";")[1], sItemType, sItemValue,itemelement.attributeValue("transactiontype"));
+													if(SH.c(itemelement.attributeValue("matchperiod")).equalsIgnoreCase("1")) {
+														bExists=MedwanQuery.getInstance().hasItemPeriod(MedwanQuery.getInstance().getConfigString("serverId")+"."+item.split(";")[1], sItemType, sItemValue,itemelement.attributeValue("transactiontype"),begin,end);
+													}
+													else {
+														bExists=MedwanQuery.getInstance().hasItem(MedwanQuery.getInstance().getConfigString("serverId")+"."+item.split(";")[1], sItemType, sItemValue,itemelement.attributeValue("transactiontype"));
+													}
 												}
 												else {
-													bExists=MedwanQuery.getInstance().hasItem(MedwanQuery.getInstance().getConfigString("serverId")+"."+item.split(";")[1], sItemType, sItemValue);
+													if(SH.c(itemelement.attributeValue("matchperiod")).equalsIgnoreCase("1")) {
+														bExists=MedwanQuery.getInstance().hasItemPeriod(MedwanQuery.getInstance().getConfigString("serverId")+"."+item.split(";")[1], sItemType, sItemValue,begin,end);
+													}
+													else if(SH.c(itemelement.attributeValue("sametransaction")).equalsIgnoreCase("1")) {
+														bExists=MedwanQuery.getInstance().hasItem(sItemType, sItemValue,Integer.parseInt(item.split(";")[11]));
+													}
+													else {
+														bExists=MedwanQuery.getInstance().hasItem(MedwanQuery.getInstance().getConfigString("serverId")+"."+item.split(";")[1], sItemType, sItemValue);
+													}
 												}
 												if(SH.c(itemelement.attributeValue("mandatory")).equalsIgnoreCase("1") && !bExists) {
 													nFound=-1;
 													break;
 												}
-												if(nNeeded==0 && !bExists){
+												if(nMaxItems<0 && nNeeded==0 && !bExists){
 													break;
 												}
-												else if(nNeeded==0){
+												else if(nNeeded==0 && bExists){
 													bOK=true;
 													break;
 												}
@@ -2917,6 +3986,10 @@ public class DHIS2Exporter {
 														bOK=true;
 														break;
 													}
+												}
+												else if(nMaxItems>=0 && nFound>nMaxItems) {
+													nFound=-1;
+													break;
 												}
 											}
 										}
@@ -3063,6 +4136,40 @@ public class DHIS2Exporter {
 								continue;
 							}
 						}
+						if(ScreenHelper.checkString(dataelement.attributeValue("minageinmonths")).length()>0){
+							try{
+								double minAge = Double.parseDouble(dataelement.attributeValue("minageinmonths"));
+								long day = 24*3600*1000;
+								double year = 365*day;
+								Date dateofbirth = ScreenHelper.parseDate(item.split(";")[3]);
+								if(dateofbirth!=null && (begin.getTime()-dateofbirth.getTime())*12/year<minAge){
+									continue;
+								}
+							}
+							catch(Exception e){
+								continue;
+							}
+						}
+						if(ScreenHelper.checkString(dataelement.attributeValue("maxageinmonths")).length()>0){
+							try{
+								double maxAge = Double.parseDouble(dataelement.attributeValue("maxageinmonths"));
+								long day = 24*3600*1000;
+								double year = 365*day;
+								Date dateofbirth = ScreenHelper.parseDate(item.split(";")[3]);
+								if(dateofbirth!=null && (begin.getTime()-dateofbirth.getTime())*12/year>=maxAge){
+									continue;
+								}
+							}
+							catch(Exception e){
+								continue;
+							}
+						}
+						if(SH.c(dataelement.attributeValue("hasnatreg")).equalsIgnoreCase("1") && item.split(";")[13].length()==0) {
+							continue;
+						}
+						else if(SH.c(dataelement.attributeValue("hasnatreg")).equalsIgnoreCase("0") && item.split(";")[13].length()>0) {
+							continue;
+						}
 						if(ScreenHelper.checkString(dataelement.attributeValue("gender")).length()>0){
 							if(!inArray(item.split(";")[2].toLowerCase(),dataelement.attributeValue("gender").toLowerCase())){
 								continue;
@@ -3091,15 +4198,18 @@ public class DHIS2Exporter {
 							}
 						}
 						if(ScreenHelper.checkString(dataelement.attributeValue("calculate")).equalsIgnoreCase("itemCount")){
-							int nNeeded=0;
+							int nNeeded=0,nMaxItems=-99;
 							if(ScreenHelper.checkString(dataelement.attributeValue("itemsneeded")).length()>0){
 								nNeeded=Integer.parseInt(ScreenHelper.checkString(dataelement.attributeValue("itemsneeded")));
+							}
+							if(ScreenHelper.checkString(dataelement.attributeValue("maxitems")).length()>0){
+								nMaxItems=Integer.parseInt(ScreenHelper.checkString(dataelement.attributeValue("maxitems")));
 							}
 							int nFound=0;
 							Iterator iItems = dataelement.elementIterator("item");
 							while(iItems.hasNext()){
 								Element itemelement = (Element)iItems.next();
-								String sItemType=itemelement.attributeValue("itemtype");
+								String sItemType=SH.c(itemelement.attributeValue("itemtype"));
 								String sItemValue=ScreenHelper.checkString(itemelement.attributeValue("itemvalue"));
 								//Now we look for the existence of this item
 								boolean bExists=false;
@@ -3113,7 +4223,7 @@ public class DHIS2Exporter {
 									nFound=-1;
 									break;
 								}
-								if(nNeeded==0 && !bExists){
+								if(nMaxItems<0 && nNeeded==0 && !bExists){
 									nFound=-1;
 									break;
 								}
@@ -3122,6 +4232,10 @@ public class DHIS2Exporter {
 									if(nFound>=nNeeded){
 										break;
 									}
+								}
+								else if(nMaxItems>=0 && nFound>nMaxItems) {
+									nFound=-1;
+									break;
 								}
 							}
 							if(nFound<nNeeded){
@@ -3177,6 +4291,22 @@ public class DHIS2Exporter {
 		}
 	}
 	
+	private void exportPluginDatasetSeriesRecords(Vector items,Element dataset,String dataelementuid){
+		int uidcounter=0;
+		for(int n=0;n<items.size();n++){
+			String item = (String)items.elementAt(n);
+			Iterator i = dataset.element("dataelements").elementIterator("dataelement");
+			while(i.hasNext()){
+				Element dataelement = (Element)i.next();
+				if(dataelement.attributeValue("uid").equals(dataelementuid)){
+					if(SH.c(dataelement.attributeValue("itemvalue")).length()==0 || item.split(";")[3].toUpperCase().startsWith(dataelement.attributeValue("itemvalue").toUpperCase())) {
+						patientrecords.add(item.split(";")[0]);
+					}
+				}
+			}
+		}
+	}
+	
 	private void exportItemDatasetSeriesRecords(Vector items,Element dataset,String dataelementuid){
 		int uidcounter=0;
 		boolean bMortality = ScreenHelper.checkString(dataset.attributeValue("mortality")).equalsIgnoreCase("true");
@@ -3223,6 +4353,34 @@ public class DHIS2Exporter {
 									continue;
 								}
 							}
+							if(ScreenHelper.checkString(dataelement.attributeValue("minageinmonths")).length()>0){
+								try{
+									double minAge = Double.parseDouble(dataelement.attributeValue("minageinmonths"));
+									long day = 24*3600*1000;
+									double year = 365*day;
+									Date dateofbirth = ScreenHelper.parseDate(item.split(";")[3]);
+									if(dateofbirth!=null && (begin.getTime()-dateofbirth.getTime())*12/year<minAge){
+										continue;
+									}
+								}
+								catch(Exception e){
+									continue;
+								}
+							}
+							if(ScreenHelper.checkString(dataelement.attributeValue("maxageinmonths")).length()>0){
+								try{
+									double maxAge = Double.parseDouble(dataelement.attributeValue("maxageinmonths"));
+									long day = 24*3600*1000;
+									double year = 365*day;
+									Date dateofbirth = ScreenHelper.parseDate(item.split(";")[3]);
+									if(dateofbirth!=null && (begin.getTime()-dateofbirth.getTime())*12/year>=maxAge){
+										continue;
+									}
+								}
+								catch(Exception e){
+									continue;
+								}
+							}
 							if(ScreenHelper.checkString(dataelement.attributeValue("gender")).length()>0){
 								if(!inArray(item.split(";")[2].toLowerCase(),dataelement.attributeValue("gender").toLowerCase())){
 									continue;
@@ -3231,18 +4389,48 @@ public class DHIS2Exporter {
 							if(ScreenHelper.checkString(dataelement.attributeValue("itemtype")).length()>0 && !inArray(item.split(";")[9].toLowerCase(), dataelement.attributeValue("itemtype").toLowerCase())){
 								continue;
 							}
+							if(ScreenHelper.checkString(dataelement.attributeValue("outcome")).length()>0 && !inArray(item.split(";")[5].toLowerCase(), dataelement.attributeValue("outcome").toLowerCase())){
+								continue;
+							}
+							if(ScreenHelper.checkString(dataelement.attributeValue("origin")).length()>0 && !inArray(item.split(";")[7].toLowerCase(), dataelement.attributeValue("origin").toLowerCase())){
+								continue;
+							}
 							if(ScreenHelper.checkString(dataelement.attributeValue("itemvalue")).length()>0 && !inArray(item.split(";")[8].toLowerCase(), dataelement.attributeValue("itemvalue").toLowerCase())){
 								continue;
 							}
+							if(ScreenHelper.checkString(dataelement.attributeValue("itemvaluemin")).length()>0){
+								try {
+									if(Double.parseDouble(item.split(";")[8])<Double.parseDouble(dataelement.attributeValue("itemvaluemin"))){
+										continue;
+									}
+								}
+								catch(Exception e) {
+									e.printStackTrace();
+								}
+							}
+							if(ScreenHelper.checkString(dataelement.attributeValue("itemvaluemax")).length()>0){
+								try {
+									if(Double.parseDouble(item.split(";")[8])>=Double.parseDouble(dataelement.attributeValue("itemvaluemax"))){
+										continue;
+									}
+								}
+								catch(Exception e) {
+									e.printStackTrace();
+								}
+							}
 							if(ScreenHelper.checkString(dataelement.attributeValue("outputtype")).equals("transactionItemValue")){
 								String[] types=ScreenHelper.checkString(dataelement.attributeValue("outputid")).split(";");
-								for(int tn=0;tn<types.length;tn++) {
+								boolean bOk=false;
+								for(int tn=0;tn<types.length && !bOk;tn++) {
 									String type = types[tn];
 									ItemVO tItem = MedwanQuery.getInstance().getItem(Integer.parseInt(item.split(";")[10]), Integer.parseInt(item.split(";")[11]), type);
 									if(tItem==null || tItem.getValue()==null || tItem.getValue().length()==0){
 										continue;
 									}
-									else if(ScreenHelper.checkString(dataelement.attributeValue("outputItemValue")).length()>0){
+									else {
+										tItem.setValue(tItem.getValue().replaceAll(";", "{semicolon}"));
+									}
+									if(ScreenHelper.checkString(dataelement.attributeValue("outputItemValue")).length()>0){
 										String matchval=ScreenHelper.checkString(dataelement.attributeValue("outputItemValue"));
 										if(!tItem.getValue().equalsIgnoreCase(matchval)){
 											continue;
@@ -3330,6 +4518,44 @@ public class DHIS2Exporter {
 														continue;
 													}
 												}
+												else if(ScreenHelper.checkString(dataelement.attributeValue("comparetoitem")).startsWith("equalsorgreaterthan;")){
+													try{
+														value=Double.parseDouble(tItem.getValue());
+														ItemVO otheritem =MedwanQuery.getInstance().getItem(Integer.parseInt(item.split(";")[10]), Integer.parseInt(item.split(";")[11]), dataelement.attributeValue("comparetoitem").split(";")[1]);
+														if(otheritem!=null){
+															double othervalue=Double.parseDouble(otheritem.getValue());
+															if(value<othervalue){
+																continue;
+															}
+														}
+														else{
+															continue;
+														}
+													}
+													catch(Exception r){
+														r.printStackTrace();
+														continue;
+													}
+												}
+												else if(ScreenHelper.checkString(dataelement.attributeValue("comparetoitem")).startsWith("equalsorlessthan;")){
+													try{
+														value=Double.parseDouble(tItem.getValue());
+														ItemVO otheritem =MedwanQuery.getInstance().getItem(Integer.parseInt(item.split(";")[10]), Integer.parseInt(item.split(";")[11]), dataelement.attributeValue("comparetoitem").split(";")[1]);
+														if(otheritem!=null){
+															double othervalue=Double.parseDouble(otheritem.getValue());
+															if(value>othervalue){
+																continue;
+															}
+														}
+														else{
+															continue;
+														}
+													}
+													catch(Exception r){
+														r.printStackTrace();
+														continue;
+													}
+												}
 												else if(ScreenHelper.checkString(dataelement.attributeValue("comparetoitem")).startsWith("greaterthannotzero;")){
 													try{
 														value=Double.parseDouble(tItem.getValue());
@@ -3371,36 +4597,61 @@ public class DHIS2Exporter {
 											}
 										}
 									}
+									bOk=true;
+								}
+								if(!bOk) {
+									continue;
 								}
 							}
 							else if(ScreenHelper.checkString(dataelement.attributeValue("calculate")).equalsIgnoreCase("itemCount")){
-								int nNeeded=0;
+								int nNeeded=0,nMaxItems=-99;
 								if(ScreenHelper.checkString(dataelement.attributeValue("itemsneeded")).length()>0){
 									nNeeded=Integer.parseInt(ScreenHelper.checkString(dataelement.attributeValue("itemsneeded")));
+								}
+								if(ScreenHelper.checkString(dataelement.attributeValue("maxitems")).length()>0){
+									nMaxItems=Integer.parseInt(ScreenHelper.checkString(dataelement.attributeValue("maxitems")));
 								}
 								int nFound=0;
 								Iterator iItems = dataelement.elementIterator("item");
 								while(iItems.hasNext()){
 									Element itemelement = (Element)iItems.next();
-									String sItemType=itemelement.attributeValue("itemtype");
+									String sItemType=SH.c(itemelement.attributeValue("itemtype"));
 									String sItemValue=ScreenHelper.checkString(itemelement.attributeValue("itemvalue"));
 									//Now we look for the existence of this item
 									boolean bExists=false;
 									if(ScreenHelper.checkString(itemelement.attributeValue("transactiontype")).length()>0) {
-										bExists=MedwanQuery.getInstance().hasItem(MedwanQuery.getInstance().getConfigString("serverId")+"."+item.split(";")[1], sItemType, sItemValue,itemelement.attributeValue("transactiontype"));
+										if(SH.c(itemelement.attributeValue("singlematch")).equalsIgnoreCase("1")){
+											bExists=MedwanQuery.getInstance().hasSingleItem(MedwanQuery.getInstance().getConfigString("serverId")+"."+item.split(";")[1], sItemType, sItemValue,itemelement.attributeValue("transactiontype"));
+										}
+										else {
+											if(SH.c(itemelement.attributeValue("matchperiod")).equalsIgnoreCase("1")) {
+												bExists=MedwanQuery.getInstance().hasItemPeriod(MedwanQuery.getInstance().getConfigString("serverId")+"."+item.split(";")[1], sItemType, sItemValue,itemelement.attributeValue("transactiontype"),begin,end);
+											}
+											else {
+												bExists=MedwanQuery.getInstance().hasItem(MedwanQuery.getInstance().getConfigString("serverId")+"."+item.split(";")[1], sItemType, sItemValue,itemelement.attributeValue("transactiontype"));
+											}
+										}
 									}
 									else {
-										bExists=MedwanQuery.getInstance().hasItem(MedwanQuery.getInstance().getConfigString("serverId")+"."+item.split(";")[1], sItemType, sItemValue);
+										if(SH.c(itemelement.attributeValue("matchperiod")).equalsIgnoreCase("1")) {
+											bExists=MedwanQuery.getInstance().hasItemPeriod(MedwanQuery.getInstance().getConfigString("serverId")+"."+item.split(";")[1], sItemType, sItemValue,begin,end);
+										}
+										else if(SH.c(itemelement.attributeValue("sametransaction")).equalsIgnoreCase("1")) {
+											bExists=MedwanQuery.getInstance().hasItem(sItemType, sItemValue,Integer.parseInt(item.split(";")[11]));
+										}
+										else {
+											bExists=MedwanQuery.getInstance().hasItem(MedwanQuery.getInstance().getConfigString("serverId")+"."+item.split(";")[1], sItemType, sItemValue);
+										}
 									}
 									if(SH.c(itemelement.attributeValue("mandatory")).equalsIgnoreCase("1") && !bExists) {
 										nFound=-1;
 										break;
 									}
-									if(nNeeded==0 && !bExists){
+									if(nMaxItems<0 && nMaxItems<0 && nNeeded==0 && !bExists){
 										nFound=-1;
 										break;
 									}
-									else if(nNeeded==0){
+									else if(nNeeded==0 && bExists){
 										nFound++;
 									}
 									else if(nNeeded>0 && bExists){
@@ -3408,6 +4659,10 @@ public class DHIS2Exporter {
 										if(nFound>=nNeeded && !ScreenHelper.checkString(dataelement.attributeValue("countall")).equals("1")){
 											break;
 										}
+									}
+									else if(nMaxItems>=0 && nFound>nMaxItems) {
+										nFound=-1;
+										break;
 									}
 								}
 								if(nFound<nNeeded){
@@ -3643,21 +4898,21 @@ public class DHIS2Exporter {
 					gravity=1;
 				}
 				try{
-					String item = rs.getString("personid")+";"
-							+rs.getString("oc_diagnosis_encounteruid")+";"
-							+rs.getString("gender")+";"
-							+ScreenHelper.formatDate(rs.getDate("dateofbirth"))+";"
-							+rs.getString("oc_diagnosis_codetype")+";"
-							+rs.getString("oc_diagnosis_code")+";"
-							+(rs.getString("oc_diagnosis_serviceuid")+";").toLowerCase()
-							+rs.getString("oc_diagnosis_flags")+";"
-							+rs.getString("oc_encounter_outcome")+";"
-							+rs.getString("oc_diagnosis_nc")+";"
-							+gravity+";"
-							+rs.getString("oc_encounter_type")+";"
-							+rs.getString("oc_diagnosis_referenceuid")+";"
-							+new SimpleDateFormat("yyyyMMddHHmm").format(rs.getTimestamp("oc_encounter_begindate"))+";"
-							+new SimpleDateFormat("yyyyMMddHHmm").format(rs.getTimestamp("oc_encounter_enddate"))+";";
+					String item = rs.getString("personid")+";" //0
+							+rs.getString("oc_diagnosis_encounteruid")+";" //1
+							+rs.getString("gender")+";" //2
+							+ScreenHelper.formatDate(rs.getDate("dateofbirth"))+";" //3
+							+rs.getString("oc_diagnosis_codetype")+";" //4
+							+rs.getString("oc_diagnosis_code")+";" //5
+							+(rs.getString("oc_diagnosis_serviceuid")+";").toLowerCase() //6
+							+rs.getString("oc_diagnosis_flags")+";" //7
+							+rs.getString("oc_encounter_outcome")+";" //8
+							+rs.getString("oc_diagnosis_nc")+";" //9
+							+gravity+";" //10
+							+rs.getString("oc_encounter_type")+";" //11
+							+rs.getString("oc_diagnosis_referenceuid")+";" //12
+							+new SimpleDateFormat("yyyyMMddHHmm").format(rs.getTimestamp("oc_encounter_begindate"))+";" //13
+							+new SimpleDateFormat("yyyyMMddHHmm").format(rs.getTimestamp("oc_encounter_enddate"))+";"; //14
 					Debug.println(item);
 					items.add(item);
 				}
@@ -3706,7 +4961,17 @@ public class DHIS2Exporter {
 			rs.close();
 			ps.close();
 			
-			sSql = 	"select personid,gender,dateofbirth,oc_encounter_begindate,oc_encounter_enddate,oc_encounter_outcome,"
+			java.util.Date now = null;
+			sSql =   "select now() now";
+			ps = conn.prepareStatement(sSql);
+			rs = ps.executeQuery();
+			if(rs.next()) {
+				now = rs.getTimestamp("now");
+			}
+			rs.close();
+			ps.close();
+
+			sSql = 	"select personid,gender,dateofbirth,oc_encounter_begindate,oc_encounter_enddate,oc_encounter_outcome,natreg,"
 							+ " oc_encounter_type,oc_encounter_origin,oc_encounter_serverid,oc_encounter_objectid,oc_encounter_serviceuid,oc_encounter_situation,oc_encounter_etiology"
 							+ " from adminview a,oc_encounters_view b"
 							+ " where"
@@ -3719,21 +4984,20 @@ public class DHIS2Exporter {
 			ps.setDate(2, new java.sql.Date(end.getTime()));
 			rs = ps.executeQuery();
 			while(rs.next()){
-				if(emptyEncounters.contains(rs.getString("oc_encounter_serverid")+"."+rs.getString("oc_encounter_objectid"))) {
-					continue;
-				}
-				String item = rs.getString("personid")+";"
-						+rs.getString("oc_encounter_objectid")+";"
-						+rs.getString("gender")+";"
-						+ScreenHelper.formatDate(rs.getDate("dateofbirth"))+";"
-						+(rs.getString("oc_encounter_serviceuid")+";").toLowerCase()
-						+rs.getString("oc_encounter_outcome")+";"
-						+rs.getString("oc_encounter_type")+";"
-						+rs.getString("oc_encounter_origin")+";"
-						+new SimpleDateFormat("yyyyMMddHHmm").format(rs.getTimestamp("oc_encounter_begindate"))+";"
-						+new SimpleDateFormat("yyyyMMddHHmm").format(rs.getTimestamp("oc_encounter_enddate"))+";"
-						+rs.getString("oc_encounter_situation")+";"
-						+rs.getString("oc_encounter_etiology")+";"
+				String item = rs.getString("personid")+";" //0
+						+rs.getString("oc_encounter_objectid")+";" //1
+						+rs.getString("gender")+";" //2
+						+ScreenHelper.formatDate(rs.getDate("dateofbirth"))+";" //3
+						+(rs.getString("oc_encounter_serviceuid")+";").toLowerCase() //4
+						+rs.getString("oc_encounter_outcome")+";" //5
+						+rs.getString("oc_encounter_type")+";" //6
+						+rs.getString("oc_encounter_origin")+";" //7
+						+new SimpleDateFormat("yyyyMMddHHmm").format(rs.getTimestamp("oc_encounter_begindate"))+";" //8
+						+new SimpleDateFormat("yyyyMMddHHmm").format(rs.getTimestamp("oc_encounter_enddate"))+";" //9
+						+rs.getString("oc_encounter_situation")+";" //10
+						+rs.getString("oc_encounter_etiology")+";" //11
+						+new SimpleDateFormat("yyyyMMddHHmm").format(now)+";" //12
+						+SH.c(rs.getString("natreg"))+";" //13
 						+"x;";
 				Debug.println(item);
 				items.add(item);
@@ -3759,7 +5023,16 @@ public class DHIS2Exporter {
 		Vector items = new Vector();
 		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
 		try{
-			String sSql = 	"select personid,gender,dateofbirth,oc_encounter_begindate,oc_encounter_enddate,oc_encounter_startdate,oc_encounter_outcome,"
+			java.util.Date now = null;
+			String sSql =   "select now() now";
+			PreparedStatement ps = conn.prepareStatement(sSql);
+			ResultSet rs = ps.executeQuery();
+			if(rs.next()) {
+				now = rs.getTimestamp("now");
+			}
+			rs.close();
+			ps.close();
+			sSql = 	"select personid,gender,dateofbirth,oc_encounter_begindate,oc_encounter_enddate,oc_encounter_startdate,oc_encounter_outcome,natreg,"
 							+ " oc_encounter_type,oc_encounter_origin,oc_encounter_objectid,oc_encounter_serviceuid,oc_encounter_situation,oc_encounter_etiology"
 							+ " from adminview a, (select * from oc_encounters_view a where oc_encounter_enddate>=? and oc_encounter_begindate<? and "
 							+ " oc_encounter_begindate = (select max(oc_encounter_servicebegindate) from"
@@ -3768,23 +5041,25 @@ public class DHIS2Exporter {
 							+ " where"
 							+ " a.personid=b.oc_encounter_patientuid and"
 							+ " a.dateofbirth>'1900-01-01'";
-			PreparedStatement ps = conn.prepareStatement(sSql);
+			ps = conn.prepareStatement(sSql);
 			ps.setDate(1, new java.sql.Date(begin.getTime()));
 			ps.setDate(2, new java.sql.Date(end.getTime()));
-			ResultSet rs = ps.executeQuery();
+			rs = ps.executeQuery();
 			while(rs.next()){
-				String item = rs.getString("personid")+";"
-						+rs.getString("oc_encounter_objectid")+";"
-						+rs.getString("gender")+";"
-						+ScreenHelper.formatDate(rs.getDate("dateofbirth"))+";"
-						+(rs.getString("oc_encounter_serviceuid")+";").toLowerCase()
-						+rs.getString("oc_encounter_outcome")+";"
-						+rs.getString("oc_encounter_type")+";"
-						+rs.getString("oc_encounter_origin")+";"
-						+new SimpleDateFormat("yyyyMMddHHmm").format(rs.getTimestamp("oc_encounter_startdate"))+";"
-						+new SimpleDateFormat("yyyyMMddHHmm").format(rs.getTimestamp("oc_encounter_enddate"))+";"
-						+rs.getString("oc_encounter_situation")+";"
-						+rs.getString("oc_encounter_etiology")+";"
+				String item = rs.getString("personid")+";" //0
+						+rs.getString("oc_encounter_objectid")+";" //1
+						+rs.getString("gender")+";" //2
+						+ScreenHelper.formatDate(rs.getDate("dateofbirth"))+";" //3
+						+(rs.getString("oc_encounter_serviceuid")+";").toLowerCase() //4
+						+rs.getString("oc_encounter_outcome")+";" //5
+						+rs.getString("oc_encounter_type")+";" //6
+						+rs.getString("oc_encounter_origin")+";" //7
+						+new SimpleDateFormat("yyyyMMddHHmm").format(rs.getTimestamp("oc_encounter_startdate"))+";" //8
+						+new SimpleDateFormat("yyyyMMddHHmm").format(rs.getTimestamp("oc_encounter_enddate"))+";" //9
+						+rs.getString("oc_encounter_situation")+";" //10
+						+rs.getString("oc_encounter_etiology")+";" //11
+						+new SimpleDateFormat("yyyyMMddHHmm").format(now)+";" //12
+						+SH.c(rs.getString("natreg"))+";" //13
 						+"x;";
 				Debug.println(item);
 				items.add(item);
@@ -3825,15 +5100,17 @@ public class DHIS2Exporter {
 			ps.setDate(2, new java.sql.Date(end.getTime()));
 			ResultSet rs = ps.executeQuery();
 			while(rs.next()){
-				String item = rs.getString("personid")+";"
-						+rs.getString("oc_encounter_objectid")+";"
-						+rs.getString("gender")+";"
-						+ScreenHelper.formatDate(rs.getDate("dateofbirth"))+";"
-						+(rs.getString("oc_debet_serviceuid")+";").toLowerCase()
-						+rs.getString("oc_encounter_outcome")+";"
-						+rs.getString("oc_encounter_type")+";"
-						+rs.getString("oc_encounter_origin")+";"
-						+rs.getString("oc_prestation_dhis2code")+";";
+				String item = rs.getString("personid")+";"							//0
+						+rs.getString("oc_encounter_objectid")+";"					//1
+						+rs.getString("gender")+";"									//2
+						+ScreenHelper.formatDate(rs.getDate("dateofbirth"))+";"		//3
+						+(rs.getString("oc_debet_serviceuid")+";").toLowerCase()	//4
+						+rs.getString("oc_encounter_outcome")+";"					//5
+						+rs.getString("oc_encounter_type")+";"						//6
+						+rs.getString("oc_encounter_origin")+";"					//7
+						+rs.getString("oc_prestation_dhis2code")+";"				//8
+						+SH.formatDate(rs.getDate("oc_encounter_begindate"))+";"	//9
+						;				
 				Debug.println(item);
 				items.add(item);
 			}
@@ -3884,7 +5161,13 @@ public class DHIS2Exporter {
 			}
 
 			String sSql = 	"select a.personid,gender,dateofbirth,oc_encounter_begindate,oc_encounter_enddate,oc_encounter_outcome,"
-							+ " oc_encounter_type,oc_encounter_origin,oc_encounter_objectid,(select max(oc_encounter_serviceuid) from oc_encounters_view where oc_encounter_serverid=b.oc_encounter_serverid and oc_encounter_objectid=b.oc_encounter_objectid and convert(oc_encounter_startdate,date)<=convert(d.updatetime,date) and convert(oc_encounter_enddate,date)>=convert(d.updatetime,date)) as oc_encounter_serviceuid,e.value,e.type,e.date,e.serverid,"
+							+ " oc_encounter_type,oc_encounter_origin,oc_encounter_objectid,"
+							+ " (select max(oc_encounter_serviceuid) from oc_encounters_view where "
+							+ "   oc_encounter_serverid=b.oc_encounter_serverid and "
+							+ "   oc_encounter_objectid=b.oc_encounter_objectid and "
+							+ "   convert(oc_encounter_startdate,date)<=convert(d.updatetime,date) and "
+							+ "   convert(oc_encounter_enddate,date)>=convert(d.updatetime,date)) as oc_encounter_serviceuid,"
+							+ " e.value,e.type,e.date,e.serverid,"
 							+ " e.transactionid,oc_encounter_situation,oc_encounter_begindate,oc_encounter_enddate"
 							+ " from adminview a,oc_encounters b,healthrecord c,transactions d, items e, items f"
 							+ " where"
@@ -3901,6 +5184,7 @@ public class DHIS2Exporter {
 							+ " f.transactionid=d.transactionid and"
 							+ " f.type='be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CONTEXT_ENCOUNTERUID' and"
 							+ " b.oc_encounter_objectid=replace(f.value,'"+MedwanQuery.getInstance().getConfigString("serverId")+".','')";
+			Debug.println(sSql);
 			PreparedStatement ps = conn.prepareStatement(sSql);
 			ps.setDate(1, new java.sql.Date(begin.getTime()));
 			ps.setDate(2, new java.sql.Date(end.getTime()));
@@ -3910,16 +5194,22 @@ public class DHIS2Exporter {
 			else if(ScreenHelper.checkString(dataset.attributeValue("transactiontype")).split(",").length==1){
 				ps.setString(3, ScreenHelper.checkString(dataset.attributeValue("transactiontype"))+"%");
 			}
+			else {
+				ps.setString(3, "%");
+			}
 			if(ScreenHelper.checkString(dataset.attributeValue("exactitemtype")).equalsIgnoreCase("1")){
 				ps.setString(4, ScreenHelper.checkString(dataset.attributeValue("itemtype")));
 			}
 			else if(ScreenHelper.checkString(dataset.attributeValue("itemtype")).split(",").length==1){
 				ps.setString(4, ScreenHelper.checkString(dataset.attributeValue("itemtype"))+"%");
 			}
+			else {
+				ps.setString(4, "%");
+			}
 			ResultSet rs = ps.executeQuery();
 			while(rs.next()){
 				java.util.Date dBegin=rs.getTimestamp("oc_encounter_begindate");
-				java.util.Date dEnd=rs.getTimestamp("oc_encounter_enddate")==null?new java.util.Date():rs.getTimestamp("oc_encounter_enddate");
+				java.util.Date dEnd=rs.getTimestamp("oc_encounter_enddate")==null?new java.util.Date(end.getTime()+SH.getTimeDay()):rs.getTimestamp("oc_encounter_enddate");
 				java.util.Date dDate=rs.getTimestamp("date");
 				if(SH.c(dataset.attributeValue("incoming")).equalsIgnoreCase("1") && (dBegin.before(begin) || dBegin.after(end))){
 					continue;
@@ -3930,22 +5220,22 @@ public class DHIS2Exporter {
 				if(SH.c(dataset.attributeValue("encountertype")).length()>0 && !dataset.attributeValue("encountertype").equalsIgnoreCase(rs.getString("oc_encounter_type"))){
 					continue;
 				}
-				String item = rs.getString("personid")+";"
-						+rs.getString("oc_encounter_objectid")+";"
-						+rs.getString("gender")+";"
-						+ScreenHelper.formatDate(rs.getDate("dateofbirth"))+";"
-						+(rs.getString("oc_encounter_serviceuid")+";").toLowerCase()
-						+rs.getString("oc_encounter_outcome")+";"
-						+rs.getString("oc_encounter_type")+";"
-						+rs.getString("oc_encounter_origin")+";"
-						+rs.getString("value").replaceAll(";", "{semicolon}")+";"
-						+rs.getString("type")+";"
-						+rs.getString("serverid")+";"
-						+rs.getString("transactionid")+";"
-						+rs.getString("oc_encounter_situation")+";"
-						+new SimpleDateFormat("yyyyMMddHHmm").format(dBegin)+";"
-						+new SimpleDateFormat("yyyyMMddHHmm").format(dEnd)+";"
-						+new SimpleDateFormat("yyyyMMddHHmm").format(dDate)+";"
+				String item = rs.getString("personid")+";" //0
+						+rs.getString("oc_encounter_objectid")+";" //1
+						+rs.getString("gender")+";" //2
+						+ScreenHelper.formatDate(rs.getDate("dateofbirth"))+";" //3
+						+(rs.getString("oc_encounter_serviceuid")+";").toLowerCase() //4
+						+rs.getString("oc_encounter_outcome")+";" //5
+						+rs.getString("oc_encounter_type")+";" //6
+						+rs.getString("oc_encounter_origin")+";" //7
+						+rs.getString("value").replaceAll(";", "{semicolon}")+";" //8
+						+rs.getString("type")+";" //9
+						+rs.getString("serverid")+";" //10
+						+rs.getString("transactionid")+";" //11
+						+rs.getString("oc_encounter_situation")+";" //12
+						+new SimpleDateFormat("yyyyMMddHHmm").format(dBegin)+";" //13
+						+new SimpleDateFormat("yyyyMMddHHmm").format(dEnd)+";" //14
+						+new SimpleDateFormat("yyyyMMddHHmm").format(dDate)+";" //15
 						;
 				Debug.println(item);
 				if(minval.length()>0){
@@ -3968,7 +5258,7 @@ public class DHIS2Exporter {
 						continue;
 					}
 				}
-				if(matchval.length()>0 && !matchval.equalsIgnoreCase(item.split(";")[8])){
+				if(matchval.length()>0 && !matchval.contains(item.split(";")[8])){
 					continue;
 				}
 				items.add(item);
@@ -4061,7 +5351,7 @@ public class DHIS2Exporter {
 							+rs.getString("transactionid")+";"
 							+rs.getString("oc_encounter_situation")+";"
 							+new SimpleDateFormat("yyyyMMddHHmm").format(rs.getTimestamp("oc_encounter_begindate"))+";"
-							+new SimpleDateFormat("yyyyMMddHHmm").format(rs.getTimestamp("oc_encounter_enddate")==null?new java.util.Date():rs.getTimestamp("oc_encounter_enddate"))+";";
+							+new SimpleDateFormat("yyyyMMddHHmm").format(rs.getTimestamp("oc_encounter_enddate")==null?new java.util.Date(end.getTime()+SH.getTimeDay()):rs.getTimestamp("oc_encounter_enddate"))+";";
 					Debug.println(item);
 					if(minval.length()>0){
 						try{
@@ -4109,10 +5399,11 @@ public class DHIS2Exporter {
 	private Vector loadLab(Element dataset){
 		String abnormal=ScreenHelper.checkString(dataset.attributeValue("abnormal"));
 		String normal=ScreenHelper.checkString(dataset.attributeValue("normal"));
+		String encountertype=ScreenHelper.checkString(dataset.attributeValue("encountertype"));
 		Vector items = new Vector();
 		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
 		try{
-			String sSql = 	"select a.personid,gender,dateofbirth,c.dhis2code,b.serverid,b.transactionid,b.resultvalue"
+			String sSql = 	"select a.personid,gender,dateofbirth,c.dhis2code,b.serverid,b.transactionid,b.resultvalue,b.resultdate"
 							+ " from adminview a,requestedlabanalyses b,labanalysis c"
 							+ " where"
 							+ " a.personid=b.patientid and"
@@ -4121,6 +5412,21 @@ public class DHIS2Exporter {
 							+ " b.analysiscode=c.labcode and"
 							+ " c.dhis2code is not null and"
 							+ " c.dhis2code <> ''";
+			if(encountertype.length()>0) {
+				sSql = 	"select a.personid,gender,dateofbirth,c.dhis2code,b.serverid,b.transactionid,b.resultvalue,b.resultdate"
+						+ " from adminview a,requestedlabanalyses b,labanalysis c, oc_encounters d"
+						+ " where"
+						+ " a.personid=b.patientid and"
+						+ " d.OC_ENCOUNTER_PATIENTUID=b.patientid AND"
+						+ " d.OC_ENCOUNTER_BEGINDATE<=b.resultdate AND"
+						+ " d.oc_encounter_type='"+encountertype+"' and"
+						+ " (d.oc_encounter_enddate IS NULL OR date_add(d.oc_encounter_enddate,interval 1 day)>b.resultdate) and"
+						+ " b.finalvalidator is not null and"
+						+ " (b.resultdate>=? and b.resultdate<?) and"
+						+ " b.analysiscode=c.labcode and"
+						+ " c.dhis2code is not null and"
+						+ " c.dhis2code <> ''";
+			}
 			if(abnormal.equals("1")){
 				sSql+=	" and ((c.editor='numeric' and (b.resultvalue*1<b.resultrefmin*1 or b.resultvalue>b.resultrefmax*1))"
 						+ " or b.resultvalue=c.alertvalue)";
@@ -4134,13 +5440,14 @@ public class DHIS2Exporter {
 			ps.setDate(2, new java.sql.Date(end.getTime()));
 			ResultSet rs = ps.executeQuery();
 			while(rs.next()){
-				String item = rs.getString("personid")+";"
-						+rs.getString("gender")+";"
-						+ScreenHelper.formatDate(rs.getDate("dateofbirth"))+";"
-						+rs.getString("dhis2code")+";"
-						+rs.getString("serverid")+";"
-						+rs.getString("transactionid")+";"
-						+rs.getString("resultvalue")+";";
+				String item = rs.getString("personid")+";" //0
+						+rs.getString("gender")+";" //1
+						+ScreenHelper.formatDate(rs.getDate("dateofbirth"))+";" //2
+						+rs.getString("dhis2code")+";" //3
+						+rs.getString("serverid")+";" //4
+						+rs.getString("transactionid")+";" //5
+						+rs.getString("resultvalue")+";" //6
+						+new SimpleDateFormat("yyyyMMddHHmm").format(rs.getTimestamp("resultdate"))+";"; //7
 				Debug.println(item);
 				items.add(item);
 			}

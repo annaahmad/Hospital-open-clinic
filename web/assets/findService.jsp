@@ -3,7 +3,6 @@
 <%@include file="/includes/validateUser.jsp"%>
 <ul id="autocompletion">
 <%
-	System.out.println("UUUUUUUUUUUUUUUUUUUUUUUUUUUU");
 	String sText = SH.p(request,"text");
 	int iMaxRows = MedwanQuery.getInstance().getConfigInt("MaxSearchFieldsRows",30);
 	int nRows=0;

@@ -3,6 +3,7 @@ package be.openclinic.pharmacy;
 import net.admin.Service;
 import be.openclinic.common.OC_Object;
 import be.openclinic.finance.Prestation;
+import be.openclinic.system.SH;
 import be.mxs.common.util.db.MedwanQuery;
 import be.mxs.common.util.system.HTMLEntities;
 import be.mxs.common.util.system.Pointer;
@@ -398,15 +399,18 @@ public class Product extends OC_Object implements Comparable {
     	Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
     	ResultSet rs = null;
     	PreparedStatement ps = null;
-    	String sQuery=	" select * from oc_productstockoperations o,oc_productstocks p"+
+    	String sQuery=	" select * from oc_productstockoperations o,oc_productstocks p, oc_servicestocks s"+
     					" where"+
-    					" oc_stock_objectid=replace(oc_operation_productstockuid,'1.','') and"+
+                        " s.OC_STOCK_OBJECTID=replace(p.OC_stock_SERVICESTOCKUID,'1.','') and"+
+                        " (s.OC_STOCK_END is null OR s.OC_STOCK_END>?) and"+
+    					" p.oc_stock_objectid=replace(oc_operation_productstockuid,'1.','') and"+
     					" oc_operation_date>=? and"+
     					" oc_operation_date<? order by oc_operation_date";
     	try {
 			ps = conn.prepareStatement(sQuery);
 			ps.setDate(1, new java.sql.Date(begin.getTime()));
-			ps.setDate(2, new java.sql.Date(end.getTime()));
+			ps.setDate(2, new java.sql.Date(begin.getTime()));
+			ps.setDate(3, new java.sql.Date(end.getTime()));
 			rs = ps.executeQuery();
 			while(rs.next()) {
 				String productuid = rs.getString("oc_stock_productuid");
@@ -539,7 +543,7 @@ public class Product extends OC_Object implements Comparable {
     	if(level<=0) {
     		stockoutbegin=begin.getTime();
     	}
-    	level=getTotalQuantityAvailable();
+    	level=getTotalActiveQuantityAvailable(begin);
 		try {
 			//Now run through all operations on this product after begin until end
 	    	Vector operations = (Vector)productstockoperations.get(getUid());
@@ -705,17 +709,21 @@ public class Product extends OC_Object implements Comparable {
     	Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
     	ResultSet rs = null;
     	PreparedStatement ps = null;
-    	String sQuery=	" select sum(oc_operation_unitschanged) consumed, oc_stock_productuid from oc_productstockoperations o,oc_productstocks p"+
+    	String sQuery=	" select sum(oc_operation_unitschanged) consumed, p.oc_stock_productuid from "+
+    					" oc_productstockoperations o,oc_productstocks p, oc_servicestocks s"+
     					" where"+
-    					" oc_stock_objectid=replace(oc_operation_productstockuid,'1.','') and"+
+                        " s.OC_STOCK_OBJECTID=replace(p.OC_stock_SERVICESTOCKUID,'1.','') and"+
+                        " (s.OC_STOCK_END is null OR s.OC_STOCK_END>?) and"+
+    					" p.oc_stock_objectid=replace(oc_operation_productstockuid,'1.','') and"+
     					" oc_operation_date>=? and"+
     					" oc_operation_date<? and"+
     					" oc_operation_description like 'medicationdelivery%' and"+
-    					" oc_operation_srcdesttype='patient' group by oc_stock_productuid";
+    					" oc_operation_srcdesttype='patient' group by p.oc_stock_productuid";
     	try {
     		ps = conn.prepareStatement(sQuery);
     		ps.setDate(1, new java.sql.Date(begin.getTime()));
-    		ps.setDate(2, new java.sql.Date(end.getTime()));
+    		ps.setDate(2, new java.sql.Date(begin.getTime()));
+    		ps.setDate(3, new java.sql.Date(end.getTime()));
     		rs=ps.executeQuery();
     		while(rs.next()) {
     			consumptions.put(rs.getString("oc_stock_productuid"),rs.getDouble("consumed"));
@@ -962,17 +970,21 @@ public class Product extends OC_Object implements Comparable {
     	ResultSet rs = null;
     	PreparedStatement ps = null;
     	String sQuery=	"select avg(consumed) consumption, product from ("+
-    					" select sum(oc_operation_unitschanged) consumed,month(oc_operation_date) month,oc_stock_productuid product from oc_productstockoperations o,oc_productstocks p"+
+    					" select sum(oc_operation_unitschanged) consumed,month(oc_operation_date) month,oc_stock_productuid product "+
+    					" from oc_productstockoperations o,oc_productstocks p, oc_servicestocks s"+
     					" where"+
-    					" oc_stock_objectid=replace(oc_operation_productstockuid,'1.','') and"+
+                        " s.OC_STOCK_OBJECTID=replace(p.OC_stock_SERVICESTOCKUID,'1.','') and"+
+                        " (s.OC_STOCK_END is null OR s.OC_STOCK_END>?) and"+
+    					" p.oc_stock_objectid=replace(oc_operation_productstockuid,'1.','') and"+
     					" oc_operation_date>? and"+
     					" oc_operation_description like 'medicationdelivery%' and"+
     					" oc_operation_srcdesttype='patient'"+
-    					" group by month(oc_operation_date),oc_stock_productuid) a group by product";
+    					" group by month(oc_operation_date),p.oc_stock_productuid) a group by product";
     	try {
     		ps = conn.prepareStatement(sQuery);
     		long year = ScreenHelper.getTimeYear();
-    		ps.setDate(1, new java.sql.Date(new java.util.Date(date.getTime()-year).getTime()));
+    		ps.setDate(1, SH.toSQLDate(date));
+    		ps.setDate(2, new java.sql.Date(new java.util.Date(date.getTime()-year).getTime()));
     		rs=ps.executeQuery();
     		while(rs.next()) {
     			consumptions.put(rs.getString("product"),rs.getDouble("consumption"));
@@ -2658,28 +2670,72 @@ public class Product extends OC_Object implements Comparable {
         return quantity;
     }
     
+    public int getTotalActiveQuantityAvailable(java.util.Date begin){
+        int quantity = 0;
+        
+        Connection oc_conn = MedwanQuery.getInstance().getOpenclinicConnection();
+        try{
+            String sQuery = "select sum(p.oc_stock_level) total"+
+                            " from oc_productstocks p,oc_servicestocks s"+
+                            " where s.OC_STOCK_OBJECTID=replace(p.OC_STOCK_SERVICESTOCKUID,'1.','')"+
+                            " and (s.OC_STOCK_END is NULL or s.OC_STOCK_END>?)"+
+                            " and p.oc_stock_productuid=?";
+            PreparedStatement ps = oc_conn.prepareStatement(sQuery);
+            ps.setDate(1, SH.toSQLDate(begin));
+            ps.setString(2,getUid());
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                quantity = rs.getInt("total");
+            }
+            rs.close();
+            ps.close();
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        
+        try{
+			oc_conn.close();
+		}
+        catch(SQLException e){
+			e.printStackTrace();
+		}
+        
+        return quantity;
+    }
+    
     public static Hashtable getTotalQuantitiesAvailable(java.util.Date date) {
     	Hashtable quantities = new Hashtable();
         Connection oc_conn = MedwanQuery.getInstance().getOpenclinicConnection();
         try{
             String sSelect = "select sum(level) level, oc_stock_productuid from ("+
-   				 	" SELECT -sum(OC_OPERATION_UNITSCHANGED) level,oc_stock_productuid"+
-                    " FROM OC_PRODUCTSTOCKOPERATIONS,OC_PRODUCTSTOCKS"+
+   				 	" SELECT -sum(OC_OPERATION_UNITSCHANGED) level,p.oc_stock_productuid"+
+                    " FROM OC_PRODUCTSTOCKOPERATIONS,OC_PRODUCTSTOCKS p, oc_servicestocks s"+
                     " WHERE OC_OPERATION_DESCRIPTION LIKE 'medicationreceipt.%'" +
-                    " and OC_STOCK_OBJECTID=replace(OC_OPERATION_PRODUCTSTOCKUID,'1.','')"+
-                    " AND OC_OPERATION_DATE >= ? group by oc_stock_productuid"+
+                    " and s.OC_STOCK_OBJECTID=replace(p.OC_stock_SERVICESTOCKUID,'1.','')"+
+                    " and (s.OC_STOCK_END is null OR s.OC_STOCK_END>?)"+
+                    " and p.OC_STOCK_OBJECTID=replace(OC_OPERATION_PRODUCTSTOCKUID,'1.','')"+
+                    " AND OC_OPERATION_DATE >= ? group by p.oc_stock_productuid"+
                     " UNION"+
-                    " SELECT sum(OC_OPERATION_UNITSCHANGED) level,oc_stock_productuid"+
-                    " FROM OC_PRODUCTSTOCKOPERATIONS,OC_PRODUCTSTOCKS"+
+                    " SELECT sum(OC_OPERATION_UNITSCHANGED) level,p.oc_stock_productuid"+
+                    " FROM OC_PRODUCTSTOCKOPERATIONS,OC_PRODUCTSTOCKS p, oc_servicestocks s"+
                     " WHERE OC_OPERATION_DESCRIPTION LIKE 'medicationdelivery.%'" +
-                    " and OC_STOCK_OBJECTID=replace(OC_OPERATION_PRODUCTSTOCKUID,'1.','')"+
-                    " AND OC_OPERATION_DATE >= ? group by oc_stock_productuid"+
+                    " and s.OC_STOCK_OBJECTID=replace(p.OC_stock_SERVICESTOCKUID,'1.','')"+
+                    " and (s.OC_STOCK_END is null OR s.OC_STOCK_END>?)"+
+                    " and p.OC_STOCK_OBJECTID=replace(OC_OPERATION_PRODUCTSTOCKUID,'1.','')"+
+                    " AND OC_OPERATION_DATE >= ? group by p.oc_stock_productuid"+
                     " UNION"+
-                    " select sum(oc_stock_level) level,oc_stock_productuid from oc_productstocks group by oc_stock_productuid) z"+
+                    " select sum(p.oc_stock_level) level,p.oc_stock_productuid from oc_productstocks p, oc_servicestocks s where"+
+                    " s.OC_STOCK_OBJECTID=replace(p.OC_stock_SERVICESTOCKUID,'1.','')"+
+                    " and (s.OC_STOCK_END is null OR s.OC_STOCK_END>?)"+
+                    " group by oc_stock_productuid) z"+
                     " group by oc_stock_productuid";
             PreparedStatement ps = oc_conn.prepareStatement(sSelect);
             ps.setTimestamp(1,new java.sql.Timestamp(date.getTime()));
             ps.setTimestamp(2,new java.sql.Timestamp(date.getTime()));
+            ps.setTimestamp(3,new java.sql.Timestamp(date.getTime()));
+            ps.setTimestamp(4,new java.sql.Timestamp(date.getTime()));
+            ps.setTimestamp(5,new java.sql.Timestamp(date.getTime()));
             ResultSet rs = ps.executeQuery();
             while(rs.next()){
 		   		quantities.put(rs.getString("oc_stock_productuid"), rs.getDouble("level"));
@@ -2702,22 +2758,28 @@ public class Product extends OC_Object implements Comparable {
         try{
             String sSelect = "SELECT SUM(level) level from ("+
    				 " SELECT sum(OC_OPERATION_UNITSCHANGED) level"+
-                    "  FROM OC_PRODUCTSTOCKOPERATIONS,OC_PRODUCTSTOCKS"+
+                    " FROM OC_PRODUCTSTOCKOPERATIONS,OC_PRODUCTSTOCKS p, oc_servicestocks s"+
                     " WHERE OC_OPERATION_DESCRIPTION LIKE 'medicationreceipt.%'" +
-                    " and OC_STOCK_OBJECTID=replace(OC_OPERATION_PRODUCTSTOCKUID,'1.','')"+
-                    " and OC_STOCK_PRODUCTUID='"+getUid()+"'"+
+                    " and s.OC_STOCK_OBJECTID=replace(p.OC_STOCK_SERVICESTOCKUID,'1.','')"+
+                    " and (s.OC_STOCK_END is NULL or s.OC_STOCK_END>?)"+
+                    " and p.OC_STOCK_OBJECTID=replace(OC_OPERATION_PRODUCTSTOCKUID,'1.','')"+
+                    " and p.OC_STOCK_PRODUCTUID='"+getUid()+"'"+
                     " AND OC_OPERATION_DATE >= ?"+
                     " UNION"+
                     " SELECT -sum(OC_OPERATION_UNITSCHANGED) level"+
-                    "  FROM OC_PRODUCTSTOCKOPERATIONS,OC_PRODUCTSTOCKS"+
+                    "  FROM OC_PRODUCTSTOCKOPERATIONS,OC_PRODUCTSTOCKS p, oc_servicestocks s"+
                     " WHERE OC_OPERATION_DESCRIPTION LIKE 'medicationdelivery.%'" +
-                    " and OC_STOCK_OBJECTID=replace(OC_OPERATION_PRODUCTSTOCKUID,'1.','')"+
-                    " and OC_STOCK_PRODUCTUID='"+getUid()+"'"+
+                    " and s.OC_STOCK_OBJECTID=replace(p.OC_STOCK_SERVICESTOCKUID,'1.','')"+
+                    " and (s.OC_STOCK_END is NULL or s.OC_STOCK_END>?)"+
+                    " and p.OC_STOCK_OBJECTID=replace(OC_OPERATION_PRODUCTSTOCKUID,'1.','')"+
+                    " and p.OC_STOCK_PRODUCTUID='"+getUid()+"'"+
                     " AND OC_OPERATION_DATE >= ?) z";
 
             PreparedStatement ps = oc_conn.prepareStatement(sSelect);
             ps.setTimestamp(1,new java.sql.Timestamp(date.getTime()));
             ps.setTimestamp(2,new java.sql.Timestamp(date.getTime()));
+            ps.setTimestamp(3,new java.sql.Timestamp(date.getTime()));
+            ps.setTimestamp(4,new java.sql.Timestamp(date.getTime()));
             ResultSet rs = ps.executeQuery();
             if(rs.next()){
 		   		quantity=quantity-rs.getInt("level");

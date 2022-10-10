@@ -29,7 +29,7 @@
 	                	servicename=service.getLabel(sWebLanguage);
 	                }
                 }
-               	out.write("<span style='display:none'>"+prestation.getUid()+";"+(insurance.getExtraInsurarUid().length()>0?"0":SH.getPriceFormat(prestation.getPatientPrice(insurance,insurance.getInsuranceCategoryLetter(),sEncounterType)))+"-idcache</span>");
+               	out.write("<span style='display:none'>"+prestation.getUid()+";"+(insurance.getExtraInsurarUid().length()>0 && SH.p(request,"defaultExtraInsurar").equals("1")?"0":SH.getPriceFormat(prestation.getPatientPrice(insurance,insurance.getInsuranceCategoryLetter(),sEncounterType)))+"-idcache</span>");
                 out.write("</li>");
             }
         }

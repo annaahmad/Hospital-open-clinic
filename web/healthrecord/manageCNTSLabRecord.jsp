@@ -322,6 +322,10 @@
 	  openPopup("cnts/stockBloodProducts.jsp&giftid="+giftid+"&type="+type+"&quantity="+quantity+"&end="+document.getElementById("cnts"+type+"expirydate").value,600,100);
   }
   
+  function searchEncounter(){
+      openPopup("/_common/search/searchEncounter.jsp&ts=<%=getTs()%>&Varcode=encounteruid&VarText=&FindEncounterPatient=<%=activePatient.personid%>");
+  }
+
   window.setTimeout('checkPharmacyLink("prp","prpdiv")',100);
   window.setTimeout('checkPharmacyLink("pfc","pfcdiv")',200);
   window.setTimeout('checkPharmacyLink("cgr","cgrdiv")',300);

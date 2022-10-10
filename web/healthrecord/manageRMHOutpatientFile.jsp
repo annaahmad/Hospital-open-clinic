@@ -1,7 +1,6 @@
 <%@include file="/includes/validateUser.jsp"%>
 <%@page errorPage="/includes/error.jsp"%>
 <%=checkPermission(out,"occup.outpatientfile","select",activeUser)%>
-
 <form name="transactionForm" id="transactionForm" method="POST" action='<c:url value="/healthrecord/updateTransaction.do"/>?ts=<%=getTs()%>'>
 	<bean:define id="transaction" name="be.mxs.webapp.wl.session.SessionContainerFactory.WO_SESSION_CONTAINER" property="currentTransactionVO"/>
 	<%=checkPrestationToday(activePatient.personid,false,activeUser,(TransactionVO)transaction)%>
@@ -16,7 +15,6 @@
     <%=writeHistoryFunctions(((TransactionVO)transaction).getTransactionType(),sWebLanguage)%>
     <%=contextHeader(request,sWebLanguage)%>
     <% SH.loadRecentItems((TransactionVO)transaction,activePatient); %>
-    
     <table class="list" cellspacing="1" cellpadding="0" width="100%">
         <tr>
             <td style="vertical-align:top;padding:0" width="60%">

@@ -43,6 +43,7 @@
     <%=writeTableHeaderButton(getTran(request,"web","assets.equipment",sWebLanguage),!asset.hasHistory()?"":"<img title='"+getTranNoLink("web","history",sWebLanguage)+"' src='"+sCONTEXTPATH+"/_img/icons/icon_history2.gif' onclick='showHistory();'/>&nbsp;")%>
     
     <input type='hidden' id='comment17'/>
+    <input type='hidden' id='comment19'/>
                 
     <table class="list" border="0" width="100%" cellspacing="1">    
         <%-- CODE (*) --%>
@@ -129,7 +130,7 @@
         <tr>
             <td class="admin" id="serialnumber_label"><%=getTran(request,"gmao","serialnumber",sWebLanguage)%>&nbsp;</td>
             <td class="admin2" colspan="3">
-                <input type="text" class="text" id="serialnumber" name="serialnumber" size="20" maxLength="30" value="<%=checkString(asset.getSerialnumber())%>">
+                <input type="text" class="text" id="serialnumber" name="serialnumber" size="20" maxLength="30" value="<%=checkString(asset.getSerialnumber())%>" onblur="validateSerialNumber(this)"/>
             	<input type="hidden" class="text" id="quantity" name="quantity" value="1"/>
             </td>
 	        <%-- CENORM --%>
@@ -289,7 +290,10 @@
         <tr>
             <td class="admin"><%=getTran(request,"web.assets","purchasePrice",sWebLanguage)%>&nbsp;*&nbsp;</td>
             <td class="admin2">
-                <input type="text" class="text" id="purchasePrice" name="purchasePrice" size="15" maxLength="15" value="<%=asset.getPurchasePrice() %>" onKeyUp="isNumber(this);" onBlur="if(isNumber(this))setDecimalLength(this,2,true);getRemainingValue();"> <%=MedwanQuery.getInstance().getConfigParam("currency","€")%>&nbsp;
+                <input type="text" class="text" id="purchasePrice" name="purchasePrice" size="15" maxLength="15" value="<%=asset.getPurchasePrice() %>" onKeyUp="isNumber(this);" onBlur="if(isNumber(this))setDecimalLength(this,2,true);">
+                <select name='comment18' id='comment18' class='text'>
+                	<%=SH.writeSelect(request, "gmao.currency", SH.c(asset.getComment18(),SH.cs("gmaodefaultcurrency","€bif")), sWebLanguage) %>
+                </select>&nbsp;
             </td>
             <td class="admin"><%=getTran(request,"web.assets","fundingsource",sWebLanguage)%>&nbsp;*</td>
             <td class="admin2">

@@ -1,15 +1,19 @@
 <%@page import="java.lang.management.ManagementFactory"%>
 <%@page import="be.openclinic.system.SystemInfo"%>
 <%@include file="/includes/helper.jsp"%>
+<%@include file="/includes/SingletonContainer.jsp"%>
+<%
+	reloadSingleton(session);
+%>
 <%=sJSVIS %>
 <body onresize='drawGraphs(true);'>
 <table width='100%'>
 	<tr>
-		<td colspan='2'>
+		<td colspan='3' style='background-color: #4f6199;'>
 			<center>
-				<font style='color: #4f6199;font-size: 36px;font-weight: bolder'><%=getTran(request,"web","hospitalname",SH.p(request,"language","en")) %></font><br/>
-				<font style='color: #4f6199;font-size: 24px;font-weight: bolder'>OpenClinic GA system performance dashboard</font><br/>
-				&nbsp;<img src='<%=sCONTEXTPATH%>/_img/block.png' height='1px' id='keepalive'/>
+				<font style='color: white;font-size: 36px;font-weight: bolder'><%=getTran(request,"web","hospitalname",SH.p(request,"language","en")) %></font><br/>
+				<font style='color: white;font-size: 24px;font-weight: bolder'>OpenClinic GA system performance dashboard</font><br/>
+				&nbsp;<img src='<%=sCONTEXTPATH%>/_img/block.png' height='1px' id='keepalive'/>&nbsp;
 			</center>
 		</td>
 	</tr>
@@ -18,7 +22,12 @@
 			<center><div id='memory_graph'></div>
 			<font style='font-size: 24px;font-weight: bolder'>Memory load: <span id='memoryload'></span></font></center>
 		</td>
-		<td width='50%'>
+		<td widt='1%' nowrap rowspan='2'>
+			<center>
+				<input orient='vertical' onchange='setZoom(this.value)' id='zoom' name='zoom' step='any' type='range' min='50' max='10000' style='accent-color: #4f6199;;-webkit-transition: .2s;transition: opacity .2s;writing-mode: bt-lr;-webkit-appearance: slider-vertical;width: 4px;height: 400px;padding: 0 5px;'/>
+			</center>
+		</td>
+		<td width='49%'>
 			<center><div id='users_graph'></div>
 			<font style='font-size: 24px;font-weight: bolder'>User load: <span id='usersload'></span></font></center>
 		</td>
@@ -40,6 +49,31 @@
 	var lastcheck = new Date().getTime();
 	var lastdashboardcheck = new Date().getTime()-2000;
 	var resettime = new Date().getTime(); 
+	<%
+		if(session.getAttribute("graphZoomLevel")==null){
+			session.setAttribute("graphZoomLevel", "500");
+		}
+	%>
+	document.getElementById("zoom").value=<%=session.getAttribute("graphZoomLevel")%>;
+	
+	function setZoom(zoomValue){
+		begindate=vis.moment().add(-30*zoomValue*10000/(500*10000), "seconds");
+		memoryGraph2d.setOptions({start: begindate,});
+		usersGraph2d.setOptions({start: begindate,});
+		cpuGraph2d.setOptions({start: begindate,});
+		replicationGraph2d.setOptions({start: begindate,});
+		memoryGraph2d.redraw();
+		usersGraph2d.redraw();
+		cpuGraph2d.redraw();
+		replicationGraph2d.redraw();
+    	var url = '<c:url value="/util/setSessionAttribute.jsp"/>';
+		localcheck = new Date().getTime();
+    	new Ajax.Request(url,{
+      		parameters: "attributeName=graphZoomLevel&attributeValue="+zoomValue,
+      		onSuccess: function(resp){
+      		},
+    	});
+	}
 	
 	function keepAlive(){
 		var size=(new Date().getTime()-lastcheck)/1000;
@@ -53,7 +87,7 @@
 		window.setTimeout("keepAlive()",1000);
 	}
 	function loadDashboardInfo(){
-    	var url = '<c:url value="/dashboards/getSystemAdministratorData.jsp"/>';
+    	var url = '<c:url value="/dashboards/sysadmin/getSystemAdministratorData.jsp"/>';
 		localcheck = new Date().getTime();
     	new Ajax.Request(url,{
       		parameters: "",
@@ -66,14 +100,46 @@
       			}
       			lastcheck = new Date().getTime();
        			var info = eval('('+resp.responseText+')');
-        		document.getElementById("memoryload").innerHTML="<font style='font-size: 24px;font-weight: bolder'>"+info.memoryload+" MB</font>";
+        		color='lightgreen';
+        		if(info.memoryload/info.maxmemory>0.8){
+        			color='red';
+        		}
+        		else if(info.memoryload/info.maxmemory>0.5){
+        			color='orange';
+        		}
+        		document.getElementById("memoryload").innerHTML="<font style='color: "+color+";font-size: 24px;font-weight: bolder'>"+info.memoryload+" MB</font>";
         		document.getElementById("usersload").innerHTML="<font style='font-size: 24px;font-weight: bolder'>"+info.usersload+"</font>";
-        		document.getElementById("cpuload").innerHTML="<font style='font-size: 24px;font-weight: bolder'>"+info.cpuload+"%</font>";
+        		if(info.cpuload*1<0){
+        			info.cpuload='? ';
+        			color='black';
+        		}
+        		else{
+	        		color='lightgreen';
+	        		if(info.cpuload*1>50){
+	        			color='red';
+	        		}
+	        		else if(info.cpuload*1>25){
+	        			color='orange';
+	        		}
+      			}
+        		document.getElementById("cpuload").innerHTML="<font style='color: "+color+";font-size: 24px;font-weight: bolder'>"+info.cpuload+"%</font>";
     			<%if(SH.cs("replicationServer","").length()>0){ %>
-	    			if(info.replicationload.length==0){
-	    				info.replicationload="?";
-	    			}
-	        		document.getElementById("replicationload").innerHTML="<font style='font-size: 24px;font-weight: bolder'>"+info.replicationload+" sec</font>";
+    				if(info.replicationload.length==0 || info.replicationload*1>=0){
+		    			if(info.replicationload.length==0){
+		    				info.replicationload="?";
+							color='red';
+		    			}
+		    			else{
+			        		color='lightgreen';
+			        		if(info.replicationload*1>3600){
+			        			color='red';
+			        		}
+			        		else if(info.replicationload*1>60){
+			        			color='orange';
+			        		}
+		    			}
+		        		document.getElementById("replicationload").innerHTML="<font style='color: "+color+";font-size: 24px;font-weight: bolder'>"+info.replicationload+" sec</font>";
+    				}
 				<%} %>
 
         		var now = vis.moment();
@@ -318,6 +384,9 @@
 			};	
 			replicationGraph2d = new vis.Graph2d(replicationContainer, replicationDataset, options);
 		<%} %>
+		<% if(!((String)session.getAttribute("graphZoomLevel")).equalsIgnoreCase("500")){ %>
+			setZoom(<%=session.getAttribute("graphZoomLevel")%>);
+		<% }%>
 	}
 
 	drawGraphs();
@@ -325,8 +394,7 @@
 	keepAlive();
 	renderStep();
 	window.setTimeout("window.location.reload()",600000);
-	document.body.style.backgroundColor="#fcfcf7";
-	window.setTimeout("window.resizeTo(screen.width, screen.height);",500);
+	window.setTimeout("window.resizeTo(screen.width, screen.height);",2000);
 </script>
 
 </body>

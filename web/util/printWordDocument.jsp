@@ -207,9 +207,9 @@
 			docx.replaceText("${asset_endofwarantydate}",asset.comment14);
 			docx.replaceText("${asset_components}",asset.getComponentsString(user.person.language));
 			docx.replaceText("${asset_unused}",asset.comment16);
-			docx.replaceText("${asset_unused}",asset.comment17);
-			docx.replaceText("${asset_unused}",asset.comment18);
-			docx.replaceText("${asset_unused}",asset.comment19);
+			docx.replaceText("${asset_surface}",asset.comment17);
+			docx.replaceText("${asset_purchasecurrency}",asset.comment18);
+			docx.replaceText("${asset_surfaceunit}",asset.comment19);
 			docx.replaceText("${asset_unused}",asset.comment20);
 			docx.replaceText("${asset_description}",asset.description);
 			docx.replaceText("${asset_gmdncode}",asset.gmdncode);

@@ -281,8 +281,8 @@
 	  return url;
 	}
 	
-	function showPreventativeMaintenanceList(){
-		var url="assets/showPreventativeMaintenanceList.jsp&service="+document.getElementById("serviceuid").value+"&begin="+document.getElementById("dashboardBegin").value+"&end="+document.getElementById("dashboardEnd").value;
+	function showPreventativeMaintenanceList(programmedonly){
+		var url="assets/showPreventativeMaintenanceList.jsp&programmedonly="+programmedonly+"&service="+document.getElementById("serviceuid").value+"&begin="+document.getElementById("dashboardBegin").value+"&end="+document.getElementById("dashboardEnd").value;
 		openPopup(url,1024,800);
 	}
 

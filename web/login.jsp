@@ -21,6 +21,13 @@ if(MedwanQuery.getInstance(true).getConfigString("edition","openclinic").equalsI
 	out.println("<script>window.location.href='"+sCONTEXTPATH+"/mpiLogin.jsp';</script>");
 	out.flush();
 }
+if(new java.util.Date().before(new SimpleDateFormat("dd/MM/yyyy").parse(be.openclinic.system.SH.cs("minimumSystemDate","01/01/2021")))){
+	//System date is not correctly set, redirect to date settings
+	%>
+		<script>window.location.href='util/setDate.jsp';</script>
+	<%
+	out.flush();
+}
 
 	response.setHeader("Content-Type","text/html; charset=ISO-8859-1");
 	session.setAttribute("javaPOSServer",checkString(request.getParameter("javaPOSServer")));
@@ -174,6 +181,17 @@ if(MedwanQuery.getInstance(true).getConfigString("edition","openclinic").equalsI
 		}
     	
     }
+    //Remove impossible birthdates from patients
+    Connection conn = SH.getAdminConnection();
+    try{
+    	PreparedStatement ps = conn.prepareStatement("UPDATE admin SET dateofbirth=null WHERE dateofbirth<'1800-01-01'");
+    	ps.execute();
+    	ps.close();
+    }
+    catch(Exception e){
+    	e.printStackTrace();
+    }
+	conn.close();
 
     //*** process 'updatequeries.xml' containing queries that need to be executed at login ***
     Object updateQueriesProcessedDate = application.getAttribute("updateQueriesProcessedDateOC");

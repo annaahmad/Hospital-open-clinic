@@ -2,6 +2,7 @@ package be.openclinic.finance;
 
 import be.openclinic.common.OC_Object;
 import be.openclinic.common.ObjectReference;
+import be.openclinic.system.SH;
 import be.mxs.common.util.db.MedwanQuery;
 import be.mxs.common.util.system.ScreenHelper;
 import be.mxs.common.util.system.Debug;
@@ -27,8 +28,17 @@ public class Wicket extends OC_Object{
     private double balance;
     private Vector authorizedUsers;
     private String authorizedUsersId;
+    private String type;
 
-    public Service getService() {
+    public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public Service getService() {
     	if(service==null && serviceUID!=null){
     		service=Service.getService(serviceUID);
     	}
@@ -100,6 +110,7 @@ public class Wicket extends OC_Object{
                         wicket.setBalance(rs.getDouble("OC_WICKET_BALANCE"));
                         wicket.setAuthorizedUsersId(ScreenHelper.checkString(rs.getString("OC_WICKET_AUTHORIZEDUSERS")));
                         wicket.setVersion(rs.getInt("OC_WICKET_VERSION"));
+                        wicket.setType(rs.getString("OC_WICKET_TYPE"));
 
                         // set service
                         Service wicketService = Service.getService(wicket.getServiceUID());
@@ -160,7 +171,8 @@ public class Wicket extends OC_Object{
                                      " OC_WICKET_CREATETIME," +
                                      " OC_WICKET_UPDATETIME," +
                                      " OC_WICKET_UPDATEUID,"  +
-                                     " OC_WICKET_VERSION" +
+                                     " OC_WICKET_VERSION," +
+                                     " OC_WICKET_TYPE" +
                               " FROM OC_WICKETS " +
                               " WHERE OC_WICKET_SERVERID = ?" +
                               " AND OC_WICKET_OBJECTID = ?";
@@ -194,9 +206,10 @@ public class Wicket extends OC_Object{
                                       " OC_WICKET_CREATETIME," +
                                       " OC_WICKET_UPDATETIME," +
                                       " OC_WICKET_UPDATEUID,"  +
-                                      " OC_WICKET_VERSION" +
+                                      " OC_WICKET_VERSION," +
+                                      " OC_WICKET_TYPE" +
                                       ") " +
-                          " VALUES(?,?,?,?,?,?,?,?,?)";
+                          " VALUES(?,?,?,?,?,?,?,?,?,?)";
 
                 ps = oc_conn.prepareStatement(sInsert);
                 ps.setInt(1,Integer.parseInt(ids[0]));
@@ -212,6 +225,7 @@ public class Wicket extends OC_Object{
                 ps.setTimestamp(7,new Timestamp(this.getUpdateDateTime().getTime()));
                 ps.setString(8,this.getUpdateUser());
                 ps.setInt(9,iVersion);
+                ps.setString(10, this.type);
                 ps.executeUpdate();
                 ps.close();
                 this.setUid(ids[0] + "." + ids[1]);
@@ -275,6 +289,7 @@ public class Wicket extends OC_Object{
                 wicket.setUpdateDateTime(rs.getTimestamp("OC_WICKET_UPDATETIME"));
                 wicket.setUpdateUser(ScreenHelper.checkString(rs.getString("OC_WICKET_UPDATEUID")));
                 wicket.setVersion(rs.getInt("OC_WICKET_VERSION"));
+                wicket.setType(SH.c(rs.getString("OC_WICKET_TYPE")));
 
                 vWickets.addElement(wicket);
             }
@@ -328,6 +343,7 @@ public class Wicket extends OC_Object{
                 wicket.setUpdateDateTime(rs.getTimestamp("OC_WICKET_UPDATETIME"));
                 wicket.setUpdateUser(ScreenHelper.checkString(rs.getString("OC_WICKET_UPDATEUID")));
                 wicket.setVersion(rs.getInt("OC_WICKET_VERSION"));
+                wicket.setType(SH.c(rs.getString("OC_WICKET_TYPE")));
 
                 vWickets.addElement(wicket);
             }
@@ -393,6 +409,7 @@ public class Wicket extends OC_Object{
                     wicket.setUpdateDateTime(rs.getTimestamp("OC_WICKET_UPDATETIME"));
                     wicket.setUpdateUser(ScreenHelper.checkString(rs.getString("OC_WICKET_UPDATEUID")));
                     wicket.setVersion(rs.getInt("OC_WICKET_VERSION"));
+                    wicket.setType(SH.c(rs.getString("OC_WICKET_TYPE")));
 
                     vWickets.addElement(wicket);
                 }
@@ -441,6 +458,7 @@ public class Wicket extends OC_Object{
                 wicket.setBalance(rs.getDouble("OC_WICKET_BALANCE"));
                 wicket.setAuthorizedUsersId(ScreenHelper.checkString(rs.getString("OC_WICKET_AUTHORIZEDUSERS")));
                 wicket.setVersion(rs.getInt("OC_WICKET_VERSION"));
+                wicket.setType(SH.c(rs.getString("OC_WICKET_TYPE")));
 
                 vWickets.addElement(wicket);
             }
@@ -481,6 +499,48 @@ public class Wicket extends OC_Object{
 
                     if(rs.next()){
                         sServiceUID = ScreenHelper.checkString(rs.getString("OC_WICKET_SERVICEUID"));
+                    }
+                    rs.close();
+                    ps.close();
+
+                    sName = sWicketUID + " " + sServiceUID;
+                }catch(Exception e){
+                    e.printStackTrace();
+                }finally{
+                    try{
+                        if(rs!=null)rs.close();
+                        if(ps!=null)ps.close();
+                        oc_conn.close();
+                    }catch(Exception e){
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+        return sName;
+    }
+
+    public static String getWicketName(String sWicketUID, String language){
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        String sName = "";
+        String sServiceUID = "";
+        String sSelect = "SELECT OC_WICKET_SERVICEUID FROM OC_WICKETS WHERE OC_WICKET_SERVERID = ? AND OC_WICKET_OBJECTID = ?";
+
+        if(sWicketUID != null && sWicketUID.length() > 0){
+            String sUids[] = sWicketUID.split("\\.");
+            if(sUids.length == 2){
+                Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
+                try{
+                    ps = oc_conn.prepareStatement(sSelect);
+                    ps.setInt(1,Integer.parseInt(sUids[0]));
+                    ps.setInt(2,Integer.parseInt(sUids[1]));
+
+                    rs = ps.executeQuery();
+
+                    if(rs.next()){
+                        sServiceUID = SH.getTran("service",SH.checkString(rs.getString("OC_WICKET_SERVICEUID")),language);
                     }
                     rs.close();
                     ps.close();
@@ -980,7 +1040,8 @@ public class Wicket extends OC_Object{
                                      " OC_WICKET_CREATETIME,"+
                                      " OC_WICKET_UPDATETIME,"+
                                      " OC_WICKET_UPDATEUID,"+
-                                     " OC_WICKET_VERSION"+
+                                     " OC_WICKET_VERSION,"+
+                                     " OC_WICKET_TYPE"+
                               " FROM OC_WICKETS"+
                               "  WHERE OC_WICKET_SERVERID = ?"+
                               "   AND OC_WICKET_OBJECTID = ?";

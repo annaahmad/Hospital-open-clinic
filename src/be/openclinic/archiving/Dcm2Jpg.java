@@ -38,6 +38,8 @@ import org.dcm4che2.imageio.plugins.dcm.DicomImageReadParam;
 import org.dcm4che2.io.DicomInputStream;
 import org.dcm4che2.util.CloseUtils;
 
+import com.pixelmed.dicom.DicomException;
+import com.pixelmed.display.ConsumerFormatImageMaker;
 import com.sun.image.codec.jpeg.ImageFormatException;
 
 import be.mxs.common.util.system.Debug;
@@ -191,7 +193,18 @@ public class Dcm2Jpg {
         }
     }
     
-
+    public void convert(String src, String dest, HttpSession session) throws IOException {
+    	 try {
+			ConsumerFormatImageMaker.convertFileToEightBitImage(src,dest, "png", 0);
+		} catch (DicomException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
+    
     public void convert(File src, ServletOutputStream dest, HttpSession session) throws IOException {
         ImageReader reader = DicomUtils.getDCM4CHE2DicomImageReader();
         DicomImageReadParam param = 

@@ -1,6 +1,8 @@
 package be.mxs.common.util.pdf.general.oc.examinations;
 
 import be.mxs.common.util.pdf.general.PDFGeneralBasic;
+import net.admin.User;
+
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfPCell;
 
@@ -39,7 +41,13 @@ public class PDFMedicalImagingRequest2 extends PDFGeneralBasic {
             // indentification rx
             itemValue = getItemValue(IConstants_PREFIX+"ITEM_TYPE_MIR2_IDENTIFICATION_RX");
             if(itemValue.length() > 0){
-                addItemRow(table,getTran("Web.Occup",IConstants_PREFIX+"ITEM_TYPE_MIR_IDENTIFICATION_RX"),getTran("web.occup",itemValue));
+                addItemRow(table,getTran("web.occup",IConstants_PREFIX+"ITEM_TYPE_MIR_IDENTIFICATION_RX"),getTran("web.occup",itemValue));
+            }
+
+            // prescripteur
+            itemValue = getItemValue(IConstants_PREFIX+"ITEM_TYPE_MIR2_INTERNALPRESCRIBER");
+            if(itemValue.length() > 0){
+                addItemRow(table,getTran("web","internalprescriber"),User.getFullUserName(itemValue));
             }
 
             // add transaction to doc
@@ -74,53 +82,55 @@ public class PDFMedicalImagingRequest2 extends PDFGeneralBasic {
         if(itemValue.equals("medwan.common.true")){
             addItemRow(table,getTran("Web.Occup","urgency"),getTran("web.occup","medwan.common.yes").toLowerCase());
         }
+        if(getPartsOfTransactionToPrint()<3) {
+	        
+	        // examination reason
+	        itemValue = getItemValue(IConstants_PREFIX+"ITEM_TYPE_MIR2_EXAMINATIONREASON"+itemIdx);
+	        if(itemValue.length() > 0){
+	            addItemRow(table,getTran("Web.Occup","examinationreason"),itemValue);
+	        }
+	
+	        // original_modified
+	        itemValue = getItemValue(IConstants_PREFIX+"ITEM_TYPE_MIR2_ORIGINAL_MODIFIED"+itemIdx);
+	        if(itemValue.equals("medwan.common.true")){
+	            addItemRow(table,getTran("Web.Occup","original_modified"),getTran("web.occup","medwan.common.yes").toLowerCase());
+	        }
+	
+	        // modification reason
+	        itemValue = getItemValue(IConstants_PREFIX+"ITEM_TYPE_MIR2_ORIGINAL_MODIFIED_REASON"+itemIdx);
+	        if(itemValue.length() > 0){
+	            addItemRow(table,getTran("Web.Occup","medwan.common.reason"),getTran("web.occup",itemValue));
+	        }
+	
+	        // prestation received
+	        itemValue = getItemValue(IConstants_PREFIX+"ITEM_TYPE_OTHER_REQUESTS_PRESTATION"+itemIdx);
+	        if(itemValue.equals("medwan.common.true")){
+	            addItemRow(table,getTran("Web.Occup","medwan.healthrecord.executionby"),getTran("web.occup","medwan.common.yes").toLowerCase());
+	        }
+	
+	        // prestation reason (exam not performed)
+	        itemValue = getItemValue(IConstants_PREFIX+"ITEM_TYPE_OTHER_REQUESTS_PRESTATION_REASON"+itemIdx);
+	        if(itemValue.length() > 0){
+	            addItemRow(table,getTran("Web.Occup","medwan.common.notPerformedReason"),getTran("web.occup",itemValue));
+	        }
+	        
+	        // protocol
+	        itemValue = getItemValue(IConstants_PREFIX+"ITEM_TYPE_MIR2_PROTOCOL"+itemIdx);
+	        if(itemValue.length() > 0){
+	            addItemRow(table,getTran("Web.Occup",IConstants_PREFIX+"ITEM_TYPE_MIR_PROTOCOL"),itemValue);
+	        }
 
-        // examination reason
-        itemValue = getItemValue(IConstants_PREFIX+"ITEM_TYPE_MIR2_EXAMINATIONREASON"+itemIdx);
-        if(itemValue.length() > 0){
-            addItemRow(table,getTran("Web.Occup","examinationreason"),itemValue);
-        }
-
-        // original_modified
-        itemValue = getItemValue(IConstants_PREFIX+"ITEM_TYPE_MIR2_ORIGINAL_MODIFIED"+itemIdx);
-        if(itemValue.equals("medwan.common.true")){
-            addItemRow(table,getTran("Web.Occup","original_modified"),getTran("web.occup","medwan.common.yes").toLowerCase());
-        }
-
-        // modification reason
-        itemValue = getItemValue(IConstants_PREFIX+"ITEM_TYPE_MIR2_ORIGINAL_MODIFIED_REASON"+itemIdx);
-        if(itemValue.length() > 0){
-            addItemRow(table,getTran("Web.Occup","medwan.common.reason"),getTran("web.occup",itemValue));
-        }
-
-        // prestation received
-        itemValue = getItemValue(IConstants_PREFIX+"ITEM_TYPE_OTHER_REQUESTS_PRESTATION"+itemIdx);
-        if(itemValue.equals("medwan.common.true")){
-            addItemRow(table,getTran("Web.Occup","medwan.healthrecord.executionby"),getTran("web.occup","medwan.common.yes").toLowerCase());
-        }
-
-        // prestation reason (exam not performed)
-        itemValue = getItemValue(IConstants_PREFIX+"ITEM_TYPE_OTHER_REQUESTS_PRESTATION_REASON"+itemIdx);
-        if(itemValue.length() > 0){
-            addItemRow(table,getTran("Web.Occup","medwan.common.notPerformedReason"),getTran("web.occup",itemValue));
-        }
-
+	        // nothing to mention
+	        itemValue = getItemValue(IConstants_PREFIX+"ITEM_TYPE_MIR2_NOTHING_TO_MENTION"+itemIdx);
+	        if(itemValue.length() > 0){
+	            addItemRow(table,getTran("Web.Occup",IConstants_PREFIX+"ITEM_TYPE_MIR_NOTHING_TO_MENTION"),getTran("web.occup",itemValue));
+	        }
+        } 
+	        
         // prestation validated
         itemValue = getItemValue(IConstants_PREFIX+"ITEM_TYPE_OTHER_REQUESTS_VALIDATION"+itemIdx);
         if(itemValue.equals("medwan.common.true")){
             addItemRow(table,getTran("Web.Occup","medwan.healthrecord.validationby"),getTran("web.occup","medwan.common.yes").toLowerCase());
-        }
-
-        // protocol
-        itemValue = getItemValue(IConstants_PREFIX+"ITEM_TYPE_MIR2_PROTOCOL"+itemIdx);
-        if(itemValue.length() > 0){
-            addItemRow(table,getTran("Web.Occup",IConstants_PREFIX+"ITEM_TYPE_MIR_PROTOCOL"),itemValue);
-        }
-
-        // nothing to mention
-        itemValue = getItemValue(IConstants_PREFIX+"ITEM_TYPE_MIR2_NOTHING_TO_MENTION"+itemIdx);
-        if(itemValue.length() > 0){
-            addItemRow(table,getTran("Web.Occup",IConstants_PREFIX+"ITEM_TYPE_MIR_NOTHING_TO_MENTION"),getTran("web.occup",itemValue));
         }
 
         // radiologist 1

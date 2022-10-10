@@ -3,6 +3,7 @@ package be.openclinic.assets;
 import be.openclinic.common.OC_Object;
 import be.openclinic.system.SH;
 import be.openclinic.util.Nomenclature;
+import net.admin.Service;
 import be.mxs.common.util.db.MedwanQuery;
 import be.mxs.common.util.system.Debug;
 import be.mxs.common.util.system.HTMLEntities;
@@ -871,6 +872,7 @@ public class MaintenanceOperation extends OC_Object {
         Connection oc_conn = MedwanQuery.getInstance().getOpenclinicConnection();
         
         try{
+        	SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         	//*** compose query ***************************
             String sSql = "SELECT * FROM OC_MAINTENANCEOPERATIONS,OC_MAINTENANCEPLANS,OC_ASSETS WHERE OC_ASSET_OBJECTID=replace(OC_MAINTENANCEPLAN_ASSETUID,'"+MedwanQuery.getInstance().getConfigString("serverId","1")+".','') AND OC_MAINTENANCEPLAN_OBJECTID=replace(OC_MAINTENANCEOPERATION_MAINTENANCEPLANUID,'"+MedwanQuery.getInstance().getConfigString("serverId","1")+".','')"; // 'where' facilitates further composition of query
 
@@ -881,20 +883,23 @@ public class MaintenanceOperation extends OC_Object {
 
             // performed-period
             if(findItem.periodPerformedBegin!=null && findItem.periodPerformedEnd!=null){
-                sSql+= " AND OC_MAINTENANCEOPERATION_DATE BETWEEN '"+findItem.periodPerformedBegin+"' AND '"+findItem.periodPerformedEnd+"'";
+                sSql+= " AND OC_MAINTENANCEOPERATION_DATE BETWEEN '"+df.format(findItem.periodPerformedBegin)+"' AND '"+df.format(findItem.periodPerformedEnd)+"'";
             }
             else if(findItem.periodPerformedBegin!=null){
-                sSql+= " AND OC_MAINTENANCEOPERATION_DATE > '"+findItem.periodPerformedBegin+"'";
+                sSql+= " AND OC_MAINTENANCEOPERATION_DATE > '"+df.format(findItem.periodPerformedBegin)+"'";
             }
             else if(findItem.periodPerformedEnd!=null){
-                sSql+= " AND OC_MAINTENANCEOPERATION_DATE <= '"+findItem.periodPerformedEnd+"'";
+                sSql+= " AND OC_MAINTENANCEOPERATION_DATE <= '"+df.format(findItem.periodPerformedEnd)+"'";
             }
             
             if(ScreenHelper.checkString(findItem.getTag()).split(";")[0].length()>0){
                 sSql+= " AND OC_MAINTENANCEPLAN_ASSETUID = '"+findItem.getTag().split(";")[0]+"'";
             }
             if(ScreenHelper.checkString(findItem.getTag()).split(";").length>1 && ScreenHelper.checkString(findItem.getTag()).split(";")[1].length()>0){
-                sSql+= " AND OC_ASSET_SERVICE like '"+findItem.getTag().split(";")[1]+"%'";
+                sSql+= " AND OC_ASSET_SERVICE in ("+Service.getChildIdsAsString(findItem.getTag().split(";")[1])+")";
+            }
+            if(ScreenHelper.checkString(findItem.getTag()).split(";").length>2 && ScreenHelper.checkString(findItem.getTag()).split(";")[2].length()>0){
+                sSql+= " AND OC_ASSET_NOMENCLATURE like '"+findItem.getTag().split(";")[2]+"%'";
             }
             if(ScreenHelper.checkString(findItem.operator).length() > 0){
                 sSql+= " AND OC_MAINTENANCEOPERATION_OPERATOR LIKE '%"+findItem.operator+"%'";
@@ -904,7 +909,6 @@ public class MaintenanceOperation extends OC_Object {
             }
             
             sSql+= " ORDER BY OC_MAINTENANCEOPERATION_MAINTENANCEPLANUID ASC,OC_MAINTENANCEOPERATION_DATE ASC";
-            
             ps = oc_conn.prepareStatement(sSql);
             
                         

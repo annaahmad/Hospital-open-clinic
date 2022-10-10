@@ -192,15 +192,30 @@
                 <script>writeTranDate();</script>
             </td>
         </tr>
+		<tr>
+			<td class='admin2' colspan='4'><%writeVitalSigns(pageContext); %></td>
+		</tr>	
         <tr>
         	<td class='admin'><%=getTran(request,"web","newinprogram",sWebLanguage) %></td>
-        	<td class='admin2'><%=SH.writeDefaultRadioButtons((TransactionVO)transaction, request, "yesno", "ITEM_TYPE_FP_NEWINPROGRAM", sWebLanguage, false, "", "") %></td>
-        	<td class='admin'><%=getTran(request,"web","postabortion",sWebLanguage) %></td>
-        	<td class='admin2'><%=SH.writeDefaultRadioButtons((TransactionVO)transaction, request, "yesno", "ITEM_TYPE_FP_POSTABORTION", sWebLanguage, false, "", "") %></td>
+        	<td class='admin2'><%=SH.writeDefaultRadioButtons((TransactionVO)transaction, request, "yesno", "!ITEM_TYPE_FP_NEWINPROGRAM", sWebLanguage, false, "onchange='checkabandoned()'", "") %></td>
+        	<td class='admin'><%=getTran(request,"pf","active",sWebLanguage) %></td>
+        	<td class='admin2'><%=SH.writeDefaultRadioButtons((TransactionVO)transaction, request, "yesno", "!ITEM_TYPE_FP_ACTIVE", sWebLanguage, false, "", "") %></td>
+        	<script>
+        		function checkabandoned(){
+        			if(document.getElementById("ITEM_TYPE_FP_NEWINPROGRAM.1").checked){
+        				document.getElementById("abandonedmethod").style.display="none";
+        			}
+        			else{
+        				document.getElementById("abandonedmethod").style.display="";
+        			}
+        		}
+        	</script>
         </tr>
         <tr>
+        	<td class='admin'><%=getTran(request,"web","postabortion",sWebLanguage) %></td>
+        	<td class='admin2'><%=SH.writeDefaultRadioButtons((TransactionVO)transaction, request, "yesno", "ITEM_TYPE_FP_POSTABORTION", sWebLanguage, false, "", "") %></td>
         	<td class='admin'><%=getTran(request,"web","postpartum",sWebLanguage) %></td>
-        	<td class='admin2' colspan='3'><%=SH.writeDefaultRadioButtons((TransactionVO)transaction, request, "msas.postpartum", "ITEM_TYPE_FP_POSTPARTUM", sWebLanguage, false, "", "") %></td>
+        	<td class='admin2'><%=SH.writeDefaultRadioButtons((TransactionVO)transaction, request, "msas.postpartum", "ITEM_TYPE_FP_POSTPARTUM", sWebLanguage, false, "", "") %></td>
         </tr>
         <tr class='admin'><td colspan='4'><%=getTran(request,"web","methodandlogistics",sWebLanguage) %></td></tr>
         <tr>
@@ -221,12 +236,39 @@
         	<td class='admin'><%=getTran(request,"web","othermethods",sWebLanguage) %></td>
         	<td class='admin2'><%=SH.writeDefaultCheckBoxes((TransactionVO)transaction, request, "msas.othermethods", "ITEM_TYPE_FP_OTHERMETHODS", sWebLanguage, false, "", "") %></td>
         </tr>
+        <tbody id='abandonedmethod' style='display: none'>
+	        <tr class='admin'><td colspan='4'><%=getTran(request,"web","abandonedmethod",sWebLanguage) %></td></tr>
+	        <tr>
+	        	<td class='admin'><%=getTran(request,"web","contraceptivepill",sWebLanguage) %></td>
+	        	<td class='admin2'><%=SH.writeDefaultRadioButtons((TransactionVO)transaction, request, "msas.contraceptivepill", "ITEM_TYPE_FP_ABANDONED_CONTRACEPTICEPILL", sWebLanguage, false, "", "") %></td>
+	        	<td class='admin'><%=getTran(request,"web","diu",sWebLanguage) %></td>
+	        	<td class='admin2'><%=SH.writeDefaultCheckBox((TransactionVO)transaction, request, "medwan.common.true", "ITEM_TYPE_FP_ABANDONED_DIU", sWebLanguage, "") %></td>
+	        </tr>
+	        <tr>
+	        	<td class='admin'><%=getTran(request,"web","injection",sWebLanguage) %></td>
+	        	<td class='admin2'><%=SH.writeDefaultRadioButtons((TransactionVO)transaction, request, "msas.injection", "ITEM_TYPE_FP_ABANDONED_INJECTION", sWebLanguage, false, "", "") %></td>
+	        	<td class='admin'><%=getTran(request,"web","implant",sWebLanguage) %></td>
+	        	<td class='admin2'><%=SH.writeDefaultRadioButtons((TransactionVO)transaction, request, "msas.implant", "ITEM_TYPE_FP_ABANDONED_IMPLANT", sWebLanguage, false, "", "") %></td>
+	        </tr>
+	        <tr>
+	        	<td class='admin'><%=getTran(request,"web","naturalmethod",sWebLanguage) %></td>
+	        	<td class='admin2'><%=SH.writeDefaultCheckBoxes((TransactionVO)transaction, request, "msas.naturalmethod", "ITEM_TYPE_FP_ABANDONED_NATURALMETHOD", sWebLanguage, false, "", "") %></td>
+	        	<td class='admin'><%=getTran(request,"web","othermethods",sWebLanguage) %></td>
+	        	<td class='admin2'><%=SH.writeDefaultCheckBoxes((TransactionVO)transaction, request, "msas.othermethods", "ITEM_TYPE_FP_ABANDONED_OTHERMETHODS", sWebLanguage, false, "", "") %></td>
+	        </tr>
+        </tbody>
         <tr class='admin'><td colspan='4'><%=getTran(request,"web","consultation",sWebLanguage) %></td></tr>
         <tr>
         	<td class='admin'><%=getTran(request,"web","reasonforencounter",sWebLanguage) %></td>
         	<td class='admin2'><%=SH.writeDefaultRadioButtons((TransactionVO)transaction, request, "msas.pf.reasonvisit", "ITEM_TYPE_FP_RFE", sWebLanguage, false, "", "") %></td>
         	<td class='admin'><%=getTran(request,"web","sideeffects",sWebLanguage) %></td>
         	<td class='admin2'><%=SH.writeDefaultTextArea(session, (TransactionVO)transaction, "ITEM_TYPE_FP_SIDEEFFECTS", 50, 1) %></td>
+        </tr>
+        <tr>
+        	<td class='admin'><%=getTran(request,"web","incidents",sWebLanguage) %></td>
+        	<td class='admin2'><%=SH.writeDefaultRadioButtons((TransactionVO)transaction, request, "msas.pf.incidents", "ITEM_TYPE_FP_INCIDENTS", sWebLanguage, false, "", "") %></td>
+        	<td class='admin'><%=getTran(request,"web","pvvih",sWebLanguage) %></td>
+        	<td class='admin2'><%=SH.writeDefaultRadioButtons((TransactionVO)transaction, request, "yesno", "ITEM_TYPE_FP_HIVPOS", sWebLanguage, false, "", "") %></td>
         </tr>
         <tr>
         	<td class='admin'><%=getTran(request,"web","additionalservice",sWebLanguage) %></td>
@@ -327,12 +369,16 @@
   }
 
   function submitForm(){
-    transactionForm.saveButton.disabled = true;
-    <%
-        SessionContainerWO sessionContainerWO = (SessionContainerWO)SessionContainerFactory.getInstance().getSessionContainerWO(request,SessionContainerWO.class.getName());
-        out.print(takeOverTransaction(sessionContainerWO,activeUser,"document.transactionForm.submit();"));
-    %>
+	  if(checkMandatoryFields()){
+	    transactionForm.saveButton.disabled = true;
+	    <%
+	        SessionContainerWO sessionContainerWO = (SessionContainerWO)SessionContainerFactory.getInstance().getSessionContainerWO(request,SessionContainerWO.class.getName());
+	        out.print(takeOverTransaction(sessionContainerWO,activeUser,"document.transactionForm.submit();"));
+	    %>
+  	  }
   }
+  checkabandoned();
+
 </script>
     
 <%=writeJSButtons("transactionForm","saveButton")%>        

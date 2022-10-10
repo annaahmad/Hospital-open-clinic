@@ -19,6 +19,7 @@ import be.mxs.common.util.system.ScreenHelper;
 import be.mxs.common.util.db.MedwanQuery;
 import be.mxs.webapp.wl.struts.actions.healthrecord.CreateTransactionAction;
 import be.openclinic.finance.*;
+import be.openclinic.system.SH;
 import be.openclinic.adt.Encounter;
 import be.openclinic.adt.Encounter.EncounterService;
 import net.admin.*;
@@ -394,7 +395,7 @@ public class PDFInsurarInvoiceGeneratorASCOMA extends PDFInvoiceGenerator {
             		uid="?";
             	}
             	else {
-            		uid=new SimpleDateFormat("dd/MM/yyyy").format(debet.getEncounter().getBegin())+" - "+debet.getEncounter().getPatient().getFullName();
+            		uid=SH.formatDate(debet.getEncounter().getBegin())+" - "+debet.getEncounter().getPatient().getFullName();
             	}
             	if(beneficiaries.get(uid)==null){
             		beneficiaries.put(uid, new TreeSet());
@@ -740,7 +741,7 @@ public class PDFInsurarInvoiceGeneratorASCOMA extends PDFInvoiceGenerator {
             		uid="?";
             	}
             	else {
-            		uid=debet.getEncounter().getPatient().getFullName()+" - "+new SimpleDateFormat("dd/MM/yyyy").format(debet.getEncounter().getBegin());
+            		uid=debet.getEncounter().getPatient().getFullName()+" - "+SH.formatDate(debet.getEncounter().getBegin());
             	}
             	if(beneficiaries.get(uid)==null){
             		beneficiaries.put(uid, new TreeSet());
@@ -1086,7 +1087,7 @@ public class PDFInsurarInvoiceGeneratorASCOMA extends PDFInvoiceGenerator {
             		uid="?";
             	}
             	else {
-            		uid=debet.getEncounter().getPatient().getFullName()+" - "+new SimpleDateFormat("dd/MM/yyyy").format(debet.getEncounter().getBegin());
+            		uid=debet.getEncounter().getPatient().getFullName()+" - "+SH.formatDate(debet.getEncounter().getBegin());
             	}
             	if(beneficiaries.get(uid)==null){
             		beneficiaries.put(uid, new TreeSet());

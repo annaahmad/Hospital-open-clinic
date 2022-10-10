@@ -2462,26 +2462,6 @@ public class OpenclinicSlaveExporter implements Runnable{
 			ps.setInt(2, Integer.parseInt(oldid));
 			ps.execute();
 			ps.close();
-			ps = occonn.prepareStatement("update arch_documents set arch_document_tran_transactionid=? where arch_document_tran_transactionid=?");
-			ps.setInt(1, Integer.parseInt(newid));
-			ps.setInt(2, Integer.parseInt(oldid));
-			ps.execute();
-			ps.close();
-			ps = occonn.prepareStatement("update items set transactionid=? where transactionid=?");
-			ps.setInt(1, Integer.parseInt(newid));
-			ps.setInt(2, Integer.parseInt(oldid));
-			ps.execute();
-			ps.close();
-			ps = occonn.prepareStatement("update permanentitems set transactionid=? where transactionid=?");
-			ps.setInt(1, Integer.parseInt(newid));
-			ps.setInt(2, Integer.parseInt(oldid));
-			ps.execute();
-			ps.close();
-			ps = occonn.prepareStatement("update requestedlabanalyses set transactionid=? where transactionid=?");
-			ps.setInt(1, Integer.parseInt(newid));
-			ps.setInt(2, Integer.parseInt(oldid));
-			ps.execute();
-			ps.close();
 
 			success=true;
 		}
@@ -2515,6 +2495,11 @@ public class OpenclinicSlaveExporter implements Runnable{
 			ps.execute();
 			ps.close();
 			ps = occonn.prepareStatement("update items set transactionid=? where transactionid=?");
+			ps.setInt(1, Integer.parseInt(newid));
+			ps.setInt(2, Integer.parseInt(oldid));
+			ps.execute();
+			ps.close();
+			ps = occonn.prepareStatement("update items set value=? where value=? and type='be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_LAB_OBJECTID'");
 			ps.setInt(1, Integer.parseInt(newid));
 			ps.setInt(2, Integer.parseInt(oldid));
 			ps.execute();

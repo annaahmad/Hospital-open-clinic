@@ -162,6 +162,7 @@
                     hMenu.put(getTran(request,"web.manage","manageworddocuments",sWebLanguage),"main.do?Page=system/manageWordDocuments.jsp"); idx++;
                     hMenu.put(getTran(request,"web.manage","reloadservices",sWebLanguage),"main.do?Page=util/clearServices.jsp"); idx++;
                     hMenu.put(getTran(request,"web.manage","importinventoryfile",sWebLanguage),"main.do?Page=assets/importAssets.jsp"); idx++;
+                    hMenu.put(getTran(request,"web.manage","manageDHIS2",sWebLanguage),"main.do?Page=system/manageDHIS2.jsp");
 
                     // depends on selection of activePatient
                     out.print(ScreenHelper.writeTblHeader(getTran(request,"web.occup","medwan.common.other",sWebLanguage),sCONTEXTPATH)+

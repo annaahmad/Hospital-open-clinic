@@ -21,7 +21,7 @@
 	    document.open();
 	
 	    String sProject = checkString((String)session.getAttribute("activeProjectTitle")).toLowerCase();
-	    String sFooterText = MedwanQuery.getInstance().getConfigString("footer."+sProject,"OpenClinic pdf engine (c)2007-"+new SimpleDateFormat("yyyy").format(new java.util.Date())+", Post-Factum bvba");
+	    String sFooterText = MedwanQuery.getInstance().getConfigString("footer."+sProject,"OpenClinic pdf engine (c) 2007-"+new SimpleDateFormat("yyyy").format(new java.util.Date())+", Post-Factum bvba");
 	    
 	    // Loop over the pages of the baos
 	    com.itextpdf.text.pdf.PdfImportedPage pdfPage;
@@ -32,16 +32,15 @@
 	    com.itextpdf.text.Rectangle rect = document.getPageSize();
 	    for(int i=0; i<totalPageCount;){
 	    	pdfPage = copy.getImportedPage(reader,++i);
-	
 	        //*** add footer with page numbers ***
 	        stamp = copy.createPageStamp(pdfPage);
 	        
 	    	// footer text
-	        phrase = com.itextpdf.text.Phrase.getInstance(0,sFooterText,com.itextpdf.text.FontFactory.getFont(FontFactory.HELVETICA,Math.round((double)10*fontSizePercentage/100.0)));
+	        phrase = com.itextpdf.text.Phrase.getInstance(0,sFooterText,com.itextpdf.text.FontFactory.getFont(FontFactory.HELVETICA,Math.round((double)8*fontSizePercentage/100.0)));
             com.itextpdf.text.pdf.ColumnText.showTextAligned(stamp.getUnderContent(),1,phrase,(rect.getLeft()+rect.getRight())/2,rect.getBottom()+26,0);
 	       
 	        // page count
-	        phrase = com.itextpdf.text.Phrase.getInstance(0,String.format("%d/%d",i,totalPageCount),com.itextpdf.text.FontFactory.getFont(FontFactory.HELVETICA,Math.round((double)10*fontSizePercentage/100.0)));
+	        phrase = com.itextpdf.text.Phrase.getInstance(0,String.format("%d/%d",i,totalPageCount),com.itextpdf.text.FontFactory.getFont(FontFactory.HELVETICA,Math.round((double)8*fontSizePercentage/100.0)));
             com.itextpdf.text.pdf.ColumnText.showTextAligned(stamp.getUnderContent(),1,phrase,(rect.getLeft()+rect.getRight())/2,rect.getBottom()+18,0);        
 	   
 	        stamp.alterContents();	
@@ -92,7 +91,10 @@
         
         try{
             PDFCreator pdfCreator = new GeneralPDFCreator(sessionContainerWO, activeUser, activePatient, sAPPTITLE, sAPPDIR, null, null, sPrintLanguage);
-            origBaos = pdfCreator.generatePDFDocumentBytes(request, application, (sSelectedFilter.length() > 0), (sSelectedFilter.equals("select_trantypes_recent") ? 0 : 1));
+            if(SH.p(request,"limitVisibility").length()>0){
+            	((GeneralPDFCreator)pdfCreator).setPartsOfTransactionToPrint(Integer.parseInt(SH.p(request,"limitVisibility")));
+            }
+            origBaos = ((GeneralPDFCreator)pdfCreator).generatePDFDocumentBytes(request, application, (sSelectedFilter.length() > 0), (sSelectedFilter.equals("select_trantypes_recent") ? 0 : 1));
             ByteArrayOutputStream newBaos = addFooterToPdf(origBaos,session);
 
             // prevent caching

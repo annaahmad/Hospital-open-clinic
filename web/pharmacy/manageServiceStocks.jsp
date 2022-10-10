@@ -91,7 +91,7 @@ private String addValidationUser(int userIdx, String userName, String sWebLangua
 	            // translate service name
 	            sServiceUid = serviceStock.getServiceUid();
 	            sServiceName = getTranNoLink("Service",sServiceUid,sWebLanguage);
-	
+
 	            // only search manager-name when different manager-UID
 	            sManagerUid = checkString(serviceStock.getStockManagerUid());
 	            if(sManagerUid.length() > 0){
@@ -100,10 +100,10 @@ private String addValidationUser(int userIdx, String userName, String sWebLangua
 	                    sManagerName = ScreenHelper.getFullUserName(sManagerUid);
 	                }
 	            }
-	
+
 	            // number of products in serviceStock
 	            int productCount = ServiceStock.getProductStockCount(sServiceStockUid);
-	
+
 	            // alternate row-style
 	            if(sClass.equals("")) sClass = "1";
 	            else                  sClass = "";
@@ -116,7 +116,7 @@ private String addValidationUser(int userIdx, String userName, String sWebLangua
 	                html.append("<img src='"+sCONTEXTPATH+"/_img/icons/icon_delete.png' class='link' onclick=\"doDelete('"+sServiceStockUid+"');\" title='"+deleteTran+"'/>").
 	                     append("<img src='"+sCONTEXTPATH+"/_img/icons/icon_edit.png' class='link' onclick=\"printFiche('"+sServiceStockUid+"','"+serviceStock.getName()+"');\" title='"+getTranNoLink("web","stockfiche",sWebLanguage)+"'/>");
 	            }
-	            
+
 	            if(serviceStock.getNosync()==0){
 	                html.append("&nbsp;<img src='"+sCONTEXTPATH+"/_img/icons/icon_sync.gif' class='link' title='"+getTranNoLink("web","sync",sWebLanguage)+"' onclick='javascript:syncDetails(\""+serviceStock.getUid()+"\");'/>");
 	            }
@@ -135,7 +135,7 @@ private String addValidationUser(int userIdx, String userName, String sWebLangua
 	                .append("<td onclick=\"doShowDetails('"+sServiceStockUid+"');\">"+sServiceName+"</td>")
 	                .append("<td onclick=\"doShowDetails('"+sServiceStockUid+"');\">"+sManagerName+"</td>")
 	                .append("<td onclick=\"doShowDetails('"+sServiceStockUid+"');\">"+productCount+"</td>");
-	
+
 	            // display "manage product stocks"-button when user is authorized
 	            if(serviceStock.isAuthorizedUser(activeUser.userid)){
 	                html.append("<td>");
@@ -151,7 +151,7 @@ private String addValidationUser(int userIdx, String userName, String sWebLangua
 	            else{
 	                html.append("<td onclick=\"doShowDetails('"+sServiceStockUid+"');\">&nbsp;</td>");
 	            }
-	
+
 	            html.append("</tr>");
             }
         }
@@ -166,7 +166,6 @@ private String addValidationUser(int userIdx, String userName, String sWebLangua
 	long prescriptionvalidity=MedwanQuery.getInstance().getConfigInt("activePrescriptionValidityPeriodInDays",30);
 	java.util.Date dStart = new java.util.Date(new java.util.Date().getTime()-prescriptionvalidity*day);
 	boolean bHasActivePrescriptions = activePatient==null?false:Prescription.findUndelivered(activePatient.personid,ScreenHelper.formatDate(dStart)).size()>0;
-
     String sAction = checkString(request.getParameter("Action"));
     if(sAction.length()==0){
     	sAction = "find";

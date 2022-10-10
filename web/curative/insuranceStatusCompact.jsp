@@ -61,7 +61,7 @@
             <table width="100%" class="sortable" cellpadding="0" cellspacing="0" id="searchresultsInsurance" style="border:0;">
                 <tr class="gray">
                     <td><%=getTran(request,"insurance","insurancenr",sWebLanguage)%></td>
-                    <td><%=getTran(request,"web","company",sWebLanguage)%></td>
+                    <td colspan='2'><%=getTran(request,"web","company",sWebLanguage)%></td>
                     <td><%=getTran(request,"web","tariff",sWebLanguage)%></td>
                     <td><%=getTran(request,"web","start",sWebLanguage)%></td>
                 </tr>
@@ -102,6 +102,29 @@
                     %>
                     <%=ScreenHelper.checkString(currentInsurance.getInsuranceNr())%></td>
                     <td <%=!bAuth?"style='text-decoration: line-through'":""%>><%=sDefault+"<span  onclick=\"doSelect('"+currentInsurance.getUid()+"');\">"+(ScreenHelper.checkString(currentInsurance.getInsuranceCategoryLetter()).length()>0 && currentInsurance.getInsuranceCategory().getLabel().length()>0?ScreenHelper.checkString(currentInsurance.getInsuranceCategory().getInsurar().getName())+ " ("+currentInsurance.getInsuranceCategory().getCategory()+": "+currentInsurance.getInsuranceCategory().getPatientShare()+"/"+(100-Integer.parseInt(currentInsurance.getInsuranceCategory().getPatientShare()))+")":"")%></span></td>
+                   	<%
+                   		if(SH.c(currentInsurance.getExtraInsurarUid()).length()>0 && currentInsurance.getExtraInsurar()!=null){
+                   			if(currentInsurance.getDefaultInsurance()==1){
+                   			%>
+                   				<td <%=!bAuth?"style='text-decoration: line-through; color: grey'":"style='color: grey'"%>>
+                   					[<input style='vertical-align: middle;' type='checkbox' id='defaultExtraInsurar' name='defaultExtraInsurar' class='text' value='1' checked>
+                   					<%=currentInsurance.getExtraInsurar().getName() %>]&nbsp;
+                   				</td>
+                   			<%
+                   			}
+                   			else{
+                   			%>
+                   				<td <%=!bAuth?"style='text-decoration: line-through; color: grey'":"style='color: grey'"%>>
+                   					[ <img width='10px' style='vertical-align: middle;' src='<%=sCONTEXTPATH%>/_img/themes/default/uncheck.gif'/>
+                   					<%=currentInsurance.getExtraInsurar().getName() %>]&nbsp;	
+                   				</td>
+                   			<%
+                   			}
+                   		}
+                   		else{
+                   			%><td/><%
+                   		}
+                   	%>
                     <td  onclick="doSelect('<%=currentInsurance.getUid()%>');" <%=!bAuth?"style='text-decoration: line-through'":""%>><%=ScreenHelper.checkString(getTran(request,"insurance.types",currentInsurance.getType(),sWebLanguage))%></td>
                     <td  onclick="doSelect('<%=currentInsurance.getUid()%>');" <%=!bAuth?"style='text-decoration: line-through'":""%>><%=ScreenHelper.checkString(currentInsurance.getStart()!=null?ScreenHelper.stdDateFormat.format(currentInsurance.getStart()):"")%></td>
                 </tr>

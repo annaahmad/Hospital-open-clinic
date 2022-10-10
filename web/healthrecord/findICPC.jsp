@@ -31,17 +31,24 @@ String sEncounterUid = checkString(request.getParameter("EncounterUid"));
 <form name="icpcForm" method="post" onSubmit="doFind();">
     <table class='menu' width='100%' cellspacing="0">
         <tr>
-            <td nowrap class='admin'><%=HTMLEntities.htmlentities(getTran(request,"Web","Keyword",sWebLanguage))%>&nbsp;&nbsp;</td>
+            <td nowrap class='admin'>
+            	<%=HTMLEntities.htmlentities(getTran(request,"Web","Keyword",sWebLanguage))%>&nbsp;<br/>
+            	<%	if(SH.ci("forceLocalDiagnosticCodes",0)==1){%>
+            			<input type='checkbox' class='text' name='forceLocalCodes' id='forceLocalCodes' value="1" <%=SH.p(request,"findaction").length()==0||SH.p(request,"forceLocalCodes").equalsIgnoreCase("1")?"checked":""%>/><%=getTran(request,"web","forcelocalcodes",sWebLanguage) %>
+            	<%	} %>
+            </td>
             <td colspan='2' class='admin2'>
                 <input type='text' class='text' name='keywords' id='keywords' size='40' value="<%=request.getParameter("keywords")!=null?request.getParameter("keywords"):""%>" onblur="limitLength(this);" onKeyDown='if(enterEvent(event,13)){doFind();}'/>
                 <input class='button' type='button' name='findButton' onclick='doFind();' value='<%=getTranNoLink("Web","Find",sWebLanguage)%>'/>
                 <input class='button' type='button' name='cancel' onclick='window.close()' value='<%=getTranNoLink("Web","Close",sWebLanguage)%>'/>
+                <input type='hidden' name='findaction' id='findaction' value='1'/>
             </td>
         </tr>
         <tr><td class="navigation_line" height="1" colspan="3"></td></tr>
         <tr><td colspan='3'><span id='info'></span></td></tr>
         <%
             String keywords = checkString(request.getParameter("keywords"));
+        	boolean bLocalCodes = SH.p(request,"forceLocalCodes").equalsIgnoreCase("1");
             int foundRecords = 0;
 
             // List the found ICPC-codes
@@ -51,33 +58,34 @@ String sEncounterUid = checkString(request.getParameter("EncounterUid"));
 
                 // header
                 if (codes.size() > 0) {
-                    out.print("<tr class='admin'><td colspan='3'>" + getTran(request,"Web.Occup", "ICPC-2", sWebLanguage) + (activeUser.getAccessRight("diagnoses.createlocal.select")?" (<a href='javascript:addnewlocalcode(\""+keywords+"\")'>"+getTran(request,"web","managelocalcodes",sWebLanguage)+"</a>)":"")+"</td></tr>");
+                    out.print("<tr class='admin'><td colspan='3'>" + getTran(request,"Web.Occup", bLocalCodes?"localcoding":"ICPC-2", sWebLanguage) + (activeUser.getAccessRight("diagnoses.createlocal.select")?" (<a href='javascript:addnewlocalcode(\""+keywords+"\")'>"+getTran(request,"web","managelocalcodes",sWebLanguage)+"</a>)":"")+"</td></tr>");
                 }
 
         %><tbody class="hand"><%
                 String oldcodelabel="";
                 for (int n=0; n<codes.size(); n++){
-
                     code = (ICPCCode)codes.elementAt(n);
-					if("ABCDEFGHIJKLMNOPQRSTUVWXYZ".indexOf(code.code.substring(0,1).toUpperCase())<0){
-						continue;
+					if(!bLocalCodes || code.code.startsWith("UU")){
+						if("ABCDEFGHIJKLMNOPQRSTUVWXYZ".indexOf(code.code.substring(0,1).toUpperCase())<0){
+							continue;
+						}
+	                    foundRecords++;
+	                    if(!oldcodelabel.equalsIgnoreCase(code.label)){
+	                        oldcodelabel=code.label;
+	                        // parent-codes end with xx00
+	                        if (code.code.length()==5 && code.code.substring(3,5).equalsIgnoreCase("00") && !code.code.startsWith("UU")){
+	                            out.print("<tr class='label2'>");
+	                        }
+	                        else {
+	                            out.print("<tr style='label3'>");
+	                        }
+	
+	                        out.print(" <td onclick='addICPC(\""+code.code+"\",\""+code.label+"\");'>"+code.code+"</td>");
+	                        out.print(" <td onclick='addICPC(\""+code.code+"\",\""+code.label+"\");'>"+code.label+"</td>");
+	                        out.print(" <td><input type='text' class='text' name='ICPCComment"+code.code+"' value='-' size='20'/></td>");
+	                        out.print("</tr>");
+	                    }
 					}
-                    foundRecords++;
-                    if(!oldcodelabel.equalsIgnoreCase(code.label)){
-                        oldcodelabel=code.label;
-                        // parent-codes end with xx00
-                        if (code.code.length()==5 && code.code.substring(3,5).equalsIgnoreCase("00")){
-                            out.print("<tr class='label2'>");
-                        }
-                        else {
-                            out.print("<tr style='label3'>");
-                        }
-
-                        out.print(" <td onclick='addICPC(\""+code.code+"\",\""+code.label+"\");'>"+code.code+"</td>");
-                        out.print(" <td onclick='addICPC(\""+code.code+"\",\""+code.label+"\");'>"+code.label+"</td>");
-                        out.print(" <td><input type='text' class='text' name='ICPCComment"+code.code+"' value='-' size='20'/></td>");
-                        out.print("</tr>");
-                    }
                 }
 
                 if (MedwanQuery.getInstance().getConfigInt("enableICD10")==1 || request.getParameter("enableICD10")!=null){
@@ -86,27 +94,28 @@ String sEncounterUid = checkString(request.getParameter("EncounterUid"));
 
                     // header
                     if(codes.size() > 0){
-                        out.print("<tr class='admin'><td colspan='3'>"+getTran(request,"Web.Occup","ICD-10",sWebLanguage)+"</td></tr>");
+                        out.print("<tr class='admin'><td colspan='3'>"+getTran(request,"Web.Occup",bLocalCodes?"localcoding":"ICD-10",sWebLanguage)+"</td></tr>");
                     }
 
                     for (int n=0; n<codes.size(); n++){
-
-                        code = (ICPCCode)codes.elementAt(n);
-    					if("ABCDEFGHIJKLMNOPQRSTUVWXYZ".indexOf(code.code.substring(0,1).toUpperCase())<0){
-    						continue;
+	                    code = (ICPCCode)codes.elementAt(n);
+    					if(!bLocalCodes || code.code.startsWith("UU")){
+	    					if("ABCDEFGHIJKLMNOPQRSTUVWXYZ".indexOf(code.code.substring(0,1).toUpperCase())<0){
+	    						continue;
+	    					}
+	                        foundRecords++;
+	                        if (code.code.length()<=3 && !code.code.startsWith("UU")){
+	                            out.print("<tr class='label2'>");
+	                        }
+	                        else {
+	                            out.print("<tr style='label3'>");
+	                        }
+	
+	                        out.print(" <td onclick='addICD10(\""+code.code+"\",\""+code.label+"\");'>"+code.code+"</td>");
+	                        out.print(" <td onclick='addICD10(\""+code.code+"\",\""+code.label+"\");' onmouseover='this.style.cursor=\"hand\"' onmouseout='this.style.cursor=\"default\"'>"+code.label+"</td>");
+	                        out.print(" <td><input type='text' class='text' name='ICD10Comment"+code.code+"' value='-' size='20'/></td>");
+	                        out.print("</tr>");
     					}
-                        foundRecords++;
-                        if (code.code.length()<=3){
-                            out.print("<tr class='label2'>");
-                        }
-                        else {
-                            out.print("<tr style='label3'>");
-                        }
-
-                        out.print(" <td onclick='addICD10(\""+code.code+"\",\""+code.label+"\");'>"+code.code+"</td>");
-                        out.print(" <td onclick='addICD10(\""+code.code+"\",\""+code.label+"\");' onmouseover='this.style.cursor=\"hand\"' onmouseout='this.style.cursor=\"default\"'>"+code.label+"</td>");
-                        out.print(" <td><input type='text' class='text' name='ICD10Comment"+code.code+"' value='-' size='20'/></td>");
-                        out.print("</tr>");
                     }
                 }
 

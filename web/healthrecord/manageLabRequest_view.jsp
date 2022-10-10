@@ -575,7 +575,16 @@
   var iIndexLA = <%=iTotal%>;
   var sLA = "<%=sLA%>";
 
-  function doReferral(){
+  function searchEncounter(){
+    openPopup("/_common/search/searchEncounter.jsp&ts=<%=getTs()%>&Varcode=encounteruid&VarText=&FindEncounterPatient=<%=activePatient.personid%>");
+  }
+  
+  if( document.getElementById('encounteruid').value=="" <%=request.getParameter("nobuttons")==null?"":" && 1==0"%>){
+  	alertDialogDirectText('<%=getTranNoLink("web","no.encounter.linked",sWebLanguage)%>');
+  	searchEncounter();
+  }	
+
+	  function doReferral(){
 	  var tranID = '<%=checkString(request.getParameter("be.mxs.healthrecord.transaction_id"))%>';
 	  var serverID = '<%=checkString(request.getParameter("be.mxs.healthrecord.server_id"))%>';
 	  openPopup('healthrecord/sendTransactionSelect.jsp&transactionId='+tranID+'&serverId='+serverID+'&ts=<%=getTs()%>',500,500);

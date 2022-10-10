@@ -25,6 +25,57 @@
 		return bHasTransactions;
 	}
 	
+	String getAgeGroup(java.util.Date dateOfBirth){
+		String age="";
+		if(dateOfBirth==null){
+			return "";
+		}
+		int a = AdminPerson.getAge(dateOfBirth);
+		if(a<0){
+			age="?";
+		}
+		else if(a<1){
+			age = "0->11m";
+		}
+		else if(a<5){
+			age = "12->59m";
+		}
+		else if(a<10){
+			age = "5->9";
+		}
+		else if(a<10){
+			age = "5->9";
+		}
+		else if(a<15){
+			age = "10->14";
+		}
+		else if(a<20){
+			age = "15->19";
+		}
+		else if(a<25){
+			age = "20->24";
+		}
+		else if(a<30){
+			age = "25->29";
+		}
+		else if(a<35){
+			age = "30->34";
+		}
+		else if(a<40){
+			age = "35->39";
+		}
+		else if(a<45){
+			age = "40->44";
+		}
+		else if(a<50){
+			age = "45->49";
+		}
+		else {
+			age = "50+";
+		}
+		return age;
+	}
+
 	java.sql.Date getSqlDate(ResultSet rs,String datefield){
 		java.sql.Date d = null;
 		try{
@@ -66,6 +117,87 @@
                 "   and OC_LABEL_TYPE = 'service'"+
                 "   and OC_LABEL_LANGUAGE = '"+sWebLanguage+"'"+
                 " order by upper(OC_LABEL_ID)";
+    }
+	//*** 1a - PBF REGISTRE BLEU ****************************************************
+    else if("pbf.burundi.blueregister".equalsIgnoreCase(sQueryType)){
+    	//Construire le contenu du rapport
+    	StringBuffer sResult = new StringBuffer();
+    	sResult.append("DATE;PATIENTID;PATIENT;SEXE;AGE;CHEF_FAMILLE;ADRESSE;VILLAGE;COLLINE;MODE_PAIEMENT;NRO_ASSURANCE;PROFESSION_PARENT;CARTE_IDENTITE_PARENT;CARTE_VACCINATION\r\n");
+		//ajouter le contenu du rapport
+    	Connection conn = SH.getOpenClinicConnection();
+		String sQuery = "select oc_encounter_begindate,a.personid,lastname,firstname,gender,"+
+    					" dateofbirth,comment5,address,sector,city,cell,comment3 "+
+						" from oc_encounters e,adminview a,privateview p where "+
+						" a.personid = p.personid and"+
+						" oc_encounter_patientuid = a.personid and"+
+    					" oc_encounter_begindate >=? and"+
+						" oc_encounter_begindate < ? and"+
+    					" datediff(oc_encounter_begindate,dateofbirth)<5*365"+
+						" order by oc_encounter_begindate";
+    	PreparedStatement ps = conn.prepareStatement(sQuery);
+    	ps.setDate(1,new java.sql.Date(ScreenHelper.parseDate(request.getParameter("begin")).getTime()));
+    	ps.setDate(2,new java.sql.Date(ScreenHelper.parseDate(request.getParameter("end")).getTime()));
+    	ResultSet rs = ps.executeQuery();
+    	while(rs.next()){
+    		sResult.append(SH.formatDate(rs.getDate("oc_encounter_begindate"))+";");
+    		sResult.append(rs.getString("personid")+";");
+    		sResult.append(SH.c(rs.getString("lastname")).toUpperCase()+","+rs.getString("firstname")+";");
+    		sResult.append(SH.c(rs.getString("gender"))+";");
+    		sResult.append(getAgeGroup(rs.getDate("dateofbirth"))+";");
+    		sResult.append(SH.c(rs.getString("comment5"))+";");
+    		sResult.append(SH.c(rs.getString("address"))+";");
+    		sResult.append(SH.c(rs.getString("sector"))+";");
+    		sResult.append(SH.c(rs.getString("city"))+";");
+			String personid = rs.getString("personid");
+			//Chercher toutes les assurances du patient
+			String sModePaiement = "",sInsuranceNr="";
+			Vector<Insurance> insurances = Insurance.selectInsurances(personid, "OC_INSURANCE_INSURARUID");
+			for(int n=0;n<insurances.size();n++){
+				Insurance insurance = insurances.elementAt(n);
+				//Exclure les assurances inactives au moment du début du contact
+				if(!insurance.getStart().after(rs.getDate("oc_encounter_begindate")) && 
+							(insurance.getStop()==null || 
+							insurance.getStop().after(rs.getDate("oc_encounter_begindate")))){
+					//Cette assurance était active au début du contact
+					//Exclure l'assurance "CASH"
+					if(insurance.getInsurar()!=null && !insurance.getInsurarUid().equalsIgnoreCase(SH.cs("selfinsureduid","1.72"))){
+						if(sModePaiement.length()>0){
+							sModePaiement+=",";
+							sInsuranceNr+=",";
+						}
+						//Cette assurance n'est pas "CASH", donc on l'ajoute
+						sModePaiement+=insurance.getInsurar().getName();
+						sInsuranceNr+=insurance.getInsuranceNr();
+					}
+				}
+			}
+			sResult.append(sModePaiement+";");
+			sResult.append(sInsuranceNr+";");
+    		sResult.append(SH.c(rs.getString("cell"))+";");
+    		AdminPerson person = AdminPerson.get(personid);
+    		sResult.append(SH.c(person.adminextends.get("tracnetid"))+";");
+    		sResult.append(SH.c(rs.getString("comment3"))+";");
+    		sResult.append("\r\n");
+    	}
+    	rs.close();
+    	ps.close();
+    	conn.close();
+    	//Produire une réponse http
+    	//Mettre à jour l'en-tête de la réponse http
+        response.setContentType("application/octet-stream; charset=windows-1252");
+	    response.setHeader("Content-Disposition", "Attachment;Filename=\"BlueRegister"+new SimpleDateFormat("yyyyMMddHHmmss").format(new Date())+".csv\"");
+	    //Mettre le body dans la réponse
+	    // Convertir le body en array de bytes (octets)
+	    byte[] aBytes = sResult.toString().getBytes("ISO-8859-1");
+	    for(int n=0;n<aBytes.length;n++){
+	    	// Ecrire chaque byte dans le body de la réponse http
+	    	response.getOutputStream().write(aBytes[n]);
+	    }
+	    // Etre sûr que tous les bytes ont été envoyés vers le navigateur
+	    response.getOutputStream().flush();
+	    // Clôturer la réponse: indique à l'indicateur que c'est terminé
+	    response.getOutputStream().close();
+	    done=true;
     }
 	//*** 2 - PATIENTS ***************************************************
     else if("patients.list".equalsIgnoreCase(sQueryType)){
@@ -1106,7 +1238,7 @@
 		    ServletOutputStream os = response.getOutputStream();
 		    
 		    // header
-			sResult.append("DATE;IDPERSONNE;NOM;PRENOM;AGE;NAISSANCE;PROCEDURE;ANESTHESIE;CHIRURGIEN;TYPE_CHIRURGIE;CIM10;DIAGNOSTIC\r\n");
+			sResult.append("DATE;IDPERSONNE;NOM;PRENOM;AGE;NAISSANCE;PROCEDURE;ANESTHESIE;CHIRURGIEN;TYPE_CHIRURGIE;MODE_PAIEMENT;NUMERO_ASSURANCE;CIM10;DIAGNOSTIC\r\n");
 			while(rs.next()){
 				int serverid = rs.getInt("serverid");
 				int transactionid = rs.getInt("transactionid");
@@ -1135,8 +1267,20 @@
 					else if(a<25){
 						age = "20->24";
 					}
+					else if(a<30){
+						age = "25->29";
+					}
+					else if(a<35){
+						age = "30->34";
+					}
+					else if(a<40){
+						age = "35->39";
+					}
+					else if(a<45){
+						age = "40->44";
+					}
 					else if(a<50){
-						age = "25->49";
+						age = "45->49";
 					}
 					else {
 						age = "50+";
@@ -1210,6 +1354,7 @@
 						}
 						sDiagnoses.append(";");
 					}
+					Insurance insurance = Insurance.getDefaultInsuranceForPatient(rs.getString("personid"));
 
 					if(transaction.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_SURGICAL_ACT1").length()>0){
 						sResult.append(ScreenHelper.formatDate(transaction.getUpdateTime())+";");
@@ -1222,6 +1367,14 @@
 						sResult.append(ScreenHelper.removeAccents(getTranNoLink("anesthesiaacts.mspls",transaction.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_ANESTHESIA_ACT1"),sWebLanguage)).toUpperCase()+";");
 						sResult.append(ScreenHelper.removeAccents(transaction.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_SURGEONS")).replaceAll("\n",", ").replaceAll("\r","")+";");
 						sResult.append(ScreenHelper.removeAccents(getTranNoLink("surgerytypes",transaction.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_SURGERYTYPE"),sWebLanguage)).toUpperCase()+";");
+						//Add insurancedata here
+						if(insurance!=null && insurance.getInsurar()!=null){
+							sResult.append(insurance.getInsurar().getName()+";"+insurance.getInsuranceNr());
+						}
+						else{
+							sResult.append(";");
+						}
+						sResult.append(";");
 						sResult.append(sDiagnoses);
 						sResult.append("\r\n");
 					}
@@ -1236,6 +1389,14 @@
 						sResult.append(ScreenHelper.removeAccents(getTranNoLink("anesthesiaacts.mspls",transaction.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_ANESTHESIA_ACT2"),sWebLanguage)).toUpperCase()+";");
 						sResult.append(ScreenHelper.removeAccents(transaction.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_SURGEONS")).replaceAll("\n",", ").replaceAll("\r","")+";");
 						sResult.append(ScreenHelper.removeAccents(getTranNoLink("surgerytypes",transaction.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_SURGERYTYPE"),sWebLanguage)).toUpperCase()+";");
+						//Add insurancedata here
+						if(insurance!=null && insurance.getInsurar()!=null){
+							sResult.append(insurance.getInsurar().getName()+";"+insurance.getInsuranceNr());
+						}
+						else{
+							sResult.append(";");
+						}
+						sResult.append(";");
 						sResult.append(sDiagnoses);
 						sResult.append("\r\n");
 					}
@@ -1250,6 +1411,14 @@
 						sResult.append(ScreenHelper.removeAccents(getTranNoLink("anesthesiaacts.mspls",transaction.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_ANESTHESIA_ACT3"),sWebLanguage)).toUpperCase()+";");
 						sResult.append(ScreenHelper.removeAccents(transaction.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_SURGEONS")).replaceAll("\n",", ").replaceAll("\r","")+";");
 						sResult.append(ScreenHelper.removeAccents(getTranNoLink("surgerytypes",transaction.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OPERATION_PROTOCOL_SURGERYTYPE"),sWebLanguage)).toUpperCase()+";");
+						//Add insurancedata here
+						if(insurance!=null && insurance.getInsurar()!=null){
+							sResult.append(insurance.getInsurar().getName()+";"+insurance.getInsuranceNr());
+						}
+						else{
+							sResult.append(";");
+						}
+						sResult.append(";");
 						sResult.append(sDiagnoses);
 						sResult.append("\r\n");
 					}
@@ -1327,8 +1496,20 @@
 						else if(a<25){
 							age = "20->24";
 						}
+						else if(a<30){
+							age = "25->29";
+						}
+						else if(a<35){
+							age = "30->34";
+						}
+						else if(a<40){
+							age = "35->39";
+						}
+						else if(a<45){
+							age = "40->44";
+						}
 						else if(a<50){
-							age = "25->49";
+							age = "45->49";
 						}
 						else {
 							age = "50+";
@@ -1420,8 +1601,20 @@
 						else if(a<25){
 							age = "20->24";
 						}
+						else if(a<30){
+							age = "25->29";
+						}
+						else if(a<35){
+							age = "30->34";
+						}
+						else if(a<40){
+							age = "35->39";
+						}
+						else if(a<45){
+							age = "40->44";
+						}
 						else if(a<50){
-							age = "25->49";
+							age = "45->49";
 						}
 						else {
 							age = "50+";
@@ -1530,8 +1723,20 @@
 						else if(a<25){
 							age = "20->24";
 						}
+						else if(a<30){
+							age = "25->29";
+						}
+						else if(a<35){
+							age = "30->34";
+						}
+						else if(a<40){
+							age = "35->39";
+						}
+						else if(a<45){
+							age = "40->44";
+						}
 						else if(a<50){
-							age = "25->49";
+							age = "45->49";
 						}
 						else {
 							age = "50+";
@@ -1643,8 +1848,20 @@
 					else if(a<25){
 						age = "20->24";
 					}
+					else if(a<30){
+						age = "25->29";
+					}
+					else if(a<35){
+						age = "30->34";
+					}
+					else if(a<40){
+						age = "35->39";
+					}
+					else if(a<45){
+						age = "40->44";
+					}
 					else if(a<50){
-						age = "25->49";
+						age = "45->49";
 					}
 					else {
 						age = "50+";
@@ -1797,8 +2014,20 @@
 						else if(a<25){
 							age = "20->24";
 						}
+						else if(a<30){
+							age = "25->29";
+						}
+						else if(a<35){
+							age = "30->34";
+						}
+						else if(a<40){
+							age = "35->39";
+						}
+						else if(a<45){
+							age = "40->44";
+						}
 						else if(a<50){
-							age = "25->49";
+							age = "45->49";
 						}
 						else {
 							age = "50+";
@@ -2013,7 +2242,7 @@
 	    ServletOutputStream os = response.getOutputStream();
 	    
 	    // header
-		sResult.append("IDPERSONNE;NOM;PRENOM;SEXE;NAISSANCE;AGE;ARRIVEE;ORIGINZ;DEPART;DUREE;EVOLUTION;CIM10_ARRIVEE;CIM10_SORTIE;PAIEMENT;SERVICE\r\n");
+		sResult.append("IDPERSONNE;NOM;PRENOM;SEXE;NAISSANCE;AGE;ARRIVEE;ORIGINE;DEPART;DUREE;EVOLUTION;CIM10_ARRIVEE;CIM10_SORTIE;MODE_PAIEMENT;NUMERO_ASSURANCE;SERVICE\r\n");
 	    
     	byte[] b = sResult.toString().getBytes("ISO-8859-1");
         for(int n=0; n<b.length; n++){
@@ -2081,8 +2310,20 @@
 					else if(a<25){
 						age = "20->24";
 					}
+					else if(a<30){
+						age = "25->29";
+					}
+					else if(a<35){
+						age = "30->34";
+					}
+					else if(a<40){
+						age = "35->39";
+					}
+					else if(a<45){
+						age = "40->44";
+					}
 					else if(a<50){
-						age = "25->49";
+						age = "45->49";
 					}
 					else {
 						age = "50+";
@@ -2106,7 +2347,7 @@
 			sResult.append(ScreenHelper.removeAccents(getTranNoLink("urgency.origin",(String)ht.get("oc_encounter_origin"),sWebLanguage)).toUpperCase()+";");
 			if(enddate!=null){
 				sResult.append(new SimpleDateFormat("dd/MM/yyyy HH:mm").format(enddate)+";");
-				sResult.append(((enddate.getTime()-begindate.getTime())/day+1)+";");
+				sResult.append(SH.nightsBetween(begindate, enddate)+";");
 			}
 			else{
 				sResult.append(";;");
@@ -2208,8 +2449,15 @@
 				bInit=true;
 			}
 			sResult.append(";");
-			sResult.append(ScreenHelper.removeAccents(getTranNoLink("payment.type",paymenttype,sWebLanguage)).toUpperCase()+";");
-			
+			//Add insurancedata here
+			Insurance insurance = Insurance.getDefaultInsuranceForPatient(""+personid);
+			if(insurance!=null && insurance.getInsurar()!=null){
+				sResult.append(insurance.getInsurar().getName()+";"+insurance.getInsuranceNr());
+			}
+			else{
+				sResult.append(";");
+			}
+			sResult.append(";");
 			Encounter encounter = Encounter.get(encounterServerId+"."+encounterObjectId);
 			PreparedStatement ps2 = loc_conn.prepareStatement("select distinct oc_encounter_serviceuid from oc_encounters_view where oc_encounter_serverid=? and oc_encounter_objectid=?");
 			ps2.setInt(1,encounterServerId);
@@ -2244,6 +2492,112 @@
         }
     }
 	//*** 8 - GLOBAL LIST ************************************************
+    else if("global.list.financial".equalsIgnoreCase(sQueryType)){
+        Hashtable<String,String> prestations = new Hashtable();
+        Hashtable<String,String> insurars = new Hashtable();
+        Hashtable<String,String> diagnoses = new Hashtable();
+    	Connection loc_conn = MedwanQuery.getInstance().getLongOpenclinicConnection();
+        PreparedStatement ps = loc_conn.prepareStatement("select * from oc_prestations");
+        ResultSet rs = ps.executeQuery();
+        while(rs.next()){
+        	prestations.put(SH.getServerId()+"."+rs.getString("oc_prestation_objectid"),rs.getString("oc_prestation_description").toUpperCase());
+        }
+        rs.close();
+        ps.close();
+        ps = loc_conn.prepareStatement("select * from oc_insurars");
+        rs = ps.executeQuery();
+        while(rs.next()){
+        	insurars.put(SH.getServerId()+"."+rs.getString("oc_insurar_objectid"),rs.getString("oc_insurar_name").toUpperCase());
+        }
+        rs.close();
+        ps.close();
+        query = "select * from oc_diagnoses d,oc_encounters e where oc_diagnosis_codetype='icd10' and oc_diagnosis_encounteruid='"+SH.getServerId()+".'||oc_encounter_objectid"+
+      			" and OC_ENCOUNTER_BEGINDATE <= "+ MedwanQuery.getInstance().convertStringToDate("'<end>'")+
+		        " and OC_ENCOUNTER_BEGINDATE >= "+ MedwanQuery.getInstance().convertStringToDate("'<begin>'");
+		query = query.replaceAll("<begin>",request.getParameter("begin")).replaceAll("<end>",request.getParameter("end"));
+		ps = loc_conn.prepareStatement(query);
+        rs = ps.executeQuery();
+        while(rs.next()){
+        	String existing = "";
+			String diag=MedwanQuery.getInstance().getCodeTran("icd10", rs.getString("oc_diagnosis_code"), sWebLanguage).toUpperCase();
+        	if(diagnoses.get(SH.getServerId()+"."+rs.getString("oc_encounter_objectid"))!=null && !diagnoses.get(SH.getServerId()+"."+rs.getString("oc_encounter_objectid")).contains(diag)){
+				existing = diagnoses.get(SH.getServerId()+"."+rs.getString("oc_encounter_objectid"))+"|";
+        	}
+        	diagnoses.put(SH.getServerId()+"."+rs.getString("oc_encounter_objectid"),existing+diag);
+        }
+        rs.close();
+        ps.close();
+        HashSet patients = new HashSet();
+        HashSet encounters = new HashSet();
+		StringBuffer sResult = new StringBuffer();
+		sResult.append("PERSONID;GENDER;AGE;ENCOUNTERUID;TYPE;BEGIN;END;DURATION;DEPARTMENT;HEALTHSERVICE;INSURAR;PATIENTCOST;INSURARCOST;EXTRAINSURARCOST;OUTCOME;DIAGNOSIS;\n");
+		// search all encounters from this period
+		query = "select * from oc_encounters a, oc_debets d,adminview v, OC_INSURANCES i"+
+		        " where d.oc_debet_encounteruid = '"+SH.getServerId()+".'||oc_encounter_objectid"+
+				" and personid=oc_encounter_patientuid"+
+      			" and OC_ENCOUNTER_BEGINDATE <= "+ MedwanQuery.getInstance().convertStringToDate("'<end>'")+
+		        " and OC_ENCOUNTER_BEGINDATE >= "+ MedwanQuery.getInstance().convertStringToDate("'<begin>'")+
+		        " and OC_INSURANCE_OBJECTID=replace(oc_debet_insuranceuid,'"+SH.getServerId()+".','')"+
+		        " ORDER BY oc_encounter_objectid,oc_debet_date";
+		query = query.replaceAll("<begin>",request.getParameter("begin"))
+     		     	.replaceAll("<end>",request.getParameter("end"));
+    	SH.syslog(query);
+		ps = loc_conn.prepareStatement(query);
+		rs = ps.executeQuery();
+		while(rs.next()){
+			if(!patients.contains(rs.getString("personid"))){
+				patients.add(rs.getString("personid"));
+				sResult.append(rs.getString("personid")+";");
+			}
+			else {
+				sResult.append(";");
+			}
+			sResult.append(SH.c(rs.getString("gender")).toUpperCase()+";");
+			sResult.append(getAgeGroup(rs.getDate("dateofbirth"))+";");
+			if(!encounters.contains(rs.getString("oc_encounter_objectid"))){
+				sResult.append(rs.getString("oc_encounter_objectid")+";");
+			}
+			else {
+				sResult.append(";");
+			}
+			sResult.append(rs.getString("oc_encounter_type")+";");
+			sResult.append(SH.formatDate(rs.getDate("oc_encounter_begindate"))+";");
+			sResult.append(SH.formatDate(rs.getDate("oc_encounter_enddate"))+";");
+			java.util.Date end = rs.getTimestamp("oc_encounter_enddate");
+			if(!encounters.contains(rs.getString("oc_encounter_objectid")) && rs.getString("oc_encounter_type").equalsIgnoreCase("admission")){
+				sResult.append((end==null?"":SH.nightsBetween(rs.getTimestamp("oc_encounter_begindate"), end))+";");
+			}
+			else {
+				sResult.append(";");
+			}
+			if(!encounters.contains(rs.getString("oc_encounter_objectid"))){
+				encounters.add(rs.getString("oc_encounter_objectid"));
+			}
+			sResult.append(rs.getString("oc_debet_serviceuid")+";");
+			sResult.append(prestations.get(rs.getString("oc_debet_prestationuid"))+";");
+			sResult.append(insurars.get(rs.getString("oc_insurance_insuraruid"))+";");
+			sResult.append(SH.getPriceFormat(rs.getDouble("oc_debet_amount"))+";");
+			sResult.append(SH.getPriceFormat(rs.getDouble("oc_debet_insuraramount"))+";");
+			sResult.append(SH.getPriceFormat(rs.getDouble("oc_debet_extrainsuraramount"))+";");
+			sResult.append(SH.c(rs.getString("OC_ENCOUNTER_OUTCOME"))+";");
+			sResult.append(diagnoses.get(SH.getServerId()+"."+rs.getString("oc_encounter_objectid"))+";");
+			sResult.append("\n");
+		}
+		rs.close();
+		ps.close();
+		loc_conn.close();
+	    response.setContentType("application/octet-stream; charset=windows-1252");
+	    response.setHeader("Content-Disposition", "Attachment;Filename=\"OpenClinicStatistic"+new SimpleDateFormat("yyyyMMddHHmmss").format(new Date())+".csv\"");
+	   
+	    ServletOutputStream os = response.getOutputStream();
+    	byte[] b = sResult.toString().getBytes("ISO-8859-1");
+        for(int n=0; n<b.length; n++){
+            os.write(b[n]);
+        }
+        os.flush();
+        os.close();
+        done=true;
+    }
     else if("global.list".equalsIgnoreCase(sQueryType)){
         Connection loc_conn = MedwanQuery.getInstance().getLongOpenclinicConnection(),
     	           lad_conn = MedwanQuery.getInstance().getLongAdminConnection();

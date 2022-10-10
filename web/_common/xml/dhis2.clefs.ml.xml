@@ -1,0 +1,459 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dhis2>
+	<dataset label="Tableau croisé santé mentale Enfants" type="title" uid="CANV_ENFANT"/>
+	<dataset label="Tableau croisé santé mentale Enfants - Diagnostics et symptômes généraux" type="item" transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_CLEFS_CHILDREN" uid="CANV_ENFANT">
+		<categoryOptionCombo type="transactionitemvalue">
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_CHILDREN_DIAG1" uid="diage001" outputItemValue="medwan.common.true" name="Comportement"/>
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_CHILDREN_DIAG2" uid="diage002" outputItemValue="medwan.common.true" name="Conduite"/>
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_CHILDREN_DIAG3" uid="diage003" outputItemValue="medwan.common.true" name="Développement"/>
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_CHILDREN_DIAG4" uid="diage004" outputItemValue="medwan.common.true" name="Alcool"/>
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_CHILDREN_DIAG5" uid="diage005" outputItemValue="medwan.common.true" name="Drogues"/>
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_CHILDREN_DIAG6" uid="diage006" outputItemValue="medwan.common.true" name="Attention"/>
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_CHILDREN_DIAG7" uid="diage007" outputItemValue="medwan.common.true" name="Anxiété"/>
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_CHILDREN_DIAG8" uid="diage008" outputItemValue="medwan.common.true" name="Stress/trauma"/>
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_CHILDREN_DIAG9" uid="diage009" outputItemValue="medwan.common.true" name="Dépression"/>
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_CHILDREN_DIAG10" uid="diage010" outputItemValue="medwan.common.true" name="Adaptation"/>
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_CHILDREN_DIAG11" uid="diage011" outputItemValue="medwan.common.true" name="Psychose"/>
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_CHILDREN_DIAG12" uid="diage012" outputItemValue="medwan.common.true" name="Suicide"/>
+		</categoryOptionCombo>
+		<dataelements>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympgen001" label="Difficultés activité quotidienne">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_CHILDREN_SYMGEN1"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympgen002" label="Agitation psychomotrice">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_CHILDREN_SYMGEN2"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympgen003" label="Difficultés de concentration">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_CHILDREN_SYMGEN3"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympgen004" label="Difficultés de sommeil">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_CHILDREN_SYMGEN4"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympgen005" label="Humeur irritable">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_CHILDREN_SYMGEN5"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympgen006" label="Accès de colère">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_CHILDREN_SYMGEN6"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympgen007" label="Fatigue">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_CHILDREN_SYMGEN7"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympgen008" label="Plaintes somatiques">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_CHILDREN_SYMGEN8"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympgen009" label="Diminution du rendement scolaire">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_CHILDREN_SYMGEN9"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympgen010" label="Manque d´espoir face à l´avenir">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_CHILDREN_SYMGEN10"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympgen011" label="Pensées récurrentes de mort">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_CHILDREN_SYMGEN11"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympgen012" label="Gestes visant à se faire du mal ou à se tuer">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_CHILDREN_SYMGEN12"/>
+			</dataelement>
+		</dataelements>
+	</dataset>
+	<dataset label="Tableau croisé santé mentale Enfants - Diagnostics et symptômes spécifiques" type="item" transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_CLEFS_CHILDREN" uid="CANV_ENFANT">
+		<categoryOptionCombo type="transactionitemvalue">
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_CHILDREN_DIAG1" uid="diage001" outputItemValue="medwan.common.true" name="Comportement"/>
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_CHILDREN_DIAG2" uid="diage002" outputItemValue="medwan.common.true" name="Conduite"/>
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_CHILDREN_DIAG3" uid="diage003" outputItemValue="medwan.common.true" name="Développement"/>
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_CHILDREN_DIAG4" uid="diage004" outputItemValue="medwan.common.true" name="Alcool"/>
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_CHILDREN_DIAG5" uid="diage005" outputItemValue="medwan.common.true" name="Drogues"/>
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_CHILDREN_DIAG6" uid="diage006" outputItemValue="medwan.common.true" name="Attention"/>
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_CHILDREN_DIAG7" uid="diage007" outputItemValue="medwan.common.true" name="Anxiété"/>
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_CHILDREN_DIAG8" uid="diage008" outputItemValue="medwan.common.true" name="Stress/trauma"/>
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_CHILDREN_DIAG9" uid="diage009" outputItemValue="medwan.common.true" name="Dépression"/>
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_CHILDREN_DIAG10" uid="diage010" outputItemValue="medwan.common.true" name="Adaptation"/>
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_CHILDREN_DIAG11" uid="diage011" outputItemValue="medwan.common.true" name="Psychose"/>
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_CHILDREN_DIAG12" uid="diage012" outputItemValue="medwan.common.true" name="Suicide"/>
+		</categoryOptionCombo>
+		<dataelements>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspec001" label="Comportements agressifs">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC1"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspec002" label="Non respect des normes sociales">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC2"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspec003" label="Retard de développement">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC3"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspec004" label="Anomalies dans la communication">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC4"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspec005" label="Consommation récurrente d'alcool">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC5"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspec006" label="Manifestations observables alcool">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC6"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspec007" label="Symptômes somatiques">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC7"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspec008" label="Consommation récurrente de drogues">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC8"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspec009" label="Manifestations observables drogues">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC9"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspec010" label="Signes indiquant l'utilisation de drogues">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC10"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspec011" label="Hyperactivité">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC11"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspec012" label="Impulsivité excessive">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC12"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspec012a" label="Interruption de tâches">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC12A"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspec013" label="Anticipation et/ou peur">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC13"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspec014" label="Symptômes somatiques de tension">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC14"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspec015" label="Réaction événements passés">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC15"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspec016" label="Événements constamment revécus">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC16"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspec017" label="Détresse ">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC17"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspec018" label="Dissociation">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC18"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspec019" label="Évitement persistant">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC19"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspec020" label="Hypervigilance">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC20"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspec021" label="Jeux répétitifs liés au trauma">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC21"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspec022" label="Perturbation du développement">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC22"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspec023" label="Tristesse persistante">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC23"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspec024" label="Problèmes d'appétit">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC24"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspec025" label="Diminution de l'estime de soi">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC25"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspec026" label="Ennui">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC26"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspec027" label="Diminution de l'intérêt">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC27"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspec028" label="Symptômes dépressifs, anxieux ou comportementaux">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC28"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspec029" label="Facteurs de stress liés à l'histoire vie">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC29"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspec030" label="Hallucinations ">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC30"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspec031" label="Délires ">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC31"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspec032" label="Catatonie">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC32"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspec033" label="Comportement anormal et désorganisé">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC33"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspec034" label="Perte de volonté">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC34"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspec035" label="Dysfonctionnement social">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC35"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspec036" label="Agressivité">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_CHILDREN_SYMSPEC36"/>
+			</dataelement>
+		</dataelements>
+	</dataset>
+	<dataset label="Tableau croisé santé mentale Adultes" type="title" uid="CANV_ADULT"/>
+	<dataset label="Tableau croisé santé mentale Adultes - Diagnostics et symptômes généraux" type="item" transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_CLEFS_ADULT" uid="CANV_ADULT">
+		<categoryOptionCombo type="transactionitemvalue">
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_ADULT_DIAG1" uid="diaga001" outputItemValue="medwan.common.true" name="Conduite"/>
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_ADULT_DIAG2" uid="diaga002" outputItemValue="medwan.common.true" name="Alcool"/>
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_ADULT_DIAG3" uid="diaga003" outputItemValue="medwan.common.true" name="Drogues"/>
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_ADULT_DIAG4" uid="diaga004" outputItemValue="medwan.common.true" name="Anxiété"/>
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_ADULT_DIAG5" uid="diaga005" outputItemValue="medwan.common.true" name="Stress/trauma"/>
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_ADULT_DIAG6" uid="diaga006" outputItemValue="medwan.common.true" name="Dépression"/>
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_ADULT_DIAG7" uid="diaga007" outputItemValue="medwan.common.true" name="Adaptation"/>
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_ADULT_DIAG8" uid="diaga008" outputItemValue="medwan.common.true" name="Psychose"/>
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_ADULT_DIAG9" uid="diaga009" outputItemValue="medwan.common.true" name="Suicide"/>
+		</categoryOptionCombo>
+		<dataelements>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympgena001" label="Difficultés activité quotidienne">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_ADULT_SYMGEN1"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympgena002" label="Agitation psychomotrice">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_ADULT_SYMGEN2"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympgena003" label="Difficultés de concentration">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_ADULT_SYMGEN3"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympgena004" label="Difficultés de sommeil">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_ADULT_SYMGEN4"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympgena005" label="Humeur irritable">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_ADULT_SYMGEN5"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympgena006" label="Accès de colère">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_ADULT_SYMGEN6"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympgena007" label="Fatigue">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_ADULT_SYMGEN7"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympgena008" label="Plaintes somatiques">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_ADULT_SYMGEN8"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympgena009" label="Manque d´espoir face à l´avenir">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_ADULT_SYMGEN9"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympgena010" label="Pensées récurrentes de mort">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_ADULT_SYMGEN10"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympgena011" label="Gestes visant à se faire du mal ou à se tuer">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_ADULT_SYMGEN11"/>
+			</dataelement>
+		</dataelements>
+	</dataset>
+	<dataset label="Tableau croisé santé mentale Adultes - Diagnostics et symptômes spécifiques" type="item" transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_CLEFS_ADULT" uid="CANV_ADULT">
+		<categoryOptionCombo type="transactionitemvalue">
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_ADULT_DIAG1" uid="diaga001" outputItemValue="medwan.common.true" name="Conduite"/>
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_ADULT_DIAG2" uid="diaga002" outputItemValue="medwan.common.true" name="Alcool"/>
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_ADULT_DIAG3" uid="diaga003" outputItemValue="medwan.common.true" name="Drogues"/>
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_ADULT_DIAG4" uid="diaga004" outputItemValue="medwan.common.true" name="Anxiété"/>
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_ADULT_DIAG5" uid="diaga005" outputItemValue="medwan.common.true" name="Stress/trauma"/>
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_ADULT_DIAG6" uid="diaga006" outputItemValue="medwan.common.true" name="Dépression"/>
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_ADULT_DIAG7" uid="diaga007" outputItemValue="medwan.common.true" name="Adaptation"/>
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_ADULT_DIAG8" uid="diaga008" outputItemValue="medwan.common.true" name="Psychose"/>
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_ADULT_DIAG9" uid="diaga009" outputItemValue="medwan.common.true" name="Suicide"/>
+		</categoryOptionCombo>
+		<dataelements>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspeca001" label="Comportements agressifs">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_ADULT_SYMSPEC1"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspeca002" label="Non respect des normes sociales">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_ADULT_SYMSPEC2"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspeca003" label="Consommation récurrente d'alcool">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_ADULT_SYMSPEC3"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspeca004" label="Manifestations observables alcool">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_ADULT_SYMSPEC4"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspeca005" label="Symptômes somatiques">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_ADULT_SYMSPEC5"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspeca006" label="Consommation récurrente de drogues">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_ADULT_SYMSPEC6"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspeca007" label="Manifestations observables drogues">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_ADULT_SYMSPEC7"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspeca008" label="Signes indiquant l'utilisation de drogues">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_ADULT_SYMSPEC8"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspeca009" label="Anticipation et/ou peur">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_ADULT_SYMSPEC9"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspeca010" label="Symptômes somatiques de tension">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_ADULT_SYMSPEC10"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspeca011" label="Réaction événements passés">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_ADULT_SYMSPEC11"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspeca012" label="Événements constamment revécus">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_ADULT_SYMSPEC12"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspeca013" label="Détresse">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_ADULT_SYMSPEC13"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspeca014" label="Dissociation">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_ADULT_SYMSPEC14"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspeca015" label="Evitement">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_ADULT_SYMSPEC15"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspeca016" label="Hypervigilance">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_ADULT_SYMSPEC16"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspeca017" label="Tristesse persistante ">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_ADULT_SYMSPEC17"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspeca018" label="Problèmes d'appétit">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_ADULT_SYMSPEC18"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspeca019" label="Diminution de l'estime de soi">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_ADULT_SYMSPEC19"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspeca020" label="Diminution de l'intérêt">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_ADULT_SYMSPEC20"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspeca021" label="Symptômes dépressifs, anxieux ou comportementaux">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_ADULT_SYMSPEC21"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspeca022" label="Facteurs de stress liés à l'histoire vie">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_ADULT_SYMSPEC22"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspeca023" label="Hallucinations">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_ADULT_SYMSPEC23"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspeca024" label="Délires">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_ADULT_SYMSPEC24"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspeca025" label="Catatonie">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_ADULT_SYMSPEC25"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspeca026" label="Comportement anormal et désorganisé">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_ADULT_SYMSPEC26"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspeca027" label="Perte de volonté">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_ADULT_SYMSPEC27"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspeca028" label="Dysfonctionnement social">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_ADULT_SYMSPEC28"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspeca029" label="Agressivité">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_ADULT_SYMSPEC29"/>
+			</dataelement>
+		</dataelements>
+	</dataset>
+	<dataset label="Tableau croisé santé mentale Période périnatale" type="title" uid="CANV_PERINATAL"/>
+	<dataset label="Tableau croisé santé mentale Période périnatale - Diagnostics et symptômes généraux" type="item" transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_CLEFS_PERINATAL" uid="CANV_PERINATAL">
+		<categoryOptionCombo type="transactionitemvalue">
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_PERINATAL_DIAG1" uid="diagp001" outputItemValue="medwan.common.true" name="Anxiété"/>
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_PERINATAL_DIAG2" uid="diagp002" outputItemValue="medwan.common.true" name="Stress/trauma"/>
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_PERINATAL_DIAG3" uid="diagp003" outputItemValue="medwan.common.true" name="Dépression"/>
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_PERINATAL_DIAG4" uid="diagp004" outputItemValue="medwan.common.true" name="Adaptation"/>
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_PERINATAL_DIAG5" uid="diagp005" outputItemValue="medwan.common.true" name="Psychose"/>
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_PERINATAL_DIAG6" uid="diagp006" outputItemValue="medwan.common.true" name="Suicide"/>
+		</categoryOptionCombo>
+		<dataelements>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympgenp001" label="Difficultés activité quotidienne">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_PERINATAL_SYMGEN1"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympgenp002" label="Agitation psychomotrice">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_PERINATAL_SYMGEN2"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympgenp003" label="Difficultés de concentration">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_PERINATAL_SYMGEN3"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympgenp004" label="Difficultés de sommeil">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_PERINATAL_SYMGEN4"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympgenp005" label="Humeur irritable">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_PERINATAL_SYMGEN5"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympgenp006" label="Accès de colère">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_PERINATAL_SYMGEN6"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympgenp007" label="Fatigue">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_PERINATAL_SYMGEN7"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympgenp008" label="Plaintes somatiques">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_PERINATAL_SYMGEN8"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympgenp009" label="Manque d´espoir face à l´avenir">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_PERINATAL_SYMGEN9"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympgenp010" label="Pensées récurrentes de mort">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_PERINATAL_SYMGEN10"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympgenp011" label="Gestes visant à se faire du mal ou à se tuer">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_PERINATAL_SYMGEN11"/>
+			</dataelement>
+		</dataelements>
+	</dataset>
+	<dataset label="Tableau croisé santé mentale Période périnatale - Diagnostics et symptômes spécifiques" type="item" transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_CLEFS_PERINATAL" uid="CANV_PERINATAL">
+		<categoryOptionCombo type="transactionitemvalue">
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_PERINATAL_DIAG1" uid="diagp001" outputItemValue="medwan.common.true" name="Anxiété"/>
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_PERINATAL_DIAG2" uid="diagp002" outputItemValue="medwan.common.true" name="Stress/trauma"/>
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_PERINATAL_DIAG3" uid="diagp003" outputItemValue="medwan.common.true" name="Dépression"/>
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_PERINATAL_DIAG4" uid="diagp004" outputItemValue="medwan.common.true" name="Adaptation"/>
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_PERINATAL_DIAG5" uid="diagp005" outputItemValue="medwan.common.true" name="Psychose"/>
+			<option itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_PERINATAL_DIAG6" uid="diagp006" outputItemValue="medwan.common.true" name="Suicide"/>
+		</categoryOptionCombo>
+		<dataelements>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspecp001" label="Anticipation ">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_PERINATAL_SYMSPEC1"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspecp002" label="Symptômes somatiques de tension">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_PERINATAL_SYMSPEC2"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspecp003" label="Réaction événements passés">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_PERINATAL_SYMSPEC3"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspecp004" label="Événements constamment revécus">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_PERINATAL_SYMSPEC4"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspecp005" label="Détresse">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_PERINATAL_SYMSPEC5"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspecp006" label="Dissociation">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_PERINATAL_SYMSPEC6"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspecp007" label="Evitement">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_PERINATAL_SYMSPEC7"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspecp008" label="Hypervigilance">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_PERINATAL_SYMSPEC8"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspecp009" label="Anticipation et/ou peur">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_PERINATAL_SYMSPEC9"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspecp010" label="Problèmes d'appétit">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_PERINATAL_SYMSPEC10"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspecp011" label="Diminution de l'estime de soi">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_PERINATAL_SYMSPEC11"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspecp012" label="Diminution de l'intérêt">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_PERINATAL_SYMSPEC12"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspecp013" label="Symptômes dépressifs, anxieux ou comportementaux">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_PERINATAL_SYMSPEC13"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspecp014" label="Facteurs de stress liés à l'histoire vie">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_PERINATAL_SYMSPEC14"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspecp015" label="Hallucinations">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_PERINATAL_SYMSPEC15"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspecp016" label="Délires">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_PERINATAL_SYMSPEC16"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspecp017" label="Catatonie ">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_PERINATAL_SYMSPEC17"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspecp018" label="Comportement anormal et désorganisé">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_PERINATAL_SYMSPEC18"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspecp019" label="Perte de volonté">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_PERINATAL_SYMSPEC19"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspecp020" label="Dysfonctionnement social">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_PERINATAL_SYMSPEC20"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" uid="sympspecp021" label="Agressivité">
+				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CLEFS_PERINATAL_SYMSPEC21"/>
+			</dataelement>
+		</dataelements>
+	</dataset>
+</dhis2>

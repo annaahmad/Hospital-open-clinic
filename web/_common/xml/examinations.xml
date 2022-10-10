@@ -2200,4 +2200,43 @@
 		<fr>Dépistage des troubles de santé mentale en période périnatale (CLEFS)</fr>
 		<en>Mental health screening in perinatal period (CLEFS)</en>
 	</Row>
+	<Row>
+		<id>1230</id>
+		<class>msas</class>
+		<transactiontype>be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSAS_REGISTRY_DENTIST</transactiontype>
+		<fr>MSAS - Registre de consultation cabinet dentaire</fr>
+		<en>MSAS - Register for dentist consultation</en>
+		<es>MSAS - Registro de consulta de consultorio dental</es>
+	</Row>
+	<Row>
+		<id>1231</id>
+		<class>msas</class>
+		<transactiontype>be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_KABGAYI_OTHEROPERATION_PROTOCOL</transactiontype>
+		<fr>Fiche Autre Opération - modèle KABGAYI</fr>
+		<en>Other Surgery Protocol - KABGAYI model</en>
+	</Row>
+	<Row>
+		<id>1300</id>
+		<class>mspls</class>
+		<transactiontype>be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPNHOSP</transactiontype>
+		<fr>MSPLS - Hôpital - Registre des consultations prénatales</fr>
+		<en>MSPLS - Hospital - ANC registry</en>
+		<es>MSPLS - Hospital - Registro de CAN</es>
+	</Row>
+	<Row>
+		<id>1301</id>
+		<class>mspls</class>
+		<transactiontype>be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_CPONHOSP</transactiontype>
+		<fr>MSPLS - Hôpital - Registre de consultation post-natale</fr>
+		<en>MSPLS - Hospital - Postnatal consultation registry</en>
+		<es>MSPLS - Hospital - Registro de CPoN</es>
+	</Row>
+	<Row>
+		<id>1302</id>
+		<class>msas</class>
+		<transactiontype>be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSAS_REGISTRY_OPHTALMOLOGY</transactiontype>
+		<fr>MSAS - Registre d'ophtalmologie</fr>
+		<en>MSAS - Ophtalmology registry</en>
+		<es>MSAS - Registro de oftalmologia</es>
+	</Row>
 </Examinations>

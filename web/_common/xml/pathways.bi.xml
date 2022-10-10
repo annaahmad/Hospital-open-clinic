@@ -1739,6 +1739,159 @@
 			</node>
 		</node>
 	</pathway>
+	<pathway complaint="dan.1" value="yes">
+		<cave><![CDATA[thrombose hémorroïdaire, fissure anale, prolapsus rectal, prolapsus hémorroïdaire, abcès de la marge anale, parasitoses, mycose anale]]></cave>
+		<label language="fr"><![CDATA[A.12 Stratégie douleur dans la région anale]]></label>
+		<node>
+			<label language="fr"><![CDATA[Douleur région anale]]></label>
+			<arguments select="1">
+				<argument type="spt" id="dan.1" value="yes"/>
+			</arguments>
+			<node>
+				<!-- Tuméfaction anale -->
+				<label language="fr"><![CDATA[Tuméfaction anale]]></label>
+				<argument type="spt" id="dan.2" value="yes"/>
+				<node>
+					<!-- Fièvre -->
+					<label language="fr"><![CDATA[Fièvre]]></label>
+					<argument type="spt" id="dan.2.1" value="yes"/>
+					<treatment id="dan1a"/>
+				</node>
+				<node>
+					<!-- Pas de fièvre -->
+					<label language="fr"><![CDATA[Pas de fièvre]]></label>
+					<argument type="spt" id="dan.2.1" value="no"/>
+					<treatment id="dan1b"/>
+				</node>
+			</node>
+			<node>
+				<!-- Pas de tuméfaction anale -->
+				<label language="fr"><![CDATA[Pas de tuméfaction anale]]></label>
+				<argument type="spt" id="dan.2" value="no"/>
+				<node>
+					<!-- Douleur pendant ou après les selles -->
+					<label language="fr"><![CDATA[Douleur pendant ou après les selles]]></label>
+					<argument type="spt" id="dan.3" value="yes"/>
+					<treatment id="dan2"/>
+				</node>
+				<node>
+					<!-- Pas de douleur pendant ou après les selles -->
+					<label language="fr"><![CDATA[Pas de douleur pendant ou après les selles]]></label>
+					<argument type="spt" id="dan.3" value="no"/>
+					<node>
+						<!-- Prolapsus -->
+						<label language="fr"><![CDATA[Prolapsus]]></label>
+						<argument type="spt" id="dan.4" value="yes"/>
+						<node>
+							<!-- Hémorroïdaire -->
+							<label language="fr"><![CDATA[Hémorroïdaire]]></label>
+							<argument type="spt" id="dan.4.1" value="hemo"/>
+							<treatment id="dan3"/>
+						</node>
+						<node>
+							<!-- Rectal -->
+							<label language="fr"><![CDATA[Rectal]]></label>
+							<argument type="spt" id="dan.4.1" value="rectal"/>
+							<treatment id="dan4.2"/>
+							<node>
+								<!-- Réduction réussie -->
+								<label language="fr"><![CDATA[Réduction réussie]]></label>
+								<argument type="spt" id="dan.4.3" value="yes"/>
+								<node>
+									<!-- OK après 3j -->
+									<label language="fr"><![CDATA[OK après 3j]]></label>
+									<argument type="spt" id="dan.4.2" value="yes"/>
+									<treatment id="dan4a"/>
+								</node>
+								<node>
+									<!-- Pas OK après 3j -->
+									<label language="fr"><![CDATA[Pas OK après 3j]]></label>
+									<argument type="spt" id="dan.4.2" value="no"/>
+									<treatment id="dan4b"/>
+								</node>
+							</node>
+							<node>
+								<!-- Réduction pas réussie -->
+								<label language="fr"><![CDATA[Réduction pas réussie]]></label>
+								<argument type="spt" id="dan.4.3" value="no"/>
+								<treatment id="dan4b"/>
+							</node>
+						</node>
+					</node>
+					<node>
+						<!-- Pas de prolapsus -->
+						<label language="fr"><![CDATA[Pas de prolapsus]]></label>
+						<argument type="spt" id="dan.4" value="no"/>
+						<node>
+							<!-- Prurit -->
+							<label language="fr"><![CDATA[Prurit avec douleur éventuelle]]></label>
+							<argument type="spt" id="dan.5" value="yes"/>
+							<node>
+								<!-- Vers -->
+								<label language="fr"><![CDATA[Vers]]></label>
+								<argument type="spt" id="dan.5.1" value="worms"/>
+								<treatment id="dan5.1"/>
+								<node>
+									<!-- OK après 7j -->
+									<label language="fr"><![CDATA[OK après 7j]]></label>
+									<argument type="spt" id="dan.5.2" value="yes"/>
+									<treatment id="dan5a"/>
+								</node>
+								<node>
+									<!-- Pas OK après 7j -->
+									<label language="fr"><![CDATA[Pas OK après 7j]]></label>
+									<argument type="spt" id="dan.5.2" value="no"/>
+									<treatment id="dan5d"/>
+								</node>
+							</node>
+							<node>
+								<!-- Amibes -->
+								<label language="fr"><![CDATA[Amibes]]></label>
+								<argument type="spt" id="dan.5.1" value="amoeba"/>
+								<treatment id="dan5.2"/>
+								<node>
+									<!-- OK après 7j -->
+									<label language="fr"><![CDATA[OK après 7j]]></label>
+									<argument type="spt" id="dan.5.3" value="yes"/>
+									<treatment id="dan5b"/>
+								</node>
+								<node>
+									<!-- Pas OK après 7j -->
+									<label language="fr"><![CDATA[Pas OK après 7j]]></label>
+									<argument type="spt" id="dan.5.3" value="no"/>
+									<treatment id="dan5d"/>
+								</node>
+							</node>
+							<node>
+								<!-- Négatif -->
+								<label language="fr"><![CDATA[Négatif]]></label>
+								<argument type="spt" id="dan.5.1" value="negative"/>
+								<treatment id="dan5.3"/>
+								<node>
+									<!-- OK après 7j -->
+									<label language="fr"><![CDATA[OK après 7j]]></label>
+									<argument type="spt" id="dan.5.4" value="yes"/>
+									<treatment id="dan5c"/>
+								</node>
+								<node>
+									<!-- Pas OK après 7j -->
+									<label language="fr"><![CDATA[Pas OK après 7j]]></label>
+									<argument type="spt" id="dan.5.4" value="no"/>
+									<treatment id="dan5d"/>
+								</node>
+							</node>
+						</node>
+						<node>
+							<!-- Pas de prurit -->
+							<label language="fr"><![CDATA[Pas de prurit avec douleur éventuelle]]></label>
+							<argument type="spt" id="dan.5" value="no"/>
+							<treatment id="dan6"/>
+						</node>
+					</node>
+				</node>
+			</node>
+		</node>
+	</pathway>
 	<pathway complaint="dpn.1" value="yes">
 		<cave><![CDATA[corps étranger, réaction allergique, asthme, pneumothorax, embolie pulmonaire, insuffisance cardiaque, pneumopathie aiguë ou chronique, pleurésie, anémie, neuropathie, problème psychique, affection ORL, rougeole, virose]]></cave>
 		<excludes>
@@ -3352,61 +3505,72 @@
 						<label language="fr"><![CDATA[Pas de traumatisme sexuel]]></label>
 						<argument type="spt" id="gynr.2b" value="no"/>
 						<node>
-							<!-- Ecoulement à l'examen -->
-							<label language="fr"><![CDATA[Ecoulement à l'examen]]></label>
-							<argument type="spt" id="gynb.4" value="yes"/>
-							<treatment id="gynb3.0"/>
-							<node>
-								<!-- Amélioration après 7 jours -->
-								<label language="fr"><![CDATA[Amélioration après 7 jours]]></label>
-								<argument type="spt" id="gynb.3" value="yes"/>
-								<treatment id="gynb3"/>
-							</node>
-							<node>
-								<!-- Pas d'amélioration après 7 jours -->
-								<label language="fr"><![CDATA[Pas d'amélioration après 7 jours]]></label>
-								<argument type="spt" id="gynb.3" value="no"/>
-								<treatment id="gynb4"/>
-							</node>
+							<!-- Tuméfaction vaginale -->
+							<label language="fr"><![CDATA[Tuméfaction vaginale]]></label>
+							<argument type="spt" id="gynb.2c" value="yes"/>
+							<treatment id="gynb2c"/>
 						</node>
 						<node>
-							<!-- Pas d'coulement à l'examen -->
-							<label language="fr"><![CDATA[Pas d'écoulement à l'examen]]></label>
-							<argument type="spt" id="gynb.4" value="no"/>
+							<!-- Pas de tuméfaction vaginale -->
+							<label language="fr"><![CDATA[Pas de tuméfaction vaginale]]></label>
+							<argument type="spt" id="gynb.2c" value="no"/>
 							<node>
-								<!-- Prurit -->
-								<label language="fr"><![CDATA[Prurit]]></label>
-								<argument type="spt" id="gynb.5" value="yes"/>
-								<treatment id="gynb5.0"/>
+								<!-- Ecoulement à l'examen -->
+								<label language="fr"><![CDATA[Ecoulement à l'examen]]></label>
+								<argument type="spt" id="gynb.4" value="yes"/>
+								<treatment id="gynb3.0"/>
 								<node>
 									<!-- Amélioration après 7 jours -->
 									<label language="fr"><![CDATA[Amélioration après 7 jours]]></label>
 									<argument type="spt" id="gynb.3" value="yes"/>
-									<treatment id="gynb5"/>
+									<treatment id="gynb3"/>
 								</node>
 								<node>
 									<!-- Pas d'amélioration après 7 jours -->
 									<label language="fr"><![CDATA[Pas d'amélioration après 7 jours]]></label>
 									<argument type="spt" id="gynb.3" value="no"/>
-									<treatment id="gynb6"/>
+									<treatment id="gynb4"/>
 								</node>
 							</node>
 							<node>
-								<!-- Pas de prurit -->
-								<label language="fr"><![CDATA[Pas de prurit]]></label>
-								<argument type="spt" id="gynb.5" value="no"/>
-								<treatment id="gynb7.0"/>
+								<!-- Pas d'coulement à l'examen -->
+								<label language="fr"><![CDATA[Pas d'écoulement à l'examen]]></label>
+								<argument type="spt" id="gynb.4" value="no"/>
 								<node>
-									<!-- Aggravation après 7 jours -->
-									<label language="fr"><![CDATA[Aggravation après 7 jours]]></label>
-									<argument type="spt" id="gynb.6" value="yes"/>
-									<treatment id="gynb8"/>
+									<!-- Prurit -->
+									<label language="fr"><![CDATA[Prurit]]></label>
+									<argument type="spt" id="gynb.5" value="yes"/>
+									<treatment id="gynb5.0"/>
+									<node>
+										<!-- Amélioration après 7 jours -->
+										<label language="fr"><![CDATA[Amélioration après 7 jours]]></label>
+										<argument type="spt" id="gynb.3" value="yes"/>
+										<treatment id="gynb5"/>
+									</node>
+									<node>
+										<!-- Pas d'amélioration après 7 jours -->
+										<label language="fr"><![CDATA[Pas d'amélioration après 7 jours]]></label>
+										<argument type="spt" id="gynb.3" value="no"/>
+										<treatment id="gynb6"/>
+									</node>
 								</node>
 								<node>
-									<!-- Pas d'aggravation après 7 jours -->
-									<label language="fr"><![CDATA[Pas d'aggravation après 7 jours]]></label>
-									<argument type="spt" id="gynb.6" value="no"/>
-									<treatment id="gynb7"/>
+									<!-- Pas de prurit -->
+									<label language="fr"><![CDATA[Pas de prurit]]></label>
+									<argument type="spt" id="gynb.5" value="no"/>
+									<treatment id="gynb7.0"/>
+									<node>
+										<!-- Aggravation après 7 jours -->
+										<label language="fr"><![CDATA[Aggravation après 7 jours]]></label>
+										<argument type="spt" id="gynb.6" value="yes"/>
+										<treatment id="gynb8"/>
+									</node>
+									<node>
+										<!-- Pas d'aggravation après 7 jours -->
+										<label language="fr"><![CDATA[Pas d'aggravation après 7 jours]]></label>
+										<argument type="spt" id="gynb.6" value="no"/>
+										<treatment id="gynb7"/>
+									</node>
 								</node>
 							</node>
 						</node>
@@ -7761,6 +7925,9 @@
 		<treatment id="gynb2b">
 			<label language="fr"><![CDATA[Référer le patient]]></label>
 		</treatment>
+		<treatment id="gynb2c">
+			<label language="fr"><![CDATA[Référer le patient]]></label>
+		</treatment>
 		<treatment id="gynb3.0">
 			<label language="fr"><![CDATA[Métronidazole 250mg 8cp en une seule prise/j<br/>Ciprofloxacine 500mg 1cp en une seule prise<br/>Doxycycline 100mg 1x 2cp/j pendant 7 jours<br/>Toilette avec chlorhexidine<br/>Counseling: préservatifs et dépistage VIH<br/>Revoir le patient après 7 jours<br/></b><i><u>En cas de grossesse</u>: remplacer Doxycycline et Ciprofloxacine par Erythromicine 500mg 2x 2cp/j pendant 7 jours<br/><u>En cas de non-disponibilité, remplacer</u>:<li>Doxycycline 100mg par Tétracycline 250mg 3x 2cp/j pendant 7 jours<li>Ciprofloxacine 500mg par Cotrimoxazole 400/80mg 2x 2cp/j pendant 7 jours</i><b>]]></label>
 		</treatment>
@@ -8175,6 +8342,43 @@
 		<treatment id="dpn1.0">
 			<document id="19"/>
 			<label language="fr"><![CDATA[Tentative d'extraction / 5 claques dans le dos / manoeuvre de Heimlich<br/>Voir Fiche Technique "s'Etouffer - manoeuvre de Heimlich"]]></label>
+		</treatment>
+		<treatment id="dan1a">
+			<label language="fr"><![CDATA[REFERER en urgence<br/>Métronidazole 500 mg p.o.<br/>Paracétamol]]></label>
+		</treatment>
+		<treatment id="dan1b">
+			<label language="fr"><![CDATA[REFERER en urgence<br/>Hyoscine 2 amp IVD]]></label>
+		</treatment>
+		<treatment id="dan2">
+			<label language="fr"><![CDATA[REFERER en urgence<br/>Hyoscine 2 amp IVD]]></label>
+		</treatment>
+		<treatment id="dan3">
+			<label language="fr"><![CDATA[REFERER]]></label>
+		</treatment>
+		<treatment id="dan4.2">
+			<label language="fr"><![CDATA[Réduction manuelle sous diazepam 10mg IM<br/>Albendazole 3co/j]]></label>
+		</treatment>
+		<treatment id="dan4a"/>
+		<treatment id="dan4b">
+			<label language="fr"><![CDATA[REFERER]]></label>
+		</treatment>
+		<treatment id="dan5.1">
+			<label language="fr"><![CDATA[Albendazole 400mg 1co]]></label>
+		</treatment>
+		<treatment id="dan5.2">
+			<label language="fr"><![CDATA[Metronidazole 250mg 3co/j pendant 7j]]></label>
+		</treatment>
+		<treatment id="dan5.3">
+			<label language="fr"><![CDATA[Prométhazine 25mg 1co le soir<br/>Albendazole 1co<br/>Nystatine 3x1/2co/j pendant 7j]]></label>
+		</treatment>
+		<treatment id="dan5a"/>
+		<treatment id="dan5b"/>
+		<treatment id="dan5c"/>
+		<treatment id="dan5d">
+			<label language="fr"><![CDATA[REFERER]]></label>
+		</treatment>
+		<treatment id="dan6">
+			<label language="fr"><![CDATA[Rassurer le patient]]></label>
 		</treatment>
 		<treatment id="dpn1"/>
 		<treatment id="dpn2">
@@ -8699,6 +8903,71 @@
 		</treatment>
 	</treatments>
 	<concepts>
+		<concept id="dan.1" value="yes">
+			<label language="fr"><![CDATA[
+				Douleur dans la région anale
+			]]></label>
+		</concept>
+		<concept id="dan.2" values="yes,no">
+			<label language="fr"><![CDATA[
+				Tuméfaction anale
+			]]></label>
+		</concept>
+		<concept id="dan.2.1" values="yes,no">
+			<label language="fr"><![CDATA[
+				Fièvre
+			]]></label>
+		</concept>
+		<concept id="dan.3" values="yes,no">
+			<label language="fr"><![CDATA[
+				Douleur pendant ou après les selles
+			]]></label>
+		</concept>
+		<concept id="dan.4" values="yes,no">
+			<label language="fr"><![CDATA[
+				Prolapsus
+			]]></label>
+		</concept>
+		<concept id="dan.4.1" values="hemo,rectal">
+			<label language="fr"><![CDATA[
+				Type de prolapsus
+			]]></label>
+		</concept>
+		<concept id="dan.4.2" values="yes,no">
+			<label language="fr"><![CDATA[
+				OK après 3 jours
+			]]></label>
+		</concept>
+		<concept id="dan.4.3" values="yes,no">
+			<label language="fr"><![CDATA[
+				Réduction réussie
+			]]></label>
+		</concept>
+		<concept id="dan.5" values="yes,no">
+			<label language="fr"><![CDATA[
+				Prurit avec douleur éventuelle
+			]]></label>
+		</concept>
+		<concept id="dan.5.1" values="worms,amoeba,negative">
+			<label language="fr"><![CDATA[
+				Examen des selles
+			]]></label>
+		</concept>
+		<concept id="dan.5.2" values="yes,no">
+			<label language="fr"><![CDATA[
+				OK après 7j
+			]]></label>
+		</concept>
+		<concept id="dan.5.3" values="yes,no">
+			<label language="fr"><![CDATA[
+				OK après 7j
+			]]></label>
+		</concept>
+		<concept id="dan.5.4" values="yes,no">
+			<label language="fr"><![CDATA[
+				OK après 7j
+			]]></label>
+		</concept>
 		<concept id="mai.1" value="yes">
 			<label language="fr"><![CDATA[
 				Amaigrissement
@@ -10543,6 +10812,11 @@
 				Traumatisme sexuel
 			]]></label>
 		</concept>
+		<concept id="gynb.2c" values="yes,no">
+			<label language="fr"><![CDATA[
+				Tuméfaction vaginale
+			]]></label>
+		</concept>
 		<concept id="gynr.3" values="yes,no">
 			<label language="fr"><![CDATA[
 				Anémie<br/></b><i>&gt;= 2 signes parmi:<li>Asthénie<li>Pouls &gt; 100/min<li>Pâleur des conjonctives et paumes des mains</i><b>
@@ -11882,6 +12156,11 @@
 			<concept id="sase.1" value="yes">
 				<label language="fr"><![CDATA[
 					Sang dans les selles
+				]]></label>
+			</concept>
+			<concept id="dan.1" value="yes">
+				<label language="fr"><![CDATA[
+					Douleur dans la région anale
 				]]></label>
 			</concept>
 		</section>

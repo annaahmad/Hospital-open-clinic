@@ -41,7 +41,7 @@ public class PatientInvoice extends Invoice {
 	public String toXml() {
 		return toXml(false);
 	}
-
+	
 	public String toXml(boolean bExtended) {
 		String s="<patientinvoice id='"+SH.c(getUid())+"' number='"+getInvoiceNumber()+"'>";
 		if(bExtended) {
@@ -1209,6 +1209,7 @@ public class PatientInvoice extends Invoice {
         PreparedStatement ps = null;
         ResultSet rs = null;
         String sSelect = "";
+        int bExistingVersion=-1;
         Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
         try{
             if(this.getUid()!=null && this.getUid().length() > 0){
@@ -1222,7 +1223,8 @@ public class PatientInvoice extends Invoice {
                     rs = ps.executeQuery();
 
                     if(rs.next()) {
-                        iVersion = rs.getInt("OC_PATIENTINVOICE_VERSION") + 1;
+                    	bExistingVersion = rs.getInt("OC_PATIENTINVOICE_VERSION");
+                        iVersion = bExistingVersion + 1;
                     }
 
                     rs.close();
@@ -1235,12 +1237,6 @@ public class PatientInvoice extends Invoice {
                     ps.executeUpdate();
                     ps.close();
 
-                    sSelect = " DELETE FROM OC_PATIENTINVOICES WHERE OC_PATIENTINVOICE_SERVERID = ? AND OC_PATIENTINVOICE_OBJECTID = ?";
-                    ps = oc_conn.prepareStatement(sSelect);
-                    ps.setInt(1,Integer.parseInt(ids[0]));
-                    ps.setInt(2,Integer.parseInt(ids[1]));
-                    ps.executeUpdate();
-                    ps.close();
                 }
                 else{
                     ids = new String[] {MedwanQuery.getInstance().getConfigString("serverId"),MedwanQuery.getInstance().getOpenclinicCounter("OC_INVOICES")+""};
@@ -1289,7 +1285,7 @@ public class PatientInvoice extends Invoice {
                         ") " +
                          " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
                 ps = oc_conn.prepareStatement(sSelect);
-                while(!MedwanQuery.getInstance().validateNewOpenclinicCounter("OC_PATIENTINVOICES","OC_PATIENTINVOICE_OBJECTID",ids[1])){
+                while(bExistingVersion==-1 && !MedwanQuery.getInstance().validateNewOpenclinicCounter("OC_PATIENTINVOICES","OC_PATIENTINVOICE_OBJECTID",ids[1])){
                     ids[1] = MedwanQuery.getInstance().getOpenclinicCounter("OC_INVOICES") + "";
                 }
                 ps.setInt(1,Integer.parseInt(ids[0]));
@@ -1315,6 +1311,16 @@ public class PatientInvoice extends Invoice {
                 ps.setString(18, this.getModifiers());
                 ps.executeUpdate();
                 ps.close();
+                
+                if(bExistingVersion>-1) {
+                    sSelect = " DELETE FROM OC_PATIENTINVOICES WHERE OC_PATIENTINVOICE_SERVERID = ? AND OC_PATIENTINVOICE_OBJECTID = ? and OC_PATIENTINVOICE_VERSION<?";
+                    ps = oc_conn.prepareStatement(sSelect);
+                    ps.setInt(1,Integer.parseInt(ids[0]));
+                    ps.setInt(2,Integer.parseInt(ids[1]));
+                    ps.setInt(3, iVersion);
+                    ps.executeUpdate();
+                    ps.close();
+                }
 
                 sSelect = "UPDATE OC_DEBETS SET OC_DEBET_PATIENTINVOICEUID = NULL WHERE OC_DEBET_PATIENTINVOICEUID = ?";
                 ps = oc_conn.prepareStatement(sSelect);
@@ -1639,7 +1645,7 @@ public class PatientInvoice extends Invoice {
                 sSql = sSql.substring(0,sSql.length()-3);
             }
 
-            sSql+= " ORDER BY OC_PATIENTINVOICE_UPDATEUID,OC_PATIENTINVOICE_DATE";
+            sSql+= " ORDER BY OC_PATIENTINVOICE_DATE DESC,OC_PATIENTINVOICE_UPDATEUID";
 
             ps = oc_conn.prepareStatement(sSql);
 

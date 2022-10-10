@@ -42,7 +42,7 @@
 				debet.setPrestationUid(prestation.getUid());
 				debet.setInsuranceUid(insurance.getUid());
 				debet.setQuantity(Double.parseDouble(components[2]));
-				if(insurance.getExtraInsurarUid().length()>0){
+				if(insurance.getExtraInsurarUid().length()>0 && SH.p(request,"defaultExtraInsurar").equals("1")){
 					debet.setAmount(0);
 					debet.setExtraInsurarUid(insurance.getExtraInsurarUid());
 					debet.setExtraInsurarAmount(debet.getQuantity()*prestation.getPatientPrice(insurance, insurance.getInsuranceCategoryLetter(),encountertype));

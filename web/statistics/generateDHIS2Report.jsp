@@ -22,10 +22,15 @@
 </style>
 <%
 	String uids = checkString(request.getParameter("uids"));
+	String organisationlevel=checkString(request.getParameter("organisationlevel"));
+	
 	try{
 		long day = 24*3600*1000;
 		long month=32*day;
 		DHIS2Exporter exporter = new DHIS2Exporter(uids);
+		if(organisationlevel.length()>0){
+			exporter.setPluginParameter("organisationlevel", organisationlevel);
+		}
 		
 		String format = checkString(request.getParameter("format"));
 		if(ScreenHelper.parseDate(request.getParameter("begin"))!=null && ScreenHelper.parseDate(request.getParameter("end"))!=null){

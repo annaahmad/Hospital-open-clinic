@@ -529,7 +529,15 @@
   	<Query id='QUERY.openclinic.labeditorparameters' db='openclinic' date='26/02/2022' dbserver='MySQL'>
 		alter table labanalysis modify column editorparameters varchar(3000);
   	</Query>
-  	<Query id='QUERY.openclinic.extendexportdata' db='openclinic' date='20/03/2022' dbserver='MySQL'>
+  	<Query id='QUERY.openclinic.extendexportdata' db6='openclinic' date='20/03/2022' dbserver='MySQL'>
 		alter table oc_exports modify column oc_export_data MEDIUMTEXT;
+  	</Query>
+  	<Query id='QUERY.openclinic.covid19diagnostics' db6='openclinic' date='05/09/2022' dbserver='MySQL'>
+		DELETE FROM icd10 WHERE CODE='U07.1';
+		INSERT into icd10(CODE,labelfr,labelnl,labelen,labeles,gender) SELECT 'U07.1','COVID 19','COVID 19','COVID 19','COVID 19','';
+		DELETE FROM icpc2 WHERE CODE='A77.01';
+		INSERT INTO icpc2(CODE,labelfr,labelnl,labelen) SELECT 'A77.01','COVID 19','COVID 19','COVID 19';
+		DELETE FROM classifications WHERE icpc='A77.01' AND icd10='U07.1';
+		INSERT INTO classifications(icpc,icd10) SELECT 'A77.01','U07.1';
   	</Query>
 </Queries>

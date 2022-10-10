@@ -4,8 +4,6 @@
 	String wadoid=ScreenHelper.checkString(request.getParameter("wadouid"));
 	String studyuid=MedwanQuery.getInstance().getConfigString(wadoid);
 	if(studyuid.split("@").length>2){
-		System.out.println("sessionid = "+studyuid.split("@")[2]);
-		System.out.println("session = "+MedwanQuery.getSession(studyuid.split("@")[2]));
 		MedwanQuery.getSession(studyuid.split("@")[2]).setAttribute("wadoQueryStarted", "1");
 	}
 	if(wadoid.length()==0){

@@ -501,10 +501,14 @@ public class Asset extends OC_Object {
 			ResultSet rs = ps.executeQuery();
 			while(rs.next()){
         		String sStorageName=rs.getString("arch_document_storagename");
+        		Debug.println("sStorageName="+sStorageName);
         		String sFilename=MedwanQuery.getInstance().getConfigString("scanDirectoryMonitor_basePath")+"/"+MedwanQuery.getInstance().getConfigString("scanDirectoryMonitor_dirTo")+"/"+sStorageName;
+        		Debug.println("sFilename="+sFilename);
         		File file = new File(sFilename);
         		if(file.exists()){
-            		HttpPost post = new HttpPost(MedwanQuery.getInstance().getConfigString("GMAOCentralServer","http://localhost/openclinic")+"/assets/storeDocument.jsp");
+        			String url=MedwanQuery.getInstance().getConfigString("GMAOCentralServer","http://localhost/openclinic")+"/assets/storeDocument.jsp";
+            		Debug.println("url="+url);
+        			HttpPost post = new HttpPost(url);
             		MultipartEntityBuilder builder = MultipartEntityBuilder.create();
             		builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
             		builder.addBinaryBody("filename", file, ContentType.DEFAULT_BINARY, sFilename);
@@ -512,11 +516,13 @@ public class Asset extends OC_Object {
             		if(sStorageName.contains("/")){
             			sFolder=sStorageName.substring(0,sStorageName.lastIndexOf("/"))+"/";
             		}
+            		Debug.println("sFolder="+sFolder);
             		builder.addTextBody("folder", sFolder, ContentType.DEFAULT_BINARY);
             		HttpEntity entity = builder.build();
             		post.setEntity(entity);
             		HttpResponse r = client.execute(post);
             	    String xmlIn=new BasicResponseHandler().handleResponse(r);
+            		Debug.println("xmlIn="+xmlIn);
             	    if(xmlIn.contains("<OK>")){
             	    	Debug.println("File successuflly sent");
             	    	PreparedStatement ps2 = conn.prepareStatement("update arch_documents set arch_document_tran_serverid=null where arch_document_objectid=?");
@@ -596,6 +602,7 @@ public class Asset extends OC_Object {
     public java.util.Date purchasePeriodBegin, purchasePeriodEnd;
     
     public static void updateAsset(Element eAsset) throws Exception{
+    	Debug.println("Updating Asset from XML: "+eAsset.asXML());
     	int serverid = Integer.parseInt(eAsset.attributeValue("serverid"));
     	int objectid = Integer.parseInt(eAsset.attributeValue("objectid"));
     	java.util.Date updatetime = new SimpleDateFormat("yyyyMMddHHmmssSSS").parse(eAsset.element("updatetime").getTextTrim());
@@ -669,7 +676,7 @@ public class Asset extends OC_Object {
 			asset.setPurchaseDate(eAsset.element("purchasedate")==null?null:new SimpleDateFormat("yyyyMMddHHmmssSSSS").parse(eAsset.element("purchasedate").getText()));
 			asset.setPurchaseDocuments(eAsset.element("purchasedocuments")==null?"":eAsset.element("purchasedocuments").getText());
 			asset.setPurchasePrice(Double.parseDouble(eAsset.element("purchaseprice")==null?"0":eAsset.element("purchaseprice").getText()));
-			asset.setQuantity(Integer.parseInt(eAsset.element("quantity")==null?"0":eAsset.element("quantity").getText()));
+			asset.setQuantity(Double.parseDouble(eAsset.element("quantity")==null?"0":eAsset.element("quantity").getText()));
 			asset.setReceiptBy(eAsset.element("purchasereceiptby")==null?"":eAsset.element("purchasereceiptby").getText());
 			asset.setSaleClient(eAsset.element("saleclient")==null?"":eAsset.element("saleclient").getText());
 			asset.setSaleValue(Double.parseDouble(eAsset.element("salevalue")==null?"0":eAsset.element("salevalue").getText()));
@@ -2766,7 +2773,7 @@ public class Asset extends OC_Object {
                 sSql+= " AND OC_ASSET_DESCRIPTION LIKE '%"+findItem.description+"%'";
             }
             if(ScreenHelper.checkString(findItem.serviceuid).length() > 0){
-                sSql+= " AND OC_ASSET_SERVICE LIKE '"+findItem.serviceuid+"%'";
+                sSql+= " AND OC_ASSET_SERVICE in ("+Service.getChildIdsAsString(findItem.serviceuid)+")";
             }
             if(ScreenHelper.checkString(findItem.serialnumber).length() > 0){
                 sSql+= " AND OC_ASSET_SERIAL LIKE '%"+findItem.serialnumber+"%'";

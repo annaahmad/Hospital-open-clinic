@@ -2433,15 +2433,16 @@ public class AdminPerson extends OC_Object{
         if(sSector.trim().length()>0){
             if(sDistrict.trim().length()==0){
             	sSQLFrom+=",PrivateView v ";
+                sSQLWhere+=" a.personid=v.personid AND";
             }
-            sSQLWhere+=" a.personid=v.personid AND v.sector = '"+sSector+"' AND";
+            sSQLWhere+=" v.sector = '"+sSector+"' AND";
         }
         try{
             if (sSQLWhere.trim().length()>0) {
                 String sSelect = sSQLSelect+" "+sSQLFrom+" WHERE "+sSQLWhere.substring(0,sSQLWhere.length()-3)+
                           " ORDER BY searchname ";
                 ps = oc_conn.prepareStatement(sSelect.trim());
-                ps.setDate(1,new java.sql.Date(new java.util.Date().getTime())); // now
+                ps.setTimestamp(1,new java.sql.Timestamp(new java.util.Date().getTime())); // now
 
                 if (sDateOfBirth.trim().length()>0) {
                     java.sql.Date dDate=null;
@@ -2454,9 +2455,9 @@ public class AdminPerson extends OC_Object{
                     ps.setDate(2,dDate);
                 }
                 rs = ps.executeQuery();
-
                 AdminPerson tempPat;
                 while(rs.next()){
+                	Debug.println("Found patient id "+rs.getString("personid"));
                     tempPat = new AdminPerson();
                     //tempPat.setPatientUID(ScreenHelper.checkString(rs.getString("OC_ENCOUNTER_PATIENTUID")));
                     tempPat.personid = ScreenHelper.checkString(rs.getString("personid"));
@@ -2625,10 +2626,14 @@ public class AdminPerson extends OC_Object{
         return lResultList;
     }
     public static List getAllPatients(String simmatnew,String sArchiveFileCode,String snatreg,String sName,String sFirstname,String sDateOfBirth, String sPersonID, String sDistrict, int iMaxResults){
-    	return getAllPatients(simmatnew, sArchiveFileCode, snatreg, sName, sFirstname, sDateOfBirth, sPersonID, sDistrict,iMaxResults,"");
+    	return getAllPatients(simmatnew, sArchiveFileCode, snatreg, sName, sFirstname, sDateOfBirth, sPersonID, sDistrict,iMaxResults,"",0);
     }
     
-    public static List getAllPatients(String simmatnew,String sArchiveFileCode,String snatreg,String sName,String sFirstname,String sDateOfBirth, String sPersonID, String sDistrict, int iMaxResults,String sSector){
+    public static List getAllPatients(String simmatnew,String sArchiveFileCode,String snatreg,String sName,String sFirstname,String sDateOfBirth, String sPersonID, String sDistrict, int iMaxResults, String sSector){
+    	return getAllPatients(simmatnew, sArchiveFileCode, snatreg, sName, sFirstname, sDateOfBirth, sPersonID, sDistrict,iMaxResults,sSector,0);
+    }
+    
+    public static List getAllPatients(String simmatnew,String sArchiveFileCode,String snatreg,String sName,String sFirstname,String sDateOfBirth, String sPersonID, String sDistrict, int iMaxResults,String sSector,int skipRecords){
         PreparedStatement ps = null;
         ResultSet rs = null;
         //Vector vResults = new Vector();
@@ -2674,10 +2679,15 @@ public class AdminPerson extends OC_Object{
 
         Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
 
-        if (sArchiveFileCode.trim().length()>0) {
-            String lowerArchiverFileCode = ScreenHelper.getConfigParam("lowerCompare","archiveFileCode",oc_conn);
+    	if(SH.ci("enableSearchOnHealthInsurance",0)==1){
+    		sSQLSelect += ",oc_insurance_nr";
+    		sSQLFrom += ","+SH.cs("openclinicdbName", "openclinic_dbo")+".oc_insurances i";
+            sSQLWhere += " i.oc_insurance_patientuid=a.personid AND oc_insurance_stop is null and oc_insurance_nr LIKE '"+sArchiveFileCode.toLowerCase()+"%' AND";
+    	}
+    	else {
+        	String lowerArchiverFileCode = ScreenHelper.getConfigParam("lowerCompare","archiveFileCode",oc_conn);
             sSQLWhere += " "+lowerArchiverFileCode+" LIKE '"+sArchiveFileCode.toLowerCase()+"' AND";
-        }
+    	}
 
         if (snatreg.trim().length()>0) {
             sSQLWhere += " natreg like '"+snatreg+"%' AND";
@@ -2728,7 +2738,7 @@ public class AdminPerson extends OC_Object{
         try{
             if (sSQLWhere.trim().length()>0) {
                 String sSelect = sSQLSelect+" "+sSQLFrom+" WHERE "+sSQLWhere.substring(0,sSQLWhere.length()-3)+
-                          " ORDER BY searchname ";
+                          " ORDER BY searchname,dateofbirth ";
                 Debug.println(sSelect);
                 ps = ad_conn.prepareStatement(sSelect.trim());
 
@@ -2739,6 +2749,10 @@ public class AdminPerson extends OC_Object{
                 rs = ps.executeQuery();
 
                 AdminPerson tempPat;
+                int skipped = 0;
+                while(skipped<skipRecords && rs.next()) {
+                	skipped++;
+                }
                 while(rs.next() && lResultList.size()<=iMaxResults){
                     tempPat = new AdminPerson();
                     //tempPat.setPatientUID(ScreenHelper.checkString(rs.getString("OC_ENCOUNTER_PATIENTUID")));
@@ -2760,6 +2774,9 @@ public class AdminPerson extends OC_Object{
                         tempPat.dateOfBirth = ScreenHelper.stdDateFormat.format(rs.getDate("dateofbirth"));
                     }else{
                         tempPat.dateOfBirth = "";
+                    }
+                    if(SH.ci("enableSearchOnHealthInsurance",0)==1){
+                    	tempPat.adminextends.put("insurancenr", SH.c(rs.getString("oc_insurance_nr")));
                     }
                     //tempPat.setDateofbirth(rs.getDate("dateofbirth"));
                     lResultList.add(tempPat);
@@ -2832,7 +2849,13 @@ public class AdminPerson extends OC_Object{
                        tempPat.personid = ScreenHelper.checkString(rs.getString("personid"));
                        tempPat.lastname = ScreenHelper.checkString(rs.getString("lastname"));
                        tempPat.firstname = ScreenHelper.checkString(rs.getString("firstname"));
-                       Date d = rs.getDate("dateofbirth");
+                       Date d = null;
+                       try {
+                    	   d=rs.getDate("dateofbirth");
+                       }
+                       catch(Exception e) {
+                    	   System.out.println("AdminPerson: cannot convert dateofbirth for personid "+tempPat.personid);
+                       }
                        tempPat.dateOfBirth = d!=null?ScreenHelper.formatDate(d):"";
                        lResultList.add(tempPat);
                    }
@@ -3792,7 +3815,7 @@ public class AdminPerson extends OC_Object{
     		age=new Double((date.getTime()-dob.getTime())/ScreenHelper.getTimeYear()).intValue();
     	}
     	catch(Exception e) {
-    		e.printStackTrace();
+    		SH.syslog("AdminPerson getAgeOnDate(): error converting date of birth '"+dateOfBirth+"' to datetime");
     	}
     	return age;
     }
@@ -3802,7 +3825,17 @@ public class AdminPerson extends OC_Object{
     		age=new Double((date.getTime()-dob.getTime())/ScreenHelper.getTimeYear()).intValue();
     	}
     	catch(Exception e) {
-    		e.printStackTrace();
+    		SH.syslog("AdminPerson getAgeOnDate(): error converting date of birth '"+dob+"' to datetime");
+    	}
+    	return age;
+    }
+    public static int getAgeInMonthsOnDate(java.util.Date dob, java.util.Date date) {
+    	int age=0;
+    	try {
+    		age=new Double((date.getTime()-dob.getTime())/(ScreenHelper.getTimeDay()*30.5)).intValue();
+    	}
+    	catch(Exception e) {
+    		SH.syslog("AdminPerson getAgeInMonthsOnDate(): error converting date of birth '"+dob+"' to datetime");
     	}
     	return age;
     }
@@ -3813,7 +3846,7 @@ public class AdminPerson extends OC_Object{
     		age=new Double((date.getTime()-dob.getTime())/(ScreenHelper.getTimeDay()*30.42)).intValue();
     	}
     	catch(Exception e) {
-    		e.printStackTrace();
+    		SH.syslog("AdminPerson getAgeInMonthsOnDate(): error converting date of birth '"+dateOfBirth+"' to datetime");
     	}
     	return age;
     }
@@ -3824,7 +3857,7 @@ public class AdminPerson extends OC_Object{
     		age=new Double((date.getTime()-dob.getTime())/ScreenHelper.getTimeDay()).intValue();
     	}
     	catch(Exception e) {
-    		e.printStackTrace();
+    		SH.syslog("AdminPerson getAgeInDaysOnDate(): error converting date of birth '"+dateOfBirth+"' to datetime");
     	}
     	return age;
     }

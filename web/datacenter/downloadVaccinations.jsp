@@ -37,7 +37,7 @@
 	sResult.append("SERVERUID;PATIENTUID;PATIENTDATEOFBIRTH;DATE;TYPE\r\n");
 	while(rs.next()){
 		java.util.Date birth=rs.getDate("PATIENTDATEOFBIRTH");
-		sResult.append(rs.getString("SERVERUID")+";"+rs.getString("PATIENTUID")+";"+(birth==null?"": new SimpleDateFormat("dd/MM/yyyy").format(birth))+";"+new SimpleDateFormat("dd/MM/yyyy").format(rs.getDate("DATE"))+";"+rs.getString("TYPE")+"\r\n");
+		sResult.append(rs.getString("SERVERUID")+";"+rs.getString("PATIENTUID")+";"+(birth==null?"": SH.formatDate(birth))+";"+SH.formatDate(rs.getDate("DATE"))+";"+rs.getString("TYPE")+"\r\n");
 	}
 	
 	byte[] b = sResult.toString().getBytes();

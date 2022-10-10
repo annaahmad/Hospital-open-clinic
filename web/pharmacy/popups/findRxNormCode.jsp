@@ -24,7 +24,7 @@
 				while(candidates.hasNext()){
 					Element candidate = (Element)candidates.next();
 					if(candidate.elementText("rxcui")!=null && rxcuis.get(candidate.element("rxcui"))==null){
-						rxcuis.put(candidate.elementText("rxcui"),Integer.parseInt(candidate.elementText("score")));
+						rxcuis.put(candidate.elementText("rxcui"),new Double(Double.parseDouble(candidate.elementText("score"))).intValue());
 					}
 				}
 			}
@@ -81,7 +81,7 @@
 		while(i.hasNext()){
 			String code=(String)i.next();
 			output.append("<tr>");
-			output.append("<td class='admin'>"+code.split(";")[1]+"("+(100-Integer.parseInt(code.split(";")[0]))+"%)</td>");
+			output.append("<td class='admin'>"+code.split(";")[1]+"("+(100-Double.parseDouble(code.split(";")[0]))+"%)</td>");
 			output.append("<td class='admin2' valign='top'><input class='text' type='checkbox' "+(counter>0?"":"checked")+" name='chkrxnorm"+code.split(";")[2]+"' id='"+code.split(";")[2]+"'/>"+code.split(";")[2]+"</td>");
 			output.append("</tr>");
 			

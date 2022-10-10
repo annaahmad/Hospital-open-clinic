@@ -25,7 +25,7 @@
     ///////////////////////////////////////////////////////////////////////////////////////////////
 
     String tmpLang;
-
+    
     // supported languages
     String supportedLanguages = MedwanQuery.getInstance().getConfigString("supportedLanguages");
     if(supportedLanguages.length()==0) supportedLanguages = "nl,fr";
@@ -513,7 +513,7 @@
                     <td class="admin2">
                         <select class="text" name="EditServiceInscode" id="EditServiceInscode">
                         	<option value=""></option>
-                        	<%=ScreenHelper.writeSelect(request,"dhis2services", service.inscode, sWebLanguage,false,true,60) %>
+                        	<%=ScreenHelper.writeSelect(request,SH.cs("dhis2servicestable","dhis2services"), service.inscode, sWebLanguage,false,true,60) %>
                         </select>
                     </td>
                 </tr>
@@ -680,8 +680,7 @@
 				            	Vector users = UserParameter.getUserIds("invoicingcareprovider","on");
 				            	SortedMap usernames = new TreeMap();
 				            	for(int n=0; n<users.size(); n++){
-				            		User user = User.get(Integer.parseInt((String)users.elementAt(n)));
-				            		usernames.put(user.person.lastname.toUpperCase()+", "+user.person.firstname,user.userid);
+				            		usernames.put(User.getFullUserName((String)users.elementAt(n)),(String)users.elementAt(n));
 				            	}
 				            	
 			            		String sSelectedValue = checkString(service.performeruid);

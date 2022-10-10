@@ -316,6 +316,7 @@ public class ExtraInsurarInvoice2 extends Invoice {
         PreparedStatement ps = null;
         ResultSet rs = null;
         String sSelect = "";
+        int bExistingVersion=-1;
         Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
         try{
             if(this.getUid()!=null && this.getUid().length() > 0){
@@ -329,7 +330,8 @@ public class ExtraInsurarInvoice2 extends Invoice {
                     rs = ps.executeQuery();
 
                     if(rs.next()) {
-                        iVersion = rs.getInt("OC_INSURARINVOICE_VERSION") + 1;
+                    	bExistingVersion=rs.getInt("OC_INSURARINVOICE_VERSION");
+                        iVersion = bExistingVersion + 1;
                     }
 
                     rs.close();
@@ -342,12 +344,6 @@ public class ExtraInsurarInvoice2 extends Invoice {
                     ps.executeUpdate();
                     ps.close();
 
-                    sSelect = " DELETE FROM OC_EXTRAINSURARINVOICES2 WHERE OC_INSURARINVOICE_SERVERID = ? AND OC_INSURARINVOICE_OBJECTID = ?";
-                    ps = oc_conn.prepareStatement(sSelect);
-                    ps.setInt(1,Integer.parseInt(ids[0]));
-                    ps.setInt(2,Integer.parseInt(ids[1]));
-                    ps.executeUpdate();
-                    ps.close();
                 }
                 else{
                     ids = new String[] {MedwanQuery.getInstance().getConfigString("serverId"),MedwanQuery.getInstance().getOpenclinicCounter("OC_INVOICES")+""};
@@ -400,6 +396,15 @@ public class ExtraInsurarInvoice2 extends Invoice {
                 ps.executeUpdate();
                 ps.close();
 
+                if(bExistingVersion>-1) {
+                    sSelect = " DELETE FROM OC_EXTRAINSURARINVOICES2 WHERE OC_INSURARINVOICE_SERVERID = ? AND OC_INSURARINVOICE_OBJECTID = ? and OC_INSURARINVOICE_VERSION<?";
+                    ps = oc_conn.prepareStatement(sSelect);
+                    ps.setInt(1,Integer.parseInt(ids[0]));
+                    ps.setInt(2,Integer.parseInt(ids[1]));
+                    ps.setInt(3, iVersion);
+                    ps.executeUpdate();
+                    ps.close();
+                }
                 sSelect = "UPDATE OC_DEBETS SET OC_DEBET_EXTRAINSURARINVOICEUID2 = NULL WHERE OC_DEBET_EXTRAINSURARINVOICEUID2 = ? ";
                 ps = oc_conn.prepareStatement(sSelect);
                 ps.setString(1,this.getUid());

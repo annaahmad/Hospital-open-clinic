@@ -265,6 +265,12 @@ public class PersonMerger {
         ps.setString(2,removePersonId+"");
         updates = ps.executeUpdate();
         ps.close();
+        sQuery = "UPDATE OC_ENCOUNTERS_HISTORY SET OC_ENCOUNTER_PATIENTUID = ? WHERE OC_ENCOUNTER_PATIENTUID = ?";
+        ps = occupConn.prepareStatement(sQuery);
+        ps.setString(1,keepPersonId+"");
+        ps.setString(2,removePersonId+"");
+        updates = ps.executeUpdate();
+        ps.close();
 
         //*** STEP 7.2 : UPDATE OC_BALANCES *****************************************************
         if(Debug.enabled) Debug.println("*** STEP 7.2 ***");
@@ -422,6 +428,15 @@ public class PersonMerger {
         //*** STEP 7.19 : UPDATE OC_SUMMARYINVOICES *****************************************************
         if(Debug.enabled) Debug.println("*** STEP 7.19 ***");
         sQuery = "UPDATE OC_SUMMARYINVOICES SET OC_SUMMARYINVOICE_PATIENTUID = ? WHERE OC_SUMMARYINVOICE_PATIENTUID = ?";
+        ps = occupConn.prepareStatement(sQuery);
+        ps.setString(1,keepPersonId+"");
+        ps.setString(2,removePersonId+"");
+        updates = ps.executeUpdate();
+        ps.close();
+
+        //*** STEP 7.20 : UPDATE OC_PRODUCTSTOCKOPERATIONS *****************************************************
+        if(Debug.enabled) Debug.println("*** STEP 7.20 ***");
+        sQuery = "UPDATE OC_PRODUCTSTOCKOPERATIONS SET OC_OPERATION_SRCDESTUID = ? WHERE OC_OPERATION_SRCDESTTYPE='patient' and OC_OPERATION_SRCDESTUID = ?";
         ps = occupConn.prepareStatement(sQuery);
         ps.setString(1,keepPersonId+"");
         ps.setString(2,removePersonId+"");

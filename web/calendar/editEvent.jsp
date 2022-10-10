@@ -191,7 +191,7 @@
 	else if(checkString(request.getParameter("actionField")).equalsIgnoreCase("save")){
 		if(createfreeslots.equalsIgnoreCase("1")){
 			Vector appointments = Planning.getUserPlannings((String)session.getAttribute("calendarUser"),appointment.getPlannedDate(),appointment.getPlannedEndDate());
-			java.util.Date blockStart = new SimpleDateFormat("dd/MM/yyyy").parse(new SimpleDateFormat("dd/MM/yyyy").format(appointment.getPlannedDate()));
+			java.util.Date blockStart = new SimpleDateFormat("dd/MM/yyyy").parse(SH.formatDate(appointment.getPlannedDate()));
 			long minute = 60000;
 			long hour = 60*minute;
 			for(long n=blockStart.getTime()+Integer.parseInt(beginhour)*hour+Integer.parseInt(beginminutes)*minute;n<=blockStart.getTime()+Integer.parseInt(endhour)*hour+(Integer.parseInt(endminutes)*minute)-(Integer.parseInt(slotduration)*minute);n+=Integer.parseInt(slotduration)*minute){

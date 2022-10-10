@@ -1,4 +1,4 @@
-package be.openclinic.medical;
+	package be.openclinic.medical;
 
 import be.mxs.common.util.db.MedwanQuery;
 import be.mxs.common.util.system.ScreenHelper;

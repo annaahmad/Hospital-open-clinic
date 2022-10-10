@@ -19,6 +19,7 @@ import be.openclinic.pharmacy.ProductOrder;
 import be.openclinic.pharmacy.ProductStock;
 import be.openclinic.pharmacy.ProductStockOperation;
 import be.openclinic.pharmacy.ServiceStock;
+import be.openclinic.system.SH;
 import be.openclinic.util.Nomenclature;
 import be.chuk.Article;
 
@@ -596,7 +597,7 @@ public class PDFXMLReportGenerator extends PDFOfficialBasic {
 				Batch batch = (Batch)batches.elementAt(i);
 				if(batch.getLevel()>0 && batch.getEnd()!=null && !batch.getEnd().after(end) && batch.getEnd().after(begin)){
 					//First find the product subcategory
-					String uid=stock.getProduct()==null?"|"+stock.getUid():HTMLEntities.unhtmlentities(stock.getProduct().getFullProductSubGroupName(sPrintLanguage))+"|"+stock.getUid()+"|"+new SimpleDateFormat("dd/MM/yyyy").format(batch.getEnd())+"|"+batch.getLevel()+"|"+batch.getBatchNumber();
+					String uid=stock.getProduct()==null?"|"+stock.getUid():HTMLEntities.unhtmlentities(stock.getProduct().getFullProductSubGroupName(sPrintLanguage))+"|"+stock.getUid()+"|"+SH.formatDate(batch.getEnd())+"|"+batch.getLevel()+"|"+batch.getBatchNumber();
 					stocks.put(uid, stock);
 				}
 			}
@@ -1497,7 +1498,7 @@ public class PDFXMLReportGenerator extends PDFOfficialBasic {
  			if(operation.getProductStock()!=null){
  				Product product=operation.getProductStock().getProduct();
  				if(product!=null){
-		 			String date=new SimpleDateFormat("dd/MM/yyyy").format(operation.getDate());
+		 			String date=SH.formatDate(operation.getDate());
 		 			String destination=operation.getDescription()+"."+(operation.getSourceDestination()==null?"":ScreenHelper.checkString(operation.getSourceDestination().getObjectType()))+"."+(operation.getSourceDestination()==null?"":ScreenHelper.checkString(operation.getSourceDestination().getObjectUid()))+"."+operation.getDocumentUID();
 		
 		 			if(activedate.length()>0 && (!date.equalsIgnoreCase(activedate) || !destination.equalsIgnoreCase(activedestination))){
@@ -1804,7 +1805,7 @@ public class PDFXMLReportGenerator extends PDFOfficialBasic {
 					}
 					else {
 						row =t.addElement("row");
-						addBoldCol(row,45,getTran("web","date")+": "+new SimpleDateFormat("dd/MM/yyyy").format(document.getDate()));
+						addBoldCol(row,45,getTran("web","date")+": "+SH.formatDate(document.getDate()));
 						addBoldCol(row,45,getTran("web","ordernr")+": "+document.getReference());
 						addBoldCol(row,120,getTran("web","supplier")+": "+document.getSourceName(sPrintLanguage));
 					}
@@ -1815,7 +1816,7 @@ public class PDFXMLReportGenerator extends PDFOfficialBasic {
 			row =t.addElement("row");
 			addCol(row,20,operation.getProductStock()==null || operation.getProductStock().getProduct()==null?"?":operation.getProductStock().getProduct().getCode());
 			addCol(row,90,operation.getProductStock()==null || operation.getProductStock().getProduct()==null?"?":operation.getProductStock().getProduct().getName());
-			addCol(row,20,operation.getBatchEnd()==null?"":new SimpleDateFormat("dd/MM/yyyy").format(operation.getBatchEnd()));
+			addCol(row,20,operation.getBatchEnd()==null?"":SH.formatDate(operation.getBatchEnd()));
 			int in=operation.getUnitsChanged();
 			addCol(row,20,in+"");
 			addCol(row,20,operation.getProductStock()==null || operation.getProductStock().getProduct()==null?"?":ScreenHelper.getTranNoLink("product.unit",operation.getProductStock().getProduct().getUnit(),sPrintLanguage),7);
@@ -1895,7 +1896,7 @@ public class PDFXMLReportGenerator extends PDFOfficialBasic {
 			}
 			//Now we print the operation data
 			row =t.addElement("row");
-			addCol(row,16,operation.getDate()==null?"":new SimpleDateFormat("dd/MM/yyyy").format(operation.getDate()));
+			addCol(row,16,operation.getDate()==null?"":SH.formatDate(operation.getDate()));
 			addCol(row,25,operation.getDocument()==null?"":operation.getDocument().getReference());
 			addCol(row,21,operation.getBatchNumber()==null?"":operation.getBatchNumber().toUpperCase(),8);
 			int in=operation.getUnitsChanged();
@@ -2099,7 +2100,7 @@ public class PDFXMLReportGenerator extends PDFOfficialBasic {
 				if(!docid.equalsIgnoreCase("?")){
 					OperationDocument document = OperationDocument.get(docid);
 					if(document!=null){
-						docdate=new SimpleDateFormat("dd/MM/yyyy").format(document.getDate());
+						docdate=SH.formatDate(document.getDate());
 						docref=document.getReference()+"";
 					}
 				}
@@ -2117,7 +2118,7 @@ public class PDFXMLReportGenerator extends PDFOfficialBasic {
 			row =t.addElement("row");
 			addCol(row,20,operation.getProductStock()==null || operation.getProductStock().getProduct()==null?"?":operation.getProductStock().getProduct().getCode());
 			addCol(row,80,operation.getProductStock()==null || operation.getProductStock().getProduct()==null?"?":operation.getProductStock().getProduct().getName()+(operation.getBatchNumber()==null?"":" ("+operation.getBatchNumber().toUpperCase()+")"));
-			addCol(row,20,operation.getBatchEnd()==null?"":new SimpleDateFormat("dd/MM/yyyy").format(operation.getBatchEnd()));
+			addCol(row,20,operation.getBatchEnd()==null?"":SH.formatDate(operation.getBatchEnd()));
 			int in=operation.getUnitsChanged();
 			addCol(row,20,in+"");
 			//Calculate missed items if an order was linked to this receipt
@@ -2197,7 +2198,7 @@ public class PDFXMLReportGenerator extends PDFOfficialBasic {
  		String activedate="",activedestination="$$$";
  		for(int n=0;n<deliveries.size();n++){
  			ProductStockOperation operation = (ProductStockOperation)deliveries.elementAt(n);
- 			String date=new SimpleDateFormat("dd/MM/yyyy").format(operation.getDate());
+ 			String date=SH.formatDate(operation.getDate());
  			String destination=operation.getDescription()+"."+date+"."+operation.getDocumentUID();
 
  			if(!destination.equalsIgnoreCase(activedestination)){

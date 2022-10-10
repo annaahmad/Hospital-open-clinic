@@ -90,6 +90,7 @@ public class DHIS2Helper {
         try {
             System.out.println("Sending dataValueSet to DHIS2 server " + DHIS2_SERVER_URI);
             String postResponse = server.sendToServer(cleanDataValueSet(dataValueSet));
+            System.out.println("POST response = "+postResponse);
             Document document = DocumentHelper.parseText(postResponse);
             Element root = document.getRootElement();
             System.out.println("Status: " + root.elementText("status"));
@@ -176,7 +177,7 @@ public class DHIS2Helper {
 					if(!activeDataSet.startsWith(getDataSetTitle(root.attributeValue("dataSet"),dataSetLabel))){
 						Debug.println("printing title");
 						//Print titel en dienst
-						html.append("<table width='100%'><tr class='admin'><td colspan='"+(1+columns)+"'>"+getDataSetTitle(root.attributeValue("dataSet"),dataSetLabel)+"</td></tr>");
+						html.append("<table width='100%'><tr><td style='height: 20px;background-color: #575757;color:white;font-weight: bolder' colspan='"+(1+columns)+"'>"+getDataSetTitle(root.attributeValue("dataSet"),dataSetLabel).toUpperCase()+"</td></tr>");
 						bColumnsDrawn=false;
 					}
 					if((!bColumnsDrawn || !activeAttribute.equalsIgnoreCase(attribute)) && results.size()>0){
@@ -332,7 +333,7 @@ public class DHIS2Helper {
 									String tokens = ScreenHelper.checkString(dataElement.attributeValue("code"));
 									if(tokens.split(",").length>1){
 										if(dataset.attributeValue("type").equalsIgnoreCase("diagnosis")){
-											name = tokens.split(",")[0]+"<img src='"+MedwanQuery.getInstance().getConfigString("imageSource","http://localhost/openclinic")+"/_img/icons/icon_info.gif' title='"+MedwanQuery.getInstance().getCodeTran("icd10code"+tokens.split(",")[0], language).replaceAll("'", "´")+"'/> ["+tokens.replaceAll(tokens.split(",")[0]+",", "")+"]";
+											name = tokens.split(",")[0]+"<img src='"+MedwanQuery.getInstance().getConfigString("imageSource","http://localhost/openclinic")+"/_img/icons/icon_info.gif'/> ["+tokens.replaceAll(tokens.split(",")[0]+",", "")+"] - "+MedwanQuery.getInstance().getCodeTran("icd10code"+tokens.split(",")[0], language).replaceAll("'", "´");
 										}
 										else{
 											name = tokens.split(",")[0]+" ["+tokens.replaceAll(tokens.split(",")[0]+",", "")+"]";
@@ -340,7 +341,7 @@ public class DHIS2Helper {
 									}
 									else{
 										if(dataset.attributeValue("type").equalsIgnoreCase("diagnosis")){
-											name = tokens+"<img src='"+MedwanQuery.getInstance().getConfigString("imageSource","http://localhost/openclinic")+"/_img/icons/icon_info.gif' title='"+MedwanQuery.getInstance().getCodeTran("icd10code"+tokens, language).replaceAll("'", "´")+"'/>";
+											name = tokens+"<img src='"+MedwanQuery.getInstance().getConfigString("imageSource","http://localhost/openclinic")+"/_img/icons/icon_info.gif'/> "+MedwanQuery.getInstance().getCodeTran("icd10code"+tokens.split(",")[0], language).replaceAll("'", "´");
 										}
 										else{
 											name=tokens;

@@ -298,12 +298,12 @@ public class AdminPrivateContact{
 
             if(rs.next()){
                 for(int i=0; i<privateDetails.length; i++){
-                // dates should be formatted
-                if(i==1 || i==2 || i==12) value = ScreenHelper.checkString(ScreenHelper.getSQLDate(rs.getDate((i+1))));
-                else                      value = ScreenHelper.checkString(rs.getString((i+1)));
-
-                if(value.length() > 0) privateDetails[i] = value;
-            }
+	                // dates should be formatted
+	                if(i==1 || i==2 || i==12) value = ScreenHelper.checkString(ScreenHelper.getSQLDate(rs.getDate((i+1))));
+	                else                      value = ScreenHelper.checkString(rs.getString((i+1)));
+	
+	                if(value.length() > 0) privateDetails[i] = value;
+	            }
             }
             rs.close();
             ps.close();

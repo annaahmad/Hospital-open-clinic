@@ -3262,7 +3262,7 @@ public class Debet extends OC_Object implements Comparable,Cloneable {
         Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
         try {
             sSelect = "SELECT oc_debet_date,d.oc_debet_quantity,p.OC_PRESTATION_CODE,p.OC_PRESTATION_DESCRIPTION,p.OC_PRESTATION_INVOICEGROUP,d.oc_debet_objectid FROM OC_ENCOUNTERS e, OC_DEBETS d, OC_PRESTATIONS p WHERE d.oc_debet_credited<>1 and p.OC_PRESTATION_OBJECTID=replace(d.OC_DEBET_PRESTATIONUID,'"+MedwanQuery.getInstance().getConfigString("serverId","1")+".','') and e.OC_ENCOUNTER_PATIENTUID = ? "
-                    + " AND d.oc_debet_encounteruid=("+MedwanQuery.getInstance().convert("varchar", "e.oc_encounter_serverid")+MedwanQuery.getInstance().concatSign()+"'.'"+MedwanQuery.getInstance().concatSign()+MedwanQuery.getInstance().convert("varchar", "e.oc_encounter_objectid")+")";
+                    + " AND d.oc_debet_encounteruid=e.oc_encounter_serverid"+MedwanQuery.getInstance().concatSign()+"'.'"+MedwanQuery.getInstance().concatSign()+"e.oc_encounter_objectid";
             if (sDateBegin.length() > 0) {
                 sSelect += " AND d.OC_DEBET_DATE >= ?  ";
             }
@@ -3342,7 +3342,7 @@ public class Debet extends OC_Object implements Comparable,Cloneable {
                 debet.setPatientbirthdate(ScreenHelper.formatDate(rs.getDate("dateofbirth")));
                 debet.setPatientgender(rs.getString("gender"));
                 debet.setPatientid(rs.getString("personid"));
-                debet.setRefUid(new java.text.SimpleDateFormat("dd/MM/yyyy").format(rs.getDate("mindate"))+" - "+new java.text.SimpleDateFormat("dd/MM/yyyy").format(rs.getDate("maxdate")));
+                debet.setRefUid(SH.formatDate(rs.getDate("mindate"))+" - "+SH.formatDate(rs.getDate("maxdate")));
                 debet.setEncounterUid(rs.getString("personid"));
                 MedwanQuery.getInstance().getObjectCache().putObject("debet", debet);
                 vDebets.add(debet);
@@ -3422,7 +3422,7 @@ public class Debet extends OC_Object implements Comparable,Cloneable {
                 //add Insurar name
                 //*********************
                 debet.setPatientName(ScreenHelper.checkString(rs.getString("OC_INSURAR_NAME")));
-                debet.setRefUid(new java.text.SimpleDateFormat("dd/MM/yyyy").format(rs.getDate("mindate"))+" - "+new java.text.SimpleDateFormat("dd/MM/yyyy").format(rs.getDate("maxdate")));
+                debet.setRefUid(SH.formatDate(rs.getDate("mindate"))+" - "+SH.formatDate(rs.getDate("maxdate")));
                 MedwanQuery.getInstance().getObjectCache().putObject("debet", debet);
                 vDebets.add(debet);
             }
@@ -3463,7 +3463,7 @@ public class Debet extends OC_Object implements Comparable,Cloneable {
                 //add extrainsurance name
                 //*********************
                 debet.setPatientName(ScreenHelper.checkString(rs.getString("OC_INSURAR_NAME")));
-                debet.setRefUid(new java.text.SimpleDateFormat("dd/MM/yyyy").format(rs.getDate("mindate"))+" - "+new java.text.SimpleDateFormat("dd/MM/yyyy").format(rs.getDate("maxdate")));
+                debet.setRefUid(SH.formatDate(rs.getDate("mindate"))+" - "+SH.formatDate(rs.getDate("maxdate")));
                 MedwanQuery.getInstance().getObjectCache().putObject("debet", debet);
                 vDebets.add(debet);
             }

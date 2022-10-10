@@ -300,6 +300,63 @@ public class WicketCredit extends OC_Object{
         return wicketCredit;
     }
 
+    public static Vector getByInvoiceUid(String sInvoiceUid){
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Vector credits = new Vector();
+
+        Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
+        try{
+            String sSelect = "SELECT * FROM OC_WICKET_CREDITS"+
+                             " WHERE OC_WICKET_CREDIT_INVOICEUID = ?";
+            ps = oc_conn.prepareStatement(sSelect);
+            ps.setString(1,sInvoiceUid);
+            rs = ps.executeQuery();
+
+            while(rs.next()){
+                WicketCredit wicketCredit = new WicketCredit();
+                wicketCredit.setUid(ScreenHelper.checkString(rs.getString("OC_WICKET_CREDIT_SERVERID"))+"."+
+                                    ScreenHelper.checkString(rs.getString("OC_WICKET_CREDIT_OBJECTID")));
+
+                wicketCredit.setWicketUID(ScreenHelper.checkString(rs.getString("OC_WICKET_CREDIT_WICKETUID")));
+                wicketCredit.setCreateDateTime(rs.getTimestamp("OC_WICKET_CREDIT_CREATETIME"));
+                wicketCredit.setUpdateDateTime(rs.getTimestamp("OC_WICKET_CREDIT_UPDATETIME"));
+                wicketCredit.setUpdateUser(ScreenHelper.checkString(rs.getString("OC_WICKET_CREDIT_UPDATEUID")));
+                wicketCredit.setAmount(rs.getDouble("OC_WICKET_CREDIT_AMOUNT"));
+                wicketCredit.setOperationType(ScreenHelper.checkString(rs.getString("OC_WICKET_CREDIT_TYPE")));
+                wicketCredit.setCategory(ScreenHelper.checkString(rs.getString("OC_WICKET_CREDIT_CATEGORY")));
+                wicketCredit.setComment(new StringBuffer(ScreenHelper.checkString(rs.getString("OC_WICKET_CREDIT_COMMENT"))));
+                wicketCredit.setOperationDate(rs.getTimestamp("OC_WICKET_CREDIT_OPERATIONDATE"));
+                wicketCredit.setVersion(rs.getInt("OC_WICKET_CREDIT_VERSION"));
+                wicketCredit.setUserUID(rs.getInt("OC_WICKET_CREDIT_USERUID"));
+                wicketCredit.setInvoiceUID(rs.getString("OC_WICKET_CREDIT_INVOICEUID"));
+                wicketCredit.setCurrency(rs.getString("OC_WICKET_CREDIT_CURRENCY"));
+
+                // reference
+                ObjectReference or = new ObjectReference();
+                or.setObjectType(ScreenHelper.checkString(rs.getString("OC_WICKET_CREDIT_REFERENCETYPE")));
+                or.setObjectUid(ScreenHelper.checkString(rs.getString("OC_WICKET_CREDIT_REFERENCEUID")));
+                wicketCredit.setReferenceObject(or);
+                credits.add(wicketCredit);
+            }
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        finally{
+            try{
+                if(rs!= null) rs.close();
+                if(ps!= null) ps.close();
+                oc_conn.close();
+            }
+            catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+
+        return credits;
+    }
+
 
     public void store(){
         PreparedStatement ps = null;
