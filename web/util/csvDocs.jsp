@@ -137,6 +137,16 @@
 			sOutput+=CsvInvoiceCplr2.getOutput(request);
 		}
 	}
+	else if("invoice.udam".equalsIgnoreCase(request.getParameter("docid"))){
+		InsurarInvoice invoice = InsurarInvoice.get(request.getParameter("invoiceuid"));
+		if(invoice!=null){
+			sOutput+="FACTURE NRO:;"+invoice.getInvoiceNumber()+"\r\n";
+			sOutput+="DATE:;"+ScreenHelper.stdDateFormat.format(invoice.getDate())+"\r\n";
+			sOutput+="ASSUREUR:;"+invoice.getInsurar().getName()+"\r\n";
+			sOutput+="\r\n";
+			sOutput+=CsvInvoiceUdam.getOutput(request,sWebLanguage);
+		}
+	}
 	else if("invoice.ccbrta.extra".equalsIgnoreCase(request.getParameter("docid"))){
 		ExtraInsurarInvoice invoice = ExtraInsurarInvoice.get(request.getParameter("invoiceuid"));
 		if(invoice!=null){

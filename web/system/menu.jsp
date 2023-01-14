@@ -121,6 +121,7 @@
                     hMenu.put(getTran(request,"web","testsmsgateways",sWebLanguage),"main.do?Page=util/smsGatewayTest.jsp");
 					if(SH.ci("enableOpenCarenetMaster",0)==1){
 	                    hMenu.put(getTran(request,"web.manage","manageOpenCarenetTokens",sWebLanguage),"main.do?Page=system/manageOpenCarenetTokens.jsp");
+	                    hMenu.put(getTran(request,"web.manage","manageOpenCarenetTraffic",sWebLanguage),"main.do?Page=system/manageOpenCarenetTraffic.jsp");
 					}
                     out.print(ScreenHelper.writeTblHeader(getTran(request,"web.manage","healthnetwork",sWebLanguage),sCONTEXTPATH)+
                     		  sortMenu(hMenu)+

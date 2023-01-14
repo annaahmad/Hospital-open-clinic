@@ -67,7 +67,6 @@
         }
         session.setAttribute("searchResultsList",lResults);
     }
-
     boolean bRS = false;
 
     if(lResults.size() > 0){

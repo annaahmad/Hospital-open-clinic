@@ -157,7 +157,7 @@
 	    }
 	    
 	    //*** REFERENCE ***
-	    String sTTReference ="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_REFERENCE";
+	    String sTTReference ="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_REFERRAL";
 	    String sTranReference = getTran(request,"web.occup",sTTReference,sWebLanguage);
 	    TransactionVO tranReference = sessionContainerWO.getLastTransaction(sTTReference);
 	
@@ -171,12 +171,28 @@
 	        sReferenceDate = ScreenHelper.stdDateFormat.format(tranReference.getUpdateTime());
 	    }
 	
+	    //*** CONTREREFERENCE ***
+	    String sTTContreReference ="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_COUNTERREFERRAL";
+	    String sTranContreReference = getTran(request,"web.occup",sTTContreReference,sWebLanguage);
+	    TransactionVO tranContreReference = sessionContainerWO.getLastTransaction(sTTContreReference);
+	
+	    String sContreReferenceTranId = "";
+	    String sContreReferenceServerId = "";
+	    String sContreReferenceDate = "";
+
+	    if(tranContreReference!=null){
+	        sContreReferenceTranId = tranContreReference.getTransactionId().intValue()+"";
+	        sContreReferenceServerId = tranContreReference.getServerId()+"";
+	        sContreReferenceDate = ScreenHelper.stdDateFormat.format(tranContreReference.getUpdateTime());
+	    }
+	
 	    //*** CARE ****************************************
 	    if(activeUser.getAccessRight("occup.surveillance.select")) out.print(writeExamination(activeUser,counter++,sTranNursing,sNursingDate,sTTNursing,sNursingTranId,sNursingServerId,sWebLanguage,sCONTEXTPATH));
 	    if(activeUser.getAccessRight("occup.labrequest.select")) out.print(writeExamination(activeUser,counter++,sTranLabo,sLaboDate,sTTLabo,sLaboTranId,sLaboServerId,sWebLanguage,sCONTEXTPATH));
 	    if(activeUser.getAccessRight("occup.medicalimagingrequest.select")) out.print(writeExamination(activeUser,counter++,sTranMir,sMirDate,sTTMir,sMirTranId,sMirServerId,sWebLanguage,sCONTEXTPATH));
 	    if(activeUser.getAccessRight("occup.anatomopathology.select")) out.print(writeExamination(activeUser,counter++,sTranAna,sAnaDate,sTTAna,sAnaTranId,sAnaServerId,sWebLanguage,sCONTEXTPATH));
 	    if(activeUser.getAccessRight("occup.reference.select")) out.print(writeExamination(activeUser,counter++,sTranReference,sReferenceDate,sTTReference,sReferenceTranId,sReferenceServerId,sWebLanguage,sCONTEXTPATH));
+	    if(activeUser.getAccessRight("occup.reference.select")) out.print(writeExamination(activeUser,counter++,sTranContreReference,sContreReferenceDate,sTTContreReference,sContreReferenceTranId,sContreReferenceServerId,sWebLanguage,sCONTEXTPATH));
 	    if(activeUser.getAccessRight("occup.arch.documents.select")) out.print(writeExamination(activeUser,counter++,sTranArc,sArcDate,sTTArc,sArcTranId,sArcServerId,sWebLanguage,sCONTEXTPATH));
 	 
 	    if(activeUser.getAccessRight("prescriptions.care.select")){

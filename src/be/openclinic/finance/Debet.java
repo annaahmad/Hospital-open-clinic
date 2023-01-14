@@ -261,6 +261,9 @@ public class Debet extends OC_Object implements Comparable,Cloneable {
     public String getPatientid() {
 		return patientid;
 	}
+    public AdminPerson getPatient() {
+		return AdminPerson.get(patientid);
+	}
 	public void setPatientid(String patientid) {
 		this.patientid = patientid;
 	}

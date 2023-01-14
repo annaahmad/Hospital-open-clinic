@@ -7,13 +7,7 @@ import be.mxs.common.util.system.Debug;
 import be.mxs.common.util.system.ScreenHelper;
 import be.openclinic.hl7.HL7Server;
 import be.openclinic.system.Config;
-
-
-
-
-
-
-
+import be.openclinic.system.SH;
 
 import java.sql.*;
 import java.sql.Date;
@@ -195,10 +189,10 @@ public class RequestedLabAnalysis {
     	requestedLabAnalysis.requestUserId=analysis.elementText("requestUserId");
     	try {
         	requestedLabAnalysis.resultDate=new SimpleDateFormat("yyyyMMddHHmmssSSS").parse(analysis.elementText("resultDate"));
-    	} catch(Exception e) {}
+    	} catch(Exception e) {e.printStackTrace();}
     	try {
         	requestedLabAnalysis.finalvalidationdatetime=new SimpleDateFormat("yyyyMMddHHmmssSSS").parse(analysis.elementText("finalvalidationdatetime"));
-    	} catch(Exception e) {}
+    	} catch(Exception e) {e.printStackTrace();}
     	return requestedLabAnalysis;
     }
 
@@ -280,8 +274,12 @@ public class RequestedLabAnalysis {
         return requestDate;
     }
 
-    public void setRequestDate(Date requestDate) {
+    public void setRequestDate(java.sql.Date requestDate) {
         this.requestDate = requestDate;
+    }
+
+    public void setRequestDate(java.util.Date requestDate) {
+        this.requestDate = SH.toSQLDate(requestDate);
     }
 
     public String getRequestUserId() {
@@ -1262,6 +1260,10 @@ public class RequestedLabAnalysis {
                 if(tmpDate!=null) labAnalysis.resultDate = tmpDate;
                 tmpDate = rs.getDate("updateTime");
                 if(tmpDate!=null) labAnalysis.requestDate = tmpDate;
+                tmpDate = rs.getDate("finalvalidationdatetime");
+                if(tmpDate!=null) labAnalysis.finalvalidationdatetime = tmpDate;
+                tmpDate = rs.getDate("technicalvalidationdatetime");
+                if(tmpDate!=null) labAnalysis.technicalvalidationdatetime = tmpDate;
 
                 labAnalyses.put(labAnalysis.analysisCode,labAnalysis);
             }
@@ -1451,7 +1453,7 @@ public class RequestedLabAnalysis {
                 sSelect = "UPDATE RequestedLabAnalyses"+
                           " SET serverid=?, transactionid=?, patientid=?, analysiscode=?, "+
                           "  comment=?, resultvalue=?, resultunit=?, resultmodifier=?, resultcomment=?, "+
-                          "  resultrefmax=?, resultrefmin=?, resultdate=?, resultuserid=?, resultprovisional=?, updatetime=?, objectid=?"
+                          "  resultrefmax=?, resultrefmin=?, resultdate=?, resultuserid=?, resultprovisional=?, updatetime=?, objectid=?, finalvalidationdatetime=?, technicalvalidationdatetime=?, finalvalidator=?,technicalvalidator=?"
                           + " WHERE"
                           + " serverid=? and transactionid=? and analysiscode=?";
 
@@ -1482,9 +1484,15 @@ public class RequestedLabAnalysis {
                 ps.setString(14,this.resultProvisional==""?"1":"0");
                 ps.setTimestamp(15, new java.sql.Timestamp(new java.util.Date().getTime()));
                 ps.setInt(16,this.getObjectid());
-                ps.setInt(17,Integer.parseInt(this.serverId));
-                ps.setInt(18,Integer.parseInt(this.transactionId));
-                ps.setString(19,this.analysisCode);
+                if(this.finalvalidationdatetime!=null) ps.setTimestamp(17,new java.sql.Timestamp(this.finalvalidationdatetime.getTime()));
+                else                      ps.setNull(17,Types.TIMESTAMP);
+                if(this.technicalvalidationdatetime!=null) ps.setTimestamp(18,new java.sql.Timestamp(this.technicalvalidationdatetime.getTime()));
+                else                      ps.setNull(18,Types.TIMESTAMP);
+                ps.setInt(19,this.finalvalidation);
+                ps.setInt(20,this.technicalvalidation);
+                ps.setInt(21,Integer.parseInt(this.serverId));
+                ps.setInt(22,Integer.parseInt(this.transactionId));
+                ps.setString(23,this.analysisCode);
                 ps.executeUpdate();
             }
             else{
@@ -1493,8 +1501,8 @@ public class RequestedLabAnalysis {
 
                 sSelect = "INSERT INTO RequestedLabAnalyses (serverid,transactionid,patientid,analysiscode,"+
                           "  comment,resultvalue,resultunit,resultmodifier,resultcomment,resultrefmax,"+
-                          "  resultrefmin,resultdate,resultuserid, resultprovisional,requestdatetime,updatetime,objectid)"+
-                          " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                          "  resultrefmin,resultdate,resultuserid, resultprovisional,requestdatetime,updatetime,objectid,finalvalidationdatetime,technicalvalidationdatetime,finalvalidator,technicalvalidator)"+
+                          " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
                 ps = oc_conn.prepareStatement(sSelect);
 
@@ -1523,6 +1531,12 @@ public class RequestedLabAnalysis {
                 ps.setTimestamp(15,new Timestamp(new java.util.Date().getTime()));
                 ps.setTimestamp(16, new java.sql.Timestamp(new java.util.Date().getTime()));
                 ps.setInt(17, this.getObjectid());
+                if(this.finalvalidationdatetime!=null) ps.setTimestamp(18,new java.sql.Timestamp(this.finalvalidationdatetime.getTime()));
+                else                      ps.setNull(18,Types.TIMESTAMP);
+                if(this.technicalvalidationdatetime!=null) ps.setTimestamp(19,new java.sql.Timestamp(this.technicalvalidationdatetime.getTime()));
+                else                      ps.setNull(19,Types.TIMESTAMP);
+                ps.setInt(20,this.finalvalidation);
+                ps.setInt(21,this.technicalvalidation);
                 ps.executeUpdate();
             }
         }

@@ -1,5 +1,4 @@
 package be.openclinic.finance;
-
 import be.openclinic.common.OC_Object;
 import be.openclinic.common.ObjectReference;
 import be.mxs.common.util.db.MedwanQuery;

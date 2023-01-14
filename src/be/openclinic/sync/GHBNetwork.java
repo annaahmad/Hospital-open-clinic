@@ -42,6 +42,7 @@ import be.mxs.common.util.system.Pointer;
 import be.mxs.common.util.system.ScreenHelper;
 import be.openclinic.medical.RequestedLabAnalysis;
 import be.openclinic.system.Encryption;
+import be.openclinic.system.SH;
 import net.admin.AdminPerson;
 
 public class GHBNetwork {
@@ -274,6 +275,10 @@ public class GHBNetwork {
 						Debug.println("Received pubkey for destination server "+targetServerId);
 						String pubkey = root.getText();
 						String token = Encryption.getToken(16);
+						SH.syslog("Token: "+token);
+						SH.syslog("PubKey: "+pubkey);
+						String encryptedToken = Encryption.encryptTextWithPublicKey(token, pubkey);
+						SH.syslog("Encrypted token: "+encryptedToken);
 						String encryptedData = Encryption.encryptTextSymmetric(data, token);
 						//Now we post the encrypted data to the GHB server
 						String storeurl=MedwanQuery.getInstance().getConfigString("ghb_ref_storemessageurl","http://www.globalhealthbarometer.net/globalhealthbarometer/util/storeGHBMessage.jsp");
@@ -283,7 +288,7 @@ public class GHBNetwork {
 							new StringPart("sourceserverid",MedwanQuery.getInstance().getConfigString("ghb_ref_serverid","")),
 							new StringPart("targetserverid",targetServerId+""),
 							new StringPart("data",encryptedData),
-							new StringPart("token",Encryption.encryptTextWithPublicKey(token, pubkey))
+							new StringPart("token",encryptedToken)
 						};
 						post.setRequestEntity(new MultipartRequestEntity(parts2, post.getParams()));
 						int status = client.executeMethod(post);

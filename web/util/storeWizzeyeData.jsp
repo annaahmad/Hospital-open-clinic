@@ -25,7 +25,10 @@
 	String type = SH.c(request.getParameter("type"));
 	String id = SH.c(request.getParameter("id"));
 	String user = SH.c(request.getParameter("user"));
+	SH.syslog("user="+user);
+	SH.syslog("id="+id);
 	String imagedata = SH.c(request.getParameter("imagedata"));
+	SH.syslog("imagedata="+imagedata.length());
 	//First find the matching patient
 	String personid = (String)application.getAttribute("wizzeyeRoomId."+roomid);
 	if(personid!=null){

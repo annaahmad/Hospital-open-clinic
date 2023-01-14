@@ -312,7 +312,7 @@
                 Service service = Service.getService(sFindServiceCode);
                 if(service != null){
                   	Connection ad_conn = MedwanQuery.getInstance().getAdminConnection();
-                    service.delete(ad_conn);
+                    service.delete(ad_conn,activeUser.userid);
                     ad_conn.close();
                     MedwanQuery.getInstance().removeServiceExaminations(sFindServiceCode);
                 }

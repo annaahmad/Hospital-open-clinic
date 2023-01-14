@@ -1059,6 +1059,7 @@
 		</attributeOptionCombo>
 		<dataelements>
 			<dataelement calculate="potentialAdmissionDays" nolink="1" uid="mJXp4cUPbsr" label="Nombre de nuitées potentielles"/>
+			<dataelement calculate="admissionDays" uid="Exr3ZejZlUk" label="Nombre de nuits d'hospitalisation"/>
 			<dataelement calculate="itemCount" unique="patients" outgoing="1" uid="kOMHQRnCGyc" label="Nombre de décès maternels">
 				<item itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_DECEASED_PREGNANTWOMEN" itemvalue="medwan.common.true"/>
 			</dataelement>
@@ -7152,16 +7153,17 @@
 	<dataset label="DSNIS-HOP - Fiche 14 - Consultations ambulatoires" type="title" uid="BlvDmrE2I4L"/>
 	<dataset label="DSNIS-HOP - Fiche 14 - Consultations ambulatoires (nouveaux cas par origine et par âge)" newcase="1" type="encounter" encountertype="visit" incoming="1" uid="BlvDmrE2I4L">
 		<attributeOptionCombo type="department">
-			<option uid="bvYCT9fPMMc" value="chi" name="Chirurgie"/>
-			<option uid="scMXOQSSdDc" value="con" name="consultation"/>
-			<option uid="B3mJbSxZ33O" value="den" name="Dentisterie"/>
-			<option uid="zhe4w2Dixus" value="der" name="Dermatologie"/>
-			<option uid="CCIAg5PRnRP" value="gyn" name="Gyneco-obstetrique"/>
-			<option uid="jfjXznWnBfI" value="int" name="Medecine interne"/>
-			<option uid="rE5t6LaDPlm" value="orl" name="ORL"/>
-			<option uid="iSViL67tigT" value="oph" name="Ophtalmologie"/>
-			<option uid="TUKn6BQQ1kZ" value="ped" name="Pediatrie"/>
-			<option uid="hNxaaaFgAFq" value="kin" name="Rehabilitation-Kinesitherapie"/>
+			<option uid="IFdEhK4azmZ" value="chi" name="Chirurgie"/>
+			<option uid="PlL6CzuMa3K" value="con" name="consultation"/>
+			<option uid="Z2WOqG2cffj" value="den" name="Dentisterie"/>
+			<option uid="pFbpKJAWQNX" value="der" name="Dermatologie"/>
+			<option uid="oSTrt6dR0ZS" value="gyn" name="Gyneco-obstetrique"/>
+			<option uid="xK1UW3wsB12" value="int" name="Medecine interne"/>
+			<option uid="on32W1e1g1x" value="orl" name="ORL"/>
+			<option uid="l4aiFBbq6hM" value="oph" name="Ophtalmologie"/>
+			<option uid="wEoeVjQZdRI" value="ped" name="Pediatrie"/>
+			<option uid="xQpFKAZv5ly" value="kin" name="Rehabilitation-Kinesitherapie"/>
+			<option uid="M2ZSfGfxm3O" value="urg" name="Urgences"/>
 		</attributeOptionCombo>
 		<categoryOptionCombo type="zone">
 			<option uid="YvCUIPUKLle" value="1" name="District - AR"/>
@@ -7176,16 +7178,17 @@
 	</dataset>
 	<dataset label="DSNIS-HOP - Fiche 14 - Consultations ambulatoires (nouveaux cas par origine et par âge)|1" notitle="1" newcase="1" type="encounter" encountertype="visit" incoming="1" uid="BlvDmrE2I4L">
 		<attributeOptionCombo type="department">
-			<option uid="bvYCT9fPMMc" value="chi" name="Chirurgie"/>
-			<option uid="scMXOQSSdDc" value="con" name="consultation"/>
-			<option uid="B3mJbSxZ33O" value="den" name="Dentisterie"/>
-			<option uid="zhe4w2Dixus" value="der" name="Dermatologie"/>
-			<option uid="CCIAg5PRnRP" value="gyn" name="Gyneco-obstetrique"/>
-			<option uid="jfjXznWnBfI" value="int" name="Medecine interne"/>
-			<option uid="rE5t6LaDPlm" value="orl" name="ORL"/>
-			<option uid="iSViL67tigT" value="oph" name="Ophtalmologie"/>
-			<option uid="TUKn6BQQ1kZ" value="ped" name="Pediatrie"/>
-			<option uid="hNxaaaFgAFq" value="kin" name="Rehabilitation-Kinesitherapie"/>
+			<option uid="IFdEhK4azmZ" value="chi" name="Chirurgie"/>
+			<option uid="PlL6CzuMa3K" value="con" name="consultation"/>
+			<option uid="Z2WOqG2cffj" value="den" name="Dentisterie"/>
+			<option uid="pFbpKJAWQNX" value="der" name="Dermatologie"/>
+			<option uid="oSTrt6dR0ZS" value="gyn" name="Gyneco-obstetrique"/>
+			<option uid="xK1UW3wsB12" value="int" name="Medecine interne"/>
+			<option uid="on32W1e1g1x" value="orl" name="ORL"/>
+			<option uid="l4aiFBbq6hM" value="oph" name="Ophtalmologie"/>
+			<option uid="wEoeVjQZdRI" value="ped" name="Pediatrie"/>
+			<option uid="xQpFKAZv5ly" value="kin" name="Rehabilitation-Kinesitherapie"/>
+			<option uid="M2ZSfGfxm3O" value="urg" name="Urgences"/>
 		</attributeOptionCombo>
 		<categoryOptionCombo type="zone">
 			<option uid="AJ1mSBEZVRL" value="1" name="District - AR"/>
@@ -7200,16 +7203,17 @@
 	</dataset>
 	<dataset label="DSNIS-HOP - Fiche 14 - Consultations ambulatoires (nouveaux cas par origine et par âge)|2" notitle="1" newcase="1" type="encounter" encountertype="visit" incoming="1" uid="BlvDmrE2I4L">
 		<attributeOptionCombo type="department">
-			<option uid="bvYCT9fPMMc" value="chi" name="Chirurgie"/>
-			<option uid="scMXOQSSdDc" value="con" name="consultation"/>
-			<option uid="B3mJbSxZ33O" value="den" name="Dentisterie"/>
-			<option uid="zhe4w2Dixus" value="der" name="Dermatologie"/>
-			<option uid="CCIAg5PRnRP" value="gyn" name="Gyneco-obstetrique"/>
-			<option uid="jfjXznWnBfI" value="int" name="Medecine interne"/>
-			<option uid="rE5t6LaDPlm" value="orl" name="ORL"/>
-			<option uid="iSViL67tigT" value="oph" name="Ophtalmologie"/>
-			<option uid="TUKn6BQQ1kZ" value="ped" name="Pediatrie"/>
-			<option uid="hNxaaaFgAFq" value="kin" name="Rehabilitation-Kinesitherapie"/>
+			<option uid="IFdEhK4azmZ" value="chi" name="Chirurgie"/>
+			<option uid="PlL6CzuMa3K" value="con" name="consultation"/>
+			<option uid="Z2WOqG2cffj" value="den" name="Dentisterie"/>
+			<option uid="pFbpKJAWQNX" value="der" name="Dermatologie"/>
+			<option uid="oSTrt6dR0ZS" value="gyn" name="Gyneco-obstetrique"/>
+			<option uid="xK1UW3wsB12" value="int" name="Medecine interne"/>
+			<option uid="on32W1e1g1x" value="orl" name="ORL"/>
+			<option uid="l4aiFBbq6hM" value="oph" name="Ophtalmologie"/>
+			<option uid="wEoeVjQZdRI" value="ped" name="Pediatrie"/>
+			<option uid="xQpFKAZv5ly" value="kin" name="Rehabilitation-Kinesitherapie"/>
+			<option uid="M2ZSfGfxm3O" value="urg" name="Urgences"/>
 		</attributeOptionCombo>
 		<categoryOptionCombo type="zone">
 			<option uid="jOUfbSve14z" value="1" name="District - AR"/>
@@ -7224,16 +7228,17 @@
 	</dataset>
 	<dataset label="DSNIS-HOP - Fiche 14 - Consultations ambulatoires (nouveaux cas par origine et par âge)|3" notitle="1" newcase="1" type="encounter" encountertype="visit" incoming="1" uid="BlvDmrE2I4L">
 		<attributeOptionCombo type="department">
-			<option uid="bvYCT9fPMMc" value="chi" name="Chirurgie"/>
-			<option uid="scMXOQSSdDc" value="con" name="consultation"/>
-			<option uid="B3mJbSxZ33O" value="den" name="Dentisterie"/>
-			<option uid="zhe4w2Dixus" value="der" name="Dermatologie"/>
-			<option uid="CCIAg5PRnRP" value="gyn" name="Gyneco-obstetrique"/>
-			<option uid="jfjXznWnBfI" value="int" name="Medecine interne"/>
-			<option uid="rE5t6LaDPlm" value="orl" name="ORL"/>
-			<option uid="iSViL67tigT" value="oph" name="Ophtalmologie"/>
-			<option uid="TUKn6BQQ1kZ" value="ped" name="Pediatrie"/>
-			<option uid="hNxaaaFgAFq" value="kin" name="Rehabilitation-Kinesitherapie"/>
+			<option uid="IFdEhK4azmZ" value="chi" name="Chirurgie"/>
+			<option uid="PlL6CzuMa3K" value="con" name="consultation"/>
+			<option uid="Z2WOqG2cffj" value="den" name="Dentisterie"/>
+			<option uid="pFbpKJAWQNX" value="der" name="Dermatologie"/>
+			<option uid="oSTrt6dR0ZS" value="gyn" name="Gyneco-obstetrique"/>
+			<option uid="xK1UW3wsB12" value="int" name="Medecine interne"/>
+			<option uid="on32W1e1g1x" value="orl" name="ORL"/>
+			<option uid="l4aiFBbq6hM" value="oph" name="Ophtalmologie"/>
+			<option uid="wEoeVjQZdRI" value="ped" name="Pediatrie"/>
+			<option uid="xQpFKAZv5ly" value="kin" name="Rehabilitation-Kinesitherapie"/>
+			<option uid="M2ZSfGfxm3O" value="urg" name="Urgences"/>
 		</attributeOptionCombo>
 		<categoryOptionCombo type="zone">
 			<option uid="a8b3m1mZ9W2" value="1" name="District - AR"/>
@@ -7248,16 +7253,17 @@
 	</dataset>
 	<dataset label="DSNIS-HOP - Fiche 14 - Consultations ambulatoires (nouveaux cas par origine et par âge)|4" notitle="1" newcase="1" type="encounter" encountertype="visit" incoming="1" uid="BlvDmrE2I4L">
 		<attributeOptionCombo type="department">
-			<option uid="bvYCT9fPMMc" value="chi" name="Chirurgie"/>
-			<option uid="scMXOQSSdDc" value="con" name="consultation"/>
-			<option uid="B3mJbSxZ33O" value="den" name="Dentisterie"/>
-			<option uid="zhe4w2Dixus" value="der" name="Dermatologie"/>
-			<option uid="CCIAg5PRnRP" value="gyn" name="Gyneco-obstetrique"/>
-			<option uid="jfjXznWnBfI" value="int" name="Medecine interne"/>
-			<option uid="rE5t6LaDPlm" value="orl" name="ORL"/>
-			<option uid="iSViL67tigT" value="oph" name="Ophtalmologie"/>
-			<option uid="TUKn6BQQ1kZ" value="ped" name="Pediatrie"/>
-			<option uid="hNxaaaFgAFq" value="kin" name="Rehabilitation-Kinesitherapie"/>
+			<option uid="IFdEhK4azmZ" value="chi" name="Chirurgie"/>
+			<option uid="PlL6CzuMa3K" value="con" name="consultation"/>
+			<option uid="Z2WOqG2cffj" value="den" name="Dentisterie"/>
+			<option uid="pFbpKJAWQNX" value="der" name="Dermatologie"/>
+			<option uid="oSTrt6dR0ZS" value="gyn" name="Gyneco-obstetrique"/>
+			<option uid="xK1UW3wsB12" value="int" name="Medecine interne"/>
+			<option uid="on32W1e1g1x" value="orl" name="ORL"/>
+			<option uid="l4aiFBbq6hM" value="oph" name="Ophtalmologie"/>
+			<option uid="wEoeVjQZdRI" value="ped" name="Pediatrie"/>
+			<option uid="xQpFKAZv5ly" value="kin" name="Rehabilitation-Kinesitherapie"/>
+			<option uid="M2ZSfGfxm3O" value="urg" name="Urgences"/>
 		</attributeOptionCombo>
 		<categoryOptionCombo type="zone">
 			<option uid="r2GZuXWPS31" value="1" name="District - AR"/>
@@ -7272,16 +7278,17 @@
 	</dataset>
 	<dataset label="DSNIS-HOP - Fiche 14 - Consultations ambulatoires (nouveaux cas par origine et par âge)|5" notitle="1" newcase="1" type="encounter" encountertype="visit" incoming="1" uid="BlvDmrE2I4L">
 		<attributeOptionCombo type="department">
-			<option uid="bvYCT9fPMMc" value="chi" name="Chirurgie"/>
-			<option uid="scMXOQSSdDc" value="con" name="consultation"/>
-			<option uid="B3mJbSxZ33O" value="den" name="Dentisterie"/>
-			<option uid="zhe4w2Dixus" value="der" name="Dermatologie"/>
-			<option uid="CCIAg5PRnRP" value="gyn" name="Gyneco-obstetrique"/>
-			<option uid="jfjXznWnBfI" value="int" name="Medecine interne"/>
-			<option uid="rE5t6LaDPlm" value="orl" name="ORL"/>
-			<option uid="iSViL67tigT" value="oph" name="Ophtalmologie"/>
-			<option uid="TUKn6BQQ1kZ" value="ped" name="Pediatrie"/>
-			<option uid="hNxaaaFgAFq" value="kin" name="Rehabilitation-Kinesitherapie"/>
+			<option uid="IFdEhK4azmZ" value="chi" name="Chirurgie"/>
+			<option uid="PlL6CzuMa3K" value="con" name="consultation"/>
+			<option uid="Z2WOqG2cffj" value="den" name="Dentisterie"/>
+			<option uid="pFbpKJAWQNX" value="der" name="Dermatologie"/>
+			<option uid="oSTrt6dR0ZS" value="gyn" name="Gyneco-obstetrique"/>
+			<option uid="xK1UW3wsB12" value="int" name="Medecine interne"/>
+			<option uid="on32W1e1g1x" value="orl" name="ORL"/>
+			<option uid="l4aiFBbq6hM" value="oph" name="Ophtalmologie"/>
+			<option uid="wEoeVjQZdRI" value="ped" name="Pediatrie"/>
+			<option uid="xQpFKAZv5ly" value="kin" name="Rehabilitation-Kinesitherapie"/>
+			<option uid="M2ZSfGfxm3O" value="urg" name="Urgences"/>
 		</attributeOptionCombo>
 		<categoryOptionCombo type="zone">
 			<option uid="EIRgo01aGkk" value="1" name="District - AR"/>
@@ -7296,16 +7303,17 @@
 	</dataset>
 	<dataset label="DSNIS-HOP - Fiche 14 - Consultations ambulatoires (nouveaux cas par origine et par âge)|6"  notitle="1" newcase="1" type="item" transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_" encountertype="visit" uid="BlvDmrE2I4L">
 		<attributeOptionCombo type="department">
-			<option uid="bvYCT9fPMMc" value="chi" name="Chirurgie"/>
-			<option uid="scMXOQSSdDc" value="con" name="consultation"/>
-			<option uid="B3mJbSxZ33O" value="den" name="Dentisterie"/>
-			<option uid="zhe4w2Dixus" value="der" name="Dermatologie"/>
-			<option uid="CCIAg5PRnRP" value="gyn" name="Gyneco-obstetrique"/>
-			<option uid="jfjXznWnBfI" value="int" name="Medecine interne"/>
-			<option uid="rE5t6LaDPlm" value="orl" name="ORL"/>
-			<option uid="iSViL67tigT" value="oph" name="Ophtalmologie"/>
-			<option uid="TUKn6BQQ1kZ" value="ped" name="Pediatrie"/>
-			<option uid="hNxaaaFgAFq" value="kin" name="Rehabilitation-Kinesitherapie"/>
+			<option uid="IFdEhK4azmZ" value="chi" name="Chirurgie"/>
+			<option uid="PlL6CzuMa3K" value="con" name="consultation"/>
+			<option uid="Z2WOqG2cffj" value="den" name="Dentisterie"/>
+			<option uid="pFbpKJAWQNX" value="der" name="Dermatologie"/>
+			<option uid="oSTrt6dR0ZS" value="gyn" name="Gyneco-obstetrique"/>
+			<option uid="xK1UW3wsB12" value="int" name="Medecine interne"/>
+			<option uid="on32W1e1g1x" value="orl" name="ORL"/>
+			<option uid="l4aiFBbq6hM" value="oph" name="Ophtalmologie"/>
+			<option uid="wEoeVjQZdRI" value="ped" name="Pediatrie"/>
+			<option uid="xQpFKAZv5ly" value="kin" name="Rehabilitation-Kinesitherapie"/>
+			<option uid="M2ZSfGfxm3O" value="urg" name="Urgences"/>
 		</attributeOptionCombo>
 		<categoryOptionCombo type="zone">
 			<option uid="QuXsLJnKt3r" value="1" name="District - AR"/>
@@ -7320,16 +7328,17 @@
 	</dataset>
 	<dataset label="DSNIS-HOP - Fiche 14 - Consultations ambulatoires (nouveaux cas par origine et par âge)|6a" notitle="1" newcase="1" type="encounter" encountertype="visit" incoming="1" uid="BlvDmrE2I4L">
 		<attributeOptionCombo type="department">
-			<option uid="bvYCT9fPMMc" value="chi" name="Chirurgie"/>
-			<option uid="scMXOQSSdDc" value="con" name="consultation"/>
-			<option uid="B3mJbSxZ33O" value="den" name="Dentisterie"/>
-			<option uid="zhe4w2Dixus" value="der" name="Dermatologie"/>
-			<option uid="CCIAg5PRnRP" value="gyn" name="Gyneco-obstetrique"/>
-			<option uid="jfjXznWnBfI" value="int" name="Medecine interne"/>
-			<option uid="rE5t6LaDPlm" value="orl" name="ORL"/>
-			<option uid="iSViL67tigT" value="oph" name="Ophtalmologie"/>
-			<option uid="TUKn6BQQ1kZ" value="ped" name="Pediatrie"/>
-			<option uid="hNxaaaFgAFq" value="kin" name="Rehabilitation-Kinesitherapie"/>
+			<option uid="IFdEhK4azmZ" value="chi" name="Chirurgie"/>
+			<option uid="PlL6CzuMa3K" value="con" name="consultation"/>
+			<option uid="Z2WOqG2cffj" value="den" name="Dentisterie"/>
+			<option uid="pFbpKJAWQNX" value="der" name="Dermatologie"/>
+			<option uid="oSTrt6dR0ZS" value="gyn" name="Gyneco-obstetrique"/>
+			<option uid="xK1UW3wsB12" value="int" name="Medecine interne"/>
+			<option uid="on32W1e1g1x" value="orl" name="ORL"/>
+			<option uid="l4aiFBbq6hM" value="oph" name="Ophtalmologie"/>
+			<option uid="wEoeVjQZdRI" value="ped" name="Pediatrie"/>
+			<option uid="xQpFKAZv5ly" value="kin" name="Rehabilitation-Kinesitherapie"/>
+			<option uid="M2ZSfGfxm3O" value="urg" name="Urgences"/>
 		</attributeOptionCombo>
 		<categoryOptionCombo type="zone">
 			<option uid="JWPfEq2ZiaO" value="1" name="District - AR"/>
@@ -7344,16 +7353,17 @@
 	</dataset>
 	<dataset label="DSNIS-HOP - Fiche 14 - Consultations ambulatoires (nouveaux cas par origine et par âge)|6b" notitle="1" newcase="1" type="encounter" encountertype="visit" incoming="1" uid="BlvDmrE2I4L">
 		<attributeOptionCombo type="department">
-			<option uid="bvYCT9fPMMc" value="chi" name="Chirurgie"/>
-			<option uid="scMXOQSSdDc" value="con" name="consultation"/>
-			<option uid="B3mJbSxZ33O" value="den" name="Dentisterie"/>
-			<option uid="zhe4w2Dixus" value="der" name="Dermatologie"/>
-			<option uid="CCIAg5PRnRP" value="gyn" name="Gyneco-obstetrique"/>
-			<option uid="jfjXznWnBfI" value="int" name="Medecine interne"/>
-			<option uid="rE5t6LaDPlm" value="orl" name="ORL"/>
-			<option uid="iSViL67tigT" value="oph" name="Ophtalmologie"/>
-			<option uid="TUKn6BQQ1kZ" value="ped" name="Pediatrie"/>
-			<option uid="hNxaaaFgAFq" value="kin" name="Rehabilitation-Kinesitherapie"/>
+			<option uid="IFdEhK4azmZ" value="chi" name="Chirurgie"/>
+			<option uid="PlL6CzuMa3K" value="con" name="consultation"/>
+			<option uid="Z2WOqG2cffj" value="den" name="Dentisterie"/>
+			<option uid="pFbpKJAWQNX" value="der" name="Dermatologie"/>
+			<option uid="oSTrt6dR0ZS" value="gyn" name="Gyneco-obstetrique"/>
+			<option uid="xK1UW3wsB12" value="int" name="Medecine interne"/>
+			<option uid="on32W1e1g1x" value="orl" name="ORL"/>
+			<option uid="l4aiFBbq6hM" value="oph" name="Ophtalmologie"/>
+			<option uid="wEoeVjQZdRI" value="ped" name="Pediatrie"/>
+			<option uid="xQpFKAZv5ly" value="kin" name="Rehabilitation-Kinesitherapie"/>
+			<option uid="M2ZSfGfxm3O" value="urg" name="Urgences"/>
 		</attributeOptionCombo>
 		<categoryOptionCombo type="zone">
 			<option uid="YCN4xm8LZY3" value="1" name="District - AR"/>
@@ -7368,16 +7378,17 @@
 	</dataset>
 	<dataset label="DSNIS-HOP - Fiche 14 - Consultations ambulatoires (nouveaux cas par origine et par âge)|6c" notitle="1" newcase="1" type="encounter" encountertype="visit" incoming="1" uid="BlvDmrE2I4L">
 		<attributeOptionCombo type="department">
-			<option uid="bvYCT9fPMMc" value="chi" name="Chirurgie"/>
-			<option uid="scMXOQSSdDc" value="con" name="consultation"/>
-			<option uid="B3mJbSxZ33O" value="den" name="Dentisterie"/>
-			<option uid="zhe4w2Dixus" value="der" name="Dermatologie"/>
-			<option uid="CCIAg5PRnRP" value="gyn" name="Gyneco-obstetrique"/>
-			<option uid="jfjXznWnBfI" value="int" name="Medecine interne"/>
-			<option uid="rE5t6LaDPlm" value="orl" name="ORL"/>
-			<option uid="iSViL67tigT" value="oph" name="Ophtalmologie"/>
-			<option uid="TUKn6BQQ1kZ" value="ped" name="Pediatrie"/>
-			<option uid="hNxaaaFgAFq" value="kin" name="Rehabilitation-Kinesitherapie"/>
+			<option uid="IFdEhK4azmZ" value="chi" name="Chirurgie"/>
+			<option uid="PlL6CzuMa3K" value="con" name="consultation"/>
+			<option uid="Z2WOqG2cffj" value="den" name="Dentisterie"/>
+			<option uid="pFbpKJAWQNX" value="der" name="Dermatologie"/>
+			<option uid="oSTrt6dR0ZS" value="gyn" name="Gyneco-obstetrique"/>
+			<option uid="xK1UW3wsB12" value="int" name="Medecine interne"/>
+			<option uid="on32W1e1g1x" value="orl" name="ORL"/>
+			<option uid="l4aiFBbq6hM" value="oph" name="Ophtalmologie"/>
+			<option uid="wEoeVjQZdRI" value="ped" name="Pediatrie"/>
+			<option uid="xQpFKAZv5ly" value="kin" name="Rehabilitation-Kinesitherapie"/>
+			<option uid="M2ZSfGfxm3O" value="urg" name="Urgences"/>
 		</attributeOptionCombo>
 		<categoryOptionCombo type="zone">
 			<option uid="a06rVD4gRQy" value="1" name="District - AR"/>
@@ -7392,16 +7403,17 @@
 	</dataset>
 	<dataset label="DSNIS-HOP - Fiche 14 - Consultations ambulatoires (nouveaux cas par origine et par âge)|6d" notitle="1" newcase="1" type="encounter" encountertype="visit" incoming="1" uid="BlvDmrE2I4L">
 		<attributeOptionCombo type="department">
-			<option uid="bvYCT9fPMMc" value="chi" name="Chirurgie"/>
-			<option uid="scMXOQSSdDc" value="con" name="consultation"/>
-			<option uid="B3mJbSxZ33O" value="den" name="Dentisterie"/>
-			<option uid="zhe4w2Dixus" value="der" name="Dermatologie"/>
-			<option uid="CCIAg5PRnRP" value="gyn" name="Gyneco-obstetrique"/>
-			<option uid="jfjXznWnBfI" value="int" name="Medecine interne"/>
-			<option uid="rE5t6LaDPlm" value="orl" name="ORL"/>
-			<option uid="iSViL67tigT" value="oph" name="Ophtalmologie"/>
-			<option uid="TUKn6BQQ1kZ" value="ped" name="Pediatrie"/>
-			<option uid="hNxaaaFgAFq" value="kin" name="Rehabilitation-Kinesitherapie"/>
+			<option uid="IFdEhK4azmZ" value="chi" name="Chirurgie"/>
+			<option uid="PlL6CzuMa3K" value="con" name="consultation"/>
+			<option uid="Z2WOqG2cffj" value="den" name="Dentisterie"/>
+			<option uid="pFbpKJAWQNX" value="der" name="Dermatologie"/>
+			<option uid="oSTrt6dR0ZS" value="gyn" name="Gyneco-obstetrique"/>
+			<option uid="xK1UW3wsB12" value="int" name="Medecine interne"/>
+			<option uid="on32W1e1g1x" value="orl" name="ORL"/>
+			<option uid="l4aiFBbq6hM" value="oph" name="Ophtalmologie"/>
+			<option uid="wEoeVjQZdRI" value="ped" name="Pediatrie"/>
+			<option uid="xQpFKAZv5ly" value="kin" name="Rehabilitation-Kinesitherapie"/>
+			<option uid="M2ZSfGfxm3O" value="urg" name="Urgences"/>
 		</attributeOptionCombo>
 		<categoryOptionCombo type="zone">
 			<option uid="nqolRzauXwf" value="1" name="District - AR"/>
@@ -7416,16 +7428,17 @@
 	</dataset>
 	<dataset label="DSNIS-HOP - Fiche 14 - Consultations ambulatoires (nouveaux cas par origine et par âge)|7" notitle="1" newcase="1" type="encounter" encountertype="visit" incoming="1" uid="BlvDmrE2I4L">
 		<attributeOptionCombo type="department">
-			<option uid="bvYCT9fPMMc" value="chi" name="Chirurgie"/>
-			<option uid="scMXOQSSdDc" value="con" name="consultation"/>
-			<option uid="B3mJbSxZ33O" value="den" name="Dentisterie"/>
-			<option uid="zhe4w2Dixus" value="der" name="Dermatologie"/>
-			<option uid="CCIAg5PRnRP" value="gyn" name="Gyneco-obstetrique"/>
-			<option uid="jfjXznWnBfI" value="int" name="Medecine interne"/>
-			<option uid="rE5t6LaDPlm" value="orl" name="ORL"/>
-			<option uid="iSViL67tigT" value="oph" name="Ophtalmologie"/>
-			<option uid="TUKn6BQQ1kZ" value="ped" name="Pediatrie"/>
-			<option uid="hNxaaaFgAFq" value="kin" name="Rehabilitation-Kinesitherapie"/>
+			<option uid="IFdEhK4azmZ" value="chi" name="Chirurgie"/>
+			<option uid="PlL6CzuMa3K" value="con" name="consultation"/>
+			<option uid="Z2WOqG2cffj" value="den" name="Dentisterie"/>
+			<option uid="pFbpKJAWQNX" value="der" name="Dermatologie"/>
+			<option uid="oSTrt6dR0ZS" value="gyn" name="Gyneco-obstetrique"/>
+			<option uid="xK1UW3wsB12" value="int" name="Medecine interne"/>
+			<option uid="on32W1e1g1x" value="orl" name="ORL"/>
+			<option uid="l4aiFBbq6hM" value="oph" name="Ophtalmologie"/>
+			<option uid="wEoeVjQZdRI" value="ped" name="Pediatrie"/>
+			<option uid="xQpFKAZv5ly" value="kin" name="Rehabilitation-Kinesitherapie"/>
+			<option uid="M2ZSfGfxm3O" value="urg" name="Urgences"/>
 		</attributeOptionCombo>
 		<categoryOptionCombo type="zone">
 			<option uid="oWwXUioM1k4" value="1" name="District - AR"/>
@@ -7440,16 +7453,17 @@
 	</dataset>
 	<dataset label="DSNIS-HOP - Fiche 14 - Consultations ambulatoires (nouveaux cas par age et par sexe)" newcase="1" type="encounter" encountertype="visit" incoming="1" uid="BlvDmrE2I4L">
 		<attributeOptionCombo type="department">
-			<option uid="bvYCT9fPMMc" value="chi" name="Chirurgie"/>
-			<option uid="scMXOQSSdDc" value="con" name="consultation"/>
-			<option uid="B3mJbSxZ33O" value="den" name="Dentisterie"/>
-			<option uid="zhe4w2Dixus" value="der" name="Dermatologie"/>
-			<option uid="CCIAg5PRnRP" value="gyn" name="Gyneco-obstetrique"/>
-			<option uid="jfjXznWnBfI" value="int" name="Medecine interne"/>
-			<option uid="rE5t6LaDPlm" value="orl" name="ORL"/>
-			<option uid="iSViL67tigT" value="oph" name="Ophtalmologie"/>
-			<option uid="TUKn6BQQ1kZ" value="ped" name="Pediatrie"/>
-			<option uid="hNxaaaFgAFq" value="kin" name="Rehabilitation-Kinesitherapie"/>
+			<option uid="IFdEhK4azmZ" value="chi" name="Chirurgie"/>
+			<option uid="PlL6CzuMa3K" value="con" name="consultation"/>
+			<option uid="Z2WOqG2cffj" value="den" name="Dentisterie"/>
+			<option uid="pFbpKJAWQNX" value="der" name="Dermatologie"/>
+			<option uid="oSTrt6dR0ZS" value="gyn" name="Gyneco-obstetrique"/>
+			<option uid="xK1UW3wsB12" value="int" name="Medecine interne"/>
+			<option uid="on32W1e1g1x" value="orl" name="ORL"/>
+			<option uid="l4aiFBbq6hM" value="oph" name="Ophtalmologie"/>
+			<option uid="wEoeVjQZdRI" value="ped" name="Pediatrie"/>
+			<option uid="xQpFKAZv5ly" value="kin" name="Rehabilitation-Kinesitherapie"/>
+			<option uid="M2ZSfGfxm3O" value="urg" name="Urgences"/>
 		</attributeOptionCombo>
 		<categoryOptionCombo type="agegender">
 			<option uid="U8aCp07FOkl" min="0" max="999" gender="m" name="Homme"/>
@@ -7461,16 +7475,17 @@
 	</dataset>
 	<dataset label="DSNIS-HOP - Fiche 14 - Consultations ambulatoires (nouveaux cas par age et par sexe)|1" notitle="1" newcase="1" type="encounter" encountertype="visit" incoming="1" uid="BlvDmrE2I4L">
 		<attributeOptionCombo type="department">
-			<option uid="bvYCT9fPMMc" value="chi" name="Chirurgie"/>
-			<option uid="scMXOQSSdDc" value="con" name="consultation"/>
-			<option uid="B3mJbSxZ33O" value="den" name="Dentisterie"/>
-			<option uid="zhe4w2Dixus" value="der" name="Dermatologie"/>
-			<option uid="CCIAg5PRnRP" value="gyn" name="Gyneco-obstetrique"/>
-			<option uid="jfjXznWnBfI" value="int" name="Medecine interne"/>
-			<option uid="rE5t6LaDPlm" value="orl" name="ORL"/>
-			<option uid="iSViL67tigT" value="oph" name="Ophtalmologie"/>
-			<option uid="TUKn6BQQ1kZ" value="ped" name="Pediatrie"/>
-			<option uid="hNxaaaFgAFq" value="kin" name="Rehabilitation-Kinesitherapie"/>
+			<option uid="IFdEhK4azmZ" value="chi" name="Chirurgie"/>
+			<option uid="PlL6CzuMa3K" value="con" name="consultation"/>
+			<option uid="Z2WOqG2cffj" value="den" name="Dentisterie"/>
+			<option uid="pFbpKJAWQNX" value="der" name="Dermatologie"/>
+			<option uid="oSTrt6dR0ZS" value="gyn" name="Gyneco-obstetrique"/>
+			<option uid="xK1UW3wsB12" value="int" name="Medecine interne"/>
+			<option uid="on32W1e1g1x" value="orl" name="ORL"/>
+			<option uid="l4aiFBbq6hM" value="oph" name="Ophtalmologie"/>
+			<option uid="wEoeVjQZdRI" value="ped" name="Pediatrie"/>
+			<option uid="xQpFKAZv5ly" value="kin" name="Rehabilitation-Kinesitherapie"/>
+			<option uid="M2ZSfGfxm3O" value="urg" name="Urgences"/>
 		</attributeOptionCombo>
 		<categoryOptionCombo type="agegender">
 			<option uid="PlTdJYtk9mS" min="0" max="999" gender="m" name="Homme"/>
@@ -7482,16 +7497,17 @@
 	</dataset>
 	<dataset label="DSNIS-HOP - Fiche 14 - Consultations ambulatoires (nouveaux cas par age et par sexe)|2" notitle="1" newcase="1" type="encounter" encountertype="visit" incoming="1" uid="BlvDmrE2I4L">
 		<attributeOptionCombo type="department">
-			<option uid="bvYCT9fPMMc" value="chi" name="Chirurgie"/>
-			<option uid="scMXOQSSdDc" value="con" name="consultation"/>
-			<option uid="B3mJbSxZ33O" value="den" name="Dentisterie"/>
-			<option uid="zhe4w2Dixus" value="der" name="Dermatologie"/>
-			<option uid="CCIAg5PRnRP" value="gyn" name="Gyneco-obstetrique"/>
-			<option uid="jfjXznWnBfI" value="int" name="Medecine interne"/>
-			<option uid="rE5t6LaDPlm" value="orl" name="ORL"/>
-			<option uid="iSViL67tigT" value="oph" name="Ophtalmologie"/>
-			<option uid="TUKn6BQQ1kZ" value="ped" name="Pediatrie"/>
-			<option uid="hNxaaaFgAFq" value="kin" name="Rehabilitation-Kinesitherapie"/>
+			<option uid="IFdEhK4azmZ" value="chi" name="Chirurgie"/>
+			<option uid="PlL6CzuMa3K" value="con" name="consultation"/>
+			<option uid="Z2WOqG2cffj" value="den" name="Dentisterie"/>
+			<option uid="pFbpKJAWQNX" value="der" name="Dermatologie"/>
+			<option uid="oSTrt6dR0ZS" value="gyn" name="Gyneco-obstetrique"/>
+			<option uid="xK1UW3wsB12" value="int" name="Medecine interne"/>
+			<option uid="on32W1e1g1x" value="orl" name="ORL"/>
+			<option uid="l4aiFBbq6hM" value="oph" name="Ophtalmologie"/>
+			<option uid="wEoeVjQZdRI" value="ped" name="Pediatrie"/>
+			<option uid="xQpFKAZv5ly" value="kin" name="Rehabilitation-Kinesitherapie"/>
+			<option uid="M2ZSfGfxm3O" value="urg" name="Urgences"/>
 		</attributeOptionCombo>
 		<categoryOptionCombo type="agegender">
 			<option uid="vMR1S7Xf8A6" min="0" max="999" gender="m" name="Homme"/>
@@ -7503,16 +7519,17 @@
 	</dataset>
 	<dataset label="DSNIS-HOP - Fiche 14 - Consultations ambulatoires (nouveaux cas par age et par sexe)|3" notitle="1" newcase="1" type="encounter" encountertype="visit" incoming="1" uid="BlvDmrE2I4L">
 		<attributeOptionCombo type="department">
-			<option uid="bvYCT9fPMMc" value="chi" name="Chirurgie"/>
-			<option uid="scMXOQSSdDc" value="con" name="consultation"/>
-			<option uid="B3mJbSxZ33O" value="den" name="Dentisterie"/>
-			<option uid="zhe4w2Dixus" value="der" name="Dermatologie"/>
-			<option uid="CCIAg5PRnRP" value="gyn" name="Gyneco-obstetrique"/>
-			<option uid="jfjXznWnBfI" value="int" name="Medecine interne"/>
-			<option uid="rE5t6LaDPlm" value="orl" name="ORL"/>
-			<option uid="iSViL67tigT" value="oph" name="Ophtalmologie"/>
-			<option uid="TUKn6BQQ1kZ" value="ped" name="Pediatrie"/>
-			<option uid="hNxaaaFgAFq" value="kin" name="Rehabilitation-Kinesitherapie"/>
+			<option uid="IFdEhK4azmZ" value="chi" name="Chirurgie"/>
+			<option uid="PlL6CzuMa3K" value="con" name="consultation"/>
+			<option uid="Z2WOqG2cffj" value="den" name="Dentisterie"/>
+			<option uid="pFbpKJAWQNX" value="der" name="Dermatologie"/>
+			<option uid="oSTrt6dR0ZS" value="gyn" name="Gyneco-obstetrique"/>
+			<option uid="xK1UW3wsB12" value="int" name="Medecine interne"/>
+			<option uid="on32W1e1g1x" value="orl" name="ORL"/>
+			<option uid="l4aiFBbq6hM" value="oph" name="Ophtalmologie"/>
+			<option uid="wEoeVjQZdRI" value="ped" name="Pediatrie"/>
+			<option uid="xQpFKAZv5ly" value="kin" name="Rehabilitation-Kinesitherapie"/>
+			<option uid="M2ZSfGfxm3O" value="urg" name="Urgences"/>
 		</attributeOptionCombo>
 		<categoryOptionCombo type="agegender">
 			<option uid="N1Zr3qfbsCL" min="0" max="999" gender="m" name="Homme"/>
@@ -7524,16 +7541,17 @@
 	</dataset>
 	<dataset label="DSNIS-HOP - Fiche 14 - Consultations ambulatoires (nouveaux cas par age et par sexe)|4" notitle="1" newcase="1" type="encounter" encountertype="visit" incoming="1" uid="BlvDmrE2I4L">
 		<attributeOptionCombo type="department">
-			<option uid="bvYCT9fPMMc" value="chi" name="Chirurgie"/>
-			<option uid="scMXOQSSdDc" value="con" name="consultation"/>
-			<option uid="B3mJbSxZ33O" value="den" name="Dentisterie"/>
-			<option uid="zhe4w2Dixus" value="der" name="Dermatologie"/>
-			<option uid="CCIAg5PRnRP" value="gyn" name="Gyneco-obstetrique"/>
-			<option uid="jfjXznWnBfI" value="int" name="Medecine interne"/>
-			<option uid="rE5t6LaDPlm" value="orl" name="ORL"/>
-			<option uid="iSViL67tigT" value="oph" name="Ophtalmologie"/>
-			<option uid="TUKn6BQQ1kZ" value="ped" name="Pediatrie"/>
-			<option uid="hNxaaaFgAFq" value="kin" name="Rehabilitation-Kinesitherapie"/>
+			<option uid="IFdEhK4azmZ" value="chi" name="Chirurgie"/>
+			<option uid="PlL6CzuMa3K" value="con" name="consultation"/>
+			<option uid="Z2WOqG2cffj" value="den" name="Dentisterie"/>
+			<option uid="pFbpKJAWQNX" value="der" name="Dermatologie"/>
+			<option uid="oSTrt6dR0ZS" value="gyn" name="Gyneco-obstetrique"/>
+			<option uid="xK1UW3wsB12" value="int" name="Medecine interne"/>
+			<option uid="on32W1e1g1x" value="orl" name="ORL"/>
+			<option uid="l4aiFBbq6hM" value="oph" name="Ophtalmologie"/>
+			<option uid="wEoeVjQZdRI" value="ped" name="Pediatrie"/>
+			<option uid="xQpFKAZv5ly" value="kin" name="Rehabilitation-Kinesitherapie"/>
+			<option uid="M2ZSfGfxm3O" value="urg" name="Urgences"/>
 		</attributeOptionCombo>
 		<categoryOptionCombo type="agegender">
 			<option uid="ZGJflSG6UwE" min="0" max="999" gender="m" name="Homme"/>
@@ -7545,16 +7563,17 @@
 	</dataset>
 	<dataset label="DSNIS-HOP - Fiche 14 - Consultations ambulatoires (nouveaux cas par age et par sexe)|5" notitle="1" newcase="1" type="encounter" encountertype="visit" incoming="1" uid="BlvDmrE2I4L">
 		<attributeOptionCombo type="department">
-			<option uid="bvYCT9fPMMc" value="chi" name="Chirurgie"/>
-			<option uid="scMXOQSSdDc" value="con" name="consultation"/>
-			<option uid="B3mJbSxZ33O" value="den" name="Dentisterie"/>
-			<option uid="zhe4w2Dixus" value="der" name="Dermatologie"/>
-			<option uid="CCIAg5PRnRP" value="gyn" name="Gyneco-obstetrique"/>
-			<option uid="jfjXznWnBfI" value="int" name="Medecine interne"/>
-			<option uid="rE5t6LaDPlm" value="orl" name="ORL"/>
-			<option uid="iSViL67tigT" value="oph" name="Ophtalmologie"/>
-			<option uid="TUKn6BQQ1kZ" value="ped" name="Pediatrie"/>
-			<option uid="hNxaaaFgAFq" value="kin" name="Rehabilitation-Kinesitherapie"/>
+			<option uid="IFdEhK4azmZ" value="chi" name="Chirurgie"/>
+			<option uid="PlL6CzuMa3K" value="con" name="consultation"/>
+			<option uid="Z2WOqG2cffj" value="den" name="Dentisterie"/>
+			<option uid="pFbpKJAWQNX" value="der" name="Dermatologie"/>
+			<option uid="oSTrt6dR0ZS" value="gyn" name="Gyneco-obstetrique"/>
+			<option uid="xK1UW3wsB12" value="int" name="Medecine interne"/>
+			<option uid="on32W1e1g1x" value="orl" name="ORL"/>
+			<option uid="l4aiFBbq6hM" value="oph" name="Ophtalmologie"/>
+			<option uid="wEoeVjQZdRI" value="ped" name="Pediatrie"/>
+			<option uid="xQpFKAZv5ly" value="kin" name="Rehabilitation-Kinesitherapie"/>
+			<option uid="M2ZSfGfxm3O" value="urg" name="Urgences"/>
 		</attributeOptionCombo>
 		<categoryOptionCombo type="agegender">
 			<option uid="Hug5t6xZVoh" min="0" max="999" gender="m" name="Homme"/>
@@ -7566,16 +7585,17 @@
 	</dataset>
 	<dataset label="DSNIS-HOP - Fiche 14 - Consultations ambulatoires (nouveaux cas par age et par sexe)|6" notitle="1" newcase="1" type="encounter" encountertype="visit" incoming="1" uid="BlvDmrE2I4L">
 		<attributeOptionCombo type="department">
-			<option uid="bvYCT9fPMMc" value="chi" name="Chirurgie"/>
-			<option uid="scMXOQSSdDc" value="con" name="consultation"/>
-			<option uid="B3mJbSxZ33O" value="den" name="Dentisterie"/>
-			<option uid="zhe4w2Dixus" value="der" name="Dermatologie"/>
-			<option uid="CCIAg5PRnRP" value="gyn" name="Gyneco-obstetrique"/>
-			<option uid="jfjXznWnBfI" value="int" name="Medecine interne"/>
-			<option uid="rE5t6LaDPlm" value="orl" name="ORL"/>
-			<option uid="iSViL67tigT" value="oph" name="Ophtalmologie"/>
-			<option uid="TUKn6BQQ1kZ" value="ped" name="Pediatrie"/>
-			<option uid="hNxaaaFgAFq" value="kin" name="Rehabilitation-Kinesitherapie"/>
+			<option uid="IFdEhK4azmZ" value="chi" name="Chirurgie"/>
+			<option uid="PlL6CzuMa3K" value="con" name="consultation"/>
+			<option uid="Z2WOqG2cffj" value="den" name="Dentisterie"/>
+			<option uid="pFbpKJAWQNX" value="der" name="Dermatologie"/>
+			<option uid="oSTrt6dR0ZS" value="gyn" name="Gyneco-obstetrique"/>
+			<option uid="xK1UW3wsB12" value="int" name="Medecine interne"/>
+			<option uid="on32W1e1g1x" value="orl" name="ORL"/>
+			<option uid="l4aiFBbq6hM" value="oph" name="Ophtalmologie"/>
+			<option uid="wEoeVjQZdRI" value="ped" name="Pediatrie"/>
+			<option uid="xQpFKAZv5ly" value="kin" name="Rehabilitation-Kinesitherapie"/>
+			<option uid="M2ZSfGfxm3O" value="urg" name="Urgences"/>
 		</attributeOptionCombo>
 		<categoryOptionCombo type="agegender">
 			<option uid="fz2nTLdb2PJ" min="0" max="999" gender="m" name="Homme"/>
@@ -7587,16 +7607,17 @@
 	</dataset>
 	<dataset label="DSNIS-HOP - Fiche 14 - Consultations ambulatoires (nouveaux cas par age et par sexe)|6b" notitle="1" newcase="1" type="encounter" encountertype="visit" incoming="1" uid="BlvDmrE2I4L">
 		<attributeOptionCombo type="department">
-			<option uid="bvYCT9fPMMc" value="chi" name="Chirurgie"/>
-			<option uid="scMXOQSSdDc" value="con" name="consultation"/>
-			<option uid="B3mJbSxZ33O" value="den" name="Dentisterie"/>
-			<option uid="zhe4w2Dixus" value="der" name="Dermatologie"/>
-			<option uid="CCIAg5PRnRP" value="gyn" name="Gyneco-obstetrique"/>
-			<option uid="jfjXznWnBfI" value="int" name="Medecine interne"/>
-			<option uid="rE5t6LaDPlm" value="orl" name="ORL"/>
-			<option uid="iSViL67tigT" value="oph" name="Ophtalmologie"/>
-			<option uid="TUKn6BQQ1kZ" value="ped" name="Pediatrie"/>
-			<option uid="hNxaaaFgAFq" value="kin" name="Rehabilitation-Kinesitherapie"/>
+			<option uid="IFdEhK4azmZ" value="chi" name="Chirurgie"/>
+			<option uid="PlL6CzuMa3K" value="con" name="consultation"/>
+			<option uid="Z2WOqG2cffj" value="den" name="Dentisterie"/>
+			<option uid="pFbpKJAWQNX" value="der" name="Dermatologie"/>
+			<option uid="oSTrt6dR0ZS" value="gyn" name="Gyneco-obstetrique"/>
+			<option uid="xK1UW3wsB12" value="int" name="Medecine interne"/>
+			<option uid="on32W1e1g1x" value="orl" name="ORL"/>
+			<option uid="l4aiFBbq6hM" value="oph" name="Ophtalmologie"/>
+			<option uid="wEoeVjQZdRI" value="ped" name="Pediatrie"/>
+			<option uid="xQpFKAZv5ly" value="kin" name="Rehabilitation-Kinesitherapie"/>
+			<option uid="M2ZSfGfxm3O" value="urg" name="Urgences"/>
 		</attributeOptionCombo>
 		<categoryOptionCombo type="agegender">
 			<option uid="Sxn0D250lCS" min="0" max="999" gender="m" name="Homme"/>
@@ -7608,16 +7629,17 @@
 	</dataset>
 	<dataset label="DSNIS-HOP - Fiche 14 - Consultations ambulatoires (nouveaux cas par age et par sexe)|6c" notitle="1" newcase="1" type="encounter" encountertype="visit" incoming="1" uid="BlvDmrE2I4L">
 		<attributeOptionCombo type="department">
-			<option uid="bvYCT9fPMMc" value="chi" name="Chirurgie"/>
-			<option uid="scMXOQSSdDc" value="con" name="consultation"/>
-			<option uid="B3mJbSxZ33O" value="den" name="Dentisterie"/>
-			<option uid="zhe4w2Dixus" value="der" name="Dermatologie"/>
-			<option uid="CCIAg5PRnRP" value="gyn" name="Gyneco-obstetrique"/>
-			<option uid="jfjXznWnBfI" value="int" name="Medecine interne"/>
-			<option uid="rE5t6LaDPlm" value="orl" name="ORL"/>
-			<option uid="iSViL67tigT" value="oph" name="Ophtalmologie"/>
-			<option uid="TUKn6BQQ1kZ" value="ped" name="Pediatrie"/>
-			<option uid="hNxaaaFgAFq" value="kin" name="Rehabilitation-Kinesitherapie"/>
+			<option uid="IFdEhK4azmZ" value="chi" name="Chirurgie"/>
+			<option uid="PlL6CzuMa3K" value="con" name="consultation"/>
+			<option uid="Z2WOqG2cffj" value="den" name="Dentisterie"/>
+			<option uid="pFbpKJAWQNX" value="der" name="Dermatologie"/>
+			<option uid="oSTrt6dR0ZS" value="gyn" name="Gyneco-obstetrique"/>
+			<option uid="xK1UW3wsB12" value="int" name="Medecine interne"/>
+			<option uid="on32W1e1g1x" value="orl" name="ORL"/>
+			<option uid="l4aiFBbq6hM" value="oph" name="Ophtalmologie"/>
+			<option uid="wEoeVjQZdRI" value="ped" name="Pediatrie"/>
+			<option uid="xQpFKAZv5ly" value="kin" name="Rehabilitation-Kinesitherapie"/>
+			<option uid="M2ZSfGfxm3O" value="urg" name="Urgences"/>
 		</attributeOptionCombo>
 		<categoryOptionCombo type="agegender">
 			<option uid="BXplpwIpqbT" min="0" max="999" gender="m" name="Homme"/>
@@ -7629,16 +7651,17 @@
 	</dataset>
 	<dataset label="DSNIS-HOP - Fiche 14 - Consultations ambulatoires (nouveaux cas par age et par sexe)|6d" notitle="1" newcase="1" type="encounter" encountertype="visit" incoming="1" uid="BlvDmrE2I4L">
 		<attributeOptionCombo type="department">
-			<option uid="bvYCT9fPMMc" value="chi" name="Chirurgie"/>
-			<option uid="scMXOQSSdDc" value="con" name="consultation"/>
-			<option uid="B3mJbSxZ33O" value="den" name="Dentisterie"/>
-			<option uid="zhe4w2Dixus" value="der" name="Dermatologie"/>
-			<option uid="CCIAg5PRnRP" value="gyn" name="Gyneco-obstetrique"/>
-			<option uid="jfjXznWnBfI" value="int" name="Medecine interne"/>
-			<option uid="rE5t6LaDPlm" value="orl" name="ORL"/>
-			<option uid="iSViL67tigT" value="oph" name="Ophtalmologie"/>
-			<option uid="TUKn6BQQ1kZ" value="ped" name="Pediatrie"/>
-			<option uid="hNxaaaFgAFq" value="kin" name="Rehabilitation-Kinesitherapie"/>
+			<option uid="IFdEhK4azmZ" value="chi" name="Chirurgie"/>
+			<option uid="PlL6CzuMa3K" value="con" name="consultation"/>
+			<option uid="Z2WOqG2cffj" value="den" name="Dentisterie"/>
+			<option uid="pFbpKJAWQNX" value="der" name="Dermatologie"/>
+			<option uid="oSTrt6dR0ZS" value="gyn" name="Gyneco-obstetrique"/>
+			<option uid="xK1UW3wsB12" value="int" name="Medecine interne"/>
+			<option uid="on32W1e1g1x" value="orl" name="ORL"/>
+			<option uid="l4aiFBbq6hM" value="oph" name="Ophtalmologie"/>
+			<option uid="wEoeVjQZdRI" value="ped" name="Pediatrie"/>
+			<option uid="xQpFKAZv5ly" value="kin" name="Rehabilitation-Kinesitherapie"/>
+			<option uid="M2ZSfGfxm3O" value="urg" name="Urgences"/>
 		</attributeOptionCombo>
 		<categoryOptionCombo type="agegender">
 			<option uid="DHSRF6zTUCB" min="0" max="999" gender="m" name="Homme"/>
@@ -7650,16 +7673,17 @@
 	</dataset>
 	<dataset label="DSNIS-HOP - Fiche 14 - Consultations ambulatoires (nouveaux cas par age et par sexe)|6e" notitle="1" newcase="1" type="encounter" encountertype="visit" incoming="1" uid="BlvDmrE2I4L">
 		<attributeOptionCombo type="department">
-			<option uid="bvYCT9fPMMc" value="chi" name="Chirurgie"/>
-			<option uid="scMXOQSSdDc" value="con" name="consultation"/>
-			<option uid="B3mJbSxZ33O" value="den" name="Dentisterie"/>
-			<option uid="zhe4w2Dixus" value="der" name="Dermatologie"/>
-			<option uid="CCIAg5PRnRP" value="gyn" name="Gyneco-obstetrique"/>
-			<option uid="jfjXznWnBfI" value="int" name="Medecine interne"/>
-			<option uid="rE5t6LaDPlm" value="orl" name="ORL"/>
-			<option uid="iSViL67tigT" value="oph" name="Ophtalmologie"/>
-			<option uid="TUKn6BQQ1kZ" value="ped" name="Pediatrie"/>
-			<option uid="hNxaaaFgAFq" value="kin" name="Rehabilitation-Kinesitherapie"/>
+			<option uid="IFdEhK4azmZ" value="chi" name="Chirurgie"/>
+			<option uid="PlL6CzuMa3K" value="con" name="consultation"/>
+			<option uid="Z2WOqG2cffj" value="den" name="Dentisterie"/>
+			<option uid="pFbpKJAWQNX" value="der" name="Dermatologie"/>
+			<option uid="oSTrt6dR0ZS" value="gyn" name="Gyneco-obstetrique"/>
+			<option uid="xK1UW3wsB12" value="int" name="Medecine interne"/>
+			<option uid="on32W1e1g1x" value="orl" name="ORL"/>
+			<option uid="l4aiFBbq6hM" value="oph" name="Ophtalmologie"/>
+			<option uid="wEoeVjQZdRI" value="ped" name="Pediatrie"/>
+			<option uid="xQpFKAZv5ly" value="kin" name="Rehabilitation-Kinesitherapie"/>
+			<option uid="M2ZSfGfxm3O" value="urg" name="Urgences"/>
 		</attributeOptionCombo>
 		<categoryOptionCombo type="agegender">
 			<option uid="hS6Tv3YxNfR" min="0" max="999" gender="m" name="Homme"/>
@@ -7671,16 +7695,17 @@
 	</dataset>
 	<dataset label="DSNIS-HOP - Fiche 14 - Consultations ambulatoires (nouveaux cas par age et par sexe)|7" notitle="1" newcase="1" type="encounter" encountertype="visit" incoming="1" uid="BlvDmrE2I4L">
 		<attributeOptionCombo type="department">
-			<option uid="bvYCT9fPMMc" value="chi" name="Chirurgie"/>
-			<option uid="scMXOQSSdDc" value="con" name="consultation"/>
-			<option uid="B3mJbSxZ33O" value="den" name="Dentisterie"/>
-			<option uid="zhe4w2Dixus" value="der" name="Dermatologie"/>
-			<option uid="CCIAg5PRnRP" value="gyn" name="Gyneco-obstetrique"/>
-			<option uid="jfjXznWnBfI" value="int" name="Medecine interne"/>
-			<option uid="rE5t6LaDPlm" value="orl" name="ORL"/>
-			<option uid="iSViL67tigT" value="oph" name="Ophtalmologie"/>
-			<option uid="TUKn6BQQ1kZ" value="ped" name="Pediatrie"/>
-			<option uid="hNxaaaFgAFq" value="kin" name="Rehabilitation-Kinesitherapie"/>
+			<option uid="IFdEhK4azmZ" value="chi" name="Chirurgie"/>
+			<option uid="PlL6CzuMa3K" value="con" name="consultation"/>
+			<option uid="Z2WOqG2cffj" value="den" name="Dentisterie"/>
+			<option uid="pFbpKJAWQNX" value="der" name="Dermatologie"/>
+			<option uid="oSTrt6dR0ZS" value="gyn" name="Gyneco-obstetrique"/>
+			<option uid="xK1UW3wsB12" value="int" name="Medecine interne"/>
+			<option uid="on32W1e1g1x" value="orl" name="ORL"/>
+			<option uid="l4aiFBbq6hM" value="oph" name="Ophtalmologie"/>
+			<option uid="wEoeVjQZdRI" value="ped" name="Pediatrie"/>
+			<option uid="xQpFKAZv5ly" value="kin" name="Rehabilitation-Kinesitherapie"/>
+			<option uid="M2ZSfGfxm3O" value="urg" name="Urgences"/>
 		</attributeOptionCombo>
 		<categoryOptionCombo type="agegender">
 			<option uid="GOV8QlzHstb" min="0" max="999" gender="m" name="Homme"/>
@@ -7692,16 +7717,17 @@
 	</dataset>
 	<dataset label="DSNIS-HOP - Fiche 14 - Consultations ambulatoires (anciens cas par age)" newcase="0" type="encounter" encountertype="visit" incoming="1" uid="BlvDmrE2I4L">
 		<attributeOptionCombo type="department">
-			<option uid="bvYCT9fPMMc" value="chi" name="Chirurgie"/>
-			<option uid="scMXOQSSdDc" value="con" name="consultation"/>
-			<option uid="B3mJbSxZ33O" value="den" name="Dentisterie"/>
-			<option uid="zhe4w2Dixus" value="der" name="Dermatologie"/>
-			<option uid="CCIAg5PRnRP" value="gyn" name="Gyneco-obstetrique"/>
-			<option uid="jfjXznWnBfI" value="int" name="Medecine interne"/>
-			<option uid="rE5t6LaDPlm" value="orl" name="ORL"/>
-			<option uid="iSViL67tigT" value="oph" name="Ophtalmologie"/>
-			<option uid="TUKn6BQQ1kZ" value="ped" name="Pediatrie"/>
-			<option uid="hNxaaaFgAFq" value="kin" name="Rehabilitation-Kinesitherapie"/>
+			<option uid="IFdEhK4azmZ" value="chi" name="Chirurgie"/>
+			<option uid="PlL6CzuMa3K" value="con" name="consultation"/>
+			<option uid="Z2WOqG2cffj" value="den" name="Dentisterie"/>
+			<option uid="pFbpKJAWQNX" value="der" name="Dermatologie"/>
+			<option uid="oSTrt6dR0ZS" value="gyn" name="Gyneco-obstetrique"/>
+			<option uid="xK1UW3wsB12" value="int" name="Medecine interne"/>
+			<option uid="on32W1e1g1x" value="orl" name="ORL"/>
+			<option uid="l4aiFBbq6hM" value="oph" name="Ophtalmologie"/>
+			<option uid="wEoeVjQZdRI" value="ped" name="Pediatrie"/>
+			<option uid="xQpFKAZv5ly" value="kin" name="Rehabilitation-Kinesitherapie"/>
+			<option uid="M2ZSfGfxm3O" value="urg" name="Urgences"/>
 		</attributeOptionCombo>
 		<categoryOptionCombo type="age">
 			<option uid="hdW79u4HG4n" min="0" max="1" name="0-11 mois"/>
@@ -7723,16 +7749,17 @@
 	</dataset>
 	<dataset label="DSNIS-HOP - Fiche 14 - Consultations ambulatoires (cas particuliers par origine)" type="item" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_RMH_PATIENTTYPE" encountertype="visit" incoming="1" uid="BlvDmrE2I4L">
 		<attributeOptionCombo type="department">
-			<option uid="bvYCT9fPMMc" value="chi" name="Chirurgie"/>
-			<option uid="scMXOQSSdDc" value="con" name="consultation"/>
-			<option uid="B3mJbSxZ33O" value="den" name="Dentisterie"/>
-			<option uid="zhe4w2Dixus" value="der" name="Dermatologie"/>
-			<option uid="CCIAg5PRnRP" value="gyn" name="Gyneco-obstetrique"/>
-			<option uid="jfjXznWnBfI" value="int" name="Medecine interne"/>
-			<option uid="rE5t6LaDPlm" value="orl" name="ORL"/>
-			<option uid="iSViL67tigT" value="oph" name="Ophtalmologie"/>
-			<option uid="TUKn6BQQ1kZ" value="ped" name="Pediatrie"/>
-			<option uid="hNxaaaFgAFq" value="kin" name="Rehabilitation-Kinesitherapie"/>
+			<option uid="IFdEhK4azmZ" value="chi" name="Chirurgie"/>
+			<option uid="PlL6CzuMa3K" value="con" name="consultation"/>
+			<option uid="Z2WOqG2cffj" value="den" name="Dentisterie"/>
+			<option uid="pFbpKJAWQNX" value="der" name="Dermatologie"/>
+			<option uid="oSTrt6dR0ZS" value="gyn" name="Gyneco-obstetrique"/>
+			<option uid="xK1UW3wsB12" value="int" name="Medecine interne"/>
+			<option uid="on32W1e1g1x" value="orl" name="ORL"/>
+			<option uid="l4aiFBbq6hM" value="oph" name="Ophtalmologie"/>
+			<option uid="wEoeVjQZdRI" value="ped" name="Pediatrie"/>
+			<option uid="xQpFKAZv5ly" value="kin" name="Rehabilitation-Kinesitherapie"/>
+			<option uid="M2ZSfGfxm3O" value="urg" name="Urgences"/>
 		</attributeOptionCombo>
 		<categoryOptionCombo type="zone">
 			<option uid="MDkOkN6SD8A" value="1" name="District - AR"/>
@@ -7749,16 +7776,17 @@
 	</dataset>
 	<dataset label="DSNIS-HOP - Fiche 14 - Consultations ambulatoires (cas par mode d'arrivée)" type="encounter" diagnosisrequired="1" encountertype="visit" incoming="1" uid="BlvDmrE2I4L">
 		<attributeOptionCombo type="department">
-			<option uid="bvYCT9fPMMc" value="chi" name="Chirurgie"/>
-			<option uid="scMXOQSSdDc" value="con" name="consultation"/>
-			<option uid="B3mJbSxZ33O" value="den" name="Dentisterie"/>
-			<option uid="zhe4w2Dixus" value="der" name="Dermatologie"/>
-			<option uid="CCIAg5PRnRP" value="gyn" name="Gyneco-obstetrique"/>
-			<option uid="jfjXznWnBfI" value="int" name="Medecine interne"/>
-			<option uid="rE5t6LaDPlm" value="orl" name="ORL"/>
-			<option uid="iSViL67tigT" value="oph" name="Ophtalmologie"/>
-			<option uid="TUKn6BQQ1kZ" value="ped" name="Pediatrie"/>
-			<option uid="hNxaaaFgAFq" value="kin" name="Rehabilitation-Kinesitherapie"/>
+			<option uid="IFdEhK4azmZ" value="chi" name="Chirurgie"/>
+			<option uid="PlL6CzuMa3K" value="con" name="consultation"/>
+			<option uid="Z2WOqG2cffj" value="den" name="Dentisterie"/>
+			<option uid="pFbpKJAWQNX" value="der" name="Dermatologie"/>
+			<option uid="oSTrt6dR0ZS" value="gyn" name="Gyneco-obstetrique"/>
+			<option uid="xK1UW3wsB12" value="int" name="Medecine interne"/>
+			<option uid="on32W1e1g1x" value="orl" name="ORL"/>
+			<option uid="l4aiFBbq6hM" value="oph" name="Ophtalmologie"/>
+			<option uid="wEoeVjQZdRI" value="ped" name="Pediatrie"/>
+			<option uid="xQpFKAZv5ly" value="kin" name="Rehabilitation-Kinesitherapie"/>
+			<option uid="M2ZSfGfxm3O" value="urg" name="Urgences"/>
 		</attributeOptionCombo>
 		<categoryOptionCombo type="origin">
 			<option uid="XQxobLpM71T" value="healthcenter" name="Par CDS"/>
@@ -7770,16 +7798,17 @@
 	</dataset>
 	<dataset label="DSNIS-HOP - Fiche 14 - Consultations ambulatoires (cas par mode de sortie)" type="encounter" diagnosisrequired="1" encountertype="visit" incoming="1" uid="BlvDmrE2I4L">
 		<attributeOptionCombo type="department">
-			<option uid="bvYCT9fPMMc" value="chi" name="Chirurgie"/>
-			<option uid="scMXOQSSdDc" value="con" name="consultation"/>
-			<option uid="B3mJbSxZ33O" value="den" name="Dentisterie"/>
-			<option uid="zhe4w2Dixus" value="der" name="Dermatologie"/>
-			<option uid="CCIAg5PRnRP" value="gyn" name="Gyneco-obstetrique"/>
-			<option uid="jfjXznWnBfI" value="int" name="Medecine interne"/>
-			<option uid="rE5t6LaDPlm" value="orl" name="ORL"/>
-			<option uid="iSViL67tigT" value="oph" name="Ophtalmologie"/>
-			<option uid="TUKn6BQQ1kZ" value="ped" name="Pediatrie"/>
-			<option uid="hNxaaaFgAFq" value="kin" name="Rehabilitation-Kinesitherapie"/>
+			<option uid="IFdEhK4azmZ" value="chi" name="Chirurgie"/>
+			<option uid="PlL6CzuMa3K" value="con" name="consultation"/>
+			<option uid="Z2WOqG2cffj" value="den" name="Dentisterie"/>
+			<option uid="pFbpKJAWQNX" value="der" name="Dermatologie"/>
+			<option uid="oSTrt6dR0ZS" value="gyn" name="Gyneco-obstetrique"/>
+			<option uid="xK1UW3wsB12" value="int" name="Medecine interne"/>
+			<option uid="on32W1e1g1x" value="orl" name="ORL"/>
+			<option uid="l4aiFBbq6hM" value="oph" name="Ophtalmologie"/>
+			<option uid="wEoeVjQZdRI" value="ped" name="Pediatrie"/>
+			<option uid="xQpFKAZv5ly" value="kin" name="Rehabilitation-Kinesitherapie"/>
+			<option uid="M2ZSfGfxm3O" value="urg" name="Urgences"/>
 		</attributeOptionCombo>
 		<categoryOptionCombo type="outcome">
 			<option uid="iiX9rcRsZPL" value="better" name="Amélioré/Retour à domicile"/>
@@ -7794,16 +7823,17 @@
 	</dataset>
 	<dataset label="DSNIS-HOP - Fiche 14 - Consultations ambulatoires (petite chirurgie)" type="encounter" encountertype="visit" incoming="1" uid="BlvDmrE2I4L">
 		<attributeOptionCombo type="department">
-			<option uid="bvYCT9fPMMc" value="chi" name="Chirurgie"/>
-			<option uid="scMXOQSSdDc" value="con" name="consultation"/>
-			<option uid="B3mJbSxZ33O" value="den" name="Dentisterie"/>
-			<option uid="zhe4w2Dixus" value="der" name="Dermatologie"/>
-			<option uid="CCIAg5PRnRP" value="gyn" name="Gyneco-obstetrique"/>
-			<option uid="jfjXznWnBfI" value="int" name="Medecine interne"/>
-			<option uid="rE5t6LaDPlm" value="orl" name="ORL"/>
-			<option uid="iSViL67tigT" value="oph" name="Ophtalmologie"/>
-			<option uid="TUKn6BQQ1kZ" value="ped" name="Pediatrie"/>
-			<option uid="hNxaaaFgAFq" value="kin" name="Rehabilitation-Kinesitherapie"/>
+			<option uid="IFdEhK4azmZ" value="chi" name="Chirurgie"/>
+			<option uid="PlL6CzuMa3K" value="con" name="consultation"/>
+			<option uid="Z2WOqG2cffj" value="den" name="Dentisterie"/>
+			<option uid="pFbpKJAWQNX" value="der" name="Dermatologie"/>
+			<option uid="oSTrt6dR0ZS" value="gyn" name="Gyneco-obstetrique"/>
+			<option uid="xK1UW3wsB12" value="int" name="Medecine interne"/>
+			<option uid="on32W1e1g1x" value="orl" name="ORL"/>
+			<option uid="l4aiFBbq6hM" value="oph" name="Ophtalmologie"/>
+			<option uid="wEoeVjQZdRI" value="ped" name="Pediatrie"/>
+			<option uid="xQpFKAZv5ly" value="kin" name="Rehabilitation-Kinesitherapie"/>
+			<option uid="M2ZSfGfxm3O" value="urg" name="Urgences"/>
 		</attributeOptionCombo>
 		<categoryOptionCombo type="default">
 			<option uid="GKkUPluq2QJ" name="Default"/>
@@ -7816,16 +7846,17 @@
 	</dataset>
 	<dataset label="DSNIS-HOP - Fiche 14 - Consultations ambulatoires (petite chirurgie)|1" type="encounter" encountertype="visit" incoming="1" uid="BlvDmrE2I4L">
 		<attributeOptionCombo type="department">
-			<option uid="bvYCT9fPMMc" value="chi" name="Chirurgie"/>
-			<option uid="scMXOQSSdDc" value="con" name="consultation"/>
-			<option uid="B3mJbSxZ33O" value="den" name="Dentisterie"/>
-			<option uid="zhe4w2Dixus" value="der" name="Dermatologie"/>
-			<option uid="CCIAg5PRnRP" value="gyn" name="Gyneco-obstetrique"/>
-			<option uid="jfjXznWnBfI" value="int" name="Medecine interne"/>
-			<option uid="rE5t6LaDPlm" value="orl" name="ORL"/>
-			<option uid="iSViL67tigT" value="oph" name="Ophtalmologie"/>
-			<option uid="TUKn6BQQ1kZ" value="ped" name="Pediatrie"/>
-			<option uid="hNxaaaFgAFq" value="kin" name="Rehabilitation-Kinesitherapie"/>
+			<option uid="IFdEhK4azmZ" value="chi" name="Chirurgie"/>
+			<option uid="PlL6CzuMa3K" value="con" name="consultation"/>
+			<option uid="Z2WOqG2cffj" value="den" name="Dentisterie"/>
+			<option uid="pFbpKJAWQNX" value="der" name="Dermatologie"/>
+			<option uid="oSTrt6dR0ZS" value="gyn" name="Gyneco-obstetrique"/>
+			<option uid="xK1UW3wsB12" value="int" name="Medecine interne"/>
+			<option uid="on32W1e1g1x" value="orl" name="ORL"/>
+			<option uid="l4aiFBbq6hM" value="oph" name="Ophtalmologie"/>
+			<option uid="wEoeVjQZdRI" value="ped" name="Pediatrie"/>
+			<option uid="xQpFKAZv5ly" value="kin" name="Rehabilitation-Kinesitherapie"/>
+			<option uid="M2ZSfGfxm3O" value="urg" name="Urgences"/>
 		</attributeOptionCombo>
 		<categoryOptionCombo type="age">
 			<option uid="GKkUPluq2QJ" min="0" max="5" name="Default"/>
@@ -7838,16 +7869,17 @@
 	</dataset>
 	<dataset label="DSNIS-HOP - Fiche 14 - Consultations ambulatoires (lésions pré-cancéreuses col utérus)" newcase="1" type="encounter" encountertype="visit" incoming="1" uid="BlvDmrE2I4L">
 		<attributeOptionCombo type="department">
-			<option uid="bvYCT9fPMMc" value="chi" name="Chirurgie"/>
-			<option uid="scMXOQSSdDc" value="con" name="consultation"/>
-			<option uid="B3mJbSxZ33O" value="den" name="Dentisterie"/>
-			<option uid="zhe4w2Dixus" value="der" name="Dermatologie"/>
-			<option uid="CCIAg5PRnRP" value="gyn" name="Gyneco-obstetrique"/>
-			<option uid="jfjXznWnBfI" value="int" name="Medecine interne"/>
-			<option uid="rE5t6LaDPlm" value="orl" name="ORL"/>
-			<option uid="iSViL67tigT" value="oph" name="Ophtalmologie"/>
-			<option uid="TUKn6BQQ1kZ" value="ped" name="Pediatrie"/>
-			<option uid="hNxaaaFgAFq" value="kin" name="Rehabilitation-Kinesitherapie"/>
+			<option uid="IFdEhK4azmZ" value="chi" name="Chirurgie"/>
+			<option uid="PlL6CzuMa3K" value="con" name="consultation"/>
+			<option uid="Z2WOqG2cffj" value="den" name="Dentisterie"/>
+			<option uid="pFbpKJAWQNX" value="der" name="Dermatologie"/>
+			<option uid="oSTrt6dR0ZS" value="gyn" name="Gyneco-obstetrique"/>
+			<option uid="xK1UW3wsB12" value="int" name="Medecine interne"/>
+			<option uid="on32W1e1g1x" value="orl" name="ORL"/>
+			<option uid="l4aiFBbq6hM" value="oph" name="Ophtalmologie"/>
+			<option uid="wEoeVjQZdRI" value="ped" name="Pediatrie"/>
+			<option uid="xQpFKAZv5ly" value="kin" name="Rehabilitation-Kinesitherapie"/>
+			<option uid="M2ZSfGfxm3O" value="urg" name="Urgences"/>
 		</attributeOptionCombo>
 		<categoryOptionCombo type="age">
 			<option uid="t3eEbkLledV" min="10" max="15" name="10-14 ans"/>

@@ -832,7 +832,50 @@
 	<!-- *************************************************************************************** -->
 	<!-- Accouchements et avortements											 -->
 	<!-- *************************************************************************************** -->
-	<dataset label="Santé de la mère et du nouveau né - accouchements et avortements" type="item" transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSAS_REGISTRY_DELIVERIES" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CONTEXT_ENCOUNTERUID" uid="ovoiyZctyyY">
+	<dataset label="Santé de la mère et du nouveau né - accouchements" type="item" transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSAS_REGISTRY_DELIVERIES" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CONTEXT_ENCOUNTERUID" uid="ovoiyZctyyY">
+		<attributeOptionCombo type="default">
+			<option uid="HoIsxzhEmia" name="Default"/>
+		</attributeOptionCombo>
+		<categoryOptionCombo type="agegender">
+			<option uid="CWaISx438Jq" min="10" max="15" gender="f" name="10-14 ans"/>
+			<option uid="MDcoi7tCcPU" min="15" max="20" gender="f" name="15-19 ans"/>
+			<option uid="F4D5x6nXi5q" min="20" max="25" gender="f" name="20-24 ans"/>
+			<option uid="kH4md2FfeBF" min="25" max="50" gender="f" name="25-50 ans"/>
+			<option uid="g38WSZ2LQ9G" min="50" max="999" gender="f" name="50 ans et +"/>
+		</categoryOptionCombo>
+		<dataelements>
+			<dataelement unique="encounters" calculate="itemCount" itemsneeded="1" label="1. Accouchements dans la structure" uid="mat1">
+				<item sametransaction="1" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_DELIVERIES_DELIVERYDATE"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" itemsneeded="1" label="2. Accouchements - style libre" uid="mat2">
+				<item sametransaction="1" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_DELIVERIES_DELIVERYTYPE" itemvalue="6"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" itemsneeded="1" label="3. Accouchements - avec ventouse" uid="mat3">
+				<item sametransaction="1" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_DELIVERIES_DELIVERYTYPE" itemvalue="4"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" itemsneeded="1" label="4. Accouchements - avec forceps" uid="mat4">
+				<item sametransaction="1" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_DELIVERIES_DELIVERYTYPE" itemvalue="3"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" itemsneeded="1" label="5. Accouchements - par césarienne" uid="mat5">
+				<item sametransaction="1" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_DELIVERIES_DELIVERYTYPE" itemvalue="2"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" itemsneeded="1" label="6. Accouchements assistés par un personnel qualifié" uid="mat6">
+				<item sametransaction="1" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_DELIVERIES_QUALIFICATION" itemvalue="doctor|nurse|nurseassistant|sfe"/>
+			</dataelement>
+c			<dataelement unique="encounters" calculate="itemCount" itemsneeded="2" label="7. Accouchements assistés par un personnel qualifié - avec partogramme" uid="mat7">
+				<item sametransaction="1" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_DELIVERIES_QUALIFICATION" itemvalue="doctor|nurse|nurseassistant|sfe"/>
+				<item sametransaction="1" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_DELIVERIES_PARTOGRAMME" itemvalue="medwan.common.true"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" itemsneeded="2" label="8. Accouchements assistés par un personnel qualifié - sous GATPA" uid="mat8">
+				<item sametransaction="1" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_DELIVERIES_QUALIFICATION" itemvalue="doctor|nurse|nurseassistant|sfe"/>
+				<item sametransaction="1" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_DELIVERIES_CHILDBIRTHTYPE" itemvalue="gatpa"/>
+			</dataelement>
+			<dataelement unique="encounters" calculate="itemCount" itemsneeded="1" label="9. Accouchements à domicile vus" uid="mat9">
+				<item sametransaction="1" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_DELIVERIES_DELIVERYLOCATION" itemvalue="home"/>
+			</dataelement>
+		</dataelements>
+	</dataset>
+	<dataset label="Santé de la mère et du nouveau né - nouveaux-nés" type="item" transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSAS_REGISTRY_DELIVERIES" itemtype="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CONTEXT_ENCOUNTERUID" uid="ovoiyZctyyY">
 		<attributeOptionCombo type="default">
 			<option uid="HoIsxzhEmia" name="Default"/>
 		</attributeOptionCombo>
@@ -1506,8 +1549,8 @@
 			<option uid="Bndfwlj5TQK" min="60" max="999" gender="f" name="&gt;=60 ans F"/>
 		</categoryOptionCombo>
 		<dataelements>
-			<dataelement unique="encounters" outputtype="transactionItemValue" outputid="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_CONS_NEWCASE" outputItemValue="1;" value="1" label="Nouveaux cas vus et traités" uid="PItxuB8GDuC"/>
 			<dataelement unique="encounters" label="Consultations" uid="hGgMAAJ7HSp"/>
+			<dataelement unique="patients" label="Consultants" uid="PItxuB8GDuC"/>
 			<dataelement unique="encounters" outputtype="transactionItemValue" outputid="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_CONS_REFERENCE" outputItemValue="oriented" value="1" label="Cas vus et orientés" uid="NCladcMfHvM"/>
 			<dataelement unique="encounters" outputtype="transactionItemValue" outputid="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_CONS_REFERENCE" outputItemValue="referral" value="1" label="Cas vus référés" uid="wtKwJ0nqr10"/>
 			<dataelement unique="encounters" outputtype="transactionItemValue" outputid="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_CONS_REFERENCE" outputItemValue="counterreferral" value="1" label="Contre référés vers CS" uid="rlJZ0VeglJu"/>
@@ -1538,8 +1581,8 @@
 			<option uid="JXEk6L64rKr" min="60" max="999" gender="f" name="&gt;=60 ans F"/>
 		</categoryOptionCombo>
 		<dataelements>
-			<dataelement unique="encounters" outputtype="transactionItemValue" outputid="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_CONS_NEWCASE" outputItemValue="1;" value="1" label="Nouveaux cas vus et traités" uid="yFMwCXlmAfi"/>
 			<dataelement unique="encounters" label="Consultations" uid="hGgMAAJ7HSp"/>
+			<dataelement unique="patients" label="Consultants" uid="yFMwCXlmAfi"/>
 			<dataelement unique="encounters" outputtype="transactionItemValue" outputid="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_CONS_REFERENCE" outputItemValue="oriented" value="1" label="Cas vus et orientés" uid="NCladcMfHvM"/>
 			<dataelement unique="encounters" outputtype="transactionItemValue" outputid="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_CONS_REFERENCE" outputItemValue="referral" value="1" label="Cas vus référés" uid="wtKwJ0nqr10"/>
 			<dataelement unique="encounters" outputtype="transactionItemValue" outputid="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_CONS_REFERENCE" outputItemValue="counterreferral" value="1" label="Contre référés vers CS" uid="rlJZ0VeglJu"/>
@@ -1570,8 +1613,8 @@
 			<option uid="Wp8g8Xk7J5X" min="60" max="999" gender="f" name="&gt;=60 ans F"/>
 		</categoryOptionCombo>
 		<dataelements>
-			<dataelement unique="encounters" outputtype="transactionItemValue" outputid="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_CONS_NEWCASE" outputItemValue="1;" value="1" label="Nouveaux cas vus et traités" uid="PItxuB8GDuC"/>
 			<dataelement unique="encounters" label="Consultations" uid="hGgMAAJ7HSp"/>
+			<dataelement unique="patients" label="Consultants" uid="PItxuB8GDuC"/>
 			<dataelement unique="encounters" outputtype="transactionItemValue" outputid="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_CONS_REFERENCE" outputItemValue="oriented" value="1" label="Cas vus et orientés" uid="NCladcMfHvM"/>
 			<dataelement unique="encounters" outputtype="transactionItemValue" outputid="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_CONS_REFERENCE" outputItemValue="referral" value="1" label="Cas vus référés" uid="wtKwJ0nqr10"/>
 			<dataelement unique="encounters" outputtype="transactionItemValue" outputid="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_CONS_REFERENCE" outputItemValue="counterreferral" value="1" label="Contre référés vers CS" uid="rlJZ0VeglJu"/>
@@ -1602,8 +1645,8 @@
 			<option uid="xg70gKwMSO2" min="60" max="999" gender="f" name="&gt;=60 ans F"/>
 		</categoryOptionCombo>
 		<dataelements>
-			<dataelement unique="encounters" outputtype="transactionItemValue" outputid="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_CONS_NEWCASE" outputItemValue="1;" value="1" label="Nouveaux cas vus et traités" uid="PItxuB8GDuC"/>
 			<dataelement unique="encounters" label="Consultations" uid="hGgMAAJ7HSp"/>
+			<dataelement unique="patients" label="Consultants" uid="PItxuB8GDuC"/>
 			<dataelement unique="encounters" outputtype="transactionItemValue" outputid="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_CONS_REFERENCE" outputItemValue="oriented" value="1" label="Cas vus et orientés" uid="NCladcMfHvM"/>
 			<dataelement unique="encounters" outputtype="transactionItemValue" outputid="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_CONS_REFERENCE" outputItemValue="referral" value="1" label="Cas vus référés" uid="wtKwJ0nqr10"/>
 			<dataelement unique="encounters" outputtype="transactionItemValue" outputid="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_CONS_REFERENCE" outputItemValue="counterreferral" value="1" label="Contre référés vers CS" uid="rlJZ0VeglJu"/>
@@ -1982,8 +2025,8 @@
 			<option uid="wctIgOSCUB0" min="60" max="999" name="&gt;=60 ans"/>
 		</categoryOptionCombo>
 		<dataelements>
-			<dataelement unique="encounters" outputtype="transactionItemValue" outputid="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_CONS_NEWCASE" outputItemValue="1;" value="1" label="Nouveaux cas vus et traités" uid="QIRMqKiNjgD"/>
 			<dataelement unique="encounters" label="Consultations" uid="u2Nl3YrTYtO"/>
+			<dataelement unique="patients" label="Consultants" uid="QIRMqKiNjgD"/>
 			<dataelement unique="encounters" outputtype="transactionItemValue" outputid="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_CONS_REFERENCE" outputItemValue="oriented" value="1" label="Cas vus et orientés" uid="jkZkF0gb7oz"/>
 			<dataelement unique="encounters" outputtype="transactionItemValue" outputid="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_CONS_REFERENCE" outputItemValue="referral" value="1" label="Cas vus référés" uid="KyyNAfsesW8"/>
 			<dataelement unique="encounters" outputtype="transactionItemValue" outputid="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_CONS_REFERENCE" outputItemValue="counterreferral" value="1" label="Contre référés vers CS" uid="KbY3LaeMEte"/>
@@ -2004,8 +2047,8 @@
 			<option uid="A8c5G20SnVa" min="60" max="999" name="&gt;=60 ans"/>
 		</categoryOptionCombo>
 		<dataelements>
-			<dataelement unique="encounters" outputtype="transactionItemValue" outputid="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_CONS_NEWCASE" outputItemValue="1;" value="1" label="Nouveaux cas vus et traités" uid="QIRMqKiNjgD"/>
 			<dataelement unique="encounters" label="Consultations" uid="u2Nl3YrTYtO"/>
+			<dataelement unique="patients" label="Consultants" uid="QIRMqKiNjgD"/>
 			<dataelement unique="encounters" outputtype="transactionItemValue" outputid="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_CONS_REFERENCE" outputItemValue="oriented" value="1" label="Cas vus et orientés" uid="jkZkF0gb7oz"/>
 			<dataelement unique="encounters" outputtype="transactionItemValue" outputid="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_CONS_REFERENCE" outputItemValue="referral" value="1" label="Cas vus référés" uid="KyyNAfsesW8"/>
 			<dataelement unique="encounters" outputtype="transactionItemValue" outputid="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_CONS_REFERENCE" outputItemValue="counterreferral" value="1" label="Contre référés vers CS" uid="KbY3LaeMEte"/>
@@ -2026,8 +2069,8 @@
 			<option uid="Mk2hDQvNtTQ" min="60" max="999" name="&gt;=60 ans"/>
 		</categoryOptionCombo>
 		<dataelements>
-			<dataelement unique="encounters" outputtype="transactionItemValue" outputid="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_CONS_NEWCASE" outputItemValue="1;" value="1" label="Nouveaux cas vus et traités" uid="QIRMqKiNjgD"/>
 			<dataelement unique="encounters" label="Consultations" uid="u2Nl3YrTYtO"/>
+			<dataelement unique="patients" label="Consultants" uid="QIRMqKiNjgD"/>
 			<dataelement unique="encounters" outputtype="transactionItemValue" outputid="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_CONS_REFERENCE" outputItemValue="oriented" value="1" label="Cas vus et orientés" uid="jkZkF0gb7oz"/>
 			<dataelement unique="encounters" outputtype="transactionItemValue" outputid="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_CONS_REFERENCE" outputItemValue="referral" value="1" label="Cas vus référés" uid="KyyNAfsesW8"/>
 			<dataelement unique="encounters" outputtype="transactionItemValue" outputid="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_CONS_REFERENCE" outputItemValue="counterreferral" value="1" label="Contre référés vers CS" uid="KbY3LaeMEte"/>
@@ -2048,8 +2091,8 @@
 			<option uid="MrBz7Nn8W1l" min="60" max="999" name="&gt;=60 ans"/>
 		</categoryOptionCombo>
 		<dataelements>
-			<dataelement unique="encounters" outputtype="transactionItemValue" outputid="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_CONS_NEWCASE" outputItemValue="1;" value="1" label="Nouveaux cas vus et traités" uid="QIRMqKiNjgD"/>
 			<dataelement unique="encounters" label="Consultations" uid="u2Nl3YrTYtO"/>
+			<dataelement unique="patients" label="Consultants" uid="QIRMqKiNjgD"/>
 			<dataelement unique="encounters" outputtype="transactionItemValue" outputid="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_CONS_REFERENCE" outputItemValue="oriented" value="1" label="Cas vus et orientés" uid="jkZkF0gb7oz"/>
 			<dataelement unique="encounters" outputtype="transactionItemValue" outputid="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_CONS_REFERENCE" outputItemValue="referral" value="1" label="Cas vus référés" uid="KyyNAfsesW8"/>
 			<dataelement unique="encounters" outputtype="transactionItemValue" outputid="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_CONS_REFERENCE" outputItemValue="counterreferral" value="1" label="Contre référés vers CS" uid="KbY3LaeMEte"/>
@@ -2070,8 +2113,8 @@
 			<option uid="y3P6SHOnqr8" min="60" max="999" name="&gt;=60 ans"/>
 		</categoryOptionCombo>
 		<dataelements>
-			<dataelement unique="encounters" outputtype="transactionItemValue" outputid="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_CONS_NEWCASE" outputItemValue="1;" value="1" label="Nouveaux cas vus et traités" uid="QIRMqKiNjgD"/>
 			<dataelement unique="encounters" label="Consultations" uid="u2Nl3YrTYtO"/>
+			<dataelement unique="patients" label="Consultants" uid="QIRMqKiNjgD"/>
 			<dataelement unique="encounters" outputtype="transactionItemValue" outputid="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_CONS_REFERENCE" outputItemValue="oriented" value="1" label="Cas vus et orientés" uid="jkZkF0gb7oz"/>
 			<dataelement unique="encounters" outputtype="transactionItemValue" outputid="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_CONS_REFERENCE" outputItemValue="referral" value="1" label="Cas vus référés" uid="KyyNAfsesW8"/>
 			<dataelement unique="encounters" outputtype="transactionItemValue" outputid="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_CONS_REFERENCE" outputItemValue="counterreferral" value="1" label="Contre référés vers CS" uid="KbY3LaeMEte"/>

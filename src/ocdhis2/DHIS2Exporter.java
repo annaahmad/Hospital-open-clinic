@@ -3860,7 +3860,9 @@ public class DHIS2Exporter {
 												bExists=MedwanQuery.getInstance().hasItemPeriod(MedwanQuery.getInstance().getConfigString("serverId")+"."+item.split(";")[1], sItemType, sItemValue,begin,end);
 											}
 											else if(SH.c(itemelement.attributeValue("sametransaction")).equalsIgnoreCase("1")) {
-												bExists=MedwanQuery.getInstance().hasItem(sItemType, sItemValue,Integer.parseInt(item.split(";")[11]));
+												for(int q=0;q<sItemValue.split("\\|").length && !bExists;q++) {
+													bExists=MedwanQuery.getInstance().hasItem(sItemType, sItemValue.split("\\|")[q],Integer.parseInt(item.split(";")[11]));
+												}
 											}
 											else {
 												bExists=MedwanQuery.getInstance().hasItem(MedwanQuery.getInstance().getConfigString("serverId")+"."+item.split(";")[1], sItemType, sItemValue);
@@ -3963,7 +3965,9 @@ public class DHIS2Exporter {
 														bExists=MedwanQuery.getInstance().hasItemPeriod(MedwanQuery.getInstance().getConfigString("serverId")+"."+item.split(";")[1], sItemType, sItemValue,begin,end);
 													}
 													else if(SH.c(itemelement.attributeValue("sametransaction")).equalsIgnoreCase("1")) {
-														bExists=MedwanQuery.getInstance().hasItem(sItemType, sItemValue,Integer.parseInt(item.split(";")[11]));
+														for(int q=0;q<sItemValue.split("\\|").length && !bExists;q++) {
+															bExists=MedwanQuery.getInstance().hasItem(sItemType, sItemValue.split("\\|")[q],Integer.parseInt(item.split(";")[11]));
+														}
 													}
 													else {
 														bExists=MedwanQuery.getInstance().hasItem(MedwanQuery.getInstance().getConfigString("serverId")+"."+item.split(";")[1], sItemType, sItemValue);
@@ -4637,7 +4641,9 @@ public class DHIS2Exporter {
 											bExists=MedwanQuery.getInstance().hasItemPeriod(MedwanQuery.getInstance().getConfigString("serverId")+"."+item.split(";")[1], sItemType, sItemValue,begin,end);
 										}
 										else if(SH.c(itemelement.attributeValue("sametransaction")).equalsIgnoreCase("1")) {
-											bExists=MedwanQuery.getInstance().hasItem(sItemType, sItemValue,Integer.parseInt(item.split(";")[11]));
+											for(int q=0;q<sItemValue.split("\\|").length && !bExists;q++) {
+												bExists=MedwanQuery.getInstance().hasItem(sItemType, sItemValue.split("\\|")[q],Integer.parseInt(item.split(";")[11]));
+											}
 										}
 										else {
 											bExists=MedwanQuery.getInstance().hasItem(MedwanQuery.getInstance().getConfigString("serverId")+"."+item.split(";")[1], sItemType, sItemValue);

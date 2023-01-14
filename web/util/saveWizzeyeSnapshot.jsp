@@ -22,7 +22,7 @@ The following image was received in OpenClinic:<br/>
 			document.getElementById("roomid").innerHTML="Room = "+e.data.room;
 			storeData(e.data.room,e.data.snapshot,"snapshot");
 		}
-		if(e.data.videorecording){
+		else if(e.data.videorecording){
 			storeData(e.data.room,e.data.videorecording,"video");
 		}
 	};

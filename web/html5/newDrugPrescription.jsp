@@ -68,6 +68,30 @@
     	newPrescription.setUnitsPerTimeUnit(Double.parseDouble(request.getParameter("drugunitspertimeunit")));
     	newPrescription.setSupplyingServiceUid("");
     	newPrescription.setServiceStockUid("");
+		if(!newPrescription.getEnd().before(newPrescription.getBegin())){
+	          long millisInTimeUnit=0;;
+	          if(newPrescription.getTimeUnit().equalsIgnoreCase("type1hour")){
+	            millisInTimeUnit = SH.getTimeHour();
+	          }
+	          else if(newPrescription.getTimeUnit().equalsIgnoreCase("type2day")){
+	            millisInTimeUnit = SH.getTimeDay();
+	          }
+	          else if(newPrescription.getTimeUnit().equalsIgnoreCase("type3week")){
+	            millisInTimeUnit = 7 * SH.getTimeDay();
+	          }
+	          else if(newPrescription.getTimeUnit().equalsIgnoreCase("type4month")){
+	            millisInTimeUnit = 31 * SH.getTimeDay();
+	          }
+	          if(millisInTimeUnit>0){
+	        	  SH.syslog(millisInTimeUnit);
+	        	  long periodInMillis = newPrescription.getEnd().getTime()+SH.getTimeDay()- newPrescription.getBegin().getTime();
+	              double unitsPerMilli = newPrescription.getUnitsPerTimeUnit() / millisInTimeUnit / newPrescription.getTimeUnitCount();
+	              double daysInPeriod = periodInMillis / SH.getTimeDay();
+	              double unitsNeeded = periodInMillis * unitsPerMilli;
+	              double requiredPackages = Math.ceil(unitsNeeded / newPrescription.getProduct().getPackageUnits());
+	          	  newPrescription.setRequiredPackages(new Double(requiredPackages).intValue());
+	          }
+		}
     	newPrescription.setUid("-1");
     	newPrescription.store();
     	

@@ -249,7 +249,7 @@
         </tr>
         
         <tr>
-            <td class="admin" rowspan="3"><%=getTran(request,"openclinic.chuk","teamcomposition",sWebLanguage)%></td>
+            <td class="admin" rowspan="5"><%=getTran(request,"openclinic.chuk","teamcomposition",sWebLanguage)%></td>
             <td class="admin" style="background-color:#ddd"><%=getTran(request,"openclinic.chuk","anesthesist",sWebLanguage)%></td>
             <td class="admin2">
                 <input type="hidden" id="EditAnesthesistID" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_ANESTHESIA_REPORT_ANESTHESIST" property="itemId"/>]>.value" value="<%=sAnesthesistID%>">
@@ -279,6 +279,18 @@
              
                 <img src="<c:url value="/_img/icons/icon_search.png"/>" class="link" alt="<%=getTranNoLink("Web","select",sWebLanguage)%>" onclick="searchUser('EditNurseID','EditNurseName');">
                 <img src="<c:url value="/_img/icons/icon_delete.png"/>" class="link" alt="<%=getTranNoLink("Web","clear",sWebLanguage)%>" onclick="document.getElementById('EditNurseID').value='';transactionForm.EditAnesthesistName.value='';">
+            </td>
+        </tr>
+        <tr>
+            <td class="admin" style="background-color:#ddd"><%=getTran(request,"openclinic.chuk","instrumentalist",sWebLanguage)%></td>
+            <td class="admin2">
+				<%=SH.writeDefaultTextArea(session, (TransactionVO)transaction, "ITEM_TYPE_ANESTHESIA_REPORT_INSTRUMENTALIST", 80, 1) %>
+            </td>
+        </tr>
+        <tr>
+            <td class="admin" style="background-color:#ddd"><%=getTran(request,"openclinic.chuk","other",sWebLanguage)%></td>
+            <td class="admin2">
+				<%=SH.writeDefaultTextArea(session, (TransactionVO)transaction, "ITEM_TYPE_ANESTHESIA_REPORT_OTHER", 80, 1) %>
             </td>
         </tr>
         

@@ -53,9 +53,11 @@
 			        </tr>
 		        	<tr>
 			            <td class="admin"><%=getTran(request,"web","referral",sWebLanguage)%>&nbsp;</td>
-			            <td class="admin2" colspan='3'>
+			            <td class="admin2">
 			            	<%=SH.writeDefaultSelect(request, (TransactionVO)transaction, "ITEM_TYPE_MSAS_CONS_REFERENCE", "msas.reference", sWebLanguage, "") %>
 			            </td>
+			            <td class='admin'><%=getTran(request,"web","newcase",sWebLanguage) %></td>
+			            <td class='admin2'><%=SH.writeDefaultRadioButtons((TransactionVO)transaction, request, "yesno", "!ITEM_TYPE_MSAS_CONS_NEWCASE", sWebLanguage, false, "", "") %></td>
 			        </tr>
 			        <tr>
 			            <td class="admin"><%=getTran(request,"web", "respiratory.movements", sWebLanguage)%></td>

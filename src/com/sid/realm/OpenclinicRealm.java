@@ -2,6 +2,9 @@ package com.sid.realm;
 
 import java.util.List;
 import org.apache.catalina.realm.*;
+
+import be.openclinic.system.SH;
+
 import java.util.ArrayList;
 import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
@@ -39,21 +42,29 @@ public class OpenclinicRealm extends RealmBase
                 }
             }
             final PreparedStatement ps2 = conn.prepareStatement("select * from users where userid=?");
+            System.out.println("1");
             ps2.setInt(1, userid);
+            System.out.println("2");
             final ResultSet rs2 = ps2.executeQuery();
             if (rs2.next()) {
+                System.out.println("3");
                 final MessageDigest md = MessageDigest.getInstance("SHA-1");
                 byte[] hash = md.digest(this.password.getBytes());
                 bOk = MessageDigest.isEqual(hash, rs2.getBytes("encryptedPassword"));
                 if(!bOk) {
+                    System.out.println("4");
                 	hash=BCrypt.hashpw(this.password, BCrypt.gensalt((userid+rs2.getString("personid")+new SimpleDateFormat("dd/MM/yyyy").format(rs2.getDate("start"))).hashCode()+"")).getBytes();
                     bOk = MessageDigest.isEqual(hash, rs2.getBytes("encryptedPassword"));
                 }
+                System.out.println("5");
             }
             rs2.close();
             ps2.close();
             conn.close();
+            System.out.println("6");
+
             if (bOk) {
+                System.out.println("7");
                 return this.getPrincipal(username);
             }
         }

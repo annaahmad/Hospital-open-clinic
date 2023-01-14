@@ -27,25 +27,106 @@
             </td>
         </tr>
 
-        <%-- DESCRIPTION --%>
+        <%-- REFERENCE --%>
         <tr>
         	<td width="50%" valign='top'>
 	        	<table width='100%'>
+	        		<tr class='admin'><td colspan='4'><%=getTran(request,"web","referral",sWebLanguage)%></td></tr>
 		        	<tr>
-			            <td class='admin'><%=getTran(request,"web","deathdate",sWebLanguage)%>&nbsp;</td>
-			            <td class='admin2'>
-	                        <input type="text" class="text" size="12" maxLength="10" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_DECEASED_DEATHDATE" property="itemId"/>]>.value" value="<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_DECEASED_DEATHDATE" property="value" formatType="date"/>" id="deathdate" onblur='checkDate(this);'/>
-	                        <script>writeMyDate("deathdate", "<c:url value="/_img/icons/icon_agenda.png"/>", "<%=getTran(null,"Web","PutToday",sWebLanguage)%>");</script>
+			            <td class='admin'><%=getTran(request,"web","inward",sWebLanguage)%>&nbsp;</td>
+			            <td class='admin2' colspan='3'>
+			            	<%=SH.writeDefaultCheckBoxes((TransactionVO)transaction, request, "msas.ophtalmology.referral.in", "ITEM_TYPE_MSAS_OPHTALMOLOGY_REFERRAL_IN", sWebLanguage, true) %>
 			            </td>
-			            <td class="admin"><%=getTran(request,"web","maternaldeath",sWebLanguage)%>&nbsp;</td>
-			            <td class="admin2">
-			            	<%=SH.writeDefaultSelect(request, (TransactionVO)transaction, "ITEM_TYPE_MSAS_DECEASED_MATERNALDEATH", "msas.maternaldeath", sWebLanguage, "") %>
+			        </tr>
+		        	<tr>
+			            <td class='admin'><%=getTran(request,"web","outward",sWebLanguage)%>&nbsp;</td>
+			            <td class='admin2' colspan='3'>
+			            	<%=SH.writeDefaultCheckBoxes((TransactionVO)transaction, request, "msas.ophtalmology.referral.out", "ITEM_TYPE_MSAS_OPHTALMOLOGY_REFERRAL_OUT", sWebLanguage, true) %>
+			            </td>
+			        </tr>
+	        		<tr class='admin'><td colspan='4'><%=getTran(request,"web","visualstatus",sWebLanguage)%></td></tr>
+		        	<tr>
+			            <td class='admin'><%=getTran(request,"web","vawithoutcorrection",sWebLanguage)%>&nbsp;</td>
+			            <td class='admin2'>
+			            	<%=getTran(request,"web","right",sWebLanguage)%>: <%=SH.writeDefaultSelectUnsorted(request, (TransactionVO)transaction, "ITEM_TYPE_MSAS_OPHTALMOLOGY_AV_WITHOUT_RIGHT", "msas_ophtalmology.va", sWebLanguage, "") %>
+			            </td>
+			            <td class='admin2' colspan='2'>
+			            	<%=getTran(request,"web","left",sWebLanguage)%>: <%=SH.writeDefaultSelectUnsorted(request, (TransactionVO)transaction, "ITEM_TYPE_MSAS_OPHTALMOLOGY_AV_WITHOUT_LEFT", "msas_ophtalmology.va", sWebLanguage, "") %>
+			            </td>
+			        </tr>
+		        	<tr>
+			            <td class='admin'><%=getTran(request,"web","vawithcorrection",sWebLanguage)%>&nbsp;</td>
+			            <td class='admin2'>
+			            	<%=getTran(request,"web","right",sWebLanguage)%>: <%=SH.writeDefaultSelectUnsorted(request, (TransactionVO)transaction, "ITEM_TYPE_MSAS_OPHTALMOLOGY_AV_WITH_RIGHT", "msas_ophtalmology.va", sWebLanguage, "onchange='getVisionStatus()'") %>
+			            </td>
+			            <td class='admin2' colspan='2'>
+			            	<%=getTran(request,"web","left",sWebLanguage)%>: <%=SH.writeDefaultSelectUnsorted(request, (TransactionVO)transaction, "ITEM_TYPE_MSAS_OPHTALMOLOGY_AV_WITH_LEFT", "msas_ophtalmology.va", sWebLanguage, "onchange='getVisionStatus()'") %>
+			            </td>
+			        </tr>
+		        	<tr>
+			            <td class='admin'><%=getTran(request,"web","visionstatus",sWebLanguage)%>&nbsp;</td>
+			            <td class='admin2' colspan='3'>
+			            	<%=SH.writeDefaultHiddenInput((TransactionVO)transaction, "ITEM_TYPE_MSAS_OPHTALMOLOGY_VASTATUS") %>
+			            	<span id='vastatus' style='color: red;font-size: 14px;font-weight: bold'></span>
+			            </td>
+			        </tr>
+	        		<tr class='admin'><td colspan='4'><%=getTran(request,"web","examination",sWebLanguage)%></td></tr>
+		        	<tr>
+			            <td class='admin'><%=getTran(request,"web","signsandsymptoms",sWebLanguage)%>&nbsp;</td>
+			            <td class='admin2' colspan='3'>
+			            	<%=SH.writeDefaultTextArea(session,(TransactionVO)transaction, "ITEM_TYPE_MSAS_OPHTALMOLOGY_SIGNSANDSYMPTOMS",40,1) %>
+			            </td>
+			        </tr>
+		        	<tr>
+			            <td class='admin'><%=getTran(request,"web","fundus",sWebLanguage)%>&nbsp;</td>
+			            <td class='admin2' colspan='3'>
+			            	<%=SH.writeDefaultTextArea(session,(TransactionVO)transaction, "ITEM_TYPE_MSAS_OPHTALMOLOGY_FUNDUS",40,1) %>
+			            </td>
+			        </tr>
+		        	<tr>
+			            <td class='admin'><%=getTran(request,"web","eyetone",sWebLanguage)%>&nbsp;</td>
+			            <td class='admin2' colspan='3'>
+			            	<%=SH.writeDefaultTextArea(session,(TransactionVO)transaction, "ITEM_TYPE_MSAS_OPHTALMOLOGY_EYETONE",40,1) %>
+			            </td>
+			        </tr>
+	        		<tr class='admin'><td colspan='4'><%=getTran(request,"web","surgery",sWebLanguage)%></td></tr>
+		        	<tr>
+			            <td class='admin2' colspan='4'>
+			            	<%=SH.writeDefaultCheckBoxes((TransactionVO)transaction, request, "msas.ophtalmology.surgery", "ITEM_TYPE_MSAS_OPHTALMOLOGY_SURGERY", sWebLanguage, false) %>
+			            </td>
+			        </tr>
+	        		<tr class='admin'><td colspan='4'><%=getTran(request,"web","anesthesia",sWebLanguage)%></td></tr>
+		        	<tr>
+			            <td class='admin2' colspan='4'>
+			            	<%=SH.writeDefaultCheckBoxes((TransactionVO)transaction, request, "msas.ophtalmology.anesthesia", "ITEM_TYPE_MSAS_OPHTALMOLOGY_ANESTHESIA", sWebLanguage, false) %>
 			            </td>
 			        </tr>
 	            </table>
 	        </td>
 	        <%-- DIAGNOSES --%>
-	    	<td class="admin2">
+	    	<td class="admin2" style='vertical-align: top'>
+	        	<table width='100%'>
+	        		<tr class='admin'><td colspan='4'><%=getTran(request,"web","ophtalmologicdiseases",sWebLanguage)%></td></tr>
+		        	<tr>
+			            <td class='admin'><%=getTran(request,"web","catacracts",sWebLanguage)%>&nbsp;</td>
+			            <td class='admin2' colspan='3'>
+			            	<%=SH.writeDefaultCheckBoxes((TransactionVO)transaction, request, "msas.ophtalmology.cataracts", "ITEM_TYPE_MSAS_OPHTALMOLOGY_CATARACTS", sWebLanguage, true) %>
+			            </td>
+			        </tr>
+		        	<tr>
+			            <td class='admin'><%=getTran(request,"web","ametropia",sWebLanguage)%>&nbsp;</td>
+			            <td class='admin2' colspan='3'>
+			            	<%=SH.writeDefaultCheckBoxes((TransactionVO)transaction, request, "msas.ophtalmology.ametropia", "ITEM_TYPE_MSAS_OPHTALMOLOGY_AMETROPIA", sWebLanguage, true) %>
+			            </td>
+			        </tr>
+	        		<tr><td colspan='4'><hr/></td></tr>
+		        	<tr>
+			            <td class='admin'><%=getTran(request,"web","other",sWebLanguage)%>&nbsp;</td>
+			            <td class='admin2' colspan='3'>
+			            	<%=SH.writeDefaultCheckBoxes((TransactionVO)transaction, request, "msas.ophtalmology.otherdiseases", "ITEM_TYPE_MSAS_OPHTALMOLOGY_OTHERDISEASES", sWebLanguage, false) %>
+			            </td>
+			        </tr>
+			    </table>
 		      	<%ScreenHelper.setIncludePage(customerInclude("healthrecord/diagnosesEncoding.jsp"),pageContext);%>
 	    	</td>
         </tr>
@@ -60,6 +141,32 @@
 </form>
 
 <script>
+  function getVisionStatus(){
+	  var besteye=100.0;
+	  if(document.getElementById("ITEM_TYPE_MSAS_OPHTALMOLOGY_AV_WITH_RIGHT").value.length>0){
+		  besteye=document.getElementById("ITEM_TYPE_MSAS_OPHTALMOLOGY_AV_WITH_RIGHT").value*1.0;
+	  }
+	  if(document.getElementById("ITEM_TYPE_MSAS_OPHTALMOLOGY_AV_WITH_LEFT").value.length>0 && document.getElementById("ITEM_TYPE_MSAS_OPHTALMOLOGY_AV_WITH_LEFT").value*1>besteye){
+		  besteye=document.getElementById("ITEM_TYPE_MSAS_OPHTALMOLOGY_AV_WITH_LEFT").value*1.0;
+	  }
+	  if(besteye>=1 && besteye<3){
+		  document.getElementById("vastatus").innerHTML="<%=getTranNoLink("web","badsight",sWebLanguage)%>";
+		  document.getElementById("ITEM_TYPE_MSAS_OPHTALMOLOGY_VASTATUS").value="1";
+	  }
+	  else if(besteye>=0.5 && besteye<1){
+		  document.getElementById("vastatus").innerHTML="<%=getTranNoLink("web","severebadsight",sWebLanguage)%>";
+		  document.getElementById("ITEM_TYPE_MSAS_OPHTALMOLOGY_VASTATUS").value="2";
+	  }
+	  else if(besteye<0.5){
+		  document.getElementById("vastatus").innerHTML="<%=getTranNoLink("web","nosight",sWebLanguage)%>";
+		  document.getElementById("ITEM_TYPE_MSAS_OPHTALMOLOGY_VASTATUS").value="3";
+	  }
+	  else{
+		  document.getElementById("vastatus").innerHTML="";
+		  document.getElementById("ITEM_TYPE_MSAS_OPHTALMOLOGY_VASTATUS").value="";
+	  }
+  }
+
   function searchEncounter(){
     openPopup("/_common/search/searchEncounter.jsp&ts=<%=getTs()%>&Varcode=encounteruid&VarText=&FindEncounterPatient=<%=activePatient.personid%>");
   }
@@ -81,6 +188,8 @@
         out.print(takeOverTransaction(sessionContainerWO,activeUser,"document.transactionForm.submit();"));
     %>
   }
+  
+  getVisionStatus();
 </script>
     
 <%=writeJSButtons("transactionForm","saveButton")%>

@@ -414,6 +414,10 @@ function changeSector(){
       	      		MedwanQuery.getInstance().getConfigInt("showAdminPrivateHSVillage",1)==0?"<input type='hidden' name='HSVillage' id='HSVillage' value='"+(checkString(apc.cell).split(";").length>3?apc.cell.split(";")[3]:"")+"'/>":
       	            "<tr><td class='admin'>"+getTran(request,"web","healthvillage",sWebLanguage)+"</td><td class='admin2'>"+sHSVillages+"</td></tr>"
                )
+			  //Village texte libre
+              +(
+            		inputRow(request,"Web","healthvillage2","PQuarter","AdminPrivate",apc.quarter,"T",true,false,sWebLanguage)
+               )
 			  //Email
               +(
        	      		MedwanQuery.getInstance().getConfigInt("showAdminPrivateEmail",1)==0?"<input type='hidden' name='PEmail' value='"+checkString(apc.email)+"'/>":
@@ -468,6 +472,7 @@ function changeSector(){
       document.getElementsByName("PFunction")[0].value = "";
       document.getElementsByName("PBusiness")[0].value = "";
       document.getElementsByName("PComment")[0].value = "";
+      document.getElementsByName("PQuarter")[0].value = "";
     }
 
     getToday(document.getElementsByName("PBegin")[0]);

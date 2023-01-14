@@ -44,7 +44,6 @@
 						}
 					}
 				}
-				//todo: 
 				bInit=true;
 			}
 		}

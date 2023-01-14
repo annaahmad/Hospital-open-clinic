@@ -3226,7 +3226,7 @@ public class MedwanQuery {
         Connection occupDb;
         try{
             occupDb = getAdminConnection();
-            ps = occupDb.prepareStatement("select count(*) total from Services where serviceparentid=?");
+            ps = occupDb.prepareStatement("select count(*) total from Services where serviceparentid=? and inactive=0");
             ps.setString(1, serviceid);
             ResultSet rs = ps.executeQuery();
             bExist = rs.next() && rs.getInt("total") > 0;

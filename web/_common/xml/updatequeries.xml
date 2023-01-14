@@ -540,4 +540,7 @@
 		DELETE FROM classifications WHERE icpc='A77.01' AND icd10='U07.1';
 		INSERT INTO classifications(icpc,icd10) SELECT 'A77.01','U07.1';
   	</Query>
+  	<Query id='QUERY.openclinic.correctCPNexamination' db6='openclinic' date='11/10/2022' dbserver='MySQL'>
+		update examinations set transactionType='be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_CS_CPN' where id=1208;
+  	</Query>
 </Queries>

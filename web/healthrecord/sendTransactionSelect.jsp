@@ -61,7 +61,7 @@
 						if(transactions.size()>0){
 							%>
 								<tr class='admin'>
-									<td><%=getTran(request,"web","activeencounter",sWebLanguage) %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type='checkbox' class='text' onclick='if(this.checked){document.getElementById("contact_tr").style.display="";}else{document.getElementById("contact_tr").style.display="none";}'/><%=getTran(request,"web","show",sWebLanguage) %></td>
+									<td><table width='100%'><tr class='admin'><td width='75%'><%=getTran(request,"web","activeencounter",sWebLanguage) %></td><td><input type='checkbox' class='text' onclick='if(this.checked){document.getElementById("contact_tr").style.display="";}else{document.getElementById("contact_tr").style.display="none";}'/><%=getTran(request,"web","show",sWebLanguage) %></td></tr></table></td>
 								</tr>
 								<tr style='display: none' id='contact_tr'><td><table width='100%'>
 							<%
@@ -88,7 +88,7 @@
 					if(transactions.size()>0){
 						%>
 							<tr class='admin'>
-								<td><%=getTran(request,"web","othertransactions",sWebLanguage) %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type='checkbox' class='text' onclick='if(this.checked){document.getElementById("other_tr").style.display="";}else{document.getElementById("other_tr").style.display="none";}'/><%=getTran(request,"web","show",sWebLanguage) %></td>
+								<td><table width='100%'><tr class='admin'><td width='75%'><%=getTran(request,"web","othertransactions",sWebLanguage) %></td><td><input type='checkbox' class='text' onclick='if(this.checked){document.getElementById("other_tr").style.display="";}else{document.getElementById("other_tr").style.display="none";}'/><%=getTran(request,"web","show",sWebLanguage) %></td></tr></table></td>
 							</tr>
 							<tr style='display: none' id='other_tr'><td><table width='100%'>
 						<%

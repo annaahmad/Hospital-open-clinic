@@ -348,7 +348,7 @@
                             }
 
                             // check permission
-                            String sAccessRightForTransaction = MedwanQuery.getInstance().getAccessRightForTransaction(sEditTranType).toLowerCase();
+                            String sAccessRightForTransaction = MedwanQuery.getInstance().getAccessRightForTransaction(sEditTranType.split("&")[0]).toLowerCase();
                             if(activeUser.getAccessRight(sAccessRightForTransaction+".select")){
                                 %><option value="<%=sEditTranType%>"<%=sSelected%>><%=sKey%></option><%
                             }

@@ -299,6 +299,11 @@
 		                    	<option value="cnts" <%=defaultmodel.equalsIgnoreCase("cnts")?"selected":""%>><%=getTranNoLink("web","CNTS-BI",sWebLanguage)%></option>
 		                    <%
 		           		}
+		              	if(MedwanQuery.getInstance().getConfigInt("enableSenegal",0)==1){
+		                    %>
+		                    	<option value="udam" <%=defaultmodel.equalsIgnoreCase("udam")?"selected":""%>><%=getTranNoLink("web","udammodel",sWebLanguage)%></option>
+		                    <%
+		           		}
 		              	
                     	if(MedwanQuery.getInstance().getConfigInt("enableBurundi",0)==1){
 		                    %>
@@ -525,6 +530,10 @@ function doPrintPdf(invoiceUid) {
     }
     else if(EditForm.PrintModel.value=='msplscsv'){
 		var url = "<c:url value='/util/csvDocs.jsp'/>?invoiceuid=" + invoiceUid + "&ts=<%=getTs()%>&docid=invoice.mspls";
+		location.href=url;
+    }
+    else if(EditForm.PrintModel.value=='udam'){
+		var url = "<c:url value='/util/csvDocs.jsp'/>?invoiceuid=" + invoiceUid + "&ts=<%=getTs()%>&docid=invoice.udam";
 		location.href=url;
     }
     else {

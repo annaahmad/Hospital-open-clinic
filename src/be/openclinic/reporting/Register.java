@@ -12,8 +12,11 @@ import be.openclinic.adt.Encounter;
 import be.openclinic.finance.Insurance;
 import be.openclinic.medical.Diagnosis;
 import be.openclinic.medical.Prescription;
+import be.openclinic.medical.ReasonForEncounter;
+import be.openclinic.system.SH;
 import net.admin.AdminPerson;
 import net.admin.AdminPrivateContact;
+import net.admin.User;
 
 public class Register {
 	private AdminPerson patient =null;
@@ -112,6 +115,18 @@ public class Register {
 		else if(patient!=null && source.equalsIgnoreCase("patient")){
 			if(name.startsWith("fullname")){
 				s=patient.getFullName();
+			}
+			else if(name.startsWith("firstname")){
+				s=SH.capitalize(patient.firstname);
+			}
+			else if(name.startsWith("lastname")){
+				s=patient.lastname.toUpperCase();
+			}
+			else if(name.startsWith("natreg")){
+				s=SH.c(patient.getID("natreg"));
+			}
+			else if(name.startsWith("telephone")){
+				s=SH.c(patient.getActivePrivate().telephone);
 			}
 			else if(name.startsWith("civilstatus")) {
 				s=ScreenHelper.getTranNoLink("civil.status",patient.comment2,sWebLanguage);
@@ -299,6 +314,9 @@ public class Register {
 			if(name.equalsIgnoreCase("updatetime")){
 				s=ScreenHelper.formatDate(transaction.getUpdateTime());
 			}
+			else if(name.equalsIgnoreCase("id")){
+				s=transaction.getTransactionId()+"";
+			}
 			else if(name.equalsIgnoreCase("user")){
 				s=transaction.getUser().getPersonVO().getFullName();
 			}
@@ -364,6 +382,22 @@ public class Register {
 			else if(name.equalsIgnoreCase("outcome")){
 				s=ScreenHelper.checkString(encounter.getOutcome());
 			}
+			else if(name.equalsIgnoreCase("reasonsforencounter")){
+				Collection rfes = ReasonForEncounter.getReasonsForEncounterByEncounterUid(encounter.getUid());
+				Iterator iRfes = rfes.iterator();
+				while(iRfes.hasNext()){
+					ReasonForEncounter rfe =(ReasonForEncounter)iRfes.next();
+					if(s.length()>0){
+						s+=", ";
+					}
+					if(rfe.getCodeType().equalsIgnoreCase("icd10")) {
+						s+=rfe.getCode()+" "+MedwanQuery.getInstance().getCodeTran("icd10code"+rfe.getCode(), sWebLanguage);
+					}
+					else if(rfe.getCodeType().equalsIgnoreCase("icpc")) {
+						s+=rfe.getCode()+" "+MedwanQuery.getInstance().getCodeTran("ICPCCode"+rfe.getCode(), sWebLanguage);
+					}
+				}
+			}
 		}
 		else if(source.startsWith("treatment") && encounter!=null){
 			Vector prescriptions = Prescription.find(encounter);
@@ -396,20 +430,25 @@ public class Register {
 			}
 		}
 		if(s.length()>0 && translateresult!=null && translateresult.length()>0){
-			String s2="",s3="";
-			for(int n=0;n<s.split(",").length;n++) {
-				s2=ScreenHelper.getTranNoLink(translateresult.split("=")[0], s.split(",")[n], sWebLanguage);
-				if(translateresult.split("=").length>1) {
-					s2=ScreenHelper.getTranNoLink(translateresult.split("=")[1].split("\\$")[0], translateresult.split("=")[1].split("\\$")[1], sWebLanguage)+": "+s2;
-				}
-				if(s2.length()>0) {
-					if(s3.length()>0) {
-						s3+="{sep}";
-					}
-					s3+=s2;
-				}
+			if(translateresult.equalsIgnoreCase("{user}")) {
+				s=User.getFullUserName(s);
 			}
-			s=s3;
+			else {
+				String s2="",s3="";
+				for(int n=0;n<s.split(",").length;n++) {
+					s2=ScreenHelper.getTranNoLink(translateresult.split("=")[0], s.split(",")[n], sWebLanguage);
+					if(translateresult.split("=").length>1) {
+						s2=ScreenHelper.getTranNoLink(translateresult.split("=")[1].split("\\$")[0], translateresult.split("=")[1].split("\\$")[1], sWebLanguage)+": "+s2;
+					}
+					if(s2.length()>0) {
+						if(s3.length()>0) {
+							s3+="{sep}";
+						}
+						s3+=s2;
+					}
+				}
+				s=s3;
+			}
 		}
 		
 		return s;

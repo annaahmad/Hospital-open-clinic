@@ -2975,6 +2975,9 @@ public static String removeAccents(String sTest){
     public static String writeDefaultSelect(HttpServletRequest request,TransactionVO transaction, String sName,String type, String language, String sEvent){
     	return writeDefaultSelect(request, transaction, sName, type, language, sEvent, "");
     }
+    public static String writeDefaultSelectUnsorted(HttpServletRequest request,TransactionVO transaction, String sName,String type, String language, String sEvent){
+    	return writeDefaultSelectUnsorted(request, transaction, sName, type, language, sEvent, "");
+    }
     public static String writeDefaultSelect(HttpServletRequest request,TransactionVO transaction, String sName,String type, String language, String sEvent,String sDefault){
     	boolean bMandatory=false;
     	if(sName.startsWith("!")) {
@@ -2999,6 +3002,35 @@ public static String removeAccents(String sTest){
 		    	s.append(" name='currentTransactionVO.items.<ItemVO[hashCode="+transaction.getItem("be.mxs.common.model.vo.healthrecord.IConstants."+sName).getItemId()+"]>.value'>");
 		    	s.append(" <option/>");
 		    	s.append(writeSelect(request,type,itemValue.length()==0 && checkString(sDefault).length()>0?sDefault:itemValue,language));
+		    	s.append(" </select>");
+	        }
+	    	return s.toString();
+    	}
+    }
+    public static String writeDefaultSelectUnsorted(HttpServletRequest request,TransactionVO transaction, String sName,String type, String language, String sEvent,String sDefault){
+    	boolean bMandatory=false;
+    	if(sName.startsWith("!")) {
+    		sName=sName.substring(1);
+    		bMandatory=true;
+    	}
+    	if(transaction.getItem("be.mxs.common.model.vo.healthrecord.IConstants."+sName)==null){
+    		return("Unknown item: <a href='javascript:createTransactionItem(\""+transaction.getTransactionType()+"\",\"be.mxs.common.model.vo.healthrecord.IConstants."+sName+"\");'>"+sName+"</a>");
+    	}
+    	else{
+	    	StringBuffer s = new StringBuffer();
+	    	String itemValue=checkString(transaction.getItem("be.mxs.common.model.vo.healthrecord.IConstants."+sName).getValue());
+	        if(request!=null && checkString((String)request.getSession().getAttribute("editmode")).equalsIgnoreCase("1")){
+	    		saveTransactionItemTranslation(transaction.getTransactionType(), "be.mxs.common.model.vo.healthrecord.IConstants."+sName, type);
+		    	s.append("<select style='vertical-align: top' "+(bMandatory?"data-mandatory='1'":"")+" title='"+sName+"' "+setRightClickMini(request.getSession(),sName)+" name='currentTransactionVO.items.<ItemVO[hashCode="+transaction.getItem("be.mxs.common.model.vo.healthrecord.IConstants."+sName).getItemId()+"]>.value' style='border:2px solid black; border-style: dotted' id='"+sName+"' onclick='window.open(\""+request.getRequestURI().replaceAll(request.getServletPath(),"")+"/popup.jsp?Page=system/manageTranslations.jsp&FindLabelType="+type+"&find=1\",\"popup\",\"toolbar=no,status=yes,scrollbars=yes,resizable=yes,width=800,height=500,menubar=no\")'>");
+		    	s.append(" <option/>");
+		    	s.append(writeSelect(request,type,itemValue.length()==0 && checkString(sDefault).length()>0?sDefault:itemValue,language,false,false));
+		    	s.append("</select>");
+	        }
+	        else{
+		    	s.append("<select style='vertical-align: top' "+(bMandatory?"data-mandatory='1'":"")+" "+(request==null?"":setRightClickNoClass(request.getSession(),sName)+" ")+sEvent+" class='text' id='"+sName+"' ");
+		    	s.append(" name='currentTransactionVO.items.<ItemVO[hashCode="+transaction.getItem("be.mxs.common.model.vo.healthrecord.IConstants."+sName).getItemId()+"]>.value'>");
+		    	s.append(" <option/>");
+		    	s.append(writeSelect(request,type,itemValue.length()==0 && checkString(sDefault).length()>0?sDefault:itemValue,language,false,false));
 		    	s.append(" </select>");
 	        }
 	    	return s.toString();
@@ -4320,6 +4352,14 @@ public static String removeAccents(String sTest){
     
     public static java.sql.Date toSQLDate(java.util.Date date){
     	return new java.sql.Date(date.getTime());
+    }
+
+    public static java.sql.Date toSQLDate(String date){
+    	return new java.sql.Date(SH.parseDate(date).getTime());
+    }
+
+    public static java.sql.Date toSQLDate(long date){
+    	return new java.sql.Date(date);
     }
 
     public static java.sql.Timestamp toSQLTimestamp(java.util.Date date){

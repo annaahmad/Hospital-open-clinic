@@ -1,4 +1,6 @@
 <mappings>
+	<mapping id="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_REFERRAL"        						path="/main.do?Page=/healthrecord/manageReferral.jsp"        		 		 	 accessright="examination.referral"/>
+	<mapping id="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_COUNTERREFERRAL"        				path="/main.do?Page=/healthrecord/manageCounterReferral.jsp"        		 	 accessright="examination.counterreferral"/>
 	<mapping id="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_CLEFS_ADULTS"        					path="/main.do?Page=/healthrecord/manageCLEFSAdults.jsp"        		 		 accessright="clefs.adults"/>
 	<mapping id="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_CLEFS_CHILDREN"        				path="/main.do?Page=/healthrecord/manageCLEFSChildren.jsp"        		 		 accessright="clefs.children"/>
 	<mapping id="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_CLEFS_PERINATAL"        				path="/main.do?Page=/healthrecord/manageCLEFSPerinatal.jsp"        		 		 accessright="clefs.perinatal"/>
@@ -60,10 +62,14 @@
     <mapping id="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_PEDIATRICADMISSION"              		path="/main.do?Page=/healthrecord/managePediatricAdmission.jsp"              	 accessright="pediatric.admission"/>
     <mapping id="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_PEDIATRICNURSINGREGISTER"              path="/main.do?Page=/healthrecord/managePediatricNursingRegister.jsp"          	 accessright="pediatric.nursingregister"/>
     <mapping id="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_PEDIATRIC_TRIAGE"              		path="/main.do?Page=/healthrecord/managePediatricTriage.jsp"              		 accessright="pediatric.triage"/>
+    <mapping id="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSAS_CATARACT_SURGERYREPORT"           path="/main.do?Page=/healthrecord/manageMSASCataractSurgeryReport.jsp"           accessright="msas.cataract.surgery"/>
     <mapping id="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSAS_REGISTRY_OPHTALMOLOGY"            path="/main.do?Page=/healthrecord/manageMSASRegistryOphtalmology.jsp"            accessright="msas.registry.ophtalmology"/>
     <mapping id="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSAS_REGISTRY_DELIVERIES"              path="/main.do?Page=/healthrecord/manageMSASRegistryDeliveries.jsp"              accessright="msas.registry.deliveries"/>
     <mapping id="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSAS_REGISTRY_HEALTHYCHILDREN"         path="/main.do?Page=/healthrecord/manageMSASRegistryHealthyChildren.jsp"         accessright="msas.registry.healthychildren"/>
     <mapping id="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSAS_REGISTRY_CONSULTATIONS"           path="/main.do?Page=/healthrecord/manageMSASRegistryConsultations.jsp"           accessright="msas.registry.consultations"/>
+    <mapping id="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSAS_REGISTRY_CONSULTATIONS_TRI"       path="/main.do?Page=/healthrecord/manageMSASRegistryConsultations.jsp"           accessright="msas.registry.consultations"/>
+    <mapping id="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSAS_REGISTRY_CONSULTATIONS_MATERNITY" path="/main.do?Page=/healthrecord/manageMSASRegistryConsultations.jsp"           accessright="msas.registry.consultations"/>
+    <mapping id="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSAS_REGISTRY_CONSULTATIONS_EMERGENCY" path="/main.do?Page=/healthrecord/manageMSASRegistryConsultations.jsp"           accessright="msas.registry.consultations"/>
     <mapping id="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSAS_REGISTRY_DENTIST"           		path="/main.do?Page=/healthrecord/manageMSASRegistryDentist.jsp"           		 accessright="msas.registry.dentist"/>
     <mapping id="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSAS_REGISTRY_POSTNATAL"               path="/main.do?Page=/healthrecord/manageMSASRegistryPostNatalConsultation.jsp"   accessright="msas.registry.postnatal"/>
     <mapping id="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSAS_REGISTRY_PRENATAL"                path="/main.do?Page=/healthrecord/manageMSASRegistryPreNatalConsultation.jsp"    accessright="msas.registry.prenatal"/>
@@ -95,7 +101,7 @@
     <mapping id="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_HC_CONTACT"                		    path="/main.do?Page=/healthrecord/manageHealthcenterContact.jsp"                 accessright="occup.healthcenter.contact"/>
     <mapping id="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_TEST_OPENIT"                		    path="/main.do?Page=/healthrecord/manageOpenITTest.jsp"                          accessright="openit.test"/>
     <mapping id="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_SURVEILLANCE_PROTOCOL"                 path="/main.do?Page=/healthrecord/globalSurveillance.jsp"                        accessright="occup.surveillance"/>
-    <mapping id="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_LAB_REQUEST"                           path="/main.do?Page=/healthrecord/manageLabRequest_view.jsp"                     accessright="labrequest"/>
+    <mapping id="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_LAB_REQUEST"                           path="/main.do?Page=/healthrecord/manageLabRequest_view.jsp"                     accessright="occup.labrequest"/>
     <mapping id="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MIR2"                                  path="/main.do?Page=/healthrecord/globalMedicalImagingRequest.jsp"               accessright="occup.medicalimagingrequest"/>
     <mapping id="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_PACS"                                  path="/main.do?Page=/healthrecord/PACSStudy.jsp"               					 accessright="occup.medicalimagingrequest"/>
     <mapping id="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_SURGICALSAFETYCHECKLIST"               path="/main.do?Page=/healthrecord/manageSurgicalSafetyChecklist.jsp"             accessright="occup.surgicalsafetychecklist"/>
@@ -221,5 +227,5 @@
     <mapping id="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_SST_DISCHARGE"                			path="/main.do?Page=/healthrecord/manageSSTDischarge.jsp"        				 accessright="occup.sstdischarge"/>
     <mapping id="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_SST_FOLLOWUP"                			path="/main.do?Page=/healthrecord/manageSSTFollowup.jsp"        				 accessright="occup.sstfollowup"/>
     <mapping id="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_KIGUTU_OBSTETRICAL_ECHOGRAPHY"         path="/main.do?Page=/healthrecord/manageKigutuObProtocol.jsp"        			 accessright="occup.kigutuobprotocol"/>
-    <mapping id="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_KIGUTU_VACCINATION"        			path="/main.do?Page=/healthrecord/manageKigutuVaccinations.jsp"        		 accessright="occup.kigutuvaccinations"/>
+    <mapping id="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_KIGUTU_VACCINATION"        			path="/main.do?Page=/healthrecord/manageKigutuVaccinations.jsp"        		 	 accessright="occup.kigutuvaccinations"/>
 </mappings>

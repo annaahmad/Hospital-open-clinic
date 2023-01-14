@@ -2239,4 +2239,57 @@
 		<en>MSAS - Ophtalmology registry</en>
 		<es>MSAS - Registro de oftalmologia</es>
 	</Row>
+	<Row>
+		<id>1303</id>
+		<class>msas</class>
+		<transactiontype>be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSAS_CATARACT_SURGERYREPORT</transactiontype>
+		<fr>MSAS - Relevé d'opération de la cataracte</fr>
+		<en>MSAS - Cataract surgery report</en>
+		<es>MSAS - Informe de cirugia de cataratas</es>
+	</Row>
+	<Row>
+		<id>1304</id>
+		<class>msas</class>
+		<transactiontype>be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSAS_REGISTRY_CONSULTATIONS_TRI</transactiontype>
+		<fr>MSAS - Registre de consultation générale TRI infirmier</fr>
+		<en>MSAS - Outpatient consultations register TRIAGE nursing</en>
+		<es>MSAS - Registro de consulta general TRIAJE infermera</es>
+	</Row>
+	<Row>
+		<id>1305</id>
+		<class>msas</class>
+		<transactiontype>be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSAS_REGISTRY_CONSULTATIONS_MATERNITY</transactiontype>
+		<fr>MSAS - Registre de consultation générale maternité</fr>
+		<en>MSAS - Outpatient consultations register maternity</en>
+		<es>MSAS - Registro de consulta general maternidad</es>
+	</Row>
+	<Row>
+		<id>1306</id>
+		<class>msas</class>
+		<transactiontype>be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSAS_REGISTRY_CONSULTATIONS_EMERGENCY</transactiontype>
+		<fr>MSAS - Registre de consultation générale urgences</fr>
+		<en>MSAS - Outpatient consultations register emergencies</en>
+		<es>MSAS - Registro de consulta general emergencias</es>
+	</Row>
+	<Row>
+		<id>1307</id>
+		<class>ophtalmology</class>  
+		<transactiontype>be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_KABGAYI_WGSS</transactiontype>  
+		<fr>Consultation WGSS (Modele Kabgayi)</fr>  
+		<en>WGSS Consultation (Kabgayi Model)</en> 
+	</Row>
+	<Row>
+		<id>1308</id>
+		<class>general.medicine</class>  
+		<transactiontype>be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_REFERRAL</transactiontype>  
+		<fr>Lettre de référence</fr>  
+		<en>Referral letter</en> 
+	</Row>
+	<Row>
+		<id>1309</id>
+		<class>general.medicine</class>  
+		<transactiontype>be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_COUNTERREFERRAL</transactiontype>  
+		<fr>Lettre de contre-référence</fr>  
+		<en>Counter-referral letter</en> 
+	</Row>
 </Examinations>

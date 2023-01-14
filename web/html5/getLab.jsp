@@ -43,7 +43,12 @@
 					</td>
 				</tr>
 				<tr>
-					<td colspan='2' class='mobileadmin' style='font-size:6vw;'><%=getTran(request,"web","labresults",sWebLanguage) %></td>
+					<td colspan='2' class='mobileadmin' style='font-size:6vw;'>
+						<%=getTran(request,"web","labresults",sWebLanguage) %>
+						<% if(Encounter.getActiveEncounter(activePatient.personid)!=null){ %>
+							<img onclick="window.location.href='newLabOrder.jsp'" src='<%=sCONTEXTPATH%>/_img/icons/mobile/new.png'/>
+						<% } %>
+					</td>
 				</tr>
 				<%
 					long day=24*3600*1000;

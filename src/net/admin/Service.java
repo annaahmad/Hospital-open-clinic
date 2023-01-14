@@ -546,7 +546,23 @@ public void setUsers(String users) {
                 PreparedStatement ps = connection.prepareStatement("delete from Services where serviceid=?");
                 ps.setString(1,this.code);
                 ps.execute();
-                ps.close();
+				ps.close();
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+            MedwanQuery.getInstance().services.remove(this.code);
+        }
+    }
+
+    public void delete(Connection connection,String userid){
+        if (this.code!=null && this.code.length()>0){
+            try {
+                PreparedStatement ps = connection.prepareStatement("delete from Services where serviceid=?");
+                ps.setString(1,this.code);
+                ps.execute();
+				SH.syslog("!DELETE - Service id "+this.code+" deleted by "+userid);
+				ps.close();
             }
             catch (Exception e){
                 e.printStackTrace();

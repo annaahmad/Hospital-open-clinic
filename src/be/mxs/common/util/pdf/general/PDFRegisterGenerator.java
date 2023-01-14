@@ -6,6 +6,7 @@ import be.mxs.common.util.system.PdfBarcode;
 import be.mxs.common.util.system.ScreenHelper;
 import be.openclinic.medical.LabRequest;
 import be.openclinic.reporting.Register;
+import be.openclinic.system.SH;
 
 import com.itextpdf.text.pdf.*;
 import com.itextpdf.text.*;
@@ -129,7 +130,7 @@ public class PDFRegisterGenerator extends PDFOfficialBasic {
             		PreparedStatement ps = conn.prepareStatement(sSql);
             		ps.setString(1,transactiontype);
             		ps.setDate(2,new java.sql.Date(ScreenHelper.parseDate(begindate).getTime()));
-            		ps.setDate(3,new java.sql.Date(ScreenHelper.parseDate(enddate).getTime()));
+            		ps.setTimestamp(3,new java.sql.Timestamp(ScreenHelper.parseDate(enddate).getTime()+SH.getTimeDay()-1));
             		ps.setInt(4,MedwanQuery.getInstance().getConfigInt("serverId"));
             		ResultSet rs = ps.executeQuery();
             		int counter=0;
@@ -161,7 +162,7 @@ public class PDFRegisterGenerator extends PDFOfficialBasic {
 	        	    				}
 	        	    				if(val.length()>0 && checkString(column.attributeValue("concatenate")).equals("1")){
 	        	    					if(concatval.length()>0){
-	        	    						concatval+="\n";
+	        	    						concatval+=column.attributeValue("separator")==null?"\n":column.attributeValue("separator");
 	        	    					}
 	        	    					concatval+=val;
 	        	    				}

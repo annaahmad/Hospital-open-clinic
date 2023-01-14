@@ -1,3 +1,4 @@
+<%@page import="java.net.URI"%>
 <%@page import="be.mxs.common.util.system.*" %>
 <%@page errorPage="/includes/error.jsp"%>
 <%@include file="/includes/validateUser.jsp"%>
@@ -10,6 +11,14 @@
 	String openclinicdb=request.getParameter("openclinicdb");
 	String mxsref=request.getParameter("mxsref");
 	String edition = request.getParameter("edition");
+	String localcontext = SH.p(request,"localcontext",SH.cs("localcontext",""));
+	if(localcontext.length()==0){
+		URI uri = new URI(request.getRequestURL().toString());
+		String host = uri.getHost();
+		localcontext = request.getRequestURL().toString().split(":")[0].toLowerCase()+"://"+uri.getHost()+":"+request.getServerPort()+request.getContextPath();
+	}
+	MedwanQuery.getInstance().setConfigString("localcontext", localcontext);
+	
 	if(mxsref==null){
 		mxsref= MedwanQuery.getInstance().getConfigString("mxsref","be");
 	}
@@ -191,6 +200,12 @@
 				<%
 					}
 				%>
+			</td>
+		</tr>
+		<tr>
+			<td class='admin'><%=getTran(request,"web","projecturl",sWebLanguage)%>&nbsp</td>
+			<td class='admin2'>
+				<input class='text' type='text' size='80' name='localcontext' id='localcontext' value='<%=localcontext%>'/>
 			</td>
 		</tr>
 		<tr>

@@ -14,18 +14,112 @@
 	<!-- INFRASTRUCTURE -->
 	<tr class='admin'><td colspan='3'><%=getTran(request,"web","infrastructure",sWebLanguage) %></td></tr>
 	<%
-		parameters = new Hashtable();
-		parameters.put("oc_asset_comment9","in;'0','1'");
-		parameters.put("oc_asset_service","in;"+serviceuids);
-		parameters.put("oc_asset_nomenclature","like;'I.%'");
-		count=Util.countAssets(parameters);
-		out.println("<tr><td class='admin' width='30%'>"+getTran(request,"asset","totalingoodstate",sWebLanguage)+"</td><td class='admin2'><span id='infragoodstate'>"+count+"</span></td><td class='admin2' rowspan='7'><table><tr><td width='200px'><canvas id='infraStateChart' width='200px' height='200px'></canvas></td><td width='200px'><canvas id='infraOperationChart' width='200px' height='200px'></canvas></td><td width='200px'><canvas id='infraSuccessChart' width='200px' height='200px'></canvas></td><td></td></tr></table></td></tr>");
-		parameters = new Hashtable();
-		parameters.put("oc_asset_nomenclature","like;'I.%'");
-		parameters.put("oc_asset_service","in;"+serviceuids);
-		total=Util.countAssets(parameters);
+		HashSet goodstates = new HashSet();
+		//First add the assets that are still in good state
+		String sSql = "select oc_asset_objectid,oc_asset_comment13 from oc_assets where oc_asset_comment9 in ('0','1') and oc_asset_service in ("+serviceuids+") and oc_asset_nomenclature like 'I.%' and oc_asset_updatetime<=?";
+		Connection conn = SH.getOpenClinicConnection();
+		PreparedStatement ps = conn.prepareStatement(sSql);
+		ps.setDate(1,SH.toSQLDate(dEnd));
+		ResultSet rs = ps.executeQuery();
+		while (rs.next()){
+			try{
+				java.util.Date od =SH.parseDate(rs.getString("oc_asset_comment13"));
+				if(od!=null && od.after(dEnd)){
+					continue;
+				}
+			}
+			catch(Exception e){
+				e.printStackTrace();
+			}
+			String id = rs.getString("oc_asset_objectid");
+			goodstates.add(id);
+		}
+		rs.close();
+		ps.close();
+		HashSet badstates = new HashSet();
+		//Now add assets that were in good state at the end of the analyzed period
+		sSql = "select oc_asset_objectid,oc_asset_comment9,oc_asset_comment13 from oc_assetshistory where oc_asset_service in ("+serviceuids+") and oc_asset_nomenclature like 'I.%' and oc_asset_updatetime<=? order by oc_asset_updatetime desc";
+		ps = conn.prepareStatement(sSql);
+		ps.setDate(1,SH.toSQLDate(dEnd));
+		rs = ps.executeQuery();
+		while (rs.next()){
+			try{
+				java.util.Date od =SH.parseDate(rs.getString("oc_asset_comment13"));
+				if(od!=null && od.after(dEnd)){
+					continue;
+				}
+			}
+			catch(Exception e){
+				e.printStackTrace();
+			}
+			String id = rs.getString("oc_asset_objectid");
+			if(!goodstates.contains(id)){
+				if(!badstates.contains(id)){
+					String state = rs.getString("oc_asset_comment9");
+					if(state.equalsIgnoreCase("0") || state.equalsIgnoreCase("1")){
+						goodstates.add(id);
+					}
+					else{
+						badstates.add(id);
+					}
+				}
+			}
+		}
+		rs.close();
+		ps.close();
+		count=goodstates.size();
+		out.println("<tr><td class='admin' width='30%'>"+getTran(request,"asset","totalingoodstate",sWebLanguage)+"</td><td class='admin2'><span id='infragoodstate'>"+count+"</span></td><td class='admin2' rowspan='8'><table><tr><td width='200px'><canvas id='infraStateChart' width='200px' height='200px'></canvas></td><td width='200px'><canvas id='infraOperationChart' width='200px' height='200px'></canvas></td><td width='200px'><canvas id='infraSuccessChart' width='200px' height='200px'></canvas></td><td></td></tr></table></td></tr>");
+		HashSet active = new HashSet();
+		sSql = "select oc_asset_objectid,oc_asset_comment13 from oc_assets where oc_asset_service in ("+serviceuids+") and oc_asset_nomenclature like 'I.%' and oc_asset_updatetime<=?";
+		conn = SH.getOpenClinicConnection();
+		ps = conn.prepareStatement(sSql);
+		ps.setDate(1,SH.toSQLDate(dEnd));
+		rs = ps.executeQuery();
+		while (rs.next()){
+			try{
+				java.util.Date od =SH.parseDate(rs.getString("oc_asset_comment13"));
+				if(od!=null && od.after(dEnd)){
+					continue;
+				}
+			}
+			catch(Exception e){
+				e.printStackTrace();
+			}
+			String id = rs.getString("oc_asset_objectid");
+			active.add(id);
+		}
+		rs.close();
+		ps.close();
+		sSql = "select oc_asset_objectid,oc_asset_comment13 from oc_assetshistory where oc_asset_service in ("+serviceuids+") and oc_asset_nomenclature like 'I.%' and oc_asset_updatetime<=? order by oc_asset_updatetime desc";
+		ps = conn.prepareStatement(sSql);
+		ps.setDate(1,SH.toSQLDate(dEnd));
+		rs = ps.executeQuery();
+		while (rs.next()){
+			try{
+				java.util.Date od =SH.parseDate(rs.getString("oc_asset_comment13"));
+				if(od!=null && od.after(dEnd)){
+					continue;
+				}
+			}
+			catch(Exception e){
+				e.printStackTrace();
+			}
+			String id = rs.getString("oc_asset_objectid");
+			if(!active.contains(id)){
+				active.add(id);
+			}
+		}
+		total=active.size();
 		out.println("<tr><td class='admin' width='30%'>"+getTran(request,"asset","totalinfrastructure",sWebLanguage)+"</td><td class='admin2'><span id='infratotalstate'>"+total+"</span></td></tr>");
 		out.println("<tr><td class='admin' width='30%'>"+getTran(request,"asset","fractioningoodstate",sWebLanguage)+"</td><td class='admin2'><b style='font-size: 14px'>"+new DecimalFormat("#0.00").format(new Double(count)*100/new Double(total))+"%</b></td></tr>");
+		parameters = new Hashtable();
+		parameters.put("oc_asset_nomenclature","like;'I.%'");
+		parameters.put("oc_asset_service","in;"+serviceuids);
+		parameters.put("oc_maintenanceplan_type","equals;'1'");
+		parameters.put("oc_maintenanceoperation_date","copy;>='"+new SimpleDateFormat("yyyy-MM-dd").format(dBegin)+"'");
+		parameters.put(" oc_maintenanceoperation_date","copy;<'"+new SimpleDateFormat("yyyy-MM-dd").format(dEnd)+"'");
+		int controlInfrastructureOperations=Util.countMaintenanceOperations(parameters);
+		out.println("<tr><td class='admin' width='30%'>"+getTran(request,"asset","totalcontroloperations",sWebLanguage)+"</td><td class='admin2'><span id='infracontrol'>"+controlInfrastructureOperations+"</span></td></tr>");
 		parameters = new Hashtable();
 		parameters.put("oc_asset_nomenclature","like;'I.%'");
 		parameters.put("oc_asset_service","in;"+serviceuids);
@@ -56,33 +150,93 @@
 	<!-- EQUIPMENT -->
 	<tr class='admin'><td colspan='3'><%=getTran(request,"web","equipment",sWebLanguage) %></td></tr>
 	<%
-		parameters = new Hashtable();
-		parameters.put("oc_asset_comment7","equals;'1'");
-		parameters.put("oc_asset_service","in;"+serviceuids);
-		parameters.put("oc_asset_nomenclature","like;'E%'");
-		int state1=Util.countAssets(parameters);
-		parameters = new Hashtable();
-		parameters.put("oc_asset_comment7","equals;'2'");
-		parameters.put("oc_asset_service","in;"+serviceuids);
-		parameters.put("oc_asset_nomenclature","like;'E%'");
-		int state2=Util.countAssets(parameters);
-		parameters = new Hashtable();
-		parameters.put("oc_asset_comment7","equals;'3'");
-		parameters.put("oc_asset_service","in;"+serviceuids);
-		parameters.put("oc_asset_nomenclature","like;'E%'");
-		int state3=Util.countAssets(parameters);
-		parameters = new Hashtable();
-		parameters.put("oc_asset_comment7","equals;'4'");
-		parameters.put("oc_asset_service","in;"+serviceuids);
-		parameters.put("oc_asset_nomenclature","like;'E%'");
-		int state4=Util.countAssets(parameters);
-		out.println("<tr><td class='admin' width='30%'>"+getTran(request,"asset","totaloperational",sWebLanguage)+"</td><td class='admin2'><span id='matgoodstate'>"+state1+"</span></td><td class='admin2' rowspan='7'><input type='hidden' id='state2' value='"+state2+"'/><input type='hidden' id='state3' value='"+state3+"'/><input type='hidden' id='state4' value='"+state4+"'/><table><tr><td width='200px'><canvas id='matStateChart' width='200px' height='200px'></canvas></td><td width='200px'><canvas id='matOperationChart' width='200px' height='200px'></canvas></td><td width='200px'><canvas id='matSuccessChart' width='200px' height='200px'></canvas></td><td></td></tr></table></td></tr>");
-		parameters = new Hashtable();
-		parameters.put("oc_asset_service","in;"+serviceuids);
-		parameters.put("oc_asset_nomenclature","like;'E%'");
-		total=Util.countAssets(parameters);
+		int state1=0,state2=0,state3=0,state4=0,stateother=0;
+		
+		active = new HashSet();
+		//First add the assets that are still in good state
+		sSql = "select oc_asset_objectid,oc_asset_comment7,oc_asset_comment13 from oc_assets where oc_asset_service in ("+serviceuids+") and oc_asset_nomenclature like 'E%' and oc_asset_updatetime<=?";
+		conn = SH.getOpenClinicConnection();
+		ps = conn.prepareStatement(sSql);
+		ps.setDate(1,SH.toSQLDate(dEnd));
+		rs = ps.executeQuery();
+		while (rs.next()){
+			try{
+				java.util.Date od =SH.parseDate(rs.getString("oc_asset_comment13"));
+				if(od!=null && od.after(dEnd)){
+					continue;
+				}
+			}
+			catch(Exception e){
+				e.printStackTrace();
+			}
+			String id = rs.getString("oc_asset_objectid");
+			if("1".equalsIgnoreCase(rs.getString("oc_asset_comment7"))){
+				state1++;
+			}
+			else if("2".equalsIgnoreCase(rs.getString("oc_asset_comment7"))){
+				state2++;
+			}
+			else if("3".equalsIgnoreCase(rs.getString("oc_asset_comment7"))){
+				state3++;
+			}
+			else if("4".equalsIgnoreCase(rs.getString("oc_asset_comment7"))){
+				state4++;
+			}
+			else{
+				stateother++;
+			}
+			active.add(id);
+		}
+		rs.close();
+		ps.close();
+		sSql = "select oc_asset_objectid,oc_asset_comment7,oc_asset_comment13 from oc_assetshistory where oc_asset_service in ("+serviceuids+") and oc_asset_nomenclature like 'E%' and oc_asset_updatetime<=? order by oc_asset_updatetime desc";
+		ps = conn.prepareStatement(sSql);
+		ps.setDate(1,SH.toSQLDate(dEnd));
+		rs = ps.executeQuery();
+		while (rs.next()){
+			try{
+				java.util.Date od =SH.parseDate(rs.getString("oc_asset_comment13"));
+				if(od!=null && od.after(dEnd)){
+					continue;
+				}
+			}
+			catch(Exception e){
+				e.printStackTrace();
+			}
+			String id = rs.getString("oc_asset_objectid");
+			if(!active.contains(id)){
+				if("1".equalsIgnoreCase(rs.getString("oc_asset_comment7"))){
+					state1++;
+				}
+				else if("2".equalsIgnoreCase(rs.getString("oc_asset_comment7"))){
+					state2++;
+				}
+				else if("3".equalsIgnoreCase(rs.getString("oc_asset_comment7"))){
+					state3++;
+				}
+				else if("4".equalsIgnoreCase(rs.getString("oc_asset_comment7"))){
+					state4++;
+				}
+				else{
+					stateother++;
+				}
+				active.add(id);
+			}
+		}
+		rs.close();
+		ps.close();
+		out.println("<tr><td class='admin' width='30%'>"+getTran(request,"asset","totaloperational",sWebLanguage)+"</td><td class='admin2'><span id='matgoodstate'>"+state1+"</span></td><td class='admin2' rowspan='8'><input type='hidden' id='state2' value='"+state2+"'/><input type='hidden' id='state3' value='"+state3+"'/><input type='hidden' id='state4' value='"+state4+"'/><table><tr><td width='200px'><canvas id='matStateChart' width='200px' height='200px'></canvas></td><td width='200px'><canvas id='matOperationChart' width='200px' height='200px'></canvas></td><td width='200px'><canvas id='matSuccessChart' width='200px' height='200px'></canvas></td><td></td></tr></table></td></tr>");
+		total=state1+state2+state3+state4+stateother;
 		out.println("<tr><td class='admin' width='30%'>"+getTran(request,"asset","totalequipment",sWebLanguage)+"</td><td class='admin2'><span id='mattotalstate'>"+total+"</span></td></tr>");
 		out.println("<tr><td class='admin' width='30%'>"+getTran(request,"asset","fractionoperational",sWebLanguage)+"</td><td class='admin2'><b style='font-size: 14px'>"+new DecimalFormat("#0.00").format(new Double(state1)*100/new Double(total))+"%</b></td></tr>");
+		parameters = new Hashtable();
+		parameters.put("oc_asset_nomenclature","like;'E%'");
+		parameters.put("oc_asset_service","in;"+serviceuids);
+		parameters.put("oc_maintenanceplan_type","equals;'1'");
+		parameters.put("oc_maintenanceoperation_date","copy;>='"+new SimpleDateFormat("yyyy-MM-dd").format(dBegin)+"'");
+		parameters.put(" oc_maintenanceoperation_date","copy;<'"+new SimpleDateFormat("yyyy-MM-dd").format(dEnd)+"'");
+		int controloperations=Util.countMaintenanceOperations(parameters);
+		out.println("<tr><td class='admin' width='30%'>"+getTran(request,"asset","totalcontroloperations",sWebLanguage)+"</td><td class='admin2'><span id='matcontrol'>"+controloperations+"</span></td></tr>");
 		parameters = new Hashtable();
 		parameters.put("oc_asset_nomenclature","like;'E%'");
 		parameters.put("oc_asset_service","in;"+serviceuids);
@@ -116,11 +270,7 @@
 		parameters.put(" oc_asset_saledate","copy;<'"+new SimpleDateFormat("yyyy-MM-dd").format(dEnd)+"'");
 		count=Util.countAssets(parameters);
 		out.println("<tr><td class='admin' width='30%'>"+getTran(request,"asset","totalevacuatedequipment",sWebLanguage)+"</td><td class='admin2' colspan='2'>"+count+"</td></tr>");
-		parameters = new Hashtable();
-		parameters.put("oc_asset_comment7","notequals;'1'");
-		parameters.put("oc_asset_service","in;"+serviceuids);
-		parameters.put("oc_asset_nomenclature","like;'E%'");
-		total=Util.countAssets(parameters);
+		total=state2+state3+state4+stateother;
 		out.println("<tr><td class='admin' width='30%'>"+getTran(request,"asset","totaldysfunctional",sWebLanguage)+"</td><td class='admin2' colspan='2'>"+total+"</td></tr>");
 		out.println("<tr><td class='admin' width='30%'>"+getTran(request,"asset","fractionevacuated",sWebLanguage)+"</td><td class='admin2' colspan='2'>"+new DecimalFormat("#0.00").format(new Double(count)*100/new Double(total))+"%</td></tr>");
 		parameters = new Hashtable();
@@ -165,14 +315,13 @@
 		HashSet plans = new HashSet();
 		int[] nFunctionalStatus = new int[5];
 		int programmed = 0;
-		Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
 		String sid=MedwanQuery.getInstance().getServerId()+"";
-		String sSql = 	"select * from oc_assets a,oc_maintenanceplans p where oc_asset_objectid=replace(oc_maintenanceplan_assetuid,'"+SH.getServerId()+".','') and"+
-								" oc_maintenanceplan_type=2 and oc_asset_service in ("+serviceuids+") and (oc_maintenanceplan_enddate is null or oc_maintenanceplan_enddate>'"+
+		sSql = 	"select * from oc_assets a,oc_maintenanceplans p where oc_asset_objectid=replace(oc_maintenanceplan_assetuid,'"+SH.getServerId()+".','') and"+
+								" (oc_maintenanceplan_type=1 or oc_maintenanceplan_type=2) and oc_asset_service in ("+serviceuids+") and (oc_maintenanceplan_enddate is null or oc_maintenanceplan_enddate>'"+
 								new SimpleDateFormat("yyyy-MM-dd").format(dBegin)+"') and oc_maintenanceplan_startdate<'"+new SimpleDateFormat("yyyy-MM-dd").format(dEnd)+"'";
 
-		PreparedStatement ps = conn.prepareStatement(sSql);
-		ResultSet rs = ps.executeQuery();
+		ps = conn.prepareStatement(sSql);
+		rs = ps.executeQuery();
 		while(rs.next()){
 			//Each of these maintenance plans is due if (i) there has never been an operation or (ii) the expiry date of the 
 			//latest maintenance operation falls before enddate (it should have been done) 
@@ -231,12 +380,12 @@
 		ps.close();
 		
 		
-		out.println("<tr><td class='admin' width='30%'>"+getTran(request,"asset","totalpreventativeforeseen",sWebLanguage)+"</td><td class='admin2'><span id='perftotal'><a href='javascript:showPreventativeMaintenanceList(0)'>"+plans.size()+"</a></span></td><td class='admin2' rowspan='7'><table><tr><td width='200px'><canvas id='performanceChart' width='200px' height='200px'></canvas></td><td width='200px'><canvas id='functionalStatusChart' width='200px' height='200px'></canvas></td></tr></table></td></tr>");
-		out.println("<tr><td class='admin' width='30%'>"+getTran(request,"asset","totalpreventativeprogrammed",sWebLanguage)+"</td><td class='admin2'><span id='perfprogrammed'><a href='javascript:showPreventativeMaintenanceList(1)'>"+programmed+"</a></span></td></tr>");
+		out.println("<tr><td class='admin' width='30%'>"+getTran(request,"asset","totalpreventativecontrolforeseen",sWebLanguage)+"</td><td class='admin2'><span id='perftotal'><a href='javascript:showPreventativeMaintenanceList(0)'>"+plans.size()+"</a></span></td><td class='admin2' rowspan='8'><table><tr><td width='200px'><canvas id='performanceChart' width='200px' height='200px'></canvas></td><td width='200px'><canvas id='functionalStatusChart' width='200px' height='200px'></canvas></td></tr></table></td></tr>");
+		out.println("<tr><td class='admin' width='30%'>"+getTran(request,"asset","totalpreventativecontrolprogrammed",sWebLanguage)+"</td><td class='admin2'><span id='perfprogrammed'><a href='javascript:showPreventativeMaintenanceList(1)'>"+programmed+"</a></span></td></tr>");
 		int totaloperations=preventativeoperations+preventativeInfrastructureOperations;
 		parameters = new Hashtable();
 		parameters.put("oc_asset_service","in;"+serviceuids);
-		parameters.put("oc_maintenanceplan_type","equals;'2'");
+		parameters.put("oc_maintenanceplan_type","in;'1','2'");
 		parameters.put("oc_maintenanceoperation_date","copy;>='"+new SimpleDateFormat("yyyy-MM-dd").format(dBegin)+"'");
 		parameters.put(" oc_maintenanceoperation_date","copy;<'"+new SimpleDateFormat("yyyy-MM-dd").format(dEnd)+"'");
 		int maintenanceplanscovered=Util.countMaintenanceOperationPlans(parameters);

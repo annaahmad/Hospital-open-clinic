@@ -4,6 +4,7 @@ import java.lang.management.ManagementFactory;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.util.Enumeration;
+import java.util.Hashtable;
 
 import be.mxs.common.util.db.MedwanQuery;
 import be.mxs.common.util.system.HTMLEntities;
@@ -17,6 +18,26 @@ public class SystemInfo {
 	private long diskSpace=-1;
 	private int usersConnected=-1;
 	private int openclinicVersion=0;
+	private Hashtable<String,String> hIndicators = new Hashtable<String,String>();
+	
+	public void setIndicator(String key, String value) {
+		hIndicators.put(key, value);
+	}
+	
+	public String getIndicator(String key) {
+		return SH.c(hIndicators.get(key));
+	}
+	
+	public void setIndicators(String s) {
+		if(SH.c(s).length()>0) {
+			String[] pairs = s.split("\\|");
+			for(int n=0;n<pairs.length;n++) {
+				if(pairs[n].split("=").length>1) {
+					this.setIndicator(pairs[n].split("=")[0], pairs[n].split("=")[1]);
+				}
+			}
+		}
+	}
 	
 	public int getOpenclinicVersion() {
 		return openclinicVersion;
@@ -27,7 +48,13 @@ public class SystemInfo {
 	}
 
 	public String serialize() {
-		return vpnDomain+";"+vpnName+";"+vpnAddress+";"+upTime+";"+diskSpace+";"+usersConnected+";"+vpnPort+";"+openclinicVersion;
+		String indicators="";
+		Enumeration<String> e = hIndicators.keys();
+		while(e.hasMoreElements()) {
+			String key = e.nextElement();
+			indicators+=key+"="+hIndicators.get(key)+"|";
+		}
+		return vpnDomain+";"+vpnName+";"+vpnAddress+";"+upTime+";"+diskSpace+";"+usersConnected+";"+vpnPort+";"+openclinicVersion+";"+indicators;
 	}
 	
 	public String getVpnPort() {
@@ -66,6 +93,14 @@ public class SystemInfo {
 				systemInfo.setOpenclinicVersion(Integer.parseInt(s.split(";")[7]));
 			}
 			catch(Exception e) {e.printStackTrace();}
+		}
+		if(s.split(";").length>=9) {
+			String[] pairs = s.split(";")[8].split("\\|");
+			for(int n=0;n<pairs.length;n++) {
+				if(pairs[n].split("=").length>1) {
+					systemInfo.setIndicator(pairs[n].split("=")[0], pairs[n].split("=")[1]);
+				}
+			}
 		}
 		return systemInfo;
 	}

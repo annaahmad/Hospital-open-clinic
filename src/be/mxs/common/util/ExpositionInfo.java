@@ -7,6 +7,7 @@ import java.util.Vector;
  * Date: 31-okt-2005
  */
 
+
 //==================================================================================================
 // Data Transfer Object (DTO) containing nuclear (internal and external) exposition data of a specified person.
 // (Dosimetry = external exposition)

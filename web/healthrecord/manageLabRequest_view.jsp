@@ -552,11 +552,16 @@
                         <%
                     }
 
-                    %>
-                        <input type='button' accesskey="<%=ScreenHelper.getAccessKey(getTranNoLink("accesskey","save",sWebLanguage))%>" style='display: none' onclick="doSave(false);"/>
-                        <input type='button' class="button" name="labSaveButton" id="labSaveButton" onclick="doSave(false);" value='<%=getTran(null,"accesskey","save",sWebLanguage)%>'/>
-                        <input class="button" type="button" name="printLabelsButton" value="<%=getTranNoLink("Web","saveandprintlabels",sWebLanguage)%>" onclick="doSave(true)"/>&nbsp;
-               <%}
+                    if(SH.ci("enableOfflineSync",0)==0 || ((TransactionVO)transaction).isNew() ){
+    		            if(checkString(request.getParameter("be.mxs.healthrecord.server_id")).length()==0 || checkString(request.getParameter("be.mxs.healthrecord.server_id")).equalsIgnoreCase("1")){
+	                    %>
+	                        <input type='button' accesskey="<%=ScreenHelper.getAccessKey(getTranNoLink("accesskey","save",sWebLanguage))%>" style='display: none' onclick="doSave(false);"/>
+	                        <input type='button' class="button" name="labSaveButton" id="labSaveButton" onclick="doSave(false);" value='<%=getTran(null,"accesskey","save",sWebLanguage)%>'/>
+	                        <input class="button" type="button" name="printLabelsButton" value="<%=getTranNoLink("Web","saveandprintlabels",sWebLanguage)%>" onclick="doSave(true)"/>&nbsp;
+		               	<%
+    		            }
+               		}
+                }
             %>
             <input class="button" type="button" name="backButton" value="<%=getTranNoLink("Web","back",sWebLanguage)%>" onclick="doBack();">
             <input type="hidden" name="monsterids"/>

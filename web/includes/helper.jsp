@@ -339,7 +339,6 @@
                             }
                         }
                     }
-
                     if(lastTransactionVO!=null){
                         SimpleDateFormat reverseDateFormat = new SimpleDateFormat("yyyy/MM/dd");
                         String sToday = reverseDateFormat.format(new java.util.Date());
@@ -359,7 +358,6 @@
                     }
                     currentContext = sessionContainerWO.getFlags().getContext();
                 }
-
                 if(transactionVO.getTransactionType().indexOf("_CUSTOMEXAMINATION") > -1){
                 	String sCustomExamType = transactionVO.getTransactionType().substring(transactionVO.getTransactionType().indexOf("_CUSTOMEXAMINATION")+"_CUSTOMEXAMINATION".length());
                 	result+= ScreenHelper.uppercaseFirstLetter(getTran(request,"examination",sCustomExamType,language));
@@ -367,7 +365,6 @@
                 else{
                     result+= ScreenHelper.getTran(request,"web.occup",transactionVO.getTransactionType(),language);
                 }
-
                 // subtitle
                 if(subTitle.length() > 0){
                     result+= " : "+subTitle;
@@ -1125,6 +1122,11 @@
     
     public String getButtonsHtml(HttpServletRequest req, User activeUser, AdminPerson activePatient,
                                  String sAccessRight, String sWebLanguage, boolean displayPrintButton) throws Exception {
+        return getButtonsHtml(req,activeUser,activePatient,sAccessRight,sWebLanguage,displayPrintButton,"");
+    }
+    
+    public String getButtonsHtml(HttpServletRequest req, User activeUser, AdminPerson activePatient,
+                String sAccessRight, String sWebLanguage, boolean displayPrintButton,String extraButtonCode) throws Exception {
     	if(req.getParameter("nobuttons")!=null){
     		return "<input type='button' class='button' name='closebutton' value='"+ScreenHelper.getTran(null,"web","close",sWebLanguage)+"' onclick='window.close();'/>";
     	}
@@ -1137,25 +1139,6 @@
             sPrintLanguage = checkString(activePatient.language);
         }
         if(sAccessRight.length()==0 || !sAccessRight.equalsIgnoreCase("readonly") && ((activeUser.getParameter("sa")!=null && activeUser.getParameter("sa").length() > 0) || activeUser.getAccessRight(sAccessRight+".add") || activeUser.getAccessRight(sAccessRight+".edit"))){
-        	if(displayPrintButton){
-	            html.append(getTran(null,"Web.Occup","PrintLanguage",sWebLanguage)).append("&nbsp;")
-	                .append("<select class='text' name='PrintLanguage'>");
-	
-	            // supported languages
-	            String supportedLanguages = MedwanQuery.getInstance().getConfigString("supportedLanguages");
-	            if(supportedLanguages.length() == 0) supportedLanguages = "nl,fr";
-	            supportedLanguages = supportedLanguages.toLowerCase();
-	
-	            // print language selector
-	            StringTokenizer tokenizer = new StringTokenizer(supportedLanguages,",");
-	            String tmpLang;
-	            while(tokenizer.hasMoreTokens()){
-	                tmpLang = tokenizer.nextToken().toUpperCase();	
-	                html.append("<option value='").append(tmpLang).append("' "+(sPrintLanguage.equalsIgnoreCase(tmpLang)?"selected":"")+">"+tmpLang+"</option>\n");
-	            }
-	
-	            html.append("</select>&nbsp;\n");
-        	}
 
             SessionContainerWO sessionContainerWO = (SessionContainerWO)SessionContainerFactory.getInstance().getSessionContainerWO( req , SessionContainerWO.class.getName() );
             TransactionVO tran = sessionContainerWO.getCurrentTransactionVO();
@@ -1164,13 +1147,30 @@
 	            if(checkString(req.getParameter("be.mxs.healthrecord.server_id")).length()==0 || checkString(req.getParameter("be.mxs.healthrecord.server_id")).equalsIgnoreCase("1")){
 	                // print and save button
 	            	if(displayPrintButton){
+	    	            html.append(getTran(null,"Web.Occup","PrintLanguage",sWebLanguage)).append("&nbsp;")
+		                .append("<select class='text' name='PrintLanguage'>");
+		
+		            // supported languages
+		            String supportedLanguages = MedwanQuery.getInstance().getConfigString("supportedLanguages");
+		            if(supportedLanguages.length() == 0) supportedLanguages = "nl,fr";
+		            supportedLanguages = supportedLanguages.toLowerCase();
+		
+		            // print language selector
+		            StringTokenizer tokenizer = new StringTokenizer(supportedLanguages,",");
+		            String tmpLang;
+		            while(tokenizer.hasMoreTokens()){
+		                tmpLang = tokenizer.nextToken().toUpperCase();	
+		                html.append("<option value='").append(tmpLang).append("' "+(sPrintLanguage.equalsIgnoreCase(tmpLang)?"selected":"")+">"+tmpLang+"</option>\n");
+		            }
+		
+		            html.append("</select>&nbsp;\n");
 	                    html.append("<input class='button' type='button' name='saveAndPrintButton' id='saveAndPrintButton' value='").append(getTran(null,"Web.Occup","medwan.common.record-and-print",sWebLanguage)).append("' onclick='if(checkMandatoryFields()){doSave(true);};'/>&nbsp;\n");	
 	            	}
 		            // save button
 		            if(MedwanQuery.getInstance().getConfigInt("enableArmyWeek",0)==0){
 		            	html.append("<input type='button' class='button' name='saveButton' id='saveButton' onclick='if(checkMandatoryFields()){submitForm();}' value='").append(getTran(null,"accesskey","save",sWebLanguage)).append("'/>&nbsp;\n");
 			            html.append("<button accesskey='").append(ScreenHelper.getAccessKey(getTranNoLink("accesskey","save",sWebLanguage))).append("' class='buttoninvisible' onclick='if(checkMandatoryFields()){submitForm();}'></button>\n");
-			            if(activeUser.getAccessRight("sendmedicaldossier.select")){
+			            if(MedwanQuery.getInstance().getConfigString("ghb_ref_serverid","").trim().length()>0 && activeUser.getAccessRight("sendmedicaldossier.select")){
 			                html.append("<input class='button' type='button' name='sendButton' id='sendButton' value='").append(getTran(null,"web","send",sWebLanguage)).append("' onclick='sendPdf();'/>&nbsp;\n");	
 			            }
 		            }
@@ -1183,7 +1183,7 @@
 
         // back button
         html.append("<input class='button' type='button' name='backButton' id='backButton' value='").append(getTran(null,"Web","back",sWebLanguage)).append("' onclick='doBack();'>\n");
-
+		html.append(extraButtonCode);
         html.append("</div>");
         
         //*** javascripts *****************************************************

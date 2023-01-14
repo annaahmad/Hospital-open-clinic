@@ -100,7 +100,7 @@ public String getProfileNameForCode(String sCode, String sWebLanguage){
     
     
     //*** SAVE ************************************************************************************
-	if(request.getParameter("submit")!=null){
+	if(request.getParameter("submitbutton")!=null){
 		Enumeration parameterNames = request.getParameterNames();
 		SortedMap labanalyses = new TreeMap();
 		
@@ -153,6 +153,9 @@ public String getProfileNameForCode(String sCode, String sWebLanguage){
 		}
 		
 		sMsg+= getTran(request,"web","dataIsSaved",sWebLanguage);
+	}
+	else if(request.getParameter("resetbutton")!=null){
+		MedwanQuery.getInstance().setConfigString("quickLabList."+activeUser.userid,"");
 	}
 
     //*** fetch saved analyses for display ***
@@ -240,8 +243,11 @@ public String getProfileNameForCode(String sCode, String sWebLanguage){
 	
 	<%-- BUTTONS --%>
 	<%=ScreenHelper.alignButtonsStart()%>
-	    <input type="submit" class="button" name="submit" value="<%=getTranNoLink("web","save",sWebLanguage)%>"/>&nbsp;
+	    <input type="submit" class="button" name="submitbutton" value="<%=getTranNoLink("web","save",sWebLanguage)%>"/>&nbsp;
 	    <input type="button" class="button" name="backbutton" value="<%=getTranNoLink("web","back",sWebLanguage)%>" onclick="doBack();">
+	    <% if(SH.p(request,"UserQuickLabList").equals("1")){ %>
+		    <input type="submit" class="redbutton" name="resetbutton" value="<%=getTranNoLink("web","reset",sWebLanguage)%>">
+		<% } %>
     <%=ScreenHelper.alignButtonsStop()%>	
 </form>
 

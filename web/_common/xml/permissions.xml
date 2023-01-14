@@ -197,6 +197,10 @@
         <permission type="examination" id="1228">clefs.children</permission>
         <permission type="examination" id="1229">clefs.perinatal</permission>
         <permission type="examination" id="1230">msas.registry.dentist</permission>
+        <permission type="examination" id="1302">msas.registry.ophtalmology</permission>
+        <permission type="examination" id="1303">msas.cataract.surgery</permission>
+        <permission type="examination" id="1308">examination.referral</permission>
+        <permission type="examination" id="1309">examination.counterreferral</permission>
     </application>
     <application type="Web" id="newexaminations">
         <permission type="web" id="globalexaminations">examinations.global</permission>

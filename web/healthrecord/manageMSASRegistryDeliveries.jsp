@@ -108,6 +108,7 @@
 			                	<option/>
 				            	<%=ScreenHelper.writeSelect(request,"msas.qualification",((TransactionVO)transaction).getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MSAS_DELIVERIES_QUALIFICATION"),sWebLanguage,false,true) %>
 			                </select>
+			                <%=SH.writeDefaultCheckBox((TransactionVO)transaction, request, "medwan.common.true", "ITEM_TYPE_MSAS_DELIVERIES_PARTOGRAMME", "") %><%=getTran(request,"web","partogrammedone",sWebLanguage) %>
 			            </td>
 			            <td class='admin'><%=getTran(request,"web","weeksofpregnancy",sWebLanguage)%>&nbsp;</td>
 			            <td class="admin2"><%=SH.writeDefaultNumericInput(session, (TransactionVO)transaction, "ITEM_TYPE_MSAS_DELIVERIES_WEEKS", 10, 1, 50, sWebLanguage) %></td>

@@ -119,8 +119,8 @@
             String sMPIID = (String)activePatient.adminextends.get("mpiid");
 
             activePatient = new AdminPerson();
-           	activePatient.checkImmatnew=!SH.c(request.getParameter("noimmatcheck")).equalsIgnoreCase("1");
-           	activePatient.checkNatreg=!SH.c(request.getParameter("nonatregcheck")).equalsIgnoreCase("1");
+           	activePatient.checkImmatnew=!SH.c(request.getParameter("noimmatcheck")).equalsIgnoreCase("1") && SH.c(request.getParameter("checkNatreg"),"0").equalsIgnoreCase("1");
+           	activePatient.checkNatreg=!SH.c(request.getParameter("nonatregcheck")).equalsIgnoreCase("1") && SH.c(request.getParameter("checkImmatnew"),"0").equalsIgnoreCase("1");
             if(sMPIID!=null){
             	activePatient.adminextends.put("mpiid",sMPIID);
             }

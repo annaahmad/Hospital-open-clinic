@@ -95,12 +95,14 @@
 		ctx = document.getElementById("infraOperationChart");
 		var data = {
 			    datasets: [{
-			        data: [document.getElementById('infrapreventative').innerHTML*1, document.getElementById('infracorrective').innerHTML*1],
+			        data: [document.getElementById('infracontrol').innerHTML*1,document.getElementById('infrapreventative').innerHTML*1, document.getElementById('infracorrective').innerHTML*1],
 		            backgroundColor: [
+		                'rgba(255, 206, 86, 0.2)',
 		                'rgba(153, 102, 255, 0.2)',
 		                'rgba(255, 159, 64, 0.2)'
 		            ],
 		            borderColor: [
+		                'rgba(255, 206, 86, 1)',
 		                'rgba(153, 102, 255, 1)',
 		                'rgba(255, 159, 64, 1)'
 		            ],
@@ -109,6 +111,7 @@
 
 			    // These labels appear in the legend and in the tooltips when hovering different arcs
 			    labels: [
+			        '<%=getTranNoLink("web","shortcontrol",sWebLanguage)%>',
 			        '<%=getTranNoLink("web","shortpreventative",sWebLanguage)%>',
 			        '<%=getTranNoLink("web","shortcorrective",sWebLanguage)%>'
 			    ]
@@ -170,12 +173,14 @@
 		ctx = document.getElementById("matOperationChart");
 		var data = {
 			    datasets: [{
-			        data: [document.getElementById('matpreventative').innerHTML*1, document.getElementById('matcorrective').innerHTML*1],
+			        data: [document.getElementById('matcontrol').innerHTML*1, document.getElementById('matpreventative').innerHTML*1, document.getElementById('matcorrective').innerHTML*1],
 		            backgroundColor: [
+		                'rgba(255, 206, 86, 0.2)',
 		                'rgba(153, 102, 255, 0.2)',
 		                'rgba(255, 159, 64, 0.2)'
 		            ],
 		            borderColor: [
+		                'rgba(255, 206, 86, 1)',
 		                'rgba(153, 102, 255, 1)',
 		                'rgba(255, 159, 64, 1)'
 		            ],
@@ -184,6 +189,7 @@
 
 			    // These labels appear in the legend and in the tooltips when hovering different arcs
 			    labels: [
+			        '<%=getTranNoLink("web","shortcontrol",sWebLanguage)%>',
 			        '<%=getTranNoLink("web","shortpreventative",sWebLanguage)%>',
 			        '<%=getTranNoLink("web","shortcorrective",sWebLanguage)%>'
 			    ]

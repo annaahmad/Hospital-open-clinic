@@ -47,6 +47,7 @@
 		systemInfo.setDiskSpace(notNull(request.getParameter("diskSpace"),""));
 		systemInfo.setUsersConnected(notNull(request.getParameter("usersConnected"),""));
 		systemInfo.setOpenclinicVersion(notNull(request.getParameter("usersConnected"),"0"));
+		systemInfo.setIndicators(notNull(request.getParameter("indicators"),""));
 		Debug.println("Opening db connection");
 		Connection conn = MedwanQuery.getInstance().getStatsConnection();
 		String sSql = "select * from dc_monitorparameters where dc_monitorparameter_serveruid=? and dc_monitorparameter_parameter='systeminfo' and DC_MONITORPARAMETER_VALUE not like '%"+request.getParameter("vpnName")+"%'";

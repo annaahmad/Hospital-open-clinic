@@ -38,7 +38,7 @@
     		PreparedStatement ps = conn.prepareStatement(sSql);
     		ps.setString(1,transactiontype);
     		ps.setDate(2,new java.sql.Date(ScreenHelper.parseDate(sBegindate).getTime()));
-    		ps.setDate(3,new java.sql.Date(ScreenHelper.parseDate(sEnddate).getTime()));
+    		ps.setTimestamp(3,new java.sql.Timestamp(ScreenHelper.parseDate(sEnddate).getTime()+SH.getTimeDay()-1));
     		ps.setInt(4,MedwanQuery.getInstance().getConfigInt("serverId"));
     		ResultSet rs = ps.executeQuery();
     		int counter=0;

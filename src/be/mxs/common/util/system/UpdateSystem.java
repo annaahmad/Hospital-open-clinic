@@ -838,7 +838,7 @@ public class UpdateSystem implements Runnable {
 	                    			String setupdir=request.getSession().getServletContext().getRealPath("/").replaceAll("\\\\","/");
 	                    			String context = request.getRequestURL().toString().replaceAll(request.getServletPath(),"");
 	                    			String minicontext =request.getContextPath().replaceAll("/", "");
-	                    			String localcontext = request.getProtocol().split("/")[0].toLowerCase()+"://localhost:"+request.getServerPort()+request.getContextPath();
+	                    			String localcontext = SH.cs("localcontext", request.getRequestURL().toString().split(":")[0].toLowerCase()+"://localhost:"+request.getServerPort()+request.getContextPath());
 	                    			String key=configelement.attributeValue("key");
 	                    			String value=configelement.attributeValue("value")+"";
 	                    			String configkey=key.replaceAll("\\$setupdir\\$", setupdir).replaceAll("\\$context\\$", context).replaceAll("\\$localcontext\\$", localcontext).replaceAll("\\$minicontext\\$", minicontext).replaceAll("\\$project\\$", MedwanQuery.getInstance().getConfigString("defaultProject","oc"));

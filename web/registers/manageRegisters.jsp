@@ -63,7 +63,12 @@
 	    	Element register = (Element)registers.next();
 	    	if(activeUser.getAccessRight(register.attributeValue("accessright")) && (checkString(register.attributeValue("country")).length()==0 || checkString(register.attributeValue("country")).equalsIgnoreCase(MedwanQuery.getInstance().getConfigString("countrycode")))){
 	    		//This register can be used
-	    		validRegisters.add(register.attributeValue("id")+";"+register.attributeValue("transactiontype"));
+	    		if(register.attributeValue("title")!=null){
+	    			validRegisters.add(register.attributeValue("id")+";"+register.attributeValue("title"));
+	    		}
+	    		else{
+	    			validRegisters.add(register.attributeValue("id")+";"+register.attributeValue("transactiontype"));
+	    		}
 	    	}
 	    }
 	    if(validRegisters.size()>0){

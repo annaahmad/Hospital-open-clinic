@@ -31,3 +31,13 @@
 		}
 	%>
 </table>
+<center>
+	<p><a href='javascript:configureDashboard();'><%=getTran(request,"web","congiguredashboards",sWebLanguage) %></a></p>
+</center>
+
+<script>
+	function configureDashboard(){
+		window.opener.location.href='<%=sCONTEXTPATH%>/main.do?Page=userprofile/manageDashboards.jsp';
+		window.close();
+	}
+</script>

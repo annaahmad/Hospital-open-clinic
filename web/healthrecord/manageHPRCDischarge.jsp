@@ -52,9 +52,25 @@
 				        	</table>
 				        </td>
 				    </tr>
+					
+					<%--  Patient avec Anemie ou transfuse / tdr positive --%>
+				    <tr>
+						
+						<td width ="<%=sTDAdminWidth%>" class='admin'><%=getTran(request,"web","anemy_transfusion",sWebLanguage)%>&nbsp;</td>
+						<td>	
+							<table width='100%'>
+							<tr>	
+								<td class='admin2'><%=SH.writeDefaultCheckBox((TransactionVO)transaction, request, "1", "ITEM_TYPE_PATIENTWITHANEMIAORTRANSFUSION", "") %></td>
+								<td width ="<%=sTDAdminWidth%>" class='admin'><%=getTran(request,"web","tdr_positive",sWebLanguage)%>&nbsp;</td>
+								<td class='admin2'><%=SH.writeDefaultCheckBox((TransactionVO)transaction, request, "1", "ITEM_TYPE_PATIENTWITH_TDR_POSITIVE", "") %></td>
+							</tr>
+						</table>
+						</td>
+				    </tr>
+					
 				    <%--  DONNEES CLINIQUES --%>
 				    <tr>
-				        <td width ="<%=sTDAdminWidth%>" class='admin'><%=getTran(request,"web","dischargesummary",sWebLanguage)%>&nbsp;</td>
+				        <td width ="<%=sTDAdminWidth%>" class='admin'><%=getTran(request,"web","dischargesummary2",sWebLanguage)%>&nbsp;</td>
 				        <td class='admin2'>
 				            <textarea onKeyup="resizeTextarea(this,10);" <%=setRightClick(session,"ITEM_TYPE_HPRC_DISCHARGESUMMARY")%> class="text" cols="74" rows="5" name="currentTransactionVO.items.<ItemVO[hashCode=<mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_HPRC_DISCHARGESUMMARY" property="itemId"/>]>.value"><mxs:propertyAccessorI18N name="transaction.items" scope="page" compare="type=be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_HPRC_DISCHARGESUMMARY" property="value"/></textarea>
 				        </td>

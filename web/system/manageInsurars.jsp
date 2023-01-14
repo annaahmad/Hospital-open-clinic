@@ -591,7 +591,12 @@
 								%>
 	    		              		<option value="ccbrtacsv" <%=checkString(insurar.getDefaultInsurarInvoiceModel()).equalsIgnoreCase("ccbrtacsv")?"selected":""%>><%=getTranNoLink("web","ccbrtacsvmodel",sWebLanguage)%></option>
 	    		              		<option value="ccbrtbcsv" <%=checkString(insurar.getDefaultInsurarInvoiceModel()).equalsIgnoreCase("ccbrtbcsv")?"selected":""%>><%=getTranNoLink("web","ccbrtbcsvmodel",sWebLanguage)%></option>
-                        		<%
+	                    		<%
+	    		              	}
+	    		              	if(MedwanQuery.getInstance().getConfigInt("enableSenegal",0)==1){
+								%>
+	    		              		<option value="udam" <%=checkString(insurar.getDefaultInsurarInvoiceModel()).equalsIgnoreCase("udam")?"selected":""%>><%=getTranNoLink("web","udammodel",sWebLanguage)%></option>
+	                    		<%
 	    		              	}
                         		%>
                             </select>

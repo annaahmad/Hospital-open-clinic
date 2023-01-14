@@ -126,6 +126,9 @@ public class CreateTransactionAction extends Action {
             							                    new Date(),
             							                    itemContextVO));
                 }  
+                if(request.getParameter("referenceUID")!=null) {
+                	extraParameters+="&referenceUID="+request.getParameter("referenceUID");
+                }
                 
                 sessionContainerWO.setCurrentTransactionVO(transactionVO);
                 

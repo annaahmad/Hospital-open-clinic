@@ -209,24 +209,22 @@ public class Util {
 					double quantity = rs.getDouble("quantity");
 					for(int n=0;n<noms.length;n++){
 						String nomenclature = noms[n];
-						PreparedStatement ps2 = conn.prepareStatement("select count(*) total from oc_assets where (oc_asset_service=? OR oc_asset_service in (?)) and (oc_asset_nomenclature=? or oc_asset_nomenclature like ?) and (oc_asset_saledate is null OR oc_asset_saledate>?) and (oc_asset_comment7 is null or oc_asset_comment7='' or oc_asset_comment7<3)");
+						PreparedStatement ps2 = conn.prepareStatement("select count(*) total from oc_assets where (oc_asset_service=? OR oc_asset_service in ("+Service.getChildIdsAsString(serviceid)+")) and (oc_asset_nomenclature=? or oc_asset_nomenclature like ?) and (oc_asset_saledate is null OR oc_asset_saledate>?) and (oc_asset_comment7 is null or oc_asset_comment7='' or oc_asset_comment7<3)");
 						ps2.setString(1, serviceid);
-						ps2.setString(2, Service.getChildIdsAsString(serviceid));
-						ps2.setString(3,nomenclature);
-						ps2.setString(4,nomenclature+".%");
-						ps2.setTimestamp(5, new java.sql.Timestamp(new java.util.Date().getTime()));
+						ps2.setString(2,nomenclature);
+						ps2.setString(3,nomenclature+".%");
+						ps2.setTimestamp(4, new java.sql.Timestamp(new java.util.Date().getTime()));
 						ResultSet rs2 = ps2.executeQuery();
 						if(rs2.next()){
 							total+=rs2.getInt("total");
 						}
 						rs2.close();
 						ps2.close();
-						ps2 = conn.prepareStatement("select count(*) total from oc_assets where (oc_asset_service=? OR oc_asset_service in (?)) and (oc_asset_nomenclature=? or oc_asset_nomenclature like ?) and (oc_asset_saledate is null OR oc_asset_saledate>?) and oc_asset_comment7='3'");
+						ps2 = conn.prepareStatement("select count(*) total from oc_assets where (oc_asset_service=? OR oc_asset_service in ("+Service.getChildIdsAsString(serviceid)+")) and (oc_asset_nomenclature=? or oc_asset_nomenclature like ?) and (oc_asset_saledate is null OR oc_asset_saledate>?) and oc_asset_comment7='3'");
 						ps2.setString(1, serviceid);
-						ps2.setString(2, Service.getChildIdsAsString(serviceid));
-						ps2.setString(3,nomenclature);
-						ps2.setString(4,nomenclature+".%");
-						ps2.setTimestamp(5, new java.sql.Timestamp(new java.util.Date().getTime()));
+						ps2.setString(2,nomenclature);
+						ps2.setString(3,nomenclature+".%");
+						ps2.setTimestamp(4, new java.sql.Timestamp(new java.util.Date().getTime()));
 						rs2 = ps2.executeQuery();
 						if(rs2.next()){
 							nonfunctional+=rs2.getInt("total");

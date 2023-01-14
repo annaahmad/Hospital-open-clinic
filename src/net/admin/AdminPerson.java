@@ -2686,7 +2686,9 @@ public class AdminPerson extends OC_Object{
     	}
     	else {
         	String lowerArchiverFileCode = ScreenHelper.getConfigParam("lowerCompare","archiveFileCode",oc_conn);
-            sSQLWhere += " "+lowerArchiverFileCode+" LIKE '"+sArchiveFileCode.toLowerCase()+"' AND";
+        	if(sArchiveFileCode.trim().length()>0) {
+        		sSQLWhere += " "+lowerArchiverFileCode+" LIKE '"+sArchiveFileCode.toLowerCase()+"' AND";
+        	}
     	}
 
         if (snatreg.trim().length()>0) {

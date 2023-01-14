@@ -1,6 +1,7 @@
 package be.openclinic.datacenter;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.net.URL;
@@ -103,6 +104,26 @@ public class Monitor implements Runnable{
             	vNvp.add(new NameValuePair("centerBeds",MedwanQuery.getInstance().getConfigString("globalHealthBarometerCenterBeds","")));
             	vNvp.add(new NameValuePair("date",new SimpleDateFormat("yyyyMMdd").format(new java.util.Date())));
             	vNvp.add(new NameValuePair("softwareVersion",MedwanQuery.getInstance().getConfigString("updateVersion","")));
+            	//Set indicators
+            	String indicators = "";
+            	//Check backup data
+            	try {
+	            	File backupfolder = new File(SH.c("backupfolder","/backups"));
+	            	File[] listOfFiles = backupfolder.listFiles();
+	            	for(int n=0;n<listOfFiles.length;n++){
+	            		File file = listOfFiles[n];
+	            		if(file.getName().toLowerCase().startsWith(SH.c("openclinicdbName","openclinic_dbo")) && file.getName().toLowerCase().endsWith(".sql.gz")){
+	            			indicators+="obs="+file.length()+"|"; //openclinic_dbo backup size
+	            		}
+	            		else if(file.getName().toLowerCase().startsWith(SH.c("admindbName","openclinic_dbo")) && file.getName().toLowerCase().endsWith(".sql.gz")){
+	            			indicators+="abs="+file.length()+"|"; //ocadmin_dbo backup size
+	            		}
+	            	}
+            	}
+            	catch(Exception ex) {
+            		// Do nothing
+            	}
+            	vNvp.add(new NameValuePair("indicators",indicators));
     			sDoc = MedwanQuery.getInstance().getConfigString("datacenterTemplateSource",MedwanQuery.getInstance().getConfigString("templateSource")) + "/globalhealthbarometer.xml";
 	            reader = new SAXReader(false);
 	            try{
