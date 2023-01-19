@@ -8,7 +8,7 @@
 			HttpClient client = new HttpClient();
 			//First retrieve all rxcui for the term
 			Hashtable rxcuis = new Hashtable();
-			String url = MedwanQuery.getInstance().getConfigString("NLM_DDI_URL_FindRxNormCode","http://rxnav.nlm.nih.gov/REST/approximateTerm");
+			String url = MedwanQuery.getInstance().getConfigString("NLM_DDI_URL_FindRxNormCode","https://rxnav.nlm.nih.gov/REST/approximateTerm");
 			GetMethod method = new GetMethod(url);
 			method.setRequestHeader("Content-type","text/xml; charset=windows-1252");
 			NameValuePair nvp1= new NameValuePair("term",sKey);
@@ -33,7 +33,7 @@
 			Enumeration e = rxcuis.keys();
 			while(e.hasMoreElements()){
 				String rxcui=(String)e.nextElement();
-				url = MedwanQuery.getInstance().getConfigString("NLM_DDI_URL_FindRxNormProperties","http://rxnav.nlm.nih.gov/REST/rxcui/"+rxcui+"/properties");
+				url = MedwanQuery.getInstance().getConfigString("NLM_DDI_URL_FindRxNormProperties","https://rxnav.nlm.nih.gov/REST/rxcui/"+rxcui+"/properties");
 				method = new GetMethod(url);
 				method.setRequestHeader("Content-type","text/xml; charset=windows-1252");
 				statusCode = client.executeMethod(method);

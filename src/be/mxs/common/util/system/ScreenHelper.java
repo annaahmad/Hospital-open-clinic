@@ -152,7 +152,7 @@ public class ScreenHelper {
     }
     
     public static long nightsBetween(java.util.Date begin,java.util.Date end){
-    	long nights = 1;
+    	long nights = 0;
     	if(!formatDate(begin).equals(formatDate(end)) && end.after(begin)){
     		nights=1+ChronoUnit.DAYS.between(begin.toInstant().atZone(ZoneId.systemDefault()).toLocalDate(), end.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
     	}
@@ -2780,9 +2780,6 @@ public static String removeAccents(String sTest){
 	    	StringBuffer s = new StringBuffer();
 	    	s.append("<input type='text' id='"+sName+"' ");
 	    	s.append(setRightClick(session,sName));
-	    	if(bMandatory) {
-	    		s.append(" "+SH.cdm()+" ");
-	    	}
 	    	s.append(" class='text' size='"+cols+"' name='currentTransactionVO.items.<ItemVO[hashCode="+transaction.getItem("be.mxs.common.model.vo.healthrecord.IConstants."+sName).getItemId()+"]>.value'");
 	    	s.append(" value='"+sValue+"'/>");
 	    	return s.toString();
@@ -4029,7 +4026,7 @@ public static String removeAccents(String sTest){
     public static String formatDate(java.time.LocalDateTime dDate){
         String sDate = "";
         if(dDate!=null){
-            sDate = dDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+            sDate = stdDateFormat.format(dDate);
         }
         return sDate;
     } 

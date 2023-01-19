@@ -135,7 +135,7 @@ public class MessageNotifier {
         			}
     			}
     		} catch (Exception e) {
-    			e.printStackTrace();
+    			Debug.printStackTrace(e);
     		}
     	}
     	Connection conn=MedwanQuery.getInstance().getOpenclinicConnection();

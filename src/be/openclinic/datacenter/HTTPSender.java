@@ -12,6 +12,7 @@ import org.apache.commons.httpclient.methods.PostMethod;
 
 import be.mxs.common.util.db.MedwanQuery;
 import be.mxs.common.util.system.Debug;
+import be.openclinic.system.SH;
 
 public class HTTPSender extends Sender {
 
@@ -49,7 +50,7 @@ public class HTTPSender extends Sender {
 							client.executeMethod(method);
 							bMessageSent = method.getResponseBodyAsString().contains("<OK>");
 						} catch (Exception e) {
-							e.printStackTrace();
+			    			Debug.printStackTrace(e);
 						}
 						if(bMessageSent) {
 							for (int n=0;n<messages.size();n++){
@@ -64,7 +65,7 @@ public class HTTPSender extends Sender {
 						}
 						else {
 					        Debug.println("-- Message could not be sent");
-					        Debug.println("-- Received: "+method.getResponseBodyAsString().trim());
+					        Debug.println("-- Received: "+SH.c(method.getResponseBodyAsString()).trim());
 					        Debug.println("------------------------------------------------------------------------------------------");
 						}
 			 		}

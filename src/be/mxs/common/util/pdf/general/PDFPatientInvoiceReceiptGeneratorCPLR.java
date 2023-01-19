@@ -24,13 +24,15 @@ import net.admin.*;
 import javax.servlet.http.HttpServletRequest;
 
 public class PDFPatientInvoiceReceiptGeneratorCPLR extends PDFInvoiceGenerator {
-
+    String sProforma = "no";
+    
     //--- CONSTRUCTOR -----------------------------------------------------------------------------
-    public PDFPatientInvoiceReceiptGeneratorCPLR(User user, AdminPerson patient, String sProject, String sPrintLanguage){
+    public PDFPatientInvoiceReceiptGeneratorCPLR(User user, AdminPerson patient, String sProject, String sPrintLanguage, String proforma){
         this.user = user;
         this.patient = patient;
         this.sProject = sProject;
         this.sPrintLanguage = sPrintLanguage;
+        this.sProforma= proforma;
 
         doc = new Document();
     }
@@ -199,7 +201,12 @@ public class PDFPatientInvoiceReceiptGeneratorCPLR extends PDFInvoiceGenerator {
 			if(receiptid>=MedwanQuery.getInstance().getConfigInt("maximumNumberOfReceipts",10000)){
 				MedwanQuery.getInstance().setOpenclinicCounter("RECEIPT",0);
 			}
-	        cell = createBorderlessCell(receiptid+" - "+ScreenHelper.getTran(null,"web","receiptforinvoice",sPrintLanguage)+" "+invoice.getInvoiceNumber(),10, 50,new Double(8*scaleFactor).intValue());
+			if(SH.c(sProforma).equalsIgnoreCase("yes")) {
+				cell = createInvertedBorderlessCell(receiptid+" - "+ScreenHelper.getTran(null,"web","proformareceiptforinvoice",sPrintLanguage)+" "+invoice.getInvoiceNumber()+"\n"+SH.getTran(null, "web", "thisisnotareceipt",sPrintLanguage),11, 50,new Double(8*scaleFactor).intValue());
+			}
+			else {
+				cell = createBorderlessCell(receiptid+" - "+ScreenHelper.getTran(null,"web","receiptforinvoice",sPrintLanguage)+" "+invoice.getInvoiceNumber(),10, 50,new Double(8*scaleFactor).intValue());
+			}
 	        cell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
 	        cell.setPadding(2);
 	        table.addCell(cell);

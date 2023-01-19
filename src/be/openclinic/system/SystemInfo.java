@@ -250,7 +250,7 @@ public class SystemInfo {
 
 	public static long getSystemUptime() {
 		long systemUptime = -1;
-		systemUptime= new oshi.SystemInfo().getHardware().getProcessor().getSystemUptime();
+		systemUptime=ManagementFactory.getRuntimeMXBean().getUptime();
 		return systemUptime;
 	}
 	

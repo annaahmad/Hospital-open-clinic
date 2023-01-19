@@ -202,11 +202,11 @@ public class RequestedLabAnalysis {
     	analysis.addElement("transactionId").setText(transactionId);
     	analysis.addElement("patientId").setText(patientId);
     	analysis.addElement("analysisCode").setText(analysisCode);
-    	analysis.addElement("comment").setText(comment);
+    	analysis.addElement("comment").setText(SH.xe(comment));
     	analysis.addElement("resultValue").setText(resultValue);
     	analysis.addElement("resultUnit").setText(resultUnit);
     	analysis.addElement("resultModifier").setText(resultModifier);
-    	analysis.addElement("resultComment").setText(resultComment);
+    	analysis.addElement("resultComment").setText(SH.xe(resultComment));
     	analysis.addElement("resultRefMax").setText(resultRefMax);
     	analysis.addElement("resultRefMin").setText(resultRefMin);
     	analysis.addElement("resultUserId").setText(resultUserId);
@@ -1730,6 +1730,7 @@ public class RequestedLabAnalysis {
                 labAnalysis.resultRefMin   = ScreenHelper.checkString(rs.getString("resultrefmin"));
                 labAnalysis.resultUserId   = ScreenHelper.checkString(rs.getString("resultuserid"));
                 labAnalysis.requestUserId   = ScreenHelper.checkString(rs.getString("userId"));
+                labAnalysis.finalvalidation   = rs.getInt("finalvalidator");
                 labAnalysis.updatetime = rs.getTimestamp("updatetime");
                 labAnalysis.objectid = rs.getInt("objectid");
                 labAnalysis.resultProvisional   = ScreenHelper.checkString(rs.getString("resultprovisional"));
@@ -1739,6 +1740,8 @@ public class RequestedLabAnalysis {
                 if(tmpDate!=null) labAnalysis.resultDate = tmpDate;
                 tmpDate = rs.getTimestamp("updateTime");
                 if(tmpDate!=null) labAnalysis.requestDate = tmpDate;
+                tmpDate = rs.getTimestamp("finalvalidationdatetime");
+                if(tmpDate!=null) labAnalysis.finalvalidationdatetime = tmpDate;
             }
             else{
                 throw new Exception("INFO : REQUESTED LABANALYSIS "+serverId+"."+transactionId+"."+analysisCode+" NOT FOUND");
@@ -1803,6 +1806,7 @@ public class RequestedLabAnalysis {
                 labAnalysis.resultRefMin   = HL7Server.checkString(rs.getString("resultrefmin"));
                 labAnalysis.resultUserId   = HL7Server.checkString(rs.getString("resultuserid"));
                 labAnalysis.requestUserId   = HL7Server.checkString(rs.getString("userId"));
+                labAnalysis.finalvalidation   = rs.getInt("finalvalidator");
                 labAnalysis.updatetime = rs.getTimestamp("updatetime");
                 labAnalysis.objectid = rs.getInt("objectid");
                 labAnalysis.resultProvisional   = HL7Server.checkString(rs.getString("resultprovisional"));
@@ -1812,6 +1816,8 @@ public class RequestedLabAnalysis {
                 if(tmpDate!=null) labAnalysis.resultDate = tmpDate;
                 tmpDate = rs.getTimestamp("updateTime");
                 if(tmpDate!=null) labAnalysis.requestDate = tmpDate;
+                tmpDate = rs.getTimestamp("finalvalidationdatetime");
+                if(tmpDate!=null) labAnalysis.finalvalidationdatetime = tmpDate;
             }
             else{
                 throw new Exception("INFO : REQUESTED LABANALYSIS "+serverId+"."+transactionId+"."+analysisCode+" NOT FOUND");
@@ -2366,7 +2372,7 @@ public class RequestedLabAnalysis {
     public static void setTechnicalValidation(int serverid,int transactionid, int technicalvalidator,String worklistAnalyses){
         Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
         try{
-            String sQuery="update RequestedLabAnalyses set technicalvalidator=?,technicalvalidationdatetime=?,updatetime="+MedwanQuery.getInstance().getConfigString("dateFunction","getdate()")+" where serverid=? and transactionid=? and analysiscode in ("+worklistAnalyses+") and technicalvalidator is null and not (resultvalue is null or resultvalue='')";
+            String sQuery="update RequestedLabAnalyses set technicalvalidator=?,technicalvalidationdatetime=?,updatetime="+MedwanQuery.getInstance().getConfigString("dateFunction","getdate()")+" where serverid=? and transactionid=? and analysiscode in ("+worklistAnalyses+") and technicalvalidationdatetime is null and not (resultvalue is null or resultvalue='')";
             PreparedStatement ps = oc_conn.prepareStatement(sQuery);
             ps.setInt(1,technicalvalidator);
             ps.setTimestamp(2,new Timestamp(new java.util.Date().getTime()));
@@ -2411,7 +2417,7 @@ public class RequestedLabAnalysis {
     public static void setFinalValidation(int serverid,int transactionid, int finalvalidator,String worklistAnalyses){
         Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
         try{
-            String sQuery="update RequestedLabAnalyses set finalvalidator=?,finalvalidationdatetime=?,updatetime="+MedwanQuery.getInstance().getConfigString("dateFunction","getdate()")+" where serverid=? and transactionid=? and analysiscode in ("+worklistAnalyses+") and finalvalidator is null and not (resultvalue is null or resultvalue='') ";
+            String sQuery="update RequestedLabAnalyses set finalvalidator=?,finalvalidationdatetime=?,updatetime="+MedwanQuery.getInstance().getConfigString("dateFunction","getdate()")+" where serverid=? and transactionid=? and analysiscode in ("+worklistAnalyses+") and finalvalidationdatetime is null and not (resultvalue is null or resultvalue='') ";
             PreparedStatement ps = oc_conn.prepareStatement(sQuery);
             ps.setInt(1,finalvalidator);
             ps.setTimestamp(2,new Timestamp(new java.util.Date().getTime()));
@@ -2434,7 +2440,7 @@ public class RequestedLabAnalysis {
     public static void setFinalValidation(int serverid,int transactionid, int finalvalidator,String worklistAnalyses,String value){
         Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
         try{
-            String sQuery="update RequestedLabAnalyses set finalvalidator=?,finalvalidationdatetime=?,updatetime="+MedwanQuery.getInstance().getConfigString("dateFunction","getdate()")+" where serverid=? and transactionid=? and analysiscode in ("+worklistAnalyses+") and finalvalidator is null and not (resultvalue is null or resultvalue='')";
+            String sQuery="update RequestedLabAnalyses set finalvalidator=?,finalvalidationdatetime=?,updatetime="+MedwanQuery.getInstance().getConfigString("dateFunction","getdate()")+" where serverid=? and transactionid=? and analysiscode in ("+worklistAnalyses+") and finalvalidationdatetime is null and not (resultvalue is null or resultvalue='')";
             PreparedStatement ps = oc_conn.prepareStatement(sQuery);
             ps.setInt(1,finalvalidator);
             ps.setTimestamp(2,new Timestamp(new java.util.Date().getTime()));
@@ -2480,7 +2486,7 @@ public class RequestedLabAnalysis {
     public static void setForcedFinalValidation(int serverid,int transactionid, int finalvalidator,String worklistAnalyses){
         Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
         try{
-            String sQuery="update RequestedLabAnalyses set resultuserid=?,finalvalidator=?,finalvalidationdatetime=?,updatetime="+MedwanQuery.getInstance().getConfigString("dateFunction","getdate()")+" where serverid=? and transactionid=? and analysiscode in ("+worklistAnalyses+") and (finalvalidator is null or resultuserid is null)";
+            String sQuery="update RequestedLabAnalyses set resultuserid=?,finalvalidator=?,finalvalidationdatetime=?,updatetime="+MedwanQuery.getInstance().getConfigString("dateFunction","getdate()")+" where serverid=? and transactionid=? and analysiscode in ("+worklistAnalyses+") and (finalvalidationdatetime is null or resultuserid is null)";
             PreparedStatement ps = oc_conn.prepareStatement(sQuery);
             ps.setInt(1,finalvalidator);
             ps.setInt(2,finalvalidator);

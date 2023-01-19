@@ -641,9 +641,9 @@ public class TransactionVO extends IObjectReference implements Serializable, IId
         		RequestedLabAnalysis analysis = (RequestedLabAnalysis)analyses.elementAt(n);
         		Element eAnalysis = eAnalyses.addElement("analysis");
         		eAnalysis.addElement("analysiscode").setText(analysis.getAnalysisCode());
-        		eAnalysis.addElement("comment").setText(analysis.getComment());
-        		eAnalysis.addElement("resultvalue").setText(analysis.getResultValue());
-        		eAnalysis.addElement("resultunit").setText(analysis.getResultUnit());
+        		eAnalysis.addElement("comment").setText(SH.xe(analysis.getComment()));
+        		eAnalysis.addElement("resultvalue").setText(SH.xe(analysis.getResultValue()));
+        		eAnalysis.addElement("resultunit").setText(SH.xe(analysis.getResultUnit()));
         		eAnalysis.addElement("resultmodifier").setText(analysis.getResultModifier());
         		eAnalysis.addElement("resultrefmax").setText(analysis.getResultRefMax());
         		eAnalysis.addElement("resultrefmin").setText(analysis.getResultRefMin());

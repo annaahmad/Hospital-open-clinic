@@ -480,6 +480,20 @@ public abstract class PDFBasic {
         return cell;
     }
 
+    protected PdfPCell createInvertedBorderlessCell(String value, int height, int colspan,int fontSize){
+        Font font = FontFactory.getFont(FontFactory.HELVETICA,fontSize,Font.BOLD);
+        font.setColor(BaseColor.WHITE);
+    	cell = new PdfPCell(new Paragraph(value,font));
+        cell.setPaddingTop(height);
+        cell.setColspan(colspan);
+        cell.setBackgroundColor(BaseColor.BLACK);
+        cell.setBorder(PdfPCell.NO_BORDER);
+        cell.setVerticalAlignment(PdfPCell.ALIGN_TOP);
+        cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
+
+        return cell;
+    }
+
     protected PdfPCell createBoldBorderlessCell(String value, int height, int colspan,int fontSize){
         cell = new PdfPCell(new Paragraph(value,FontFactory.getFont(FontFactory.HELVETICA,fontSize,Font.BOLD)));
         cell.setPaddingTop(height);

@@ -8,7 +8,8 @@
 <%@ page import="be.openclinic.finance.PatientInvoice" %>
 <%
     String sInvoiceUid    = checkString(request.getParameter("InvoiceUid")),
-           sPrintLanguage = checkString(request.getParameter("PrintLanguage"));
+           sPrintLanguage = checkString(request.getParameter("PrintLanguage")),
+       	   sProforma      = checkString(request.getParameter("Proforma"));
     ByteArrayOutputStream baosPDF = null;
 
     try{
@@ -29,10 +30,10 @@
                 	e.printStackTrace();
                 }
             }
-        	pdfGenerator = new PDFPatientInvoiceReceiptGeneratorCPLR(activeUser,invoice.getPatient(),sProject,sPrintLanguage);
+        	pdfGenerator = new PDFPatientInvoiceReceiptGeneratorCPLR(activeUser,invoice.getPatient(),sProject,sPrintLanguage,sProforma);
         }
         else{
-        	pdfGenerator = new PDFPatientInvoiceReceiptGenerator(activeUser,invoice.getPatient(),sProject,sPrintLanguage);
+        	pdfGenerator = new PDFPatientInvoiceReceiptGenerator(activeUser,invoice.getPatient(),sProject,sPrintLanguage,sProforma);
         }
         baosPDF = pdfGenerator.generatePDFDocumentBytes(request,sInvoiceUid);
 

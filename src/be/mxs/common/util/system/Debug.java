@@ -97,8 +97,7 @@ public class Debug {
     
     //--- PRINT STACKTRACE ------------------------------------------------------------------------
     public static void printStackTrace(Exception e){
-        if(printStackTrace){
-            System.out.println("\n********************** ERROR in OpenClinic ["+getTimeString()+"] **********************");
+        if(enabled){
             e.printStackTrace();
         }
     }

@@ -28,6 +28,7 @@ import be.mxs.common.util.system.Translate;
 import be.openclinic.knowledge.ATCClass;
 import be.openclinic.medical.ChronicMedication;
 import be.openclinic.medical.Prescription;
+import be.openclinic.system.SH;
 
 public class Utils {
 
@@ -36,7 +37,7 @@ public class Utils {
 		try{
 			HttpClient client = new HttpClient();
 			//First retrieve all rxcui for the term
-			String url = MedwanQuery.getInstance().getConfigString("NLM_DDI_URL_FindRxNormCode","http://rxnav.nlm.nih.gov/REST/approximateTerm");
+			String url = MedwanQuery.getInstance().getConfigString("NLM_DDI_URL_FindRxNormCode","https://rxnav.nlm.nih.gov/REST/approximateTerm");
 			GetMethod method = new GetMethod(url);
 			method.setRequestHeader("Content-type","text/xml; charset=windows-1252");
 			NameValuePair nvp1= new NameValuePair("term",sKey);
@@ -54,7 +55,7 @@ public class Utils {
 					Element candidate = (Element)candidates.next();
 					if(candidate.elementText("rxcui")!=null){
 						String rxcui=candidate.elementText("rxcui");
-						url = MedwanQuery.getInstance().getConfigString("NLM_DDI_URL_FindRxNormProperties","http://rxnav.nlm.nih.gov/REST/rxcui/"+rxcui+"/properties");
+						url = MedwanQuery.getInstance().getConfigString("NLM_DDI_URL_FindRxNormProperties","https://rxnav.nlm.nih.gov/REST/rxcui/"+rxcui+"/properties");
 						method = new GetMethod(url);
 						method.setRequestHeader("Content-type","text/xml; charset=windows-1252");
 						statusCode = client.executeMethod(method);
@@ -83,7 +84,7 @@ public class Utils {
 		try{
 			HttpClient client = new HttpClient();
 			//First retrieve all rxcui for the term
-			String url = MedwanQuery.getInstance().getConfigString("NLM_DDI_URL_FindRxNormCodeForATC","http://rxnav.nlm.nih.gov/REST/rxcui");
+			String url = MedwanQuery.getInstance().getConfigString("NLM_DDI_URL_FindRxNormCodeForATC","https://rxnav.nlm.nih.gov/REST/rxcui");
 			GetMethod method = new GetMethod(url);
 			method.setRequestHeader("Content-type","text/xml; charset=windows-1252");
 			NameValuePair nvp1= new NameValuePair("idtype","ATC");
@@ -113,7 +114,7 @@ public class Utils {
 			HttpClient client = new HttpClient();
 			//First retrieve all rxcui for the term
 			Hashtable rxcuis = new Hashtable();
-			String url = MedwanQuery.getInstance().getConfigString("NLM_DDI_URL_FindRxNormCode","http://rxnav.nlm.nih.gov/REST/approximateTerm");
+			String url = MedwanQuery.getInstance().getConfigString("NLM_DDI_URL_FindRxNormCode","https://rxnav.nlm.nih.gov/REST/approximateTerm");
 			GetMethod method = new GetMethod(url);
 			method.setRequestHeader("Content-type","text/xml; charset=windows-1252");
 			NameValuePair nvp1= new NameValuePair("term",sKey);
@@ -138,7 +139,7 @@ public class Utils {
 			Enumeration e = rxcuis.keys();
 			while(e.hasMoreElements()){
 				String rxcui=(String)e.nextElement();
-				url = MedwanQuery.getInstance().getConfigString("NLM_DDI_URL_FindRxNormProperties","http://rxnav.nlm.nih.gov/REST/rxcui/"+rxcui+"/properties");
+				url = MedwanQuery.getInstance().getConfigString("NLM_DDI_URL_FindRxNormProperties","https://rxnav.nlm.nih.gov/REST/rxcui/"+rxcui+"/properties");
 				method = new GetMethod(url);
 				method.setRequestHeader("Content-type","text/xml; charset=windows-1252");
 				statusCode = client.executeMethod(method);
@@ -172,7 +173,7 @@ public class Utils {
 			}
 			try{
 				HttpClient client = new HttpClient();
-				String url = MedwanQuery.getInstance().getConfigString("NLM_DDI_URL_FindRxNormInteraction","http://rxnav.nlm.nih.gov/REST/interaction/list.xml?rxcuis="+rxcuis);
+				String url = MedwanQuery.getInstance().getConfigString("NLM_DDI_URL_FindRxNormInteraction","https://rxnav.nlm.nih.gov/REST/interaction/list.xml?rxcuis="+rxcuis);
 				GetMethod method = new GetMethod(url);
 				method.setRequestHeader("Content-type","text/xml; charset=windows-1252");
 				int statusCode = client.executeMethod(method);
@@ -233,11 +234,12 @@ public class Utils {
 		}
 		try{
 			HttpClient client = new HttpClient();
-			String url = MedwanQuery.getInstance().getConfigString("NLM_DDI_URL_FindRxNormInteraction","http://rxnav.nlm.nih.gov/REST/interaction/list.xml?rxcuis="+rxcuis);
+			String url = MedwanQuery.getInstance().getConfigString("NLM_DDI_URL_FindRxNormInteraction","https://rxnav.nlm.nih.gov/REST/interaction/list.xml?rxcuis=")+rxcuis;
 			GetMethod method = new GetMethod(url);
 			method.setRequestHeader("Content-type","text/xml; charset=windows-1252");
 			int statusCode = client.executeMethod(method);
-			BufferedReader br = new BufferedReader(new StringReader(method.getResponseBodyAsString()));
+			String sResp = method.getResponseBodyAsString();
+			BufferedReader br = new BufferedReader(new StringReader(sResp));
 			SAXReader reader=new SAXReader(false);
 			org.dom4j.Document document=reader.read(br);
 			Element root = document.getRootElement();
@@ -283,7 +285,7 @@ public class Utils {
 	public static boolean hasDrugDrugInteractions(String rxcuis){
 		try{
 			HttpClient client = new HttpClient();
-			String url = MedwanQuery.getInstance().getConfigString("NLM_DDI_URL_FindRxNormInteraction","http://rxnav.nlm.nih.gov/REST/interaction/list.xml?rxcuis="+rxcuis);
+			String url = MedwanQuery.getInstance().getConfigString("NLM_DDI_URL_FindRxNormInteraction","https://rxnav.nlm.nih.gov/REST/interaction/list.xml?rxcuis="+rxcuis);
 			GetMethod method = new GetMethod(url);
 			method.setRequestHeader("Content-type","text/xml; charset=windows-1252");
 			int statusCode = client.executeMethod(method);
@@ -372,7 +374,7 @@ public class Utils {
 		}
 		try{
 			HttpClient client = new HttpClient();
-			String url = MedwanQuery.getInstance().getConfigString("NLM_DDI_URL_FindRxNormInteraction","http://rxnav.nlm.nih.gov/REST/interaction/list.xml?rxcuis="+rxcuis);
+			String url = MedwanQuery.getInstance().getConfigString("NLM_DDI_URL_FindRxNormInteraction","https://rxnav.nlm.nih.gov/REST/interaction/list.xml?rxcuis="+rxcuis);
 			GetMethod method = new GetMethod(url);
 			method.setRequestHeader("Content-type","text/xml; charset=windows-1252");
 			int statusCode = client.executeMethod(method);
@@ -448,6 +450,15 @@ public class Utils {
 					String productstockuid = rs.getString("oc_list_productstockuid");
 					ProductStock productStock = ProductStock.get(productstockuid);
 					if(productStock!=null && productStock.getProduct()!=null && productStock.getProduct().getRxnormcode()!=null && rxcuis.indexOf(productStock.getProduct().getRxnormcode().replaceAll(";", "+")+"+")<0){
+						try {
+							String[] codes = productStock.getProduct().getRxnormcode().replaceAll(";", "+").split("+");
+							for(int n=0;n<codes.length;n++) {
+								long l = Long.parseLong(codes[n]);
+							}
+						}
+						catch(Exception e) {
+							continue;
+						}
 						rxcuis+=productStock.getProduct().getRxnormcode().replaceAll(";", "+")+"+";
 					}
 				}

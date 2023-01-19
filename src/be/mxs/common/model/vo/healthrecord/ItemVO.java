@@ -183,7 +183,7 @@ public class ItemVO implements Serializable, IIdentifiable, Comparable {
         Element item = DocumentHelper.createElement("Item");
         item.addElement("ItemId").addText(itemId+"");
         item.addElement("ItemType").addText(type);
-        item.addElement("ItemValue").addText(value);
+        item.addElement("ItemValue").addText(SH.xe(value));
         item.addElement("ItemDate").addText(ScreenHelper.fullDateFormatSS.format(date));
         return item;
     }

@@ -233,7 +233,7 @@ public class GHBNetwork {
 			}
 		}
 		catch(Exception e) {
-			e.printStackTrace();
+			Debug.printStackTrace(e);
 		}
 	}
 	

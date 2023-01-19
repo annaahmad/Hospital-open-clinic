@@ -66,6 +66,7 @@ public class Translate {
 	        String everything = sb.toString();
 	        br = new BufferedReader(new StringReader(everything));
 	 		SAXReader reader=new SAXReader(false);
+	 		System.out.println(everything);
 			org.dom4j.Document document=reader.read(br);
 			Element root = document.getRootElement(); //tmx element
 			if(root.getName().equalsIgnoreCase("tmx")){

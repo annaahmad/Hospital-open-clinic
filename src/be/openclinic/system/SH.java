@@ -29,6 +29,7 @@ import java.util.Locale;
 
 import be.mxs.common.model.vo.healthrecord.TransactionVO;
 import be.mxs.common.util.db.MedwanQuery;
+import be.mxs.common.util.system.HTMLEntities;
 import be.mxs.common.util.system.ScreenHelper;
 import be.openclinic.knowledge.SPT;
 import net.admin.AdminPerson;
@@ -45,7 +46,11 @@ public class SH extends ScreenHelper {
 	    return SCANDIR_BASE+"/"+MedwanQuery.getInstance().getConfigString("scanDirectoryMonitor_dirTo","to");
 	}
 	
-	public static Hashtable getMultipartFormParameters(HttpServletRequest request) {
+    public static String xe(String s){
+    	return HTMLEntities.xmlencode(ScreenHelper.checkString(s));
+    }
+
+    public static Hashtable getMultipartFormParameters(HttpServletRequest request) {
 		Hashtable parameters = new Hashtable();
 		if(ServletFileUpload.isMultipartContent(request)) {
 		    FileItemFactory factory = new DiskFileItemFactory();

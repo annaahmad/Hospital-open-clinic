@@ -9,7 +9,7 @@
 			String[] keys = sKey.split(";");
 			for(int n=0;n<keys.length;n++){
 				Hashtable rxcuis = new Hashtable();
-				String url = MedwanQuery.getInstance().getConfigString("NLM_DDI_URL_FindRxNormInteraction","http://rxnav.nlm.nih.gov/REST/interaction/interaction.xml");
+				String url = MedwanQuery.getInstance().getConfigString("NLM_DDI_URL_FindRxNormInteraction","https://rxnav.nlm.nih.gov/REST/interaction/interaction.xml");
 				GetMethod method = new GetMethod(url);
 				method.setRequestHeader("Content-type","text/xml; charset=windows-1252");
 				NameValuePair nvp1= new NameValuePair("rxcui",keys[0]);
@@ -79,7 +79,7 @@
 			%>
 			<tr>
 				<td class='admin'><%=code.split(";")[0]%></td>
-				<td class='admin2' valign='top'><%=Translate.translate("en",checkString(request.getParameter("cbtranslate")).equalsIgnoreCase("1")?sWebLanguage:"en",code.split(";")[1])%></td>
+				<td class='admin2' valign='top'><%=GoogleTranslate.translate(MedwanQuery.getInstance().getConfigString("googleTranslateKey","AIzaSyAPk18gciaKdwl3Z2rmFSog4ZwBbmfhByg"),"en", sWebLanguage,code.split(";")[1]) %></td>
 			</tr>
 			
 			<%	

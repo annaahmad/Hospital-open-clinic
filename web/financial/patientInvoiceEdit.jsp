@@ -824,7 +824,7 @@
                         	%>
                         </select>
 						<%if(!isInsuranceAgent){ %>
-                        <input accesskey="R" class="button" type="button" name="buttonPrint" value='<%=getTranNoLink("Web","print",sWebLanguage)%>' onclick="doPrintPdf('<%=patientInvoice.getUid()%>');">
+                        	<input accesskey="R" class="button" type="button" name="buttonPrint" value='<%=getTranNoLink("Web","print",sWebLanguage)%>' onclick="doPrintPdf('<%=patientInvoice.getUid()%>');">
                         <%}
 							boolean bInsurerAllowsProforma=false;
 				        	String[] insurers = patientInvoice.getInsurerIds().split(",");
@@ -842,6 +842,11 @@
 	                        	<input class="button" type="button" name="buttonPrintDebit" value='<%=getTranNoLink("invoice","debetnote",sWebLanguage)%>' onclick="doPrintDebitNotePdf('<%=patientInvoice.getUid()%>');">
                         	<%
 	                    	}
+                        	if(!isInsuranceAgent && MedwanQuery.getInstance().getConfigInt("printPDFreceiptenabled",1)==1){
+                        	%>
+                        		<input accesskey="I" class="button" type="button" name="buttonPrint" value='<%=getTranNoLink("Web","print.proforma.receipt.pdf",sWebLanguage)%>' onclick="doPrintProformaReceiptPdf('<%=patientInvoice.getUid()%>');">
+                        	<%
+                        	}
 						}
                         	if(!isInsuranceAgent && MedwanQuery.getInstance().getConfigInt("javaPOSenabled",0)==1){
                         %>
@@ -1408,15 +1413,19 @@
    	        window.open(url,"PatientInvoicePdf<%=new java.util.Date().getTime()%>","height=600,width=900,toolbar=yes,status=no,scrollbars=yes,resizable=yes,menubar=yes");
    	    }
    		
-	    function doPrintPatientReceiptPdf(invoiceUid){
-	        if (("<%=sClosed%>"!="closed")&&("<%=sClosed%>"!="canceled")){
-	            alert("<%=getTranNoLink("web","closetheinvoicefirst",sWebLanguage)%>");
-	        }
-	        else {
-	            var url = "<c:url value='/financial/createPatientInvoiceReceiptPdf.jsp'/>?InvoiceUid="+invoiceUid+"&ts=<%=getTs()%>&PrintLanguage="+EditForm.PrintLanguage.value;
-	            window.open(url,"PatientInvoicePdf<%=new java.util.Date().getTime()%>","height=600,width=900,toolbar=yes,status=no,scrollbars=yes,resizable=yes,menubar=yes");
-            }
-	    }
+   	   	function doPrintPatientReceiptPdf(invoiceUid){
+   	 	    if (("<%=sClosed%>"!="closed")&&("<%=sClosed%>"!="canceled")){
+   	 	        alert("<%=getTranNoLink("web","closetheinvoicefirst",sWebLanguage)%>");
+   	 	    }
+   	 	    else {
+   	 	        var url = "<c:url value='/financial/createPatientInvoiceReceiptPdf.jsp'/>?InvoiceUid="+invoiceUid+"&ts=<%=getTs()%>&PrintLanguage="+EditForm.PrintLanguage.value;
+   	 	        window.open(url,"PatientInvoicePdf<%=new java.util.Date().getTime()%>","height=600,width=900,toolbar=yes,status=no,scrollbars=yes,resizable=yes,menubar=yes");
+   	         }
+   	 	}
+		function doPrintProformaReceiptPdf(invoiceUid){
+		    var url = "<c:url value='/financial/createPatientInvoiceReceiptPdf.jsp'/>?Proforma=yes&InvoiceUid="+invoiceUid+"&ts=<%=getTs()%>&PrintLanguage="+EditForm.PrintLanguage.value;
+			window.open(url,"PatientInvoicePdf<%=new java.util.Date().getTime()%>","height=600,width=900,toolbar=yes,status=no,scrollbars=yes,resizable=yes,menubar=yes");
+		}
 		
 	    function doModifyInvoice(invoiceuid){
 		    var params = '';
