@@ -300,11 +300,20 @@
     if(sPurchaseDate.length() > 0){
         asset.purchaseDate = ScreenHelper.parseDate(sPurchaseDate);
     }
+    else{
+    	asset.purchaseDate = null;
+    }
     if(sLoanDate.length() > 0){
         asset.loanDate = ScreenHelper.parseDate(sLoanDate);
     }
+    else{
+    	asset.loanDate = null;
+    }
     if(sSaleDate.length() > 0){
         asset.saleDate = ScreenHelper.parseDate(sSaleDate);
+    }
+    else{
+    	asset.saleDate = null;
     }
 
     asset.code = sCode;

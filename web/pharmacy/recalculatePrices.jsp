@@ -53,7 +53,7 @@
 				if(product!=null){
 					prestation = Prestation.get(product.getPrestationcode());
 					if(prestation!=null){
-						double newprice = Double.parseDouble(new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#.00")).format(product.getLastYearsAveragePrice()*(100+product.getMargin())/100).replaceAll(",", "."));
+						double newprice = SH.getPriceToDouble(new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#.00")).format(product.getLastYearsAveragePrice()*(100+product.getMargin())/100));
 						double resultprice = newprice;
 						double oldprice = prestation.getPrice();
 						

@@ -2210,7 +2210,7 @@
         	z.printStackTrace();
         }
     }
-  /*  else if("pbf.burundi.admissionslist".equalsIgnoreCase(sQueryType)){
+    else if("pbf.burundi.admissionslist".equalsIgnoreCase(sQueryType)){
         try{
     	Connection loc_conn = MedwanQuery.getInstance().getLongOpenclinicConnection();
 		StringBuffer sResult = new StringBuffer();
@@ -2445,10 +2445,7 @@
         catch(Exception z){
         	z.printStackTrace();
         }
-    }*/
-  
-  
-  //ARMEL
+    }
   
   else if("pbf.rdc.admissionlist".equalsIgnoreCase(sQueryType)){
         try{

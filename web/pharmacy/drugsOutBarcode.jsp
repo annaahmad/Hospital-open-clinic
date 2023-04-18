@@ -232,7 +232,13 @@
         	  myautocompleter.activate();
           }
         }
-        checkForInteractions();
+        <%
+      	if(MedwanQuery.getInstance().getConfigInt("enableRxNorm",0)==1){
+      %>
+      		checkForInteractions();
+      <%
+      	}
+      %>
       }
     });
     document.getElementById('drugbarcode').focus();  
@@ -310,7 +316,13 @@
             document.getElementById("quantity").value=0;
             doAdd("yes");
         }
-        checkForInteractions();
+        <%
+      	if(MedwanQuery.getInstance().getConfigInt("enableRxNorm",0)==1){
+      %>
+      		checkForInteractions();
+      <%
+      	}
+      %>
       }
     });
     document.getElementById('drugbarcode').focus();

@@ -608,15 +608,17 @@
                             <input type="text" class="text" name="EditInsurarAllowedReductions" size="50" maxChars="255" value="<%=checkString(insurar.getAllowedReductions())%>">%
                         </td>
                     </tr>
-                    <tr>
-                        <td class="admin"><%=getTran(request,"web","accreditationmechanism",sWebLanguage)%></td>
-                        <td class="admin2">
-                            <select class="text" name="EditInsurarAccreditationMechanism">
-                                <option value=""></option>
-                                <%=ScreenHelper.writeSelect(request,"insurance.accreditationmechanisms",checkString(insurar.getAccreditationMechanism()),sWebLanguage)%>
-                            </select>
-                        </td>
-                    </tr>
+                    <%if(SH.getLabelIds("insurance.accreditationmechanisms", sWebLanguage).size()>0){%>
+	                    <tr>
+	                        <td class="admin"><%=getTran(request,"web","accreditationmechanism",sWebLanguage)%></td>
+	                        <td class="admin2">
+	                            <select class="text" name="EditInsurarAccreditationMechanism">
+	                                <option value=""></option>
+	                                <%=ScreenHelper.writeSelect(request,"insurance.accreditationmechanisms",checkString(insurar.getAccreditationMechanism()),sWebLanguage)%>
+	                            </select>
+	                        </td>
+	                    </tr>
+                    <%} %>
                     <tr>
                     	<td colspan='2'>
 	                    	<table width='100%'>

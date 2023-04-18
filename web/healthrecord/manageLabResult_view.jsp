@@ -187,7 +187,7 @@
                     		if(analysis.getLimitedVisibility()>0 && !activeUser.getAccessRight("labos.limitedvisibility.select")){
                     			result = getTran(request,"web","invisible",sWebLanguage);	
                     		}
-                    		else if(requestedLabAnalysis.getFinalvalidation()>0){
+                    		else if(requestedLabAnalysis.getFinalvalidationdatetime()!=null){
 	                    		result = requestedLabAnalysis.getResultValue();
 	                    	}
 	                    	else{

@@ -529,6 +529,12 @@
 			                	if(SH.ci("enableMobilePayment",0)==1 && activeUser.getAccessRight("financial.mobilepayment.select")){
 			                        %><button type='button' style='vertical-align: middle' class='button' name="buttonMoMo" onclick="doMobilePaymentMTN();"><img height='16px' style='vertical-align: middle' src='<%=sCONTEXTPATH%>/_img/themes/default/mtnmomopay.png'/></button><%
 			                	}
+			                	if(SH.ci("enableOrangeMoney",0)==1 && activeUser.getAccessRight("financial.mobilepayment.select")){
+			                        %><button type='button' style='vertical-align: middle' class='button' name="buttonOrangeMoney" onclick="doMobilePaymentOrange();"><img height='16px' style='vertical-align: middle' src='<%=sCONTEXTPATH%>/_img/themes/default/orangemoney.png'/></button><%
+			                	}
+			                	if(SH.ci("enableOrangeMoney",0)==2 && activeUser.getAccessRight("financial.mobilepayment.select")){
+			                        %><button type='button' style='vertical-align: middle' class='button' name="buttonOrangeMoney" onclick="doMobilePaymentOrangeEasy();"><img height='16px' style='vertical-align: middle' src='<%=sCONTEXTPATH%>/_img/themes/default/orangemoney.png'/></button><%
+			                	}
 			            	}
 			            	else{
 			            	    %><font color="red"><%=getTran(request,"web","nowicketassignedtouser",sWebLanguage)%></font><%
@@ -588,6 +594,16 @@
    
   function doMobilePaymentMTN(){
 	  var url = "financial/mobilemoney/mobileMoneyPayment.jsp&invoiceid="+document.getElementById("EditCreditInvoiceUid").value+"&operator=MTN&amount="+document.getElementById("EditCreditAmount").value+"&currency=<%=SH.cs("currency","RWF")%>&ts=<%=getTs()%>";
+	  openPopup(url);
+  }
+  
+  function doMobilePaymentOrange(){
+	  var url = "financial/mobilemoney/mobileMoneyPayment.jsp&invoiceid="+document.getElementById("EditCreditInvoiceUid").value+"&operator=Orange&amount="+document.getElementById("EditCreditAmount").value+"&currency=<%=SH.cs("currency","RWF")%>&ts=<%=getTs()%>";
+	  openPopup(url);
+  }
+  
+  function doMobilePaymentOrangeEasy(){
+	  var url = "financial/mobilemoney/mobileMoneyPayment.jsp&invoiceid="+document.getElementById("EditCreditInvoiceUid").value+"&operator=OrangeEasy&amount="+document.getElementById("EditCreditAmount").value+"&currency=<%=SH.cs("currency","RWF")%>&ts=<%=getTs()%>";
 	  openPopup(url);
   }
   

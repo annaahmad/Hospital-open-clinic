@@ -46,16 +46,16 @@
 					Iterator<Element> iOrgunits = orgunits.elementIterator("organisationUnit");
 					while(iOrgunits.hasNext()){
 						Element orgunit = iOrgunits.next();
-						sM.put(new String(orgunit.attributeValue("name").getBytes(),"UTF-8"),orgunit);
+						sM.put(new String(orgunit.attributeValue("name").getBytes()),orgunit);
 					}
 					Iterator<String> iSorts = sM.keySet().iterator();
 					while(iSorts.hasNext()){
 						Element orgunit = sM.get(iSorts.next());
-						if(organisationunitname.length()>0 && !new String(orgunit.attributeValue("id").getBytes(),"UTF-8").equals(organisationunitname) && !new String(orgunit.attributeValue("name").getBytes(),"UTF-8").toLowerCase().contains(organisationunitname.toLowerCase())){
+						if(organisationunitname.length()>0 && !new String(orgunit.attributeValue("id").getBytes()).equals(organisationunitname) && !new String(orgunit.attributeValue("name").getBytes()).toLowerCase().contains(organisationunitname.toLowerCase())){
 							continue;
 						}
 						out.println("<tr>");
-						out.println("<td class='admin'><b>"+new String(orgunit.attributeValue("name").getBytes(),"UTF-8")+"</b></td>");
+						out.println("<td class='admin'><b>"+new String(orgunit.attributeValue("name").getBytes())+"</b></td>");
 						out.println("<td class='admin2' width='1%' id='"+orgunit.attributeValue("id")+"'>"+orgunit.attributeValue("id")+"&nbsp;</td><td class='admin2'><input class='button' type='button' value='"+getTranNoLink("web","select",sWebLanguage)+"' onclick='selectOrgUnit(\""+orgunit.attributeValue("id")+"\")'/></td>");
 						out.println("</tr>");
 					}
@@ -78,16 +78,17 @@
 						Iterator<Element> iDatasets = datasets.elementIterator("dataSet");
 						while(iDatasets.hasNext()){
 							Element dataset = iDatasets.next();
-							sM.put(new String(dataset.attributeValue("name").getBytes(),"UTF-8"),dataset);
+							sM.put(new String(dataset.attributeValue("name").getBytes()),dataset);
+							System.out.println(new String(dataset.attributeValue("name").getBytes()));
 						}
 						Iterator<String> iSorts = sM.keySet().iterator();
 						while(iSorts.hasNext()){
 							Element dataset = sM.get(iSorts.next());
-							if(datasetname.length()>0 && !new String(dataset.attributeValue("name").getBytes(),"UTF-8").toLowerCase().contains(datasetname.toLowerCase())){
+							if(datasetname.length()>0 && !new String(dataset.attributeValue("name").getBytes()).toLowerCase().contains(datasetname.toLowerCase())){
 								continue;
 							}
 							out.println("<tr>");
-							out.println("<td class='admin'><b>"+new String(dataset.attributeValue("name").getBytes(),"UTF-8")+"</b></td>");
+							out.println("<td class='admin'><b>"+new String(dataset.attributeValue("name").getBytes())+"</b></td>");
 							out.println("<td class='admin2'><a href='javascript:getDataSet(\""+dataset.attributeValue("id")+"\");'>"+dataset.attributeValue("id")+"</a></td>");
 							out.println("</tr>");
 						}
@@ -103,14 +104,14 @@
 					Element root = document.getRootElement();
 					out.println("<tr class='admin'>");
 					out.println("<td>dataSet</td>");
-					out.println("<td>"+new String(root.attributeValue("name").getBytes(),"UTF-8")+"</td>");
+					out.println("<td>"+new String(root.attributeValue("name").getBytes())+"</td>");
 					out.println("<td><a href='javascript:getDataSet(\""+root.attributeValue("id")+"\");'>"+root.attributeValue("id")+"</a></td>");
 					out.println("</tr>");
 					Element categoryCombo = root.element("categoryCombo");
 					if(categoryCombo!=null){
 						out.println("<tr>");
 						out.println("<td class='admin'>categoryCombo</td>");
-						out.println("<td class='admin2'><b>"+new String(categoryCombo.attributeValue("name").getBytes(),"UTF-8")+"</b></td>");
+						out.println("<td class='admin2'><b>"+new String(categoryCombo.attributeValue("name").getBytes())+"</b></td>");
 						out.println("<td class='admin2'><a href='javascript:getCategoryCombo(\""+categoryCombo.attributeValue("id")+"\");'>"+categoryCombo.attributeValue("id")+"</a></td>");
 						out.println("</tr>");
 					}
@@ -120,21 +121,21 @@
 						Iterator<Element> idataSetElements = dataSetElements.elementIterator("dataSetElement");
 						while(idataSetElements.hasNext()){
 							Element dataElement = idataSetElements.next().element("dataElement");
-							sM.put(new String(dataElement.attributeValue("name").getBytes(),"UTF-8"),dataElement);
+							sM.put(new String(dataElement.attributeValue("name").getBytes()),dataElement);
 						}
 						Iterator<String> sI = sM.keySet().iterator();
 						while(sI.hasNext()){
 							Element dataElement = sM.get(sI.next());
 							out.println("<tr>");
 							out.println("<td class='admin'>dataElement</td>");
-							out.println("<td class='admin2'><b>"+new String(dataElement.attributeValue("name").getBytes(),"UTF-8")+"</b></td>");
+							out.println("<td class='admin2'><b>"+new String(dataElement.attributeValue("name").getBytes())+"</b></td>");
 							out.println("<td class='admin2'>"+dataElement.attributeValue("id")+"</td>");
 							out.println("</tr>");
 							categoryCombo = dataElement.element("categoryCombo");
 							if(categoryCombo!=null){
 								out.println("<tr>");
 								out.println("<td class='admin'></td>");
-								out.println("<td class='admin2'><i>categoryCombo: "+new String(categoryCombo.attributeValue("name").getBytes(),"UTF-8")+"</i></td>");
+								out.println("<td class='admin2'><i>categoryCombo: "+new String(categoryCombo.attributeValue("name").getBytes())+"</i></td>");
 								out.println("<td class='admin2'><i><a href='javascript:getCategoryCombo(\""+categoryCombo.attributeValue("id")+"\");'>"+categoryCombo.attributeValue("id")+"</a></i></td>");
 								out.println("</tr>");
 							}
@@ -146,7 +147,7 @@
 					Element root = document.getRootElement();
 					out.println("<tr class='admin'>");
 					out.println("<td>categoryCombo</td>");
-					out.println("<td>"+new String(root.attributeValue("name").getBytes(),"UTF-8")+"</td>");
+					out.println("<td>"+new String(root.attributeValue("name").getBytes())+"</td>");
 					out.println("<td><a href='javascript:getCategoryCombo(\""+root.attributeValue("id")+"\");'>"+root.attributeValue("id")+"</a></td>");
 					out.println("</tr>");
 					Element categoryOptionCombos = root.element("categoryOptionCombos");
@@ -155,14 +156,14 @@
 						Iterator <Element>iCategoryOptionCombo = categoryOptionCombos.elementIterator("categoryOptionCombo");
 						while(iCategoryOptionCombo.hasNext()){
 							Element categoryOptionCombo = iCategoryOptionCombo.next();
-							sM.put(new String(categoryOptionCombo.attributeValue("name").getBytes(),"UTF-8"),categoryOptionCombo);
+							sM.put(new String(categoryOptionCombo.attributeValue("name").getBytes()),categoryOptionCombo);
 						}
 						Iterator<String> iS = sM.keySet().iterator();
 						while(iS.hasNext()){
 							Element categoryOptionCombo = sM.get(iS.next());
 							out.println("<tr>");
 							out.println("<td class='admin'>categoryOptionCombo</td>");
-							out.println("<td class='admin2'><b>"+new String(categoryOptionCombo.attributeValue("name").getBytes(),"UTF-8")+"</b></td>");
+							out.println("<td class='admin2'><b>"+new String(categoryOptionCombo.attributeValue("name").getBytes())+"</b></td>");
 							out.println("<td class='admin2'>"+categoryOptionCombo.attributeValue("id")+"</td>");
 							out.println("</tr>");
 						}

@@ -79,7 +79,7 @@
 			%>
 			<tr>
 				<td class='admin'><%=code.split(";")[0]%></td>
-				<td class='admin2' valign='top'><%=GoogleTranslate.translate(MedwanQuery.getInstance().getConfigString("googleTranslateKey","AIzaSyAPk18gciaKdwl3Z2rmFSog4ZwBbmfhByg"),"en", sWebLanguage,code.split(";")[1]) %></td>
+				<td class='admin2' valign='top'><%=SH.ci("translateInteractions",0)==0?code.split(";")[1]:GoogleTranslate.translate(MedwanQuery.getInstance().getConfigString("googleTranslateKey","AIzaSyAPk18gciaKdwl3Z2rmFSog4ZwBbmfhByg"),"en", sWebLanguage,code.split(";")[1]) %></td>
 			</tr>
 			
 			<%	

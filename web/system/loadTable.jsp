@@ -1,3 +1,7 @@
+<%@page import="org.apache.commons.lang3.StringEscapeUtils"%>
+<%@page import="org.unbescape.html.HtmlEscape"%>
+<%@page import="java.nio.charset.Charset"%>
+<%@page import="be.openclinic.assets.Asset"%>
 <%@page import="be.mxs.common.util.io.MessageReader,
                 be.mxs.common.util.io.MessageReaderMedidoc,
                 java.util.*,be.openclinic.finance.*,be.openclinic.pharmacy.*,
@@ -563,6 +567,98 @@
 						}
 						conn.close();
 					}
+					else if(mrequest.getParameter("filetype").equalsIgnoreCase("assetscsv")){
+						if(mrequest.getParameter("erase")!=null){
+							ObjectCacheFactory.getInstance().resetObjectCache();
+							Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+							PreparedStatement ps = conn.prepareStatement("delete from oc_assets");
+							ps.execute();
+							ps.close();
+							ps = conn.prepareStatement("delete from oc_assetshistory");
+							ps.execute();
+							ps.close();
+							ps = conn.prepareStatement("delete from oc_maintenanceplans");
+							ps.execute();
+							ps.close();
+							ps = conn.prepareStatement("delete from oc_maintenanceplanshistory");
+							ps.execute();
+							ps.close();
+							ps = conn.prepareStatement("delete from oc_maintenanceoperations");
+							ps.execute();
+							ps.close();
+							ps = conn.prepareStatement("delete from oc_maintenanceoperationshistory");
+							ps.execute();
+							ps.close();
+							conn.close();
+					        UpdateSystem systemUpdate = new UpdateSystem();
+					        systemUpdate.updateCounters();
+						}	
+						String code,name,serial,service,status,startdate,supplier,funding,price,currency,details,brand,model,nomenclature;
+						String sDateFormat=MedwanQuery.getInstance().getConfigString("assetImportDateFormat","yyyyMMdd");
+		                File f = new File(upBean.getFolderstore()+"/"+sFileName);
+		                Charset inputCharset = Charset.forName("ISO-8859-1");
+						BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(f), inputCharset));
+						lines=0;
+						int loaded=0;
+						Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+						while(reader.ready()){
+							lines++;
+							String s =  reader.readLine();
+							String[] line = s.split(";");
+							if(line[0].equalsIgnoreCase("code") || line.length<14){
+								SH.syslog("1: "+lines+" | "+s);
+								continue;
+							}
+							code		=line[0].trim().toLowerCase();
+							name		=StringEscapeUtils.escapeXml(line[1].trim()).toUpperCase().replaceAll("&APOS;","´");
+							serial		=line[2].trim();
+							service		=line[3].trim().toLowerCase();
+							status		=line[4].trim();
+							startdate	=line[5].trim();
+							supplier	=line[6].trim();
+							funding		=line[7].trim().toUpperCase();
+							price		=line[8].trim();
+							currency	=line[9].trim();
+							details		=line[10].trim();
+							brand		=line[11].trim();
+							model		=line[12].trim();
+							nomenclature=line[13].trim().toUpperCase();
+							if(name.length()*service.length()*nomenclature.length()==0){
+								SH.syslog("2: "+lines+" | "+s);
+								continue;	
+							}
+							if(Service.getService(service)==null){
+								SH.syslog("3: "+lines+" | "+s);
+								continue;	
+							}
+							
+							Asset asset = new Asset();
+							asset.setUid("-1");
+							asset.code			= code;
+							asset.description 	= name;
+							asset.serialnumber	= serial;
+							asset.serviceuid	= service;
+							asset.comment7		= status;
+							try{
+								asset.comment12	= SH.formatDate(new SimpleDateFormat(sDateFormat).parse(startdate));
+							}
+							catch(Exception e){}
+							asset.supplierUid	= supplier;
+							asset.comment6		= funding;
+							try{
+								asset.purchasePrice	= Double.parseDouble(price);
+							}
+							catch(Exception e){}
+							asset.comment18		= currency;
+							asset.comment8		= details;
+							asset.comment2		= brand;
+							asset.comment10		= model;
+							asset.nomenclature	= nomenclature;
+							asset.store(activeUser.userid);
+							loaded++;
+						}
+						message="<h3>"+loaded+" " +getTran(request,"web","records.loaded",sWebLanguage)+"</h3>";
+					}
 					else if(mrequest.getParameter("filetype").equalsIgnoreCase("pharmacyloadcsv")){
 						//Imports can only be done to the central warehouse in OpenClinic
 						if(MedwanQuery.getInstance().getConfigString("PEXOpenClinicServiceStock","").length()==0){
@@ -1038,6 +1134,7 @@
 						<option value="labelscsv"><%=getTran(request,"web","labels.csv",sWebLanguage)%></option>
 						<option value="userscsv"><%=getTran(request,"web","userscsv",sWebLanguage)%></option>
 						<option value="stockscsv"><%=getTran(request,"web","stockscsv",sWebLanguage)%></option>
+						<option value="assetscsv"><%=getTran(request,"web","assetscsv",sWebLanguage)%></option>
 						<option value="labxml"><%=getTran(request,"web","lab.xml",sWebLanguage)%></option>
 						<option value="drugsxml"><%=getTran(request,"web","drugs.xml",sWebLanguage)%></option>
 						<option value="keywordsxml"><%=getTran(request,"web","keywords.xml",sWebLanguage)%></option>
@@ -1074,6 +1171,9 @@
 		}
 		else if(document.getElementById("filetype").value=="stockscsv"){
 			document.getElementById("structure").innerHTML="Required structure (* are mandatory):<br/><b>Code* ; Drugname* ; Form* ; Dispensing quantity*, Stock*, Stock level, Minimum level, Maximum level, Group, Category</b>";
+		}
+		else if(document.getElementById("filetype").value=="assetscsv"){
+			document.getElementById("structure").innerHTML="Required structure (* are mandatory):<br/><b>Code* ; Name* ; Serial ; Service*, Status, Startdate, Supplier, Funding, Price, Currency, Details, Brand, Model, Nomenclature*</b>";
 		}
 		else {
 			document.getElementById("structure").innerHTML="";

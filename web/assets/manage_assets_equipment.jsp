@@ -346,7 +346,7 @@
         		}
         	}
         </script>
-        <tr id='documentSection' style='display: none'>
+        <tr id='documentSection' style='display: <%=SH.ci("enableAssetOpenDocuments",0)==1?"":"none"%>'>
         	<td colspan='6'>
         		<table width='100%'  style='border:1px solid black;'>
 			        <tr>

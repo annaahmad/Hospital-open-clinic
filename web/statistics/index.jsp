@@ -71,7 +71,7 @@
     }
 
     //*** 3 - PATHOLOGY ***************************************************************************
-    if(activeUser.getAccessRight("statistics.globalpathologydistribution.select")){
+    if(activeUser.getAccessRight("statistics.globalpathology.select")){
         out.print(ScreenHelper.writeTblHeader(getTran(request,"Web","statistics.pathologystats",sWebLanguage),sCONTEXTPATH));
         out.print(writeTblChildNoButton(activeUser.getAccessRight("statistics.globalpathology.select"),"main.do?Page=statistics/diagnosisStats.jsp",getTran(request,"Web","statistics.globalpathology",sWebLanguage))+
         		  writeTblChildNoButton(activeUser.getAccessRight("statistics.mortality.select"),"main.do?Page=statistics/mortality.jsp",getTran(request,"Web","statistics.mortality",sWebLanguage))+

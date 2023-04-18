@@ -18,9 +18,9 @@
 	rs.close();
 	ps.close();	
 	total = vContacts.size();
-	ps = conn.prepareStatement("select i.value from transactions t, items i where t.updatetime>=? and t.updatetime<? and t.transactionid=i.transactionid and i.type=?");
+	ps = conn.prepareStatement("select i.value from transactions t, items i where t.updatetime>=? and t.updatetime<=? and t.transactionid=i.transactionid and i.type=?");
 	ps.setDate(1,new java.sql.Date(begin.getTime()));
-	ps.setDate(2,new java.sql.Date(end.getTime()));
+	ps.setDate(2,new java.sql.Date(end.getTime()+SH.ci("clinicalCoverageDelayInDays",2)*SH.getTimeDay()));
 	ps.setString(3,"be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CONTEXT_ENCOUNTERUID");
 	rs = ps.executeQuery();
 	while(rs.next()){

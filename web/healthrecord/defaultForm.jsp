@@ -13,7 +13,7 @@
 <%@include file="/includes/validateUser.jsp"%>
 <%@page errorPage="/includes/error.jsp"%>
 <%
-	String accessright="mspls.familyplanning.consultation";
+	String accessright="default.accessright";
 %>
 <%=checkPermission(accessright,"select",activeUser)%>
 <%!

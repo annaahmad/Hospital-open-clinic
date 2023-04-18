@@ -1,4 +1,4 @@
-<%@page import="be.openclinic.medical.ResultsProfile,
+è<%@page import="be.openclinic.medical.ResultsProfile,
                 java.util.*,
                 be.openclinic.medical.LabRequest,
                 be.openclinic.medical.RequestedLabAnalysis,

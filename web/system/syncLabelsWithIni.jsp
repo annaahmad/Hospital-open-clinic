@@ -90,9 +90,9 @@
     String excludedLabelTypes = MedwanQuery.getInstance().getConfigString("excludedLabelTypesNew");
     if(excludedLabelTypes.length() == 0){
         excludedLabelTypes = "*datacenterserver*datacenterservergroup*labanalysis*labanalysis.short*labanalysis.monster*labanalysis.group*insurance.types*prestation.type*resultprofiles*"+
-        					 " *admin.category*labanalysis.refcomment*"+
+        					 " *admin.category*labanalysis.refcomment*mir-type*debet.type*encounter.situation*medecin*"+
                              " *labprofiles*activitycodes*worktime*patientsharecoverageinsurance*patientsharecoverageinsurance2*"+
-                             " *urgency.origin*encountertype*prestation.type*product.productgroup*costcenter*"+
+                             " *urgency.origin*encountertype*prestation.type*product.productgroup*costcenter*productstockoperation.medicationdelivery*"+
                              " *insurance.types*labanalysis.group*drug.category*planningresource*systemmessages*product.unit*credit.type*wicketcredit.type*"+
                              " *productstockoperation.sourcedestinationtype*queue*anonymousqueue*costcenter*ikirezi.functional.signs*mir_type*radiologist*"; // default
     }
@@ -512,10 +512,7 @@ try{
                         rs = ps.executeQuery();
 
                         // invalid key chars
-                        String invalidLabelKeyChars = MedwanQuery.getInstance().getConfigString("invalidLabelKeyChars");
-                        if(invalidLabelKeyChars.length() == 0){
-                            invalidLabelKeyChars = " /:"; // default
-                        }
+                        String invalidLabelKeyChars = " /:\t"; // default
 
                         HashSet iniLabels = new HashSet();
                         Enumeration keys = iniProps.keys();
@@ -537,8 +534,11 @@ try{
 								continue;
 							}
                             // only display labels if not in ini, so check existence in ini.
-                            if(excludedLabelTypes.indexOf("*"+labelType.toLowerCase()+"*")<0 && !iniLabels.contains(labelUniqueKey) && labelID.indexOf(" ")<0){
-                                // display labels, except excluded labeltypes
+                            if(excludedLabelTypes.indexOf("*"+labelType.toLowerCase()+"*")<0 && !iniLabels.contains(labelUniqueKey) && labelID.indexOf(" ")<0 && labelID.indexOf("=")<0){
+                                SH.syslog("labelType="+labelType);
+                                SH.syslog("labelUniqueKey="+labelUniqueKey);
+                                SH.syslog("iniLabels.contains(labelUniqueKey)="+iniLabels.contains(labelUniqueKey));
+                            	// display labels, except excluded labeltypes
                                 checked = "checked";
 
                                 labelValue = checkString(rs.getString("OC_LABEL_VALUE"));

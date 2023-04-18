@@ -45,7 +45,47 @@
 				<td><input type='button' class='button' value='<%=getTranNoLink("web","send",sWebLanguage) %>' name='requestPayment' onclick='requestPaymentMTN()'/></td>
 			</tr>
 		<% } %>
-	<% } %>
+	<% } else if(operator.equalsIgnoreCase("orange")){   %>
+		<tr>
+			<td colspan='2'><img height='50px' src='<%=sCONTEXTPATH%>/_img/themes/default/orangemoney.png'/></td>
+		</tr>
+		<tr>
+			<td class='admin' width='90%'><%=getTran(request,"web","amount",sWebLanguage) %></td>
+			<td class='admin2'><font style='font-size: 14px; font-weight: bolder'><%=SH.getPriceFormat(Double.parseDouble(amount))+" "+currency %></font></td>
+		</tr>
+		<tr>
+			<td class='admin'><%=getTran(request,"web","invoice",sWebLanguage) %> #</td>
+			<td class='admin2'><%=invoiceid %></td>
+		</tr>
+		<tr>
+			<td class='admin'><%=getTran(request,"web","telephone",sWebLanguage) %></td>
+			<td class='admin2'><input size='15' type='text' class='text' name='phone' id='phone' value='<%=payerphone %>'/></td>
+		</tr>
+		<% if(Double.parseDouble(amount)>0){ %>
+			<tr>	
+				<td><div id='divPayment' name='divPayment'></div></td>
+				<td><input type='button' class='button' value='<%=getTranNoLink("web","send",sWebLanguage) %>' name='requestPayment' onclick='requestPaymentOrange()'/></td>
+			</tr>
+		<% } %>
+	<% } else if(operator.equalsIgnoreCase("orangeeasy")){   %>
+		<tr>
+			<td colspan='2'><img height='50px' src='<%=sCONTEXTPATH%>/_img/themes/default/orangemoney.png'/></td>
+		</tr>
+		<tr>
+			<td class='admin' width='90%'><%=getTran(request,"web","amount",sWebLanguage) %></td>
+			<td class='admin2'><font style='font-size: 14px; font-weight: bolder'><%=SH.getPriceFormat(Double.parseDouble(amount))+" "+currency %></font></td>
+		</tr>
+		<tr>
+			<td class='admin'><%=getTran(request,"web","paymentcode",sWebLanguage) %></td>
+			<td class='admin2'><input size='15' type='text' class='text' name='paymentcode' id='paymentcode' value=''/></td>
+		</tr>
+		<% if(Double.parseDouble(amount)>0){ %>
+			<tr>	
+				<td><div id='divPayment' name='divPayment'></div></td>
+				<td><input type='button' class='button' value='<%=getTranNoLink("web","send",sWebLanguage) %>' name='verifyPayment' onclick='verifyPaymentOrange()'/></td>
+			</tr>
+		<% } %>
+	<% }%>
 </table>
 
 <script>
@@ -69,6 +109,61 @@
               if(paymentRequest.transactionId.length>0){
             	  document.getElementById('divPayment').innerHTML = "<b><%=getTran(request,"web","waitingforpayment",sWebLanguage)%></b> #"+paymentRequest.transactionId+"<br/><img src='<c:url value="/_img/themes/default/ajax-loader.gif"/>'/>";
             	  checkPaymentMTN(paymentRequest.transactionId);
+              }
+              else{
+            	  document.getElementById('divPayment').innerHTML = "<img height='14px' src='<c:url value="/_img/icons/icon_error.gif"/>'> <%=getTranNoLink("web","errorsendingpaymentrequest",sWebLanguage)%>";
+              }
+	      },
+          onError: function(resp){
+        	  document.getElementById('divPayment').innerHTML = "<img height='14px' src='<c:url value="/_img/icons/icon_error.gif"/>'> <%=getTranNoLink("web","errorsendingpaymentrequest",sWebLanguage)%>";
+          }
+		});
+	}
+	
+	function requestPaymentOrange(){
+	    document.getElementById('divPayment').innerHTML = "<img src='<c:url value="/_img/themes/default/ajax-loader.gif"/>'/><br/>Loading";
+	    var uid="<%=SH.cs("mobileMoneyCallbackIpAddress","localhost")%>;<%=invoiceid%>;<%=amount%>;"+document.getElementById("phone").value;
+	    //Todo: set parameters that are needed
+	    var params = "uid="+uid
+            +"&currency=<%=currency%>";
+	    var today = new Date();
+	    var url= '<c:url value="/financial/mobilemoney/requestPaymentOrange.jsp"/>?ts='+today;
+		new Ajax.Request(url,{
+		  method: "POST",
+	      parameters: params,
+	      onSuccess: function(resp){
+              var paymentRequest = eval('('+resp.responseText+')');
+              if(paymentRequest.status.length>0 && paymentRequest.status=="ok"){
+            	  document.getElementById('divPayment').innerHTML = "<b><%=getTran(request,"web","waitingforpayment",sWebLanguage)%></b> #"+paymentRequest.transactionId+"<br/><img src='<c:url value="/_img/themes/default/ajax-loader.gif"/>'/>";
+            	  checkPaymentOrange(uid);
+              }
+              else{
+            	  document.getElementById('divPayment').innerHTML = "<img height='14px' src='<c:url value="/_img/icons/icon_error.gif"/>'> <%=getTranNoLink("web","errorsendingpaymentrequest",sWebLanguage)%>";
+              }
+	      },
+          onError: function(resp){
+        	  document.getElementById('divPayment').innerHTML = "<img height='14px' src='<c:url value="/_img/icons/icon_error.gif"/>'> <%=getTranNoLink("web","errorsendingpaymentrequest",sWebLanguage)%>";
+          }
+		});
+	}
+	
+	function verifyPaymentOrange(){
+	    document.getElementById('divPayment').innerHTML = "<img src='<c:url value="/_img/themes/default/ajax-loader.gif"/>'/><br/>Loading";
+	    //Todo: set parameters that are needed
+	    var params = "amount="+<%=amount%>
+        +"&paymentcode="+document.getElementById("paymentcode").value
+        +"&currency=<%=currency%>";
+	    var today = new Date();
+	    var url= '<c:url value="/financial/mobilemoney/verifyPaymentOrange.jsp"/>?ts='+today;
+		new Ajax.Request(url,{
+		  method: "POST",
+	      parameters: params,
+	      onSuccess: function(resp){
+              var paymentRequest = eval('('+resp.responseText+')');
+              if(paymentRequest.status.length>0 && paymentRequest.status=="ok"){
+            	  document.getElementById('divPayment').innerHTML = "<img height='14px' src='<c:url value="/_img/icons/icon_ok.gif"/>'> <%=getTranNoLink("web","paymentsuccessful",sWebLanguage)%>";
+            	  window.opener.registerMomoPayment('<%=SH.cs("momo.cashdesk.orange","")%>','Orange Money - #<%=invoiceid%>','<%=invoiceid%>');
+            	  window.close();
               }
               else{
             	  document.getElementById('divPayment').innerHTML = "<img height='14px' src='<c:url value="/_img/icons/icon_error.gif"/>'> <%=getTranNoLink("web","errorsendingpaymentrequest",sWebLanguage)%>";
@@ -106,4 +201,33 @@
           }
 		});
 	}
+	
+	function checkPaymentOrange(uid){
+	    var params = "uid="+uid;
+		var today = new Date();
+	    var url= '<c:url value="/financial/mobilemoney/getPaymentStatusOrange.jsp"/>?ts='+today;
+		new Ajax.Request(url,{
+		  method: "POST",
+	      parameters: params,
+	      onSuccess: function(resp){
+              var paymentRequest = eval('('+resp.responseText+')');
+              if(paymentRequest.status.length>0 && paymentRequest.status=="ok"){
+            	  document.getElementById('divPayment').innerHTML = "<img height='14px' src='<c:url value="/_img/icons/icon_ok.gif"/>'> <%=getTranNoLink("web","paymentsuccessful",sWebLanguage)%>";
+            	  window.opener.registerMomoPayment('<%=SH.cs("momo.cashdesk.orange","")%>','Orange Money - '+paymentRequest.telephone+" - #"+paymentRequest.financialTransactionId,paymentRequest.financialTransactionId);
+            	  window.close();
+              }
+              else if(paymentRequest.status.length>0 && paymentRequest.status=="canceled"){
+            	  document.getElementById('divPayment').innerHTML = "<img height='14px' src='<c:url value="/_img/icons/icon_error.gif"/>'> <%=getTranNoLink("web","paymentfailed",sWebLanguage)%>";
+              }
+              else{
+            	  window.setTimeout("checkPaymentOrange('"+transactionId+"');",500);
+              }
+	      },
+          onError: function(resp){
+        	  document.getElementById('divPayment').innerHTML = "<img height='14px' src='<c:url value="/_img/icons/icon_error.gif"/>'> <%=getTranNoLink("web","nopaymentregistered",sWebLanguage)%>";
+          }
+		});
+	}
+	
+	
 </script>

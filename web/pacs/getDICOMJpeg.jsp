@@ -1,3 +1,5 @@
+<%@page import="java.awt.image.BufferedImage"%>
+<%@page import="com.pixelmed.display.*"%>
 <%@page import="java.sql.*,java.io.*,java.util.*,javax.imageio.*,org.dcm4che3.imageio.plugins.dcm.*"%><%@page import="be.mxs.common.util.db.MedwanQuery"%><%@page import="be.openclinic.archiving.*"%>
 <%
 	try{
@@ -30,6 +32,9 @@
 		String dicomfile=MedwanQuery.getInstance(true).getConfigString("scanDirectoryMonitor_basePath","/var/tomcat/webapps/openclinic/scan")+"/"+MedwanQuery.getInstance().getConfigString("scanDirectoryMonitor_dirTo","to")+"/"+rs.getString("OC_PACS_FILENAME");
 		System.out.println("dicomfile="+dicomfile);
 		try{
+			//SourceImage sourceImage = new SourceImage(dicomfile);
+			//BufferedImage img = ConsumerFormatImageMaker.makeEightBitFrame(sourceImage, 0);
+			//ImageIO.write(img, "jpg", os);
 			Dcm2Jpg dcm2Jpg = new Dcm2Jpg();
 			dcm2Jpg.convert(new File(dicomfile), os, session);
 		}

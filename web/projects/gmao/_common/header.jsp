@@ -48,6 +48,9 @@
         </td>
     </tr>
 </table>
-<div style="position:absolute;right:5px;top:5px;width:400px">
+<div style="position:absolute;right:5px;top:5px;width:220px">
+    <%if(SH.cs("logoflag","").length()>0){ %>
+		<img height="28px" src="<%=SH.cs("logoflag","") %>" style='text-align: right' border="0">
+    <%} %>
 	<div class="logogmao" style="background:url('<c:url value="/_img/themes/default/"/><%=MedwanQuery.getInstance().getConfigInt("TestEdition",0)==0?"logo_gmao.png":"logo_gmao_test.png"%>');">
 </div>

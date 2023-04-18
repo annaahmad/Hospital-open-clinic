@@ -110,7 +110,7 @@
 	            		out.print(" ("+(activePatient.gender.equalsIgnoreCase("M")?getTran(request,"web.occup","male",sWebLanguage):getTran(request,"web.occup","female",sWebLanguage))+" - "+ activePatient.getAgeInMonths()/12+" "+getTran(request,"web","years",sWebLanguage).toLowerCase()+ " "+ activePatient.getAgeInMonths()%12+" "+getTran(request,"web","months",sWebLanguage).toLowerCase()+")");
 	            	}
 	            	else{
-	            		out.print(" ("+(activePatient.gender.equalsIgnoreCase("M")?getTran(request,"web.occup","male",sWebLanguage):getTran(request,"web.occup","female",sWebLanguage))+" - "+ activePatient.getAgeInMonths()+" "+getTran(request,"web","months",sWebLanguage).toLowerCase()+" - "+ activePatient.getAgeInDays()%30+" "+getTran(request,"web","days",sWebLanguage).toLowerCase()+")");
+	            		out.print(" ("+(activePatient.gender.equalsIgnoreCase("M")?getTran(request,"web.occup","male",sWebLanguage):getTran(request,"web.occup","female",sWebLanguage))+" - "+ activePatient.getAgeInDays()/30+" "+getTran(request,"web","months",sWebLanguage).toLowerCase()+" - "+ activePatient.getAgeInDays()%30+" "+getTran(request,"web","days",sWebLanguage).toLowerCase()+")");
 	            	}	
             	}
             %>

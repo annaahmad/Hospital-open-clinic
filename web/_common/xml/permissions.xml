@@ -201,6 +201,8 @@
         <permission type="examination" id="1303">msas.cataract.surgery</permission>
         <permission type="examination" id="1308">examination.referral</permission>
         <permission type="examination" id="1309">examination.counterreferral</permission>
+        <permission type="examination" id="1310">examination.geriatrics</permission>
+        <permission type="examination" id="1311">anesthesia.monitoring</permission>
     </application>
     <application type="Web" id="newexaminations">
         <permission type="web" id="globalexaminations">examinations.global</permission>
@@ -369,6 +371,7 @@
     </application>
     <application type="Web" id="financial">
         <permission type="web" id="financial.mobilemoneyoverview">financial.mobilemoneyoverview</permission>
+        <permission type="web" id="financial.mobilepayment">financial.mobilepayment</permission>
         <permission type="web" id="financial.invoicenursingactivities">financial.invoicenursingactivities</permission>
         <permission type="web" id="financial.forceaccreditation">financial.forceaccreditation</permission>
         <permission type="web" id="financial.patientpaymentdate">financial.patientpaymentdate</permission>

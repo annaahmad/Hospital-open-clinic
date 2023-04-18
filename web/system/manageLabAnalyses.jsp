@@ -832,19 +832,19 @@
   	  	else if($("EditLabEditor").value=="listbox" || $("EditLabEditor").value=="listboxcomment"){
   	  		content="<tr><td class='admin2'><%=getTranNoLink("web","options",sWebLanguage)%></td>"+
 			"<td class='admin2'>"+
-			"<input type='text' name='EPOptions' id='EPOptions' class='text' value='"+getParameter(parameters,"OP")+"' size='50'>"+
+			"<input type='text' name='EPOptions' id='EPOptions' class='text' value='"+getParameter(parameters,"OP")+"' size='3000'>"+
 			"</td></tr>";
 	  	}
   	  	else if($("EditLabEditor").value=="radiobutton" || $("EditLabEditor").value=="radiobuttoncomment" || $("EditLabEditor").value=="checkbox" || $("EditLabEditor").value=="checkboxcomment"){
   	  		content="<tr><td class='admin2'><%=getTranNoLink("web","options",sWebLanguage)%></td>"+
 			"<td class='admin2'>"+
-			"<input type='text' name='EPOptions' id='EPOptions' class='text' value='"+getParameter(parameters,"OP")+"' size='50'>"+
+			"<input type='text' name='EPOptions' id='EPOptions' class='text' value='"+getParameter(parameters,"OP")+"' size='3000'>"+
 			"</td></tr>";
 	  	}
   	  	else if($("EditLabEditor").value=="calculated"){
   	  		content="<tr><td class='admin2'><%=getTran(request,"web","formula.and.parameters",sWebLanguage)%> </td>"+
 			"<td class='admin2'>"+
-			"<input type='text' name='EPOptions' id='EPOptions' class='text' value='"+getParameter(parameters,"OP")+"' size='100'>"+
+			"<input type='text' name='EPOptions' id='EPOptions' class='text' value='"+getParameter(parameters,"OP")+"' size='3000'>"+
 			"</td></tr>";
 	  	}
   	  	document.getElementById("ep").innerHTML=content;

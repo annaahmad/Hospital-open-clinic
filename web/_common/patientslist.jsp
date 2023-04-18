@@ -160,7 +160,15 @@
             else {
                 sInactive = "Text";
             }
-            
+            if(sPage.trim().length() > 0){
+                sLink = sPage+checkString(tempPat.personid);
+                sResult.append("<tr");
+            }
+            else{
+                sLink = "";
+                sResult.append("<tr");
+            }
+
             if("On".equalsIgnoreCase(MedwanQuery.getInstance().getConfigString("showServiceInPatientList"))){
                 if(sTmpServiceID.trim().length() > 0){
                 	String img="";
@@ -171,21 +179,21 @@
                 		img+="<img style='vertical-align: middle' src='"+sCONTEXTPATH+"/_img/icons/icon_admin.gif'/>";
                 	}
                 	
-                    String sHospDate = "<td>"+ScreenHelper.fullDateFormat.format(enc.getBegin())+" "+img+"</td>";
+                    String sHospDate = "<td onClick='window.location.href=\""+sLink+"\";'>"+ScreenHelper.fullDateFormat.format(enc.getBegin())+" "+img+"</td>";
                     long duration = (new Date().getTime() - enc.getBegin().getTime());
                     long days = 24 * 3600 * 1000;
                     days = days * 90;
                     if(enc.getEnd()!=null){
 	                    String manager= (!(enc==null) && enc.getManagerUID()!=null && enc.getManagerUID().length()>0? User.getFullUserName(enc.getManagerUID()):"");
-	                    sTmpServiceID = "<td style='text-decoration: line-through'>"+sTmpServiceID+" "+getTran(request,"Service",sTmpServiceID,sWebLanguage)+"</td><td style='text-decoration: line-through'>"+manager+"</td><td style='text-decoration: line-through'>"+sBed+"</td><td style='text-decoration: line-through'>"+ScreenHelper.fullDateFormat.format(enc.getBegin())+" "+img+"</td>";
+	                    sTmpServiceID = "<td  onClick='window.location.href=\""+sLink+"\";' style='text-decoration: line-through'>"+sTmpServiceID+" "+getTran(request,"Service",sTmpServiceID,sWebLanguage)+"</td><td  onClick='window.location.href=\""+sLink+"\";' style='text-decoration: line-through'>"+manager+"</td><td  onClick='window.location.href=\""+sLink+"\";' style='text-decoration: line-through'>"+sBed+"</td><td  onClick='window.location.href=\""+sLink+"\";' style='text-decoration: line-through'>"+ScreenHelper.fullDateFormat.format(enc.getBegin())+" "+img+"</td>";
                     }
                     else{
 	                    if(duration > days || duration < 0){
-	                        sHospDate = "<td style='color: red'>"+ScreenHelper.fullDateFormat.format(enc.getBegin())+" "+img+ "</td>";
+	                        sHospDate = "<td  onClick='window.location.href=\""+sLink+"\";' style='color: red'>"+ScreenHelper.fullDateFormat.format(enc.getBegin())+" "+img+ "</td>";
 	                    }
                     
 	                    String manager= (!(enc==null) && enc.getManagerUID()!=null && enc.getManagerUID().length()>0? User.getFullUserName(enc.getManagerUID()):"");
-	                    sTmpServiceID = "<td>"+sTmpServiceID+" "+getTran(request,"Service",sTmpServiceID,sWebLanguage)+"</td><td>"+manager+"</td><td>"+sBed+"</td>"+sHospDate;
+	                    sTmpServiceID = "<td onClick='window.location.href=\""+sLink+"\";'>"+sTmpServiceID+" "+getTran(request,"Service",sTmpServiceID,sWebLanguage)+"</td><td onClick='window.location.href=\""+sLink+"\";'>"+manager+"</td><td onClick='window.location.href=\""+sLink+"\";'>"+sBed+"</td>"+sHospDate;
                     }
                 }
                 else {
@@ -197,14 +205,6 @@
             if(sClass.equals("")) sClass = "1";
             else                  sClass = "";
             
-            if(sPage.trim().length() > 0){
-                sLink = sPage+checkString(tempPat.personid);
-                sResult.append("<tr onClick='window.location.href=\""+sLink+"\";'");
-            }
-            else{
-                sLink = "";
-                sResult.append("<tr");
-            }
             
             String sImmatNew = "";
             String sNatReg = "";
@@ -228,15 +228,15 @@
             	sCity="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;("+checkString(privateDetails[4])+")";
             }
             sResult.append(" class='list"+sInactive+sClass+"'>"
-                   +"<td><img src='"+sCONTEXTPATH+"/_img/icons/icon_view.png' alt='"+getTranNoLink("Web","view",sWebLanguage)+"'></td>"
-                   +"<td>"+checkString(sImmatNew)+"</td>");
+                   +"<td onClick='window.location.href=\""+sLink+"\";'><img src='"+sCONTEXTPATH+"/_img/icons/icon_view.png' alt='"+getTranNoLink("Web","view",sWebLanguage)+"'></td>"
+                   +"<td onClick='window.location.href=\""+sLink+"\";'>"+checkString(sImmatNew)+"</td>");
 		           if(SH.ci("enableSearchOnHealthInsurance",0)==1){
-		        	   sResult.append("<td>"+SH.c((String)tempPat.adminextends.get("insurancenr"))+"</td>");
+		        	   sResult.append("<td onClick='window.location.href=\""+sLink+"\";'>"+SH.c((String)tempPat.adminextends.get("insurancenr"))+"</td>");
 		           }
-		           sResult.append("<td>"+checkString(sNatReg)+"</td>"
-                   +"<td><b>"+checkString(tempPat.lastname)+"  "+checkString(tempPat.firstname)+"</b>"+sCity+"</td>"
-                   +"<td>"+checkString(tempPat.gender.toUpperCase())+"</td>"
-                   +"<td>"+tempPat.dateOfBirth+"</td>"
+		           sResult.append("<td onClick='window.location.href=\""+sLink+"\";'>"+checkString(sNatReg)+"</td>"
+                   +"<td onClick='window.location.href=\""+sLink+"\";'><b>"+checkString(tempPat.lastname)+"  "+checkString(tempPat.firstname)+"</b>"+sCity+"</td>"
+                   +"<td onClick='window.location.href=\""+sLink+"\";'>"+checkString(tempPat.gender.toUpperCase())+"</td>"
+                   +"<td nowrap><span onClick='window.location.href=\""+sLink+"\";'>"+tempPat.dateOfBirth+"</span>"+(sAction.equals("MY_VISITS") && enc.getEnd()==null?" <img height='16px' src='"+sCONTEXTPATH+"/_img/icons/mobile/lock.png' onclick='closeMyEncounter(\""+enc.getUid()+"\");'/>":"")+(sAction.equals("MY_VISITS")?" <img height='16px' src='"+sCONTEXTPATH+"/_img/icons/mobile/edit.png' onclick='editMyEncounter(\""+enc.getUid()+"\");'/>":"")+"</td>"
                    +""+sTmpServiceID
                    +"</tr>");
             if(activeUser.getParameter("patientlist", "compact").equalsIgnoreCase("extended")){
@@ -384,6 +384,20 @@
 %>
 
 <script>
+	function closeMyEncounter(uid){
+	    var params = "uid="+uid;
+		var url = "<%=sCONTEXTPATH%>/adt/closeEncounter.jsp";
+		new Ajax.Request(url,{
+		method: "POST",
+		parameters: params,
+		onSuccess: function(resp){
+			window.location.reload();
+		}
+		});
+	}
+	function editMyEncounter(uid){
+	    openPopup("adt/editEncounter.jsp&EditEncounterUID="+uid+"&Popup=yes&ts=<%=getTs()%>",800,600);
+	}
 	function findMPIrecord(mpiid){
 		document.getElementById('divmpisearch').style.display='';
 	    document.getElementById('divmpisearch').innerHTML = "<img src='<c:url value="/_img/themes/default/ajax-loader.gif"/>'/>";

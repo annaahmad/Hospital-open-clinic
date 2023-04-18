@@ -1387,6 +1387,32 @@
 		    <description language="en">Phone number linked to the merchant account.</description>
 		</parameter>
 	</parametergroup>
+	<parametergroup id="orangemoney" name="Orange Money">
+		<parameter name="enableOrangeMoney" default="0" type="radio" options="0;1;2">
+		    <description language="en">Enables the use of orange money payment platforms in OpenClinic</description>
+		</parameter>
+		<parameter name="momo.cashdesk.orange" default="">
+		    <description language="en">Default cash desk UID in which orange money mobile payments will be deposited.</description>
+		</parameter>
+		<parameter name="orangeMoneyURL" default="">
+		    <description language="en">URL that is called for requesting an Orange Money payment.</description>
+		</parameter>
+		<parameter name="orangeMoneyEasyURL" default="">
+		    <description language="en">URL that is called for requesting an Orange Money Easy payment.</description>
+		</parameter>
+		<parameter name="orangeMoneySuccessCallbackURL" default="https://base.cnom.sante.gov.ml/openclinic/mobilemoney/mmCallback.jsp?status=ok">
+		    <description language="en">Callback intermediate URL for Orange Money in case of successful payment.</description>
+		</parameter>
+		<parameter name="orangeMoneyFailureCallbackURL" default="https://base.cnom.sante.gov.ml/openclinic/mobilemoney/mmCallback.jsp?status=cancel">
+		    <description language="en">Callback intermediate URL for Orange Money in case of failed or refused payment.</description>
+		</parameter>
+		<parameter name="mobileMoneyCallbackIpAddress" default="localhost">
+		    <description language="en">Server ip address to which callbacks shoud be transferred by intermediate server</description>
+		</parameter>
+		<parameter name="orangeMoneyMerchantCode" default="">
+		    <description language="en">Marchant code with the Orange Money platform</description>
+		</parameter>
+	</parametergroup>
 	<parametergroup id="messaginggateway" name="Messaging Gateway" sort="false">
 		<parameter name="cellPhoneCountryPrefix" default="32">
 		    <description language="en">Default country prefix that must be automatically added to local phone numbers, e.g. 32 for Belgium. Phone numbers starting with a + sign are exempted from this rule.</description>

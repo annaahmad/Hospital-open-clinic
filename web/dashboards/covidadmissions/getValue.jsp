@@ -10,7 +10,7 @@
 		for(int n=0;n<30;n++){
 			String sSql = "select count(distinct e.oc_encounter_objectid) total from oc_encounters e, healthrecord h where"+
 						  " oc_encounter_begindate<=? and"+
-						  " oc_encounter_enddate>? and"+
+						  " (oc_encounter_enddate is null or oc_encounter_enddate>?) and"+
 						  " oc_encounter_type='admission' and"+
 						  " h.personid=e.oc_encounter_patientuid and"+
 						  " exists ("+
@@ -49,7 +49,7 @@
 		for(int n=0;n<12;n++){
 			String sSql = "select count(distinct e.oc_encounter_objectid) total from oc_encounters e, healthrecord h where"+
 					  " oc_encounter_begindate<=? and"+
-					  " oc_encounter_enddate>? and"+
+					  " (oc_encounter_enddate is null or oc_encounter_enddate>?) and"+
 					  " oc_encounter_type='admission' and"+
 					  " h.personid=e.oc_encounter_patientuid and"+
 					  " exists ("+
