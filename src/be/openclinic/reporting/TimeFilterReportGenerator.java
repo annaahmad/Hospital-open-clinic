@@ -97,8 +97,7 @@ public class TimeFilterReportGenerator {
 	        message.setContent(multipart);
 	
 	        transport.connect(MedwanQuery.getInstance(false).getConfigString("mailbot.server","smtp.gmail.com"),username,password);
-	        transport.sendMessage(message,
-	        message.getRecipients(Message.RecipientType.TO));
+	        transport.sendMessage(message,message.getRecipients(Message.RecipientType.TO));
 	        transport.close();
 	        bSuccess=true;
 	    }

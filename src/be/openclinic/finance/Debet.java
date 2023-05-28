@@ -3916,10 +3916,10 @@ public class Debet extends OC_Object implements Comparable,Cloneable {
 		    	            dPatientAmount=quantity * (prestation.getPrice("C")+prestation.getSupplement())*(prestation.getAnesthesiaPercentage()/100);
 		    	            dInsurarAmount=0;
 		    	        }
-		    	        dPatientAmount= Double.parseDouble(new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#.00")).format(dPatientAmount).replaceAll(",", "."));
-		    	        dInsurarAmount= Double.parseDouble(new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#.00")).format(dInsurarAmount).replaceAll(",", "."));
-		    	        dExtraInsurarAmount= Double.parseDouble(new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#.00")).format(dExtraInsurarAmount).replaceAll(",", "."));
-		    	        dExtraInsurarAmount2= Double.parseDouble(new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#.00")).format(dExtraInsurarAmount2).replaceAll(",", "."));
+		    	        dPatientAmount= SH.getPriceToDouble(new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#.00")).format(dPatientAmount));
+		    	        dInsurarAmount= SH.getPriceToDouble(new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#.00")).format(dInsurarAmount));
+		    	        dExtraInsurarAmount= SH.getPriceToDouble(new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#.00")).format(dExtraInsurarAmount));
+		    	        dExtraInsurarAmount2= SH.getPriceToDouble(new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#.00")).format(dExtraInsurarAmount2));
 	
 		    	        debet = new Debet();
 		    	        debet.setAmount(dPatientAmount);

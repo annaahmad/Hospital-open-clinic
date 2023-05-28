@@ -565,23 +565,23 @@ public class LabRequest {
                 requestedLabAnalysis.setFinalvalidation(rs.getInt("finalvalidator"));
                 java.util.Date d= rs.getTimestamp("technicalvalidationdatetime");
                 if(d!=null){
-                    requestedLabAnalysis.setTechnicalvalidationdatetime(new java.sql.Date(d.getTime()));
+                    requestedLabAnalysis.setTechnicalvalidationdatetime(new java.sql.Timestamp(d.getTime()));
                 }
                 d= rs.getTimestamp("finalvalidationdatetime");
                 if(d!=null){
-                    requestedLabAnalysis.setFinalvalidationdatetime(new java.sql.Date(d.getTime()));
+                    requestedLabAnalysis.setFinalvalidationdatetime(new java.sql.Timestamp(d.getTime()));
                 }
                 d= rs.getTimestamp("sampletakendatetime");
                 if(d!=null){
-                    requestedLabAnalysis.setSampletakendatetime(new java.sql.Date(d.getTime()));
+                    requestedLabAnalysis.setSampletakendatetime(new java.sql.Timestamp(d.getTime()));
                 }
                 d= rs.getTimestamp("samplereceptiondatetime");
                 if(d!=null){
-                    requestedLabAnalysis.setSamplereceptiondatetime(new java.sql.Date(d.getTime()));
+                    requestedLabAnalysis.setSamplereceptiondatetime(new java.sql.Timestamp(d.getTime()));
                 }
                 d= rs.getTimestamp("worklisteddatetime");
                 if(d!=null){
-                    requestedLabAnalysis.setWorklisteddatetime(new java.sql.Date(d.getTime()));
+                    requestedLabAnalysis.setWorklisteddatetime(new java.sql.Timestamp(d.getTime()));
                 }
                 requestedLabAnalysis.setSampler(rs.getInt("sampler"));
                 getAnalyses().put(requestedLabAnalysis.getAnalysisCode(),requestedLabAnalysis);
@@ -602,7 +602,7 @@ public class LabRequest {
     public void loadUnvalidatedRequestAnalyses(){
         Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
         try{
-            String sQuery="select a.*,b.labgroup from RequestedLabAnalyses a,LabAnalysis b where a.analysiscode=b.labcode and b.deletetime is null and serverid=? and transactionid=? and finalvalidator is null";
+            String sQuery="select a.*,b.labgroup from RequestedLabAnalyses a,LabAnalysis b where a.analysiscode=b.labcode and b.deletetime is null and serverid=? and transactionid=? and (finalvalidator is null or finalvalidator=0)";
             PreparedStatement ps = oc_conn.prepareStatement(sQuery);
             ps.setInt(1,getServerid());
             ps.setInt(2,getTransactionid());
@@ -668,7 +668,7 @@ public class LabRequest {
         Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
         try{
             //First let's find all transactionid's for which at least one result is open
-            String sQuery="select distinct a.serverid,a.transactionid,a.patientid,d.gender,d.firstname,d.lastname,b.userid,d.dateofbirth,b.updatetime from RequestedLabAnalyses a, Transactions b, AdminView d where a.serverid=b.serverid and a.transactionId=b.transactionId and a.patientid=d.personid and analysiscode in ("+worklistAnalyses+") and worklisteddatetime is not null and finalvalidator is null and finalvalidationdatetime is null and (resultvalue is null or resultvalue='' or technicalvalidator is null)";
+            String sQuery="select distinct a.serverid,a.transactionid,a.patientid,d.gender,d.firstname,d.lastname,b.userid,d.dateofbirth,b.updatetime from RequestedLabAnalyses a, Transactions b, AdminView d where a.serverid=b.serverid and a.transactionId=b.transactionId and a.patientid=d.personid and analysiscode in ("+worklistAnalyses+") and worklisteddatetime is not null and (finalvalidator is null or finalvalidator=0) and finalvalidationdatetime is null and (resultvalue is null or resultvalue='' or (technicalvalidator is null or technicalvalidator=0))";
             PreparedStatement ps = oc_conn.prepareStatement(sQuery);
             ResultSet rs = ps.executeQuery();
             while (rs.next()){
@@ -810,10 +810,10 @@ public class LabRequest {
             //First let's find all transactionid's for which at least one result is open
             String sQuery="select distinct a.serverid,a.transactionid,a.patientid,d.gender,d.firstname,d.lastname,b.userid,d.dateofbirth,b.updatetime from RequestedLabAnalyses a, Transactions b, AdminView d where a.serverid=b.serverid and a.transactionId=b.transactionId and a.patientid=d.personid and analysiscode in ("+worklistAnalyses+") and worklisteddatetime>? and finalvalidationdatetime is null and not (resultvalue is null or resultvalue='')";
             if(type==1){
-                 sQuery+=" and finalvalidator is null";
+                 sQuery+=" and (finalvalidator is null or finalvalidator=0)";
             }
             else if(type==0) {
-                sQuery+=" and technicalvalidator is null";
+                sQuery+=" and (technicalvalidator is null or technicalvalidator=0)";
             }
             PreparedStatement ps = oc_conn.prepareStatement(sQuery);
             long hour=3600*1000;

@@ -93,7 +93,7 @@ public class ExporterLab extends Exporter {
 								ps.setTimestamp(2,new java.sql.Timestamp(end.getTime()));
 								rs = ps.executeQuery();
 								while(rs.next()){
-									String labcode=rs.getString("labanalysiscode");
+									String labcode=rs.getString("analysiscode");
 									String resultvalue=rs.getString("resultvalue");
 									sb.append("<labtest editor='listbox' code='"+labcode+"' value='"+resultvalue+"' count='"+rs.getInt("total")+"' month='"+i+"' year='"+n+"'/>");
 								}
@@ -105,7 +105,7 @@ public class ExporterLab extends Exporter {
 								ps.setTimestamp(2,new java.sql.Timestamp(end.getTime()));
 								rs = ps.executeQuery();
 								while(rs.next()){
-									String labcode=rs.getString("labanalysiscode");
+									String labcode=rs.getString("analysiscode");
 									String editor=rs.getString("editor");
 									sb.append("<labtest editor='"+editor+"' code='"+labcode+"' count='"+rs.getInt("total")+"' month='"+i+"' year='"+n+"'/>");
 								}

@@ -1258,11 +1258,11 @@ public class RequestedLabAnalysis {
                 // result date
                 java.util.Date tmpDate = rs.getTimestamp("resultdate");
                 if(tmpDate!=null) labAnalysis.resultDate = tmpDate;
-                tmpDate = rs.getDate("updateTime");
+                tmpDate = rs.getTimestamp("updateTime");
                 if(tmpDate!=null) labAnalysis.requestDate = tmpDate;
-                tmpDate = rs.getDate("finalvalidationdatetime");
+                tmpDate = rs.getTimestamp("finalvalidationdatetime");
                 if(tmpDate!=null) labAnalysis.finalvalidationdatetime = tmpDate;
-                tmpDate = rs.getDate("technicalvalidationdatetime");
+                tmpDate = rs.getTimestamp("technicalvalidationdatetime");
                 if(tmpDate!=null) labAnalysis.technicalvalidationdatetime = tmpDate;
 
                 labAnalyses.put(labAnalysis.analysisCode,labAnalysis);
@@ -2552,7 +2552,7 @@ public class RequestedLabAnalysis {
     public static void setFinalValidation(int serverid,int transactionid, int finalvalidator){
         Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
         try{
-            String sQuery="update RequestedLabAnalyses set finalvalidator=?,finalvalidationdatetime=?,updatetime="+MedwanQuery.getInstance().getConfigString("dateFunction","getdate()")+" where serverid=? and transactionid=? and finalvalidator is null and not (resultvalue is null or resultvalue='')";
+            String sQuery="update RequestedLabAnalyses set finalvalidator=?,finalvalidationdatetime=?,updatetime="+MedwanQuery.getInstance().getConfigString("dateFunction","getdate()")+" where serverid=? and transactionid=? and (finalvalidator is null or finalvalidator=0) and not (resultvalue is null or resultvalue='')";
             PreparedStatement ps = oc_conn.prepareStatement(sQuery);
             ps.setInt(1,finalvalidator);
             ps.setTimestamp(2,new Timestamp(new java.util.Date().getTime()));
@@ -2599,7 +2599,7 @@ public class RequestedLabAnalysis {
         String result="";
         Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
         try{
-            String sQuery="select distinct a.analysiscode from RequestedLabAnalyses a, Transactions b, AdminView d where a.serverid=b.serverid and a.transactionId=b.transactionId and a.patientid=d.personid and (finalvalidator='' or finalvalidator is null) and worklisteddatetime>? and not (resultvalue is null or resultvalue='')";
+            String sQuery="select distinct a.analysiscode from RequestedLabAnalyses a, Transactions b, AdminView d where a.serverid=b.serverid and a.transactionId=b.transactionId and a.patientid=d.personid and (finalvalidator is null or finalvalidator=0) and worklisteddatetime>? and not (resultvalue is null or resultvalue='')";
             PreparedStatement ps = oc_conn.prepareStatement(sQuery);
             long hour=3600*1000;
             long day = 24*hour;
@@ -2630,7 +2630,7 @@ public class RequestedLabAnalysis {
         String result="";
         Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
         try{
-            String sQuery="select distinct a.analysiscode from RequestedLabAnalyses a, Transactions b, AdminView d where a.serverid=b.serverid and a.transactionId=b.transactionId and a.patientid=d.personid and finalvalidator is null and patientid=?";
+            String sQuery="select distinct a.analysiscode from RequestedLabAnalyses a, Transactions b, AdminView d where a.serverid=b.serverid and a.transactionId=b.transactionId and a.patientid=d.personid and (finalvalidator is null or finalvalidator=0) and patientid=?";
             PreparedStatement ps = oc_conn.prepareStatement(sQuery);
             ps.setInt(1,personid);
             ResultSet rs = ps.executeQuery();

@@ -279,6 +279,57 @@ public class Planning extends OC_Object {
 		setModifier(8,n+"");
 	}
 	
+	public int getWarningDays(){
+		int n=0;
+		if(getModifiers()!=null){
+			try{
+				n=Integer.parseInt(getModifiers().split(";")[9]);
+			}
+			catch(Exception e){
+				//e.printStackTrace();
+			}
+		}
+		return n;
+	}
+
+	public void setWarningDays(int n){
+		setModifier(9,n+"");
+	}
+	
+	public String getWarningSMS(){
+		String n="";
+		if(getModifiers()!=null){
+			try{
+				n=getModifiers().split(";")[10];
+			}
+			catch(Exception e){
+				//e.printStackTrace();
+			}
+		}
+		return n;
+	}
+
+	public void setWarningSMS(String n){
+		setModifier(10,n+"");
+	}
+	
+	public String getWarningEmail(){
+		String n="";
+		if(getModifiers()!=null){
+			try{
+				n=getModifiers().split(";")[11];
+			}
+			catch(Exception e){
+				//e.printStackTrace();
+			}
+		}
+		return n;
+	}
+
+	public void setWarningEmail(String n){
+		setModifier(11,n+"");
+	}
+	
     public Date getCancellationWarningSent() {
 		return cancellationWarningSent;
 	}
@@ -1730,6 +1781,61 @@ public class Planning extends OC_Object {
         }
         
         return hUsers;
+    }
+    
+    public static void sendPlanningReminders() {
+        Debug.println("Running planning maintenance query");
+        Connection conn = MedwanQuery.getInstance().getOpenclinicConnection();
+        PreparedStatement ps = null;
+        try{
+        	String sSelect = "select * from oc_planning where"
+        			+ " oc_planning_confirmationdate <? and"
+        			+ " oc_planning_confirmationdate >? and"
+        			+ " oc_planning_planneddate >? and"
+        			+ " oc_planning_remindsent is null";
+            ps = conn.prepareStatement(sSelect);
+            ps.setTimestamp(1, new java.sql.Timestamp(new java.util.Date().getTime()));
+            ps.setTimestamp(2, new java.sql.Timestamp(new java.util.Date().getTime()-SH.getTimeDay()*SH.ci("patientwarningbufferindays", 7)));
+            ps.setTimestamp(3, new java.sql.Timestamp(new java.util.Date().getTime()));
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+            	//This reminder must be sent
+            	AdminPerson patient = AdminPerson.get(rs.getString("oc_planning_patientuid"));
+            	if(patient.isNotEmpty()) {
+            		Planning planning = Planning.get(rs.getString("oc_planning_serverid")+"."+rs.getString("oc_planning_objectid"));
+            		String sLanguage=SH.cs("patientAppointmentReminderLanguage", "fr");
+            		if(patient.language.toLowerCase().startsWith("f")) {
+            			sLanguage="fr";
+            		}
+            		else if(patient.language.toLowerCase().startsWith("e")) {
+            			sLanguage="en";
+            		}
+					String sResult = ScreenHelper.getTranNoLink("web", "patientappointmentreminder",sLanguage);
+					sResult=sResult.replaceAll("#patientname#", patient.getFullName());
+					sResult=sResult.replaceAll("#appointmentdate#", new SimpleDateFormat("dd/MM/yyyy HH:mm").format(rs.getTimestamp("oc_planning_planneddate")));
+					if(SH.c(planning.getWarningEmail()).length()>0) {
+						MessageNotifier.SpoolMessage(MedwanQuery.getInstance().getOpenclinicCounter("OC_MESSAGES"), "simplemail", sResult, planning.getWarningEmail(), "appointmentreminder", sLanguage);
+					}
+					if(SH.c(planning.getWarningSMS()).length()>0) {
+						MessageNotifier.SpoolMessage(MedwanQuery.getInstance().getOpenclinicCounter("OC_MESSAGES"), "sms", sResult, planning.getWarningEmail(), "appointmentreminder", sLanguage);
+					}
+					Planning.storeRemindSent(planning.getUid(), new java.util.Date());
+            	}
+            }
+            rs.close();
+            ps.close();
+        }
+        catch(Exception e) {
+        	e.printStackTrace();
+        }
+        finally {
+        	try {
+        		conn.close();       	
+        	}
+        	catch(Exception a) {
+        		a.printStackTrace();
+        	}
+        }
     }
     
     public static void doMaintenance(){

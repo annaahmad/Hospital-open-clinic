@@ -61,6 +61,7 @@ public class BrokerScheduler implements Runnable{
 		Debug.println("Generating new lab messages");
 		lrNotifier.sendNewLabs();
 		Debug.println("Generating new planning messages");
+		Planning.sendPlanningReminders();
 		plNotifier.sendPlanningReminders();
 		Debug.println("Running message spooler");
 		msNotifier.sendSpooledMessages();

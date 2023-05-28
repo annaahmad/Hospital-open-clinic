@@ -99,7 +99,7 @@ public class LabresultsNotifier {
 	public void sendNewLabs(){
 		//We only want to send this once every x minutes
 		if(SH.isTimeout("lastLabSender", SH.ci("labSenderInterval", 300))) {
-			String sSendMode = "attachedmail";
+			String sSendMode = SH.cs("labmailmode","htmlmail");
 			sendNewLabs(sSendMode);
 		}
 	}
@@ -108,7 +108,7 @@ public class LabresultsNotifier {
 		TransactionVO transactionVO; 
 		String sLanguage;
 		Hashtable transactionlanguages = new Hashtable();
-
+		Debug.println("|||--- labmailmode="+sSendMode);
 		try {
 			Hashtable htLabsToSendEmail = new Hashtable();	 		
 			Hashtable htLabsToSendSMS = new Hashtable();
@@ -214,7 +214,7 @@ public class LabresultsNotifier {
 					}
                 	String normal = rqLabAnalysis.getResultModifier();
                 	String normalindicator=rqLabAnalysis.getResultModifier();
-					if (sSendMode == "htmlmail" || sSendMode == "attachedmail"){
+					if (sSendMode.equalsIgnoreCase("htmlmail") || sSendMode.equalsIgnoreCase("attachedmail")){
                     	if(normal.length()==0){
                     		String min =rqLabAnalysis.getResultRefMin();
                     		String max =rqLabAnalysis.getResultRefMax();
@@ -260,6 +260,15 @@ public class LabresultsNotifier {
 	                    		//e2.printStackTrace();
 	                    	}
                     	}
+                    	else {
+                            normalindicator=normal;
+                            if(normal.equalsIgnoreCase("n")) {
+                            	normal = "<font color='green'>"+normal+"</font>";
+                            }
+                            else {
+                            	normal = "<font color='red'>"+normal+"</font>";
+                            }
+                    	}
                     	String references=rqLabAnalysis.getResultRefMin()+" - "+rqLabAnalysis.getResultRefMax();
                     	if(references.equalsIgnoreCase(" - ")){
                     		references="";
@@ -268,8 +277,9 @@ public class LabresultsNotifier {
                     		result="covidrbc";
                     	}
                     	else {
-                    		result =  "<tr><td>" + la.getLabcode() + "</td><td><b>" + MedwanQuery.getInstance().getLabel("labanalysis", la.getLabId()+"", sLanguage) 
-    								+  "</b></td><td><b> " + rqLabAnalysis.getResultValue()+"</b> "+rqLabAnalysis.getResultUnit()+"</td><td>"+references+"</td><td>"+normal+" </td></tr>";
+                    		result =  "<tr><td style='border-bottom: 1px solid;'>" + la.getLabcode() + "</td><td style='border-bottom: 1px solid;'><b>" + MedwanQuery.getInstance().getLabel("labanalysis", la.getLabId()+"", sLanguage) 
+    								+  "</b></td><td style='border-bottom: 1px solid;'><b> " + rqLabAnalysis.getResultValue()+"</b> "+rqLabAnalysis.getResultUnit()+"</td><td style='border-bottom: 1px solid;'>"+references+"</td><td style='border-bottom: 1px solid;'>"+normal+" </td></tr>";
+                    		Debug.println(result);
                     	}
 					}
 					else { 
@@ -380,7 +390,7 @@ public class LabresultsNotifier {
 				sUserFirstname = sUserFirstname.charAt(0) + sUserFirstname.substring(1).toLowerCase();					
 
 				if(transport.equalsIgnoreCase("sms")){
-					String sResult = SH.cs("labsmscontent", "#results#").replaceAll("#date#",SH.formatDate(transactionVO.getUpdateTime())).replaceAll("#transactionid#", transactionId+"").replaceAll("<br>", "\n").replace("#patient#", patient.lastname.toUpperCase()+" "+sPatientFirstname).replaceAll("#results#",result).replaceAll("#email#",SH.c(patient.getActivePrivate().email));
+					String sResult = SH.cs("labsmscontent","Lab test ##transactionid# on #date# for #patient#:<br>#results#").replaceAll("#date#",SH.formatDate(transactionVO.getUpdateTime())).replaceAll("#transactionid#", transactionId+"").replaceAll("<br>", "\n").replace("#patient#", patient.getFullName()).replaceAll("#results#",result).replaceAll("#email#",SH.c(patient.getActivePrivate().email));
 					if(SendSMS.sendSMS(sentto, sResult)){
 						Debug.println("SMS correctly sent transactionid "+transactionId+" to "+sentto);
 						setSpoolMessageSent(transactionId,transport);
@@ -413,14 +423,14 @@ public class LabresultsNotifier {
 				else if(transport.equalsIgnoreCase("htmlmail")){
 					try{
 						String sMailTitle = MedwanQuery.getInstance().getLabel("sendhtmlmail", "labrequestfortransaction", user.language);
-						String sImage = "<img src=\"cid:image_logo\">";
-						String sHeader = "<html><body style='font-family: arial, sans-serif;height:100%;background-color: #DCEDFF'>"+
+						String sImage = "<img style='max-height: "+SH.ci("labMailMaxLogoSizeInPixels", 75)+"px' src=\"cid:image_logo\">";
+						String sHeader = "<html><body style='font-family: arial, sans-serif;height:100%;background-color: white'>"+
 						"<table border='0' width='100%'><tr><td>" + MedwanQuery.getInstance().getLabel("sendhtmlmail", "todoctor", user.language) + " " +  sUserFirstname + " " + user.lastname + ", </td> <td></td> <td ALIGN='right'> " + sImage + "</td> </tr></table> <br>" +			
 						MedwanQuery.getInstance().getLabel("sendhtmlmail", "newresults", user.language) + "<br><br>" +
 						"<center><h3>" + sMailTitle + " " + transactionId + " ("+ScreenHelper.stdDateFormat.format(transactionVO.getUpdateTime())+")</h3></center><center><h3>"+
 						MedwanQuery.getInstance().getLabel("web", "patient", user.language) +": "+ patient.lastname.toUpperCase()+" "+sPatientFirstname+", "+patient.gender.toUpperCase()+" °"+patient.dateOfBirth + " (ID: "+patient.personid+")</h3></center>" +
-						"<table border='1' width='100%'>" +
-						"	<tr BGCOLOR='Lightskyblue'><th>"+MedwanQuery.getInstance().getLabel("web", "labcode", user.language)+"</th><th>" + MedwanQuery.getInstance().getLabel("web", "label", user.language)+"</th><th>"+ MedwanQuery.getInstance().getLabel("web", "value", user.language) +"</th><th>"+ MedwanQuery.getInstance().getLabel("web", "references", user.language) +"</th><th>"+ MedwanQuery.getInstance().getLabel("web", "evaluation", user.language) +"</th></tr>";
+						"<table width='100%'>" +
+						"	<tr style='background-color: black; color: white'><th style='text-align: left'>"+MedwanQuery.getInstance().getLabel("web", "labcode", user.language)+"</th><th style='text-align: left'>" + MedwanQuery.getInstance().getLabel("web", "label", user.language)+"</th><th style='text-align: left'>"+ MedwanQuery.getInstance().getLabel("web", "value", user.language) +"</th><th style='text-align: left'>"+ MedwanQuery.getInstance().getLabel("web", "references", user.language) +"</th><th style='text-align: left'>"+ MedwanQuery.getInstance().getLabel("web", "evaluation", user.language) +"</th></tr>";
 	
 						String sResult=sHeader+result;
 						sResult+= "</table><br/><br/>"+MedwanQuery.getInstance().getLabel("sendhtmlmail", "closingmail", user.language) + "<br><br>" + MedwanQuery.getInstance().getLabel("sendhtmlmail", "closingmailname", user.language);
@@ -461,13 +471,13 @@ public class LabresultsNotifier {
 			                fos.flush();
 						}
 						else {
-							sHeader = "<html><body style='font-family: arial, sans-serif;height:100%;background-color: #DCEDFF'>"+
+							sHeader = "<html><body style='font-family: arial, sans-serif;height:100%;background-color: white'>"+
 							"<table border='0' width='100%'><tr><td>" + MedwanQuery.getInstance().getLabel("sendhtmlmail", "todoctor", user.language) + " " +  sUserFirstname + " " + user.lastname + ", </td> <td></td> <td ALIGN='right'> " + sImage + "</td> </tr></table> <br>" +			
 							MedwanQuery.getInstance().getLabel("sendhtmlmail", "newresults", user.language) + "<br><br>" +
-							"<center><h3>" + sMailTitle + " " + transactionId + " ("+ScreenHelper.stdDateFormat.format(transactionVO.getUpdateTime())+")</h3></center><center><h3>"+
+							"<center><h3>" + sMailTitle + " ("+ScreenHelper.stdDateFormat.format(transactionVO.getUpdateTime())+")</h3></center><center><h3>"+
 							MedwanQuery.getInstance().getLabel("web", "patient", user.language) +": "+ patient.lastname.toUpperCase()+" "+sPatientFirstname+", "+patient.gender.toUpperCase()+" °"+patient.dateOfBirth + " (ID: "+patient.personid+")</h3></center>" +
-							"<table border='1' width='100%'>" +
-							"	<tr BGCOLOR='Lightskyblue'><th>"+MedwanQuery.getInstance().getLabel("web", "labcode", user.language)+"</th><th>" + MedwanQuery.getInstance().getLabel("web", "label", user.language)+"</th><th>"+ MedwanQuery.getInstance().getLabel("web", "value", user.language) +"</th><th>"+ MedwanQuery.getInstance().getLabel("web", "references", user.language) +"</th><th>"+ MedwanQuery.getInstance().getLabel("web", "evaluation", user.language) +"</th></tr>";
+							"<table width='100%'>" +
+							"	<tr style='background-color: black; color: white'><th style='text-align: left'>"+MedwanQuery.getInstance().getLabel("web", "labcode", user.language)+"</th><th style='text-align: left'>" + MedwanQuery.getInstance().getLabel("web", "label", user.language)+"</th><th style='text-align: left'>"+ MedwanQuery.getInstance().getLabel("web", "value", user.language) +"</th><th style='text-align: left'>"+ MedwanQuery.getInstance().getLabel("web", "references", user.language) +"</th><th style='text-align: left'>"+ MedwanQuery.getInstance().getLabel("web", "evaluation", user.language) +"</th></tr>";
 		
 							String sResult=sHeader+result;
 							sResult+= "</table><br/><br/>"+MedwanQuery.getInstance().getLabel("sendhtmlmail", "closingmail", user.language) + "<br><br>" + MedwanQuery.getInstance().getLabel("sendhtmlmail", "closingmailname", user.language);
@@ -480,9 +490,9 @@ public class LabresultsNotifier {
 							sFileName = "Transaction"+ new SimpleDateFormat("ddMMyyyy-HHmmss").format(new java.util.Date())+"_Tid"+transactionId+".html";
 			                sAttachment = MedwanQuery.getInstance().getConfigString("tempDirectory","/tmp")+"/"+sFileName;				
 							ProcessFiles.writeFile(sAttachment, sResult);
-							sNotification=sMailTitle + " " + transactionId;
+							sNotification=sMailTitle;
 						}
-						if(sendHtmlMail.sendAttachEmail(MedwanQuery.getInstance().getConfigString("PatientEdit.MailServer"), MedwanQuery.getInstance().getConfigString("labNotifierEmailSender","frank.verbeke@mxs.be"), sentto, sMailTitle, sNotification, sAttachment, sFileName)){
+						if(sendHtmlMail.sendAttachEmail(MedwanQuery.getInstance().getConfigString("PatientEdit.MailServer"), MedwanQuery.getInstance().getConfigString("labNotifierEmailSender","frank.verbeke@mxs.be"), sentto, sMailTitle+" ("+patient.getFullName()+")", sNotification, sAttachment, sFileName)){
 							Debug.println("AttachedMail correctly sent transactionid "+transactionId+" to "+sentto);
 							setSpoolMessageSent(transactionId,transport);
 						}

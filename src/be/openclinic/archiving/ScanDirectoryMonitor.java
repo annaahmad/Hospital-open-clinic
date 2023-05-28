@@ -671,78 +671,84 @@ public class ScanDirectoryMonitor implements Runnable{
 		    			rs.close();
 		    			ps.close();
 		    			
-		    			//check if study already exists, if not create a new TRANSACTION_TYPE_PACS document
-			    		ps =conn.prepareStatement("select * from OC_PACS where OC_PACS_STUDYUID=? and OC_PACS_SERIES=?");
-			    		ps.setString(1, studyUid);
-			    		ps.setString(2, seriesUid);
-			    		rs =ps.executeQuery();
-			    		if(!rs.next()){
-			    			//Study does not exist, create the document
-			    			TransactionVO transaction = new TransactionFactoryGeneral().createTransactionVO(MedwanQuery.getInstance().getUser(MedwanQuery.getInstance().getConfigString("defaultPACSuser","4")),"be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_PACS",false); 
-			    			transaction.setCreationDate(new java.util.Date());
-			    			transaction.setStatus(1);
-			    			transaction.setTransactionId(MedwanQuery.getInstance().getOpenclinicCounter("TransactionID"));
-			    			transaction.setServerId(MedwanQuery.getInstance().getConfigInt("serverId",1));
-			    			transaction.setTransactionType("be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_PACS");
-			    			transaction.setUpdateTime(new SimpleDateFormat("yyyyMMdd").parse(obj.getString(Tag.StudyDate)));
-			    			UserVO user = MedwanQuery.getInstance().getUser(MedwanQuery.getInstance().getConfigString("defaultPACSuser","4"));
-			    			if(user==null){
-			    				MedwanQuery.getInstance().getUser("4");
-			    			}
-			    			transaction.setUser(user);
-			    			transaction.setVersion(1);
-			    			transaction.setItems(new Vector());
-			    			ItemContextVO itemContextVO = new ItemContextVO(new Integer( IdentifierFactory.getInstance().getTemporaryNewIdentifier()), "", "");
-			    			transaction.getItems().add(new ItemVO(new Integer( IdentifierFactory.getInstance().getTemporaryNewIdentifier()),
-			    					"be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_STUDYUID",studyUid,new Date(),itemContextVO));
-			    			itemContextVO = new ItemContextVO(new Integer( IdentifierFactory.getInstance().getTemporaryNewIdentifier()), "", "");
-			    			transaction.getItems().add(new ItemVO(new Integer( IdentifierFactory.getInstance().getTemporaryNewIdentifier()),
-			    					"be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_SERIESID",seriesUid,new Date(),itemContextVO));
-			    			itemContextVO = new ItemContextVO(new Integer( IdentifierFactory.getInstance().getTemporaryNewIdentifier()), "", "");
-			    			String sDescription=ScreenHelper.checkString(obj.getString(Tag.StudyDescription));
-			    			if(sDescription.trim().length()==0){
-				    			sDescription=ScreenHelper.checkString(obj.getString(Tag.AcquisitionDeviceProcessingDescription));
-			    			}
-			    			if(sDescription.trim().length()==0){
-				    			sDescription=ScreenHelper.checkString(obj.getString(Tag.CodeMeaning));
-			    			}
-			    			transaction.getItems().add(new ItemVO(new Integer( IdentifierFactory.getInstance().getTemporaryNewIdentifier()),
-			    					"be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_STUDYDESCRIPTION",sDescription.replaceAll("\\^", ", "),new Date(),itemContextVO));
-			    			itemContextVO = new ItemContextVO(new Integer( IdentifierFactory.getInstance().getTemporaryNewIdentifier()), "", "");
-			    			try{
+		    			//First check if another process is not yet doing this
+		    			String semaphore = studyUid+"-"+seriesUid;
+		    			SH.clearSemaphores(10000);
+		    			if(!SH.isSemaphore(semaphore)) {
+			    			SH.setSemaphore(semaphore);
+			    			//check if study already exists, if not create a new TRANSACTION_TYPE_PACS document
+				    		ps =conn.prepareStatement("select * from OC_PACS where OC_PACS_STUDYUID=? and OC_PACS_SERIES=?");
+				    		ps.setString(1, studyUid);
+				    		ps.setString(2, seriesUid);
+				    		rs =ps.executeQuery();
+				    		if(!rs.next()){
+				    			//Study does not exist, create the document
+				    			TransactionVO transaction = new TransactionFactoryGeneral().createTransactionVO(MedwanQuery.getInstance().getUser(MedwanQuery.getInstance().getConfigString("defaultPACSuser","4")),"be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_PACS",false); 
+				    			transaction.setCreationDate(new java.util.Date());
+				    			transaction.setStatus(1);
+				    			transaction.setTransactionId(MedwanQuery.getInstance().getOpenclinicCounter("TransactionID"));
+				    			transaction.setServerId(MedwanQuery.getInstance().getConfigInt("serverId",1));
+				    			transaction.setTransactionType("be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_PACS");
+				    			transaction.setUpdateTime(new SimpleDateFormat("yyyyMMdd").parse(obj.getString(Tag.StudyDate)));
+				    			UserVO user = MedwanQuery.getInstance().getUser(MedwanQuery.getInstance().getConfigString("defaultPACSuser","4"));
+				    			if(user==null){
+				    				MedwanQuery.getInstance().getUser("4");
+				    			}
+				    			transaction.setUser(user);
+				    			transaction.setVersion(1);
+				    			transaction.setItems(new Vector());
+				    			ItemContextVO itemContextVO = new ItemContextVO(new Integer( IdentifierFactory.getInstance().getTemporaryNewIdentifier()), "", "");
 				    			transaction.getItems().add(new ItemVO(new Integer( IdentifierFactory.getInstance().getTemporaryNewIdentifier()),
-				    					"be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_STUDYDATE",ScreenHelper.formatDate(new SimpleDateFormat("yyyyMMdd").parse(obj.getString(Tag.StudyDate))),new Date(),itemContextVO));
-			    			}
-			    			catch(Exception er){er.printStackTrace();}
-			    			itemContextVO = new ItemContextVO(new Integer( IdentifierFactory.getInstance().getTemporaryNewIdentifier()), "", "");
-			    			try{
-				    			transaction.getItems().add(new ItemVO(new Integer( IdentifierFactory.getInstance().getTemporaryNewIdentifier()),
-				    					"be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_SERIESDATE",ScreenHelper.formatDate(new SimpleDateFormat("yyyyMMdd").parse(obj.getString(Tag.SeriesDate))),new Date(),itemContextVO));
-			    			}
-			    			catch(Exception er){er.printStackTrace();}
-			    			itemContextVO = new ItemContextVO(new Integer( IdentifierFactory.getInstance().getTemporaryNewIdentifier()), "", "");
-			    			transaction.getItems().add(new ItemVO(new Integer( IdentifierFactory.getInstance().getTemporaryNewIdentifier()),
-			    					"be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_MODALITY",ScreenHelper.checkString(obj.getString(Tag.Modality))+" - "+ScreenHelper.checkString(obj.getString(Tag.Manufacturer)),new Date(),itemContextVO));
-			    			itemContextVO = new ItemContextVO(new Integer( IdentifierFactory.getInstance().getTemporaryNewIdentifier()), "", "");
-			    			transaction.getItems().add(new ItemVO(new Integer( IdentifierFactory.getInstance().getTemporaryNewIdentifier()),
-			    					"be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_PATIENTPOSITION",ScreenHelper.checkString(obj.getString(Tag.PatientPosition)),new Date(),itemContextVO));
-			    			itemContextVO = new ItemContextVO(new Integer( IdentifierFactory.getInstance().getTemporaryNewIdentifier()), "", "");
-			    			transaction.getItems().add(new ItemVO(new Integer( IdentifierFactory.getInstance().getTemporaryNewIdentifier()),
-			    					"be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_REFMED",ScreenHelper.checkString(obj.getString(Tag.ReferringPhysicianName)),new Date(),itemContextVO));
-			    			Encounter encounter = Encounter.getActiveEncounterOnDate(SH.getSQLTimestamp(transaction.getUpdateTime()),nPatientId+"");
-			    			if(encounter!=null) {
+				    					"be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_STUDYUID",studyUid,new Date(),itemContextVO));
 				    			itemContextVO = new ItemContextVO(new Integer( IdentifierFactory.getInstance().getTemporaryNewIdentifier()), "", "");
 				    			transaction.getItems().add(new ItemVO(new Integer( IdentifierFactory.getInstance().getTemporaryNewIdentifier()),
-			    					"be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CONTEXT_ENCOUNTERUID",encounter.getUid(),new Date(),itemContextVO));
-			    			}
-			    			if(MedwanQuery.getInstance().getConfigInt("pacsTestLoad",0)==0){
-			    				MedwanQuery.getInstance().updateTransaction(nPatientId,transaction);
-			    			}
-			    			else{
-			    				MedwanQuery.getInstance().updateTransaction(MedwanQuery.getInstance().getConfigInt("pacsTestLoadPatientUid",9966),transaction);
-			    			}
+				    					"be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_SERIESID",seriesUid,new Date(),itemContextVO));
+				    			itemContextVO = new ItemContextVO(new Integer( IdentifierFactory.getInstance().getTemporaryNewIdentifier()), "", "");
+				    			String sDescription=ScreenHelper.checkString(obj.getString(Tag.StudyDescription));
+				    			if(sDescription.trim().length()==0){
+					    			sDescription=ScreenHelper.checkString(obj.getString(Tag.AcquisitionDeviceProcessingDescription));
+				    			}
+				    			if(sDescription.trim().length()==0){
+					    			sDescription=ScreenHelper.checkString(obj.getString(Tag.CodeMeaning));
+				    			}
+				    			transaction.getItems().add(new ItemVO(new Integer( IdentifierFactory.getInstance().getTemporaryNewIdentifier()),
+				    					"be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_STUDYDESCRIPTION",sDescription.replaceAll("\\^", ", "),new Date(),itemContextVO));
+				    			itemContextVO = new ItemContextVO(new Integer( IdentifierFactory.getInstance().getTemporaryNewIdentifier()), "", "");
+				    			try{
+					    			transaction.getItems().add(new ItemVO(new Integer( IdentifierFactory.getInstance().getTemporaryNewIdentifier()),
+					    					"be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_STUDYDATE",ScreenHelper.formatDate(new SimpleDateFormat("yyyyMMdd").parse(obj.getString(Tag.StudyDate))),new Date(),itemContextVO));
+				    			}
+				    			catch(Exception er){er.printStackTrace();}
+				    			itemContextVO = new ItemContextVO(new Integer( IdentifierFactory.getInstance().getTemporaryNewIdentifier()), "", "");
+				    			try{
+					    			transaction.getItems().add(new ItemVO(new Integer( IdentifierFactory.getInstance().getTemporaryNewIdentifier()),
+					    					"be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_SERIESDATE",ScreenHelper.formatDate(new SimpleDateFormat("yyyyMMdd").parse(obj.getString(Tag.SeriesDate))),new Date(),itemContextVO));
+				    			}
+				    			catch(Exception er){er.printStackTrace();}
+				    			itemContextVO = new ItemContextVO(new Integer( IdentifierFactory.getInstance().getTemporaryNewIdentifier()), "", "");
+				    			transaction.getItems().add(new ItemVO(new Integer( IdentifierFactory.getInstance().getTemporaryNewIdentifier()),
+				    					"be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_MODALITY",ScreenHelper.checkString(obj.getString(Tag.Modality))+" - "+ScreenHelper.checkString(obj.getString(Tag.Manufacturer)),new Date(),itemContextVO));
+				    			itemContextVO = new ItemContextVO(new Integer( IdentifierFactory.getInstance().getTemporaryNewIdentifier()), "", "");
+				    			transaction.getItems().add(new ItemVO(new Integer( IdentifierFactory.getInstance().getTemporaryNewIdentifier()),
+				    					"be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_PATIENTPOSITION",ScreenHelper.checkString(obj.getString(Tag.PatientPosition)),new Date(),itemContextVO));
+				    			itemContextVO = new ItemContextVO(new Integer( IdentifierFactory.getInstance().getTemporaryNewIdentifier()), "", "");
+				    			transaction.getItems().add(new ItemVO(new Integer( IdentifierFactory.getInstance().getTemporaryNewIdentifier()),
+				    					"be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PACS_REFMED",ScreenHelper.checkString(obj.getString(Tag.ReferringPhysicianName)),new Date(),itemContextVO));
+				    			Encounter encounter = Encounter.getActiveEncounterOnDate(SH.getSQLTimestamp(transaction.getUpdateTime()),nPatientId+"");
+				    			if(encounter!=null) {
+					    			itemContextVO = new ItemContextVO(new Integer( IdentifierFactory.getInstance().getTemporaryNewIdentifier()), "", "");
+					    			transaction.getItems().add(new ItemVO(new Integer( IdentifierFactory.getInstance().getTemporaryNewIdentifier()),
+				    					"be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CONTEXT_ENCOUNTERUID",encounter.getUid(),new Date(),itemContextVO));
+				    			}
+				    			if(MedwanQuery.getInstance().getConfigInt("pacsTestLoad",0)==0){
+				    				MedwanQuery.getInstance().updateTransaction(nPatientId,transaction);
+				    			}
+				    			else{
+				    				MedwanQuery.getInstance().updateTransaction(MedwanQuery.getInstance().getConfigInt("pacsTestLoadPatientUid",9966),transaction);
+				    			}
+				    		}
 			    		}
-	
+		
 			    		String filename=ArchiveDocument.generateUDI(MedwanQuery.getInstance().getOpenclinicCounter("ARCH_DOCUMENTS"));
 		    			filename = acceptIncomingDICOMFile(filename, file);
 		    			if(new File(SCANDIR_BASE+"/"+SCANDIR_TO+"/"+filename).exists()) {
@@ -762,8 +768,8 @@ public class ScanDirectoryMonitor implements Runnable{
 		    			else {
 		    				Debug.println("Target file has not been created (file already moved by another process?)");
 		    			}
-			    		err=1;
-		    		}
+	    			}
+		    		err=1;
 		    		rs.close();
 		    		ps.close();
 	    		}

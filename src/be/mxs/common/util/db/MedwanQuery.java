@@ -1490,7 +1490,7 @@ public class MedwanQuery {
             }
             catch(Exception e){
                 Debug.println("WARNING : ConfigInt \""+key+"\" requested but NO INTEGER. (Value = '"+configString+"')");
-                return -1;
+                return defaultValue;
             }
         }
 
@@ -1506,7 +1506,7 @@ public class MedwanQuery {
             }
             catch(Exception e){
                 Debug.println("WARNING : ConfigInt \""+key+"\" requested but NO LONG. (Value = '"+configString+"')");
-                return -1;
+                return defaultValue;
             }
         }
 

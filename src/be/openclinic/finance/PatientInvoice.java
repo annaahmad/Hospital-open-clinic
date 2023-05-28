@@ -879,7 +879,7 @@ public class PatientInvoice extends Invoice {
         }
         else {
         	try{
-        		b=Double.parseDouble(new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#.00")).format(b));
+        		b=SH.getPriceToDouble(new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#.00")).format(b));
         	}
         	catch(Exception e){
         	}
@@ -1263,7 +1263,18 @@ public class PatientInvoice extends Invoice {
             		}
             		setClosureDate(ScreenHelper.formatDate(getUpdateDateTime()));
             	}
-            	sSelect = " INSERT INTO OC_PATIENTINVOICES (" +
+                
+            	if(bExistingVersion>-1) {
+                    sSelect = " DELETE FROM OC_PATIENTINVOICES WHERE OC_PATIENTINVOICE_SERVERID = ? AND OC_PATIENTINVOICE_OBJECTID = ? and OC_PATIENTINVOICE_VERSION<?";
+                    ps = oc_conn.prepareStatement(sSelect);
+                    ps.setInt(1,Integer.parseInt(ids[0]));
+                    ps.setInt(2,Integer.parseInt(ids[1]));
+                    ps.setInt(3, iVersion);
+                    ps.executeUpdate();
+                    ps.close();
+                }
+
+                sSelect = " INSERT INTO OC_PATIENTINVOICES (" +
                           " OC_PATIENTINVOICE_SERVERID," +
                           " OC_PATIENTINVOICE_OBJECTID," +
                           " OC_PATIENTINVOICE_DATE," +
@@ -1312,16 +1323,6 @@ public class PatientInvoice extends Invoice {
                 ps.executeUpdate();
                 ps.close();
                 
-                if(bExistingVersion>-1) {
-                    sSelect = " DELETE FROM OC_PATIENTINVOICES WHERE OC_PATIENTINVOICE_SERVERID = ? AND OC_PATIENTINVOICE_OBJECTID = ? and OC_PATIENTINVOICE_VERSION<?";
-                    ps = oc_conn.prepareStatement(sSelect);
-                    ps.setInt(1,Integer.parseInt(ids[0]));
-                    ps.setInt(2,Integer.parseInt(ids[1]));
-                    ps.setInt(3, iVersion);
-                    ps.executeUpdate();
-                    ps.close();
-                }
-
                 sSelect = "UPDATE OC_DEBETS SET OC_DEBET_PATIENTINVOICEUID = NULL WHERE OC_DEBET_PATIENTINVOICEUID = ?";
                 ps = oc_conn.prepareStatement(sSelect);
                 ps.setString(1,this.getUid());

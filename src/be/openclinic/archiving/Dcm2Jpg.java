@@ -40,7 +40,6 @@ import org.dcm4che2.util.CloseUtils;
 
 import com.pixelmed.dicom.DicomException;
 import com.pixelmed.display.ConsumerFormatImageMaker;
-import com.sun.image.codec.jpeg.ImageFormatException;
 
 import be.mxs.common.util.system.Debug;
 import be.openclinic.system.SH;
@@ -280,7 +279,7 @@ public class Dcm2Jpg {
     	jpgWriter.dispose();
     }
     
-    private void encodeByJPEGEncoder(BufferedImage bi, File dest) throws ImageFormatException, IOException {
+    private void encodeByJPEGEncoder(BufferedImage bi, File dest) throws IOException {
     	FileImageOutputStream out = null;
         try {
             out = new FileImageOutputStream(dest);

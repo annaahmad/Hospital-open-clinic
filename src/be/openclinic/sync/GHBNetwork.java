@@ -100,7 +100,14 @@ public class GHBNetwork {
 									String encryptedToken = root.elementText("token");
 									Debug.println("ENC-- Decrypting token with private key");
 									Debug.println("ENC-- Encrypted token = "+encryptedToken);
-									String token = Encryption.decryptTextWithPrivateKey(encryptedToken, MedwanQuery.getInstance().getConfigString("ghb_ref_privkey"));
+									String token="";
+									try {
+										token = Encryption.decryptTextWithPrivateKey(encryptedToken, MedwanQuery.getInstance().getConfigString("ghb_ref_privkey"));
+									}
+									catch(Exception e) {
+										e.printStackTrace();
+										continue;
+									}
 									Debug.println("ENC-- Decrypted token = "+token);
 									Debug.println("ENC-- Decrypting text with token");
 									String data = Encryption.decryptTextSymmetric(encryptedData, token);

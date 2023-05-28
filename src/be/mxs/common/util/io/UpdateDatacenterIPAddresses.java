@@ -18,6 +18,9 @@ import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
+import be.mxs.common.util.system.HTMLEntities;
+import be.openclinic.system.SH;
+
 
 public class UpdateDatacenterIPAddresses {
 
@@ -82,18 +85,19 @@ public class UpdateDatacenterIPAddresses {
 		    	for(int n=0;n<ips.length;n++){
 		    		if(validIP(ips[n]) && !ips[n].startsWith("10.") && !ips[n].startsWith("192.168.")){
 		    			HttpClient client = new HttpClient();
-		    			String url = "http://api.ipstack.com/"+ips[n];
+		    			String url = "http://ipwho.is/"+ips[n];
 		    			GetMethod method = new GetMethod(url);
 		    			method.setRequestHeader("Content-type","text/xml; charset=windows-1252");
 		    			Vector<NameValuePair> vNvp = new Vector<NameValuePair>();
 		            	vNvp.add(new NameValuePair("access_key","88c7c66cdcdb938a81a5618fee505748"));
 		            	vNvp.add(new NameValuePair("output","xml"));
+		            	vNvp.add(new NameValuePair("fields","country_code,city,latitude,longitude"));
 		    			NameValuePair[] nvp = new NameValuePair[vNvp.size()];
 		    			vNvp.copyInto(nvp);
 		    			method.setQueryString(nvp);
 		    			int statusCode = client.executeMethod(method);
 		    			System.out.println("checking ip "+ips[n]);
-		    			if(method.getResponseBodyAsString().contains("<result>")){
+		    			if(method.getResponseBodyAsString().contains("<query>")){
 		    				BufferedReader br = new BufferedReader(new StringReader(method.getResponseBodyAsString()));
 		    				SAXReader reader=new SAXReader(false);
 		    				Document document=reader.read(br);
@@ -108,13 +112,16 @@ public class UpdateDatacenterIPAddresses {
 	        					System.out.println("Server country "+root.element("country_code").getText());
 		    				}
 		    				if(root.element("city")!=null && !root.element("city").getText().equalsIgnoreCase("-")){
-		    					PreparedStatement ps2 = conn.prepareStatement("update dc_monitorservers set dc_monitorserver_city=? where dc_monitorserver_serverid=?");
-		    					ps2.setString(1, root.element("city").getText().toUpperCase());
-		    					ps2.setInt(2,id);
-		    					ps2.execute();
-		    					ps2.close();
-		    					location+=", "+root.element("city").getText().toUpperCase();
-	        					System.out.println("Server city "+root.element("city").getText());
+		    					try {
+			    					PreparedStatement ps2 = conn.prepareStatement("update dc_monitorservers set dc_monitorserver_city=? where dc_monitorserver_serverid=?");
+			    					ps2.setString(1, root.element("city").getText().toUpperCase());
+			    					ps2.setInt(2,id);
+			    					ps2.execute();
+			    					ps2.close();
+			    					location+=", "+HTMLEntities.unhtmlentities(root.element("city").getText()).toUpperCase();
+		        					System.out.println("Server city "+root.element("city").getText());
+		    					}
+		    					catch(Exception q) {q.printStackTrace();}
 		    				}
 	        				if(root.element("latitude")!=null && !root.element("latitude").getText().equalsIgnoreCase("-") && root.element("longitude")!=null && !root.element("longitude").getText().equalsIgnoreCase("-")){
 	        					PreparedStatement ps2 = conn.prepareStatement("update dc_monitorservers set dc_monitorserver_latitude=?,dc_monitorserver_longitude=? where dc_monitorserver_serverid=?");
@@ -133,7 +140,7 @@ public class UpdateDatacenterIPAddresses {
 		    ps.close();
 		    
 		    //Update geographical positions
-			ps = conn.prepareStatement("select * from dc_monitorservers where (dc_monitorserver_latitude is null OR dc_monitorserver_longitude is null) and dc_monitorserver_country is not null and dc_monitorserver_country<>'' and dc_monitorserver_city is not null and dc_monitorserver_city<>'' and dc_monitorserver_name not like '10.%' and dc_monitorserver_name not like '192.168.%'");
+			ps = conn.prepareStatement("select d.*,oc_label_value from dc_monitorservers d,openclinic_dbo.oc_labels  where oc_label_type='country' and oc_label_language='en' and oc_label_id=dc_monitorserver_country and (dc_monitorserver_latitude is null OR dc_monitorserver_longitude is null) and dc_monitorserver_country is not null and dc_monitorserver_country<>'' and dc_monitorserver_city is not null and dc_monitorserver_city<>'' and dc_monitorserver_name not like '10.%' and dc_monitorserver_name not like '192.168.%'");
 			rs=ps.executeQuery();
 			while(rs.next()){
     			int id = rs.getInt("dc_monitorserver_serverid");
@@ -142,8 +149,7 @@ public class UpdateDatacenterIPAddresses {
     			PostMethod method = new PostMethod(url);
     			method.setRequestHeader("Content-type","text/xml; charset=windows-1252");
     			Vector<NameValuePair> vNvp = new Vector<NameValuePair>();
-            	String address=checkString(rs.getString("dc_monitorserver_city"))+","+checkString(rs.getString("dc_monitorserver_country"));
-            	System.out.println("trying address "+address);
+	            String address=rs.getString("dc_monitorserver_city")+","+rs.getString("oc_label_value");
     			vNvp.add(new NameValuePair("key","AIzaSyCuCDqEFvqpb2q4hDwm_syqwevWe_ZAPBE"));
     			vNvp.add(new NameValuePair("address",address));
             	vNvp.add(new NameValuePair("sensor","false"));

@@ -951,7 +951,7 @@ public class HL7Server {
     	String type="";
     	java.sql.Connection conn = SH.getOpenClinicConnection();
     	try {
-	    	PreparedStatement ps = conn.prepareStatement("select monster from labanalysis where labcode=?");
+	    	PreparedStatement ps = conn.prepareStatement("select monster from labanalysis where labcode=? and deletetime is null");
 	    	ps.setString(1, labcode);
 	    	ResultSet rs = ps.executeQuery();
 	    	if(rs.next()) {

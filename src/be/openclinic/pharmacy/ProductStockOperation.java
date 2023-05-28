@@ -1073,9 +1073,9 @@ public class ProductStockOperation extends OC_Object{
 	            				debet.setExtraInsurarUid(extrainsurar.getUid());
 	            			}
 	            		}
-	            		debet.setAmount(Double.parseDouble(new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#.00")).format(patientamount).replaceAll(",", "."))*debet.getQuantity());
-	            		debet.setInsurarAmount(Double.parseDouble(new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#.00")).format(insuraramount).replaceAll(",", "."))*debet.getQuantity());
-	            		debet.setExtraInsurarAmount(Double.parseDouble(new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#.00")).format(extrainsuraramount).replaceAll(",", "."))*debet.getQuantity());
+	            		debet.setAmount(SH.getPriceToDouble(new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#.00")).format(patientamount))*debet.getQuantity());
+	            		debet.setInsurarAmount(SH.getPriceToDouble(new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#.00")).format(insuraramount))*debet.getQuantity());
+	            		debet.setExtraInsurarAmount(SH.getPriceToDouble(new DecimalFormat(MedwanQuery.getInstance().getConfigString("priceFormat","#.00")).format(extrainsuraramount))*debet.getQuantity());
                     	Debug.println("Sauvegarde de la prestation");
                     	Debug.println("ExtraInsurarAmount="+debet.getExtraInsurarAmount()+" ("+extrainsuraramount+")");
                     	debet.store();

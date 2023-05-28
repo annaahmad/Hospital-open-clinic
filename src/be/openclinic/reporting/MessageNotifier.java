@@ -140,7 +140,7 @@ public class MessageNotifier {
     	}
     	Connection conn=MedwanQuery.getInstance().getOpenclinicConnection();
 		try{
-			PreparedStatement ps = conn.prepareStatement("SELECT * from OC_MESSAGES where OC_MESSAGE_SENTDATETIME IS NULL and OC_MESSAGE_CREATEDATETIME>? and OC_MESSAGE_SENDAFTER<?");
+			PreparedStatement ps = conn.prepareStatement("SELECT * from OC_MESSAGES where OC_MESSAGE_SENTDATETIME IS NULL and OC_MESSAGE_CREATEDATETIME>? AND OC_MESSAGE_SENDAFTER<?");
 			long day = 24*3600*1000;
 			long period = day * MedwanQuery.getInstance().getConfigInt("spoolnotifiermessagesfordays",7);
 			ps.setTimestamp(1, new java.sql.Timestamp(new Date().getTime()-period));

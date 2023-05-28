@@ -301,7 +301,7 @@ public class PDFPatientInvoiceReceiptGenerator extends PDFInvoiceGenerator {
 	        cell = createValueCell(ScreenHelper.getTran(null,"web","balance",sPrintLanguage)+": "+priceFormat.format(invoice.getBalance())+" "+sCurrency, 25,new Double(7*scaleFactor).intValue(),Font.NORMAL);
 	        cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
 	        table.addCell(cell);
-	
+	        
 	        cell=createValueCell("",50);
 	        cell.setBorder(PdfPCell.BOTTOM);
 	        table.addCell(cell);
@@ -332,6 +332,20 @@ public class PDFPatientInvoiceReceiptGenerator extends PDFInvoiceGenerator {
 	
 		        cell=createValueCell("\r\n",50);
 		        cell.setBorder(PdfPCell.NO_BORDER);
+		        table.addCell(cell);
+	        }
+
+	        if(SH.ci("printBankInstructionOnReceipt", 0)==1) {
+		        cell = createValueCell(ScreenHelper.getTranNoLink("web","paytobank",sPrintLanguage), 50,new Double(15*scaleFactor).intValue(),Font.BOLD);
+		        cell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+		        table.addCell(cell);
+		        cell = createValueCell(priceFormat.format(SH.ci("printBankInstructionBalance", 1)==1?invoice.getBalance():invoice.getPatientAmount())+" "+sCurrency, 50,new Double(15*scaleFactor).intValue(),Font.BOLD);
+		        cell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+		        table.addCell(cell);
+	        }
+	        if(SH.ci("printFinalInstructionOnReceipt", 0)==1) {
+		        cell = createValueCell(ScreenHelper.getTranNoLink("web","receiptinstruction",sPrintLanguage), 50,new Double(7*scaleFactor).intValue(),Font.BOLD);
+		        cell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
 		        table.addCell(cell);
 	        }
 

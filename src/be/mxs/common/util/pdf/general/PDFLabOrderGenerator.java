@@ -218,6 +218,8 @@ public class PDFLabOrderGenerator extends PDFOfficialBasic {
 	        table.addCell(cell);
         }
         
+       
+        
         if(tran!=null && tran.getItemValue("be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_LAB_REMARK").length()>0){
 	        cell=createLabelCourier(" ",10,10,Font.NORMAL);
 	        cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);

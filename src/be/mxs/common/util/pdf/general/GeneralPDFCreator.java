@@ -8,6 +8,7 @@ import be.mxs.common.model.vo.healthrecord.IConstants;
 import be.mxs.common.util.db.MedwanQuery;
 import be.mxs.common.util.pdf.PDFCreator;
 import be.mxs.common.util.system.Debug;
+import be.mxs.common.util.system.Miscelaneous;
 import be.mxs.common.util.system.PdfBarcode;
 import be.mxs.common.util.system.Picture;
 import be.mxs.common.util.system.ScreenHelper;
@@ -127,14 +128,33 @@ public class GeneralPDFCreator extends PDFCreator {
             doc.open();
 
             //*** HEADER **************************************************************************
-            printDocumentHeader(req);
+            //printDocumentHeader(req);
+            PdfPTable table = new PdfPTable(2);
+            table.setWidthPercentage(100);
+            PdfPCell cell = null;
+            // logo
+            String sURL = req.getRequestURL().toString();
+            sURL = sURL.substring(0,sURL.indexOf("openclinic",10));
+            try{
+                Image img = Miscelaneous.getImage("logo_pdf.jpg",sProject);
+                img.scaleToFit(80,80);
+                cell = new PdfPCell(img);
+                cell.setBorder(PdfPCell.NO_BORDER);
+                cell.setVerticalAlignment(PdfPCell.ALIGN_MIDDLE);
+                table.addCell(cell);
+            }
+            catch(Exception e){
+                e.printStackTrace();
+            }
+            PdfPTable table2 = new PdfPTable(1);
 
             //*** TITLE ***************************************************************************
             String title = getTran("web","clinicaldocuments").toUpperCase();
 
             Paragraph par = new Paragraph(title,FontFactory.getFont(FontFactory.HELVETICA,15,Font.BOLD));
             par.setAlignment(Paragraph.ALIGN_CENTER);
-            doc.add(par);
+            cell = new PdfPCell(par);
+            table2.addCell(cell);
             
             // add date restriction to document title
             String sSubTitle = "";
@@ -143,8 +163,14 @@ public class GeneralPDFCreator extends PDFCreator {
             		
             par = new Paragraph(sSubTitle,FontFactory.getFont(FontFactory.HELVETICA,Math.round((double)10*fontSizePercentage/100.0),Font.NORMAL));
             par.setAlignment(Paragraph.ALIGN_CENTER);
-            doc.add(par);
+            cell = new PdfPCell(par);
+            table2.addCell(cell);
+            
+            cell = new PdfPCell(table2);
+            cell.setBorder(PdfPCell.NO_BORDER);
+            table.addCell(cell);
 
+            doc.add(table);
             doc.add(new Paragraph(" "));
 
             //*** TRANSACTIONS ********************************************************************
@@ -202,14 +228,34 @@ public class GeneralPDFCreator extends PDFCreator {
             doc.open();
 
             //*** HEADER **************************************************************************
-            printDocumentHeader(req);
+            //printDocumentHeader(req);
+            PdfPTable table = new PdfPTable(2);
+            table.setWidthPercentage(100);
+            PdfPCell cell = null;
+            // logo
+            String sURL = req.getRequestURL().toString();
+            sURL = sURL.substring(0,sURL.indexOf("openclinic",10));
+            try{
+                Image img = Miscelaneous.getImage("logo_pdf.jpg",sProject);
+                img.scaleToFit(80,80);
+                cell = new PdfPCell(img);
+                cell.setBorder(PdfPCell.NO_BORDER);
+                cell.setVerticalAlignment(PdfPCell.ALIGN_MIDDLE);
+                table.addCell(cell);
+            }
+            catch(Exception e){
+                e.printStackTrace();
+            }
+            PdfPTable table2 = new PdfPTable(1);
 
             //*** TITLE ***************************************************************************
             String title = getTran("web","clinicaldocuments").toUpperCase();
 
             Paragraph par = new Paragraph(title,FontFactory.getFont(FontFactory.HELVETICA,15,Font.BOLD));
             par.setAlignment(Paragraph.ALIGN_CENTER);
-            doc.add(par);
+            cell = new PdfPCell(par);
+            cell.setBorder(PdfPCell.NO_BORDER);
+            table2.addCell(cell);
             
             // add date restriction to document title
             String sSubTitle = "";
@@ -231,10 +277,18 @@ public class GeneralPDFCreator extends PDFCreator {
 
             sSubTitle+= getTran("web","printdate")+": "+dateFormat.format(new Date());
             		
-            par = new Paragraph(sSubTitle,FontFactory.getFont(FontFactory.HELVETICA,Math.round((double)10*fontSizePercentage/100.0),Font.NORMAL));
+            par = new Paragraph(sSubTitle,FontFactory.getFont(FontFactory.HELVETICA,11,Font.NORMAL));
             par.setAlignment(Paragraph.ALIGN_CENTER);
-            doc.add(par);
+            cell = new PdfPCell(par);
+            cell.setBorder(PdfPCell.NO_BORDER);
+            table2.addCell(cell);
+            
+            cell = new PdfPCell(table2);
+            cell.setBorder(PdfPCell.NO_BORDER);
+            table.addCell(cell);
 
+            doc.add(table);
+            
             //*** OTHER DOCUMENT ELEMENTS *********************************************************
             printPatientCard(patient,true); // 0, showPhoto
             //printAdminHeader(patient);

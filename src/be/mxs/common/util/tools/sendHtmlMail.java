@@ -15,12 +15,21 @@ public class sendHtmlMail {
 	static public boolean sendSimpleMail(String smtpServer, String sFrom, String sTo, String sSubject, String sMessage){    	
 		boolean bSuccess=false;
 		try{
-	        Properties props = new Properties();
-	        props.setProperty("mail.transport.protocol", "smtp");
-	        props.setProperty("mail.host", smtpServer); //props.setProperty("mail.user", ""); //props.setProperty("mail.password", "");
-	
-	        Session mailSession = Session.getDefaultInstance(props, null);
-	        mailSession.setDebug(true);
+			final String username = MedwanQuery.getInstance(false).getConfigString("mailbot.user","openclinic.mailrobot@ict4d.be");
+			final String password = MedwanQuery.getInstance(false).getConfigString("mailbot.password","Bigo4ever");
+
+			Properties props = new Properties();
+			props.put("mail.smtp.auth", "true");
+			props.put("mail.smtp.starttls.enable", "true");
+			props.put("mail.smtp.host", MedwanQuery.getInstance(false).getConfigString("mailbot.server","smtp.gmail.com"));
+			props.put("mail.smtp.port", MedwanQuery.getInstance(false).getConfigString("mailbot.port","587"));
+	        props.put("mail.smtp.user", username);
+	        props.put("mail.smtp.password", password);
+	        props.put("mail.smtp.ssl.trust", MedwanQuery.getInstance(false).getConfigString("mailbot.server","smtp.gmail.com"));        
+
+	        Session mailSession = Session.getInstance(props);
+
+	        mailSession.setDebug(MedwanQuery.getInstance(false).getConfigString("Debug").equalsIgnoreCase("On"));
 	        Transport transport = mailSession.getTransport("smtp");
 	
 	        MimeMessage message = new MimeMessage(mailSession);
@@ -32,9 +41,9 @@ public class sendHtmlMail {
 	        message.setContent(sMessage, "text/plain");
 	        message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(sTo,false));
 	
-	        transport.connect();
-	        transport.sendMessage(message, message.getRecipients(Message.RecipientType.TO));
-	        transport.close();        
+	        transport.connect(MedwanQuery.getInstance(false).getConfigString("mailbot.server","smtp.gmail.com"),username,password);
+	        transport.sendMessage(message,message.getRecipients(Message.RecipientType.TO));
+	        transport.close();
 	        bSuccess=true;
 		}
         catch(Exception e){
@@ -46,14 +55,21 @@ public class sendHtmlMail {
 	static public void sendMail(String smtpServer, String sFrom, String sTo, String sSubject, String sMessage)
 			throws AddressException, MessagingException {    	
 		try{
-			//Send HTML mail without embedded images
-	        Properties props = new Properties();
-	        props.setProperty("mail.transport.protocol", "smtp");
-	        props.setProperty("mail.host", smtpServer); //props.setProperty("mail.user", ""); //props.setProperty("mail.password", "");
-	
-	        Session mailSession = Session.getDefaultInstance(props, null);
-	        mailSession.setDebug(true);
-	        //Transport transport = mailSession.getTransport();
+			final String username = MedwanQuery.getInstance(false).getConfigString("mailbot.user","openclinic.mailrobot@ict4d.be");
+			final String password = MedwanQuery.getInstance(false).getConfigString("mailbot.password","Bigo4ever");
+
+			Properties props = new Properties();
+			props.put("mail.smtp.auth", "true");
+			props.put("mail.smtp.starttls.enable", "true");
+			props.put("mail.smtp.host", MedwanQuery.getInstance(false).getConfigString("mailbot.server","smtp.gmail.com"));
+			props.put("mail.smtp.port", MedwanQuery.getInstance(false).getConfigString("mailbot.port","587"));
+	        props.put("mail.smtp.user", username);
+	        props.put("mail.smtp.password", password);
+	        props.put("mail.smtp.ssl.trust", MedwanQuery.getInstance(false).getConfigString("mailbot.server","smtp.gmail.com"));        
+
+	        Session mailSession = Session.getInstance(props);
+
+	        mailSession.setDebug(MedwanQuery.getInstance(false).getConfigString("Debug").equalsIgnoreCase("On"));
 	        Transport transport = mailSession.getTransport("smtp");
 	
 	        MimeMessage message = new MimeMessage(mailSession);
@@ -67,8 +83,8 @@ public class sendHtmlMail {
 	        message.setContent(sMessage, "text/html");
 	        message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(sTo,false));
 	
-	        transport.connect();
-	        transport.sendMessage(message, message.getRecipients(Message.RecipientType.TO));
+	        transport.connect(MedwanQuery.getInstance(false).getConfigString("mailbot.server","smtp.gmail.com"),username,password);
+	        transport.sendMessage(message,message.getRecipients(Message.RecipientType.TO));
 	        transport.close();
 		}
         catch(Exception e){
@@ -83,14 +99,22 @@ public class sendHtmlMail {
 			//	An alternative to placing absolute URLs to images in your HTML is to include the images as attachments to the email. The HTML can reference the image in an attachment by using the protocol prefix cid: plus the content-id of the attachment.      		       
 	    boolean bSuccess = false;    
 		try{
-	        Properties props = new Properties();
-	        props.setProperty("mail.transport.protocol", "smtp");
-	        props.setProperty("mail.host", smtpServer); //props.setProperty("mail.user", "myuser"); //props.setProperty("mail.password", "mypwd");
-	
-	        //Session mailSession = Session.getDefaultInstance(props, null);
+			final String username = MedwanQuery.getInstance(false).getConfigString("mailbot.user","openclinic.mailrobot@ict4d.be");
+			final String password = MedwanQuery.getInstance(false).getConfigString("mailbot.password","Bigo4ever");
+
+			Properties props = new Properties();
+			props.put("mail.smtp.auth", "true");
+			props.put("mail.smtp.starttls.enable", "true");
+			props.put("mail.smtp.host", MedwanQuery.getInstance(false).getConfigString("mailbot.server","smtp.gmail.com"));
+			props.put("mail.smtp.port", MedwanQuery.getInstance(false).getConfigString("mailbot.port","587"));
+	        props.put("mail.smtp.user", username);
+	        props.put("mail.smtp.password", password);
+	        props.put("mail.smtp.ssl.trust", MedwanQuery.getInstance(false).getConfigString("mailbot.server","smtp.gmail.com"));        
+
 	        Session mailSession = Session.getInstance(props);
-	        mailSession.setDebug(MedwanQuery.getInstance().getConfigString("Debug").equalsIgnoreCase("On"));
-	        Transport transport = mailSession.getTransport();
+
+	        mailSession.setDebug(MedwanQuery.getInstance(false).getConfigString("Debug").equalsIgnoreCase("On"));
+	        Transport transport = mailSession.getTransport("smtp");
 	
 	        MimeMessage message = new MimeMessage(mailSession);
 	        message.setSubject(sSubject);
@@ -125,9 +149,8 @@ public class sendHtmlMail {
 	        // put everything together
 	        message.setContent(multipart);
 	
-	        transport.connect();
-	        transport.sendMessage(message,
-	        message.getRecipients(Message.RecipientType.TO));
+	        transport.connect(MedwanQuery.getInstance(false).getConfigString("mailbot.server","smtp.gmail.com"),username,password);
+	        transport.sendMessage(message,message.getRecipients(Message.RecipientType.TO));
 	        transport.close();
 	        bSuccess=true;
         }
@@ -141,13 +164,22 @@ public class sendHtmlMail {
     static public void sendAttachEmailWithImages(String smtpServer, String sFrom, String sTo, String sSubject, String sMessage, String sAttachment, String sFileName, String sLogo)
             throws AddressException, MessagingException {
     	try{
-	        Properties props = new Properties();
-	        props.setProperty("mail.transport.protocol", "smtp");
-	        props.setProperty("mail.host", smtpServer); //props.setProperty("mail.user", "myuser"); //props.setProperty("mail.password", "mypwd");
-	
-	        Session mailSession = Session.getDefaultInstance(props, null);
-	        mailSession.setDebug(true);
-	        Transport transport = mailSession.getTransport();
+			final String username = MedwanQuery.getInstance(false).getConfigString("mailbot.user","openclinic.mailrobot@ict4d.be");
+			final String password = MedwanQuery.getInstance(false).getConfigString("mailbot.password","Bigo4ever");
+
+			Properties props = new Properties();
+			props.put("mail.smtp.auth", "true");
+			props.put("mail.smtp.starttls.enable", "true");
+			props.put("mail.smtp.host", MedwanQuery.getInstance(false).getConfigString("mailbot.server","smtp.gmail.com"));
+			props.put("mail.smtp.port", MedwanQuery.getInstance(false).getConfigString("mailbot.port","587"));
+	        props.put("mail.smtp.user", username);
+	        props.put("mail.smtp.password", password);
+	        props.put("mail.smtp.ssl.trust", MedwanQuery.getInstance(false).getConfigString("mailbot.server","smtp.gmail.com"));        
+
+	        Session mailSession = Session.getInstance(props);
+
+	        mailSession.setDebug(MedwanQuery.getInstance(false).getConfigString("Debug").equalsIgnoreCase("On"));
+	        Transport transport = mailSession.getTransport("smtp");
 	
 	        MimeMessage message = new MimeMessage(mailSession);
 	        message.setSubject(sSubject);
@@ -190,9 +222,8 @@ public class sendHtmlMail {
 	        // put everything together
 	        message.setContent(multipart);
 	
-	        transport.connect();
-	        transport.sendMessage(message,
-	            message.getRecipients(Message.RecipientType.TO));
+	        transport.connect(MedwanQuery.getInstance(false).getConfigString("mailbot.server","smtp.gmail.com"),username,password);
+	        transport.sendMessage(message,message.getRecipients(Message.RecipientType.TO));
 	        transport.close();
     	}
         catch(Exception e){
@@ -204,13 +235,21 @@ public class sendHtmlMail {
             throws AddressException, MessagingException {
     	boolean bSuccess = false;
     	try{
-	        Properties props = new Properties();
-	        props.setProperty("mail.transport.protocol", "smtp");
-	        props.setProperty("mail.host", smtpServer); //props.setProperty("mail.user", "myuser"); //props.setProperty("mail.password", "mypwd");
+			final String username = MedwanQuery.getInstance(false).getConfigString("mailbot.user","openclinic.mailrobot@ict4d.be");
+			final String password = MedwanQuery.getInstance(false).getConfigString("mailbot.password","Bigo4ever");
+	        
+			Properties props = new Properties();
+			props.put("mail.smtp.auth", "true");
+			props.put("mail.smtp.starttls.enable", "true");
+			props.put("mail.smtp.host", MedwanQuery.getInstance(false).getConfigString("mailbot.server","smtp.gmail.com"));
+			props.put("mail.smtp.port", MedwanQuery.getInstance(false).getConfigString("mailbot.port","587"));
+	        props.put("mail.smtp.user", username);
+	        props.put("mail.smtp.password", password);
+	        props.put("mail.smtp.ssl.trust", MedwanQuery.getInstance(false).getConfigString("mailbot.server","smtp.gmail.com"));        
 	
-	        Session mailSession = Session.getDefaultInstance(props, null);
-	        mailSession.setDebug(true);
-	        Transport transport = mailSession.getTransport();
+	        Session mailSession = Session.getInstance(props);
+	        mailSession.setDebug(MedwanQuery.getInstance(false).getConfigString("Debug").equalsIgnoreCase("On"));
+	        Transport transport = mailSession.getTransport("smtp");
 	
 	        MimeMessage message = new MimeMessage(mailSession);
 	        message.setSubject(sSubject);
@@ -250,9 +289,8 @@ public class sendHtmlMail {
 	        //message.setHeader("content-type", "text/html; charset=ISO-8859-1");
 	        message.setContent(multipart);
 	
-	        transport.connect();
-	        transport.sendMessage(message,
-	        message.getRecipients(Message.RecipientType.TO));
+	        transport.connect(MedwanQuery.getInstance(false).getConfigString("mailbot.server","smtp.gmail.com"),username,password);
+	        transport.sendMessage(message,message.getRecipients(Message.RecipientType.TO));
 	        transport.close();
 	        bSuccess = true;
     	}
@@ -261,48 +299,6 @@ public class sendHtmlMail {
         }
     	return bSuccess;
     }
-	
-    
-    /* Multiple Images
-
-Each image needs to be its own MimeBodyPart, break up this code,
-
-// second part (the image)
-messageBodyPart = new MimeBodyPart();
-DataSource fds = new FileDataSource
-  ("C:\\images\\cec_header_457.png");
-DataSource fds1 = new FileDataSource
-("C:\\images\\cec_header_420.png");
-messageBodyPart.setDataHandler(new DataHandler(fds));
-messageBodyPart.setDataHandler(new DataHandler(fds1));
-messageBodyPart.addHeader("Content-ID","<image>");
-messageBodyPart.addHeader("Content-ID","<senny>");
-// add it
-multipart.addBodyPart(messageBodyPart);
-
-Into two multi parts, something like
-
-// second part (the image)
-messageBodyPart = new MimeBodyPart();
-DataSource fds1 = new FileDataSource
-("C:\\images\\cec_header_420.png");
-messageBodyPart.setDataHandler(new DataHandler(fds1));
-messageBodyPart.addHeader("Content-ID","<senny>");
-// add it
-multipart.addBodyPart(messageBodyPart);
-
-messageBodyPart = new MimeBodyPart();
-DataSource fds = new FileDataSource
-  ("C:\\images\\cec_header_457.png");
-messageBodyPart.setDataHandler(new DataHandler(fds));
-messageBodyPart.addHeader("Content-ID","<image>");
-// add it
-multipart.addBodyPart(messageBodyPart);
-
-	 * 
-	 * 
-	 * 
-	 */
 	 
 }
 

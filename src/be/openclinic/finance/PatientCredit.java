@@ -257,7 +257,7 @@ public class PatientCredit extends OC_Object {
         Connection oc_conn = MedwanQuery.getInstance().getOpenclinicConnection();
         try{
             sSelect = "SELECT * FROM OC_ENCOUNTERS e, OC_PATIENTCREDITS d WHERE e.OC_ENCOUNTER_PATIENTUID = ?"+
-                      "  AND e.oc_encounter_objectid = replace(d.OC_PATIENTCREDIT_ENCOUNTERUID,'"+ MedwanQuery.getInstance().getConfigString("serverId")+".','')"+
+                      "  AND d.OC_PATIENTCREDIT_ENCOUNTERUID='"+MedwanQuery.getInstance().getConfigString("serverId")+".'"+MedwanQuery.getInstance().concatSign()+"e.oc_encounter_objectid"+
                       "  AND (d.OC_PATIENTCREDIT_INVOICEUID is null or d.OC_PATIENTCREDIT_INVOICEUID='')"+
                       " ORDER BY OC_PATIENTCREDIT_DATE DESC";
             ps = oc_conn.prepareStatement(sSelect);

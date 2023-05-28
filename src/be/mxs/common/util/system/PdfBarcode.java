@@ -1,6 +1,5 @@
 package be.mxs.common.util.system;
 
-import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -15,20 +14,15 @@ import java.awt.image.Raster;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.EnumMap;
-import java.util.EnumSet;
 import java.util.Hashtable;
 import java.util.Map;
-
-import javax.imageio.ImageIO;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 
 import be.mxs.common.util.db.MedwanQuery;
-import be.mxs.common.util.io.BlobDemo;
 import be.mxs.common.util.io.BlobFinder;
-import be.mxs.common.util.io.BlobDemo.Coordinates;
+import be.openclinic.system.SH;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.BinaryBitmap;
@@ -37,13 +31,11 @@ import com.google.zxing.EncodeHintType;
 import com.google.zxing.LuminanceSource;
 import com.google.zxing.MultiFormatReader;
 import com.google.zxing.Result;
-import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
-import com.itextpdf.text.BadElementException;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.pdf.Barcode39;
 import com.itextpdf.text.pdf.PdfContentByte;
@@ -134,7 +126,6 @@ public class PdfBarcode {
 	    	        0.111f, 0.111f, 0.111f, 
 	    	        0.111f, 0.111f, 0.111f, 
 	    	    };
-
 		    BufferedImageOp op2 = new java.awt.image.ConvolveOp( new Kernel(3, 3, matrix) );
 			BufferedImage blurredImage = op2.filter(rotatedImage, null);    	
 	        sBarcode=downscaleTest(blurredImage,hints);
@@ -306,10 +297,10 @@ public class PdfBarcode {
         	if(MedwanQuery.getInstance().getConfigString("qrCodeErrorCorrectionLevel","H").equalsIgnoreCase("M")){
             	errorcorrection = ErrorCorrectionLevel.M;
         	}
-        	else if(MedwanQuery.getInstance().getConfigString("qrCodeErrorCorrectionLevel","Q").equalsIgnoreCase("M")){
+        	else if(MedwanQuery.getInstance().getConfigString("qrCodeErrorCorrectionLevel","Q").equalsIgnoreCase("Q")){
             	errorcorrection = ErrorCorrectionLevel.Q;
         	}
-        	else if(MedwanQuery.getInstance().getConfigString("qrCodeErrorCorrectionLevel","L").equalsIgnoreCase("M")){
+        	else if(MedwanQuery.getInstance().getConfigString("qrCodeErrorCorrectionLevel","L").equalsIgnoreCase("L")){
             	errorcorrection = ErrorCorrectionLevel.L;
         	}
             PdfContentByte cb = docWriter.getDirectContent();
@@ -370,9 +361,11 @@ public class PdfBarcode {
 
 		return getBlobZones(srcImage);
 	}
+	
 	public static class Coordinates{
 		public long x=0,y=0;
 	}
+	
 	public static Coordinates getBlobZones(BufferedImage srcImage)
 	{
 		int width = srcImage.getWidth();

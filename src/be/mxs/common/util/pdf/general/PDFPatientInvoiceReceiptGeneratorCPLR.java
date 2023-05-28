@@ -420,6 +420,19 @@ public class PDFPatientInvoiceReceiptGeneratorCPLR extends PDFInvoiceGenerator {
 		        table.addCell(cell);
 	        }
 
+	        if(SH.ci("printBankInstructionOnReceipt", 0)==1) {
+		        cell = createValueCell(ScreenHelper.getTranNoLink("web","paytobank",sPrintLanguage), 50,new Double(15*scaleFactor).intValue(),Font.BOLD);
+		        cell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+		        table.addCell(cell);
+		        cell = createValueCell(priceFormat.format(SH.ci("printBankInstructionBalance", 1)==1?invoice.getBalance():invoice.getPatientAmount())+" "+sCurrency, 50,new Double(15*scaleFactor).intValue(),Font.BOLD);
+		        cell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+		        table.addCell(cell);
+	        }
+	        if(SH.ci("printFinalInstructionOnReceipt", 0)==1) {
+		        cell = createValueCell(ScreenHelper.getTranNoLink("web","receiptinstruction",sPrintLanguage), 50,new Double(7*scaleFactor).intValue(),Font.BOLD);
+		        cell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+		        table.addCell(cell);
+	        }
 
 	        cell=createValueCell("",50);
 	        cell.setBorder(PdfPCell.BOTTOM);

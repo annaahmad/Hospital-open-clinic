@@ -2171,7 +2171,7 @@ public class AdminPerson extends OC_Object{
         Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
         try{
             ps = oc_conn.prepareStatement(sSelect.trim());
-            ps.setTimestamp(1,new Timestamp(ScreenHelper.getSQLTime().getTime()));
+            ps.setTimestamp(1,new Timestamp(ScreenHelper.getSQLTime().getTime()-SH.ci("myActiveAdmissionsToleranceHours", 24)*SH.getTimeHour()));
             ps.setString(2,sUserID);
 
             rs = ps.executeQuery();
@@ -2248,7 +2248,7 @@ public class AdminPerson extends OC_Object{
         Connection oc_conn=MedwanQuery.getInstance().getOpenclinicConnection();
         try{
             ps = oc_conn.prepareStatement(sSelect.trim());
-            ps.setTimestamp(1, new java.sql.Timestamp(new java.util.Date().getTime()));
+            ps.setDate(1, new java.sql.Date(new java.util.Date().getTime()-SH.ci("myActiveVisitsToleranceHours", 24)*SH.getTimeHour()));
             ps.setString(2,sUserID);
 
             rs = ps.executeQuery();

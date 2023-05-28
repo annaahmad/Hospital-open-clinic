@@ -41,6 +41,68 @@ public class SH extends ScreenHelper {
 	    return SCANDIR_BASE+"/"+MedwanQuery.getInstance().getConfigString("scanDirectoryMonitor_dirFrom","from");
 	}
 	
+	public static boolean isSemaphore(String id) {
+		boolean bSemaphore=false;
+		Connection conn = SH.getOpenClinicConnection();
+		try {
+			PreparedStatement ps = conn.prepareStatement("select * from oc_semaphores where oc_semaphore_id=?");
+			ps.setString(1, id);
+			ResultSet rs = ps.executeQuery();
+			bSemaphore=rs.next();
+			rs.close();
+			ps.close();
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		try {
+			conn.close();
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		return bSemaphore;
+	}
+	
+	public static void clearSemaphores(long timeoutinmillis) {
+		Connection conn = SH.getOpenClinicConnection();
+		try {
+			PreparedStatement ps = conn.prepareStatement("delete from oc_semaphores where oc_semaphore_date<=?");
+			ps.setTimestamp(1, new java.sql.Timestamp(new java.util.Date().getTime()-timeoutinmillis));
+			ps.execute();
+			ps.close();
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		try {
+			conn.close();
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void setSemaphore(String id) {
+		Connection conn = SH.getOpenClinicConnection();
+		try {
+			PreparedStatement ps = conn.prepareStatement("insert into oc_semaphores(oc_semaphore_id,oc_semaphore_date) values(?,?)");
+			ps.setString(1, id);
+			ps.setTimestamp(2, new java.sql.Timestamp(new java.util.Date().getTime()));
+			ps.execute();
+			ps.close();
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		try {
+			conn.close();
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public static String getScanDirectoryToPath() {
 		String SCANDIR_BASE = MedwanQuery.getInstance().getConfigString("scanDirectoryMonitor_basePath","/var/tomcat/webapps/openclinic/scan");
 	    return SCANDIR_BASE+"/"+MedwanQuery.getInstance().getConfigString("scanDirectoryMonitor_dirTo","to");
@@ -48,6 +110,27 @@ public class SH extends ScreenHelper {
 	
     public static String xe(String s){
     	return HTMLEntities.xmlencode(ScreenHelper.checkString(s));
+    }
+    
+    public static double getPriceToDouble(String sPrice) {
+    	double d=0;
+    	try {
+    		if(sPrice.contains(".") && sPrice.contains(",") && sPrice.indexOf(",")<sPrice.indexOf(".")) {
+    			// comma is a thousands separator
+    			sPrice=sPrice.replaceAll(",", "");
+    		}
+    		else if(sPrice.contains(".") && sPrice.contains(",") && sPrice.indexOf(",")>sPrice.indexOf(".")) {
+    			// point is a thousands separator
+    			sPrice=sPrice.replaceAll("\\.", "");
+    		}
+			sPrice=sPrice.replaceAll(" ", "");
+			sPrice=sPrice.replaceAll(",", "\\.");
+			d=Double.parseDouble(sPrice);
+    	}
+    	catch(Exception e) {
+    		e.printStackTrace();
+    	}
+    	return d;
     }
 
     public static Hashtable getMultipartFormParameters(HttpServletRequest request) {
