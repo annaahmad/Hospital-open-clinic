@@ -1,6 +1,9 @@
 <parameters>
 	<!-- ###### GENERAL ####################################################################### -->
 	<parametergroup id="gen" name="General">
+		<parameter name="enableAutoReloadAfterResize" default="0" type="radio" options="0;1">
+		    <description language="en">Automatically adapt OpenClinic screen to a change in the browser's zoom factor</description>
+		</parameter>
 		<parameter name="searchDelay" default="1000" type="integer" unit="milliseconds">
 		    <description language="en">The delay applied when displaying products after selecting a product-category</description>
 		</parameter>
@@ -1420,9 +1423,15 @@
 		<parameter name="cellPhoneRemoveLeadingZero" default="1" type="radio" options="0;1">
 		    <description language="en">If set to 1, leading zeros are automatically removed from local phone numbers before prefixing with the country phone code.</description>
 		</parameter>
+		<parameter name="labmailmode" default="htmlmail" type="radio" options="htmlmail;attachedmail">
+		    <description language="en">How lab results should be reported through the e-mail gateway</description>
+		</parameter>
+		<parameter name="labMailMaxLogoSizeInPixels" default="75">
+		    <description language="en">Maximum size in pixels of the logo on lab result e-mails in htmlmail format</description>
+		</parameter>
 		<parameter name="SMS" class="title"/>
-		<parameter name="labsmscontent" default="Lab test ##transactionid# for #patient#&lt;br&gt;#results#&lt;br&gt;The certificate is sent by e-mail to #email#">
-		    <description language="en">Header for SMS messages sent when new lab results are available. Use the following place holders for content: #patient# = patient full name, #transactionid# = lab order id, #results# = lab results, #email# = patient's email address</description>
+		<parameter name="labsmscontent" default="Lab test ##transactionid# on #date# for #patient#:&lt;br&gt;#results#">
+		    <description language="en">Header for SMS messages sent when new lab results are available. Use the following place holders for content: #date# = lab order date, #patient# = patient full name, #transactionid# = lab order id, #results# = lab results, #email# = patient's email address</description>
 		</parameter>
 		<parameter name="smsgateway" default="" type="select" options=";africastalking;bulksms;d7;experttexting;hqsms;releans;smsglobal">
 		    <description language="en">SMS gateway to be used</description>
@@ -1469,7 +1478,7 @@
 		<parameter name="experttexting.api_key" default="">
 		    <description language="en">API key for the experttexting API</description>
 		</parameter>
-		<parameter name="experttexting.api_secret" default="">
+		<parameter name="experttexting.api_secret" default="" type="password">
 		    <description language="en">API secret for the experttexting API</description>
 		</parameter>
 		<parameter name="RELEANS" class="title"/>
@@ -1515,7 +1524,7 @@
 		<parameter name="africastalking.username" default="">
 		    <description language="en">User name for the AfricasTalking API</description>
 		</parameter>
-		<parameter name="africastalking.api_key" default="">
+		<parameter name="africastalking.api_key" default="" type="password">
 		    <description language="en">API key for the AfricasTalking API</description>
 		</parameter>
 		<parameter name="africastalking.senderid" default="">

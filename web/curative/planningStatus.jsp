@@ -179,7 +179,7 @@
 		else if(MedwanQuery.getInstance().getConfigString("calendarVersion", "1").equalsIgnoreCase("2")){
     %>
 	    var url = "calendar/editEvent.jsp&id="+planningUid;
-	    openPopup(url,500,300,'<%=getTranNoLink("web", "planning", sWebLanguage)%>');
+	    openPopup(url,500,400,'<%=getTranNoLink("web", "planning", sWebLanguage)%>');
     <%
 		}
     %>

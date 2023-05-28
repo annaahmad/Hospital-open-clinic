@@ -108,6 +108,9 @@
 		
 		sMsg+= getTran(request,"web","dataIsSaved",sWebLanguage);
 	}
+	else if(request.getParameter("resetbutton")!=null){
+		MedwanQuery.getInstance().setConfigString("quickList."+activeUser.userid,"");
+	}
 	
     //*** fetch saved prestations for display ***
     String sPrestations, prestations[] = null;
@@ -190,6 +193,9 @@
 	<%=ScreenHelper.alignButtonsStart()%>
 	    <input type="submit" class="button" name="submit" value="<%=getTranNoLink("web","save",sWebLanguage)%>"/>&nbsp;
 	    <input type="button" class="button" name="backbutton" value="<%=getTranNoLink("web","back",sWebLanguage)%>" onclick="doBack();">
+	    <% if(SH.p(request,"UserQuickList").equals("1")){ %>
+		    <input type="submit" class="redbutton" name="resetbutton" value="<%=getTranNoLink("web","reset",sWebLanguage)%>">
+		<% } %>
     <%=ScreenHelper.alignButtonsStop()%>
 </form>
 

@@ -98,7 +98,7 @@
 
             sDebetsHtml.append("<tr class='list"+sClass+"'>")
                         .append("<td>"+ScreenHelper.stdDateFormat.format(debet.getOperationDate())+"</td>")
-                        .append("<td>"+checkString(debet.getUid())+"</td>")
+                        .append("<td>"+checkString(debet.getUid())+"&nbsp;&nbsp;</td>")
                         .append("<td>"+priceFormat.format(debet.getAmount())+"&nbsp;&nbsp;</td>")
                         .append("<td>"+getTranNoLink("debet.type",debet.getOperationType(),sWebLanguage)+"</td>")
                         .append("<td>"+ScreenHelper.getFullUserName(Integer.toString(debet.getUserUID()))+"</td>")
@@ -136,7 +136,7 @@
 
             sCreditsHtml.append("<tr class='list"+sClass+"'>")
                          .append("<td>"+ScreenHelper.stdDateFormat.format(credit.getOperationDate())+"</td>")
-                         .append("<td>"+checkString(credit.getUid())+"</td>")
+                         .append("<td>"+checkString(credit.getUid())+"&nbsp;&nbsp;</td>")
                          .append("<td>"+priceFormat.format(credit.getAmount())+sAlternateValue+"&nbsp;&nbsp;</td>")
                          .append("<td>"+getTranNoLink("credit.type",credit.getOperationType(),sWebLanguage)+"</td>")
                          .append("<td>"+ScreenHelper.getFullUserName(Integer.toString(credit.getUserUID()))+"</td>")

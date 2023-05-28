@@ -75,7 +75,7 @@
             <font color="blue"><b><%=getTran(request,"Web.Occup","medwan.healthrecord.audiometry.OG",sWebLanguage)%></b></font><br/>
             <font color="#000000"><b><%=getTran(request,"openclinic.chuk","audiometry.bony.OD",sWebLanguage)%></b></font><br/>
             <font color="#800080"><b><%=getTran(request,"openclinic.chuk","audiometry.bony.OG",sWebLanguage)%></b></font><br/>
-            <font color="#00AA00"><b><%=getTran(request,"Web.Occup","medwan.healthrecord.audiometry.normal",sWebLanguage)%> (<%=getTran(request,"web",sGenderLabelId,sWebLanguage)%>, <%=iAge%> <%=getTran(request,"web","year",sWebLanguage).toLowerCase()%>)</b></font>
+            <font color="#00AA00"><b><%=getTran(request,"Web.Occup","medwan.healthrecord.audiometry.normal",sWebLanguage)%> (<%=getTran(request,"web",sGenderLabelId,sWebLanguage)%>, <%=iAge%> <%=getTran(request,"web","years",sWebLanguage).toLowerCase()%>)</b></font>
         </td>
 
         <td nowrap style="vertical-align:top;padding-left:20px">

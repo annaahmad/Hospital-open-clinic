@@ -207,7 +207,7 @@
 	}
 	
 	function editEvent(id,start,end,type){
-		openPopup('calendar/editEvent.jsp&id='+id+'&begindate='+start+'&enddate='+end+"&calendartype="+type,500,300,'<%=getTranNoLink("web","editappointment",sWebLanguage)%>');
+		openPopup('calendar/editEvent.jsp&id='+id+'&begindate='+start+'&enddate='+end+"&calendartype="+type,500,400,'<%=getTranNoLink("web","editappointment",sWebLanguage)%>');
 	}
 	
 	function searchAppointment(){

@@ -56,7 +56,7 @@
 				Vector debets = Debet.getEncounterDebets(uid);
 				for(int i=0;i<debets.size();i++){
 					Debet debet = (Debet)debets.elementAt(i);
-					if(debet.getCredited()==0){
+					if(debet.getPrestation()!=null && debet.getCredited()==0){
 						if(sDebets.length()>0){
 							sDebets+=", ";
 						}

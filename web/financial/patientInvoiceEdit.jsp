@@ -684,7 +684,6 @@
            		pid=activePatient.personid;
            	}
 			if(patientInvoice!=null){
-				SH.syslog(1);
 				Vector insurers= patientInvoice.getInsurerObjects();
 				SortedSet allowedreductions=new TreeSet();
 				for(int n=0;n<insurers.size();n++){
@@ -699,7 +698,6 @@
         				catch(Exception e){}
             		}
 				}
-				SH.syslog("2: "+allowedreductions.size());
             	if(activeUser.getAccessRight("financial.invoicereduction.select") && patientInvoice!=null && patientInvoice.getStatus()!=null && patientInvoice.getStatus().equals("open") && allowedreductions.size()>0){
 					out.println("<tr><td class='admin'>"+getTran(request,"web","acceptable.reductions",sWebLanguage)+"</td><td class='admin2' colspan='3'>");
         			if(!allowedreductions.contains(0)){
@@ -881,10 +879,6 @@
                         <%
                             	}
                             }
-                            SH.syslog("1: "+isInsuranceAgent);
-                            SH.syslog("2: "+(checkString(patientInvoice.getUid()).split("\\.").length==2));
-                            SH.syslog("3: "+(checkString(patientInvoice.getAcceptationUid()).length()==0));
-                            SH.syslog("4: "+(Pointer.getPointer("NOVALIDATE."+patientInvoice.getUid()).length()==0));
                         if(isInsuranceAgent && checkString(patientInvoice.getUid()).split("\\.").length==2 && checkString(patientInvoice.getAcceptationUid()).length()==0 && Pointer.getPointer("NOVALIDATE."+patientInvoice.getUid()).length()==0){
                         %>
                               	<input class="button" type="button" name="buttonAcceptation" value='<%=getTranNoLink("Web.finance","validation",sWebLanguage)%>' onclick="doValidate('<%=patientInvoice.getUid()%>');">

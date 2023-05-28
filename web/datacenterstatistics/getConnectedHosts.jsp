@@ -106,9 +106,22 @@
 		SortedMap servers = new TreeMap();
 		Enumeration networkInterfaces = NetworkInterface.getNetworkInterfaces();
 		Connection conn = MedwanQuery.getInstance().getStatsConnection();
-		PreparedStatement ps = conn.prepareStatement("select distinct * from dc_monitorparameters where dc_monitorparameter_parameter='systeminfo' and dc_monitorparameter_value like ? and dc_monitorparameter_value like ? order by dc_monitorparameter_value");
+		String sSql = "select distinct * from dc_monitorparameters where dc_monitorparameter_parameter='systeminfo' and dc_monitorparameter_value like ? and (1=0";
+		for(int n=0;n<SH.cs("vpnlogin."+accesskey,"").split(",").length;n++){
+			if(SH.cs("vpnlogin."+accesskey,"").split(",")[n].trim().length()>0){
+				sSql += " or dc_monitorparameter_value like ?";
+			}
+		}
+		sSql+=") order by dc_monitorparameter_value";
+		PreparedStatement ps = conn.prepareStatement(sSql);
 		ps.setString(1,vpnDomain+"%");
-		ps.setString(2,SH.cs("vpnlogin."+accesskey,"")+"%");
+		int pars = 0;
+		for(int n=0;n<SH.cs("vpnlogin."+accesskey,"").split(",").length;n++){
+			if(SH.cs("vpnlogin."+accesskey,"").split(",")[n].trim().length()>0){
+				ps.setString(2+pars,SH.cs("vpnlogin."+accesskey,"").split(",")[n].trim()+"%");
+				pars++;
+			}
+		}
 		ResultSet rs = ps.executeQuery();
 		boolean bInit=false;
 		HashSet hosts = new HashSet(), names = new HashSet();

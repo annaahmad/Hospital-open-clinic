@@ -8,24 +8,29 @@
     String sEditExamDuration = checkString(request.getParameter("PlanningExamDuration"));
     String sEditZoom = checkString(request.getParameter("EditZoom"));
     String sEditDoubleBookingProhibited = checkString(request.getParameter("PlanningDoubleBookingProhibited"));
+	User refUser = activeUser;
+	if(SH.p(request,"refuser").length()>0){
+		SH.syslog(SH.p(request,"refuser"));
+		refUser=User.get(Integer.parseInt(SH.p(request,"refuser")));
+	}
 
     //--- DISPLAY ---------------------------------------------------------------------------------
     if (sAction.length() == 0) {
-        sEditFrom = checkString(activeUser.getParameter("PlanningFindFrom"));
+        sEditFrom = checkString(refUser.getParameter("PlanningFindFrom"));
         if (sEditFrom.length() == 0) {
             sEditFrom = 8 + "";
         }
-        sEditUntil = checkString(activeUser.getParameter("PlanningFindUntil"));
+        sEditUntil = checkString(refUser.getParameter("PlanningFindUntil"));
         if (sEditUntil.length() == 0) {
             sEditUntil = 20 + "";
         }
-        sEditExamDuration = checkString(activeUser.getParameter("PlanningExamDuration"));
+        sEditExamDuration = checkString(refUser.getParameter("PlanningExamDuration"));
         if (sEditExamDuration.length() == 0) {
             sEditExamDuration = 30 + "";
         }
-        sEditUserIDs = checkString(activeUser.getParameter("PlanningFindUserIDs"));
-        sEditDoubleBookingProhibited=checkString(activeUser.getParameter("PlanningDoubleBookingProhibited"));
-        sEditZoom = checkString(activeUser.getParameter("PlanningFindZoom"));
+        sEditUserIDs = checkString(refUser.getParameter("PlanningFindUserIDs"));
+        sEditDoubleBookingProhibited=checkString(refUser.getParameter("PlanningDoubleBookingProhibited"));
+        sEditZoom = checkString(refUser.getParameter("PlanningFindZoom"));
         if (sEditZoom.length() == 0) {
             sEditZoom = 40 + "";
         }
@@ -40,6 +45,16 @@
     <input type="hidden" name="EditZoom" id="EditZoom" value="<%=sEditZoom%>"/>
     <%=writeTableHeader("Web.UserProfile", "managePlanning", sWebLanguage, " doBack();")%>
     <table width='100%' cellspacing="1" cellpadding="0" class="list">
+		<%if(activeUser.getAccessRight("planning.manager.select")){ %>
+        <tr>
+            <td class="admin"><%=getTran(request,"planning","usercalendar",sWebLanguage)%></td>
+            <td class="admin2">
+				<input type='text' class='text' size='30' name='refusername' id='refusername' readonly value='<%=refUser.getFullName()%>'/>
+				<img style='vertical-align: middle' src='<%=sCONTEXTPATH %>/_img/icons/icon_search.png' onclick='searchPlanningRefUser()'/>
+				<img style='vertical-align: middle' src='<%=sCONTEXTPATH %>/_img/icons/icon_delete.png' onclick='document.getElementById("refuser").value="";document.getElementById("refusername").value="";'/>
+            </td>
+        </tr>
+		<%}%>
         <tr>
             <%-- EXAM_DURATION --%>
             <td class="admin"><%=getTran(request,"web", "examduration", sWebLanguage)%>
@@ -74,6 +89,7 @@
 				<table width='100%'>
 					<tr>
 						<td>
+							<input type='hidden' name='refuser' id='refuser' value='<%=refUser.userid %>' onchange='formEdit.Action.value="";formEdit.submit();'/>
 							<input type='hidden' name='userid' id='userid' value=''/>
 							<input type='text' class='text' size='30' name='username' id='username' readonly value=''/>
 							<img style='vertical-align: middle' src='<%=sCONTEXTPATH %>/_img/icons/icon_search.png' onclick='searchPlanningUser()'/>
@@ -88,42 +104,6 @@
 				</table>
             </td>
         </tr>
-		<!-- 
-        <tr>
-            <td class="admin" width="<%=sTDAdminWidth%>">
-                <%=getTran(request,"planning", "users_with_permission", sWebLanguage)%>
-            </td>
-            <td class="admin2">
-                <input type="hidden" name="EditUserIDs" value="<%=sEditUserIDs%>">
-                <input type="hidden" name="EditUserID">
-                <input style="margin-left:30px;" class="text" type="text" name="EditUserName" readonly size="<%=sTextWidth%>">
-                <img src="<c:url value="/_img/icons/icon_search.png"/>" class="link" alt="<%=getTranNoLink("Web","select",sWebLanguage)%>" onclick="searchPlanningUser()">
-                <img src="<c:url value="/_img/icons/icon_add.gif"/>" class="link" alt="<%=getTranNoLink("Web","add",sWebLanguage)%>" onclick="doAdd()">
-                <br>
-                <table style="margin-left:30px;" id="tableUsers">
-                    <tr height="1">
-                        <td width="20"/>
-                    </tr>
-                    <%if (sEditUserIDs.length() > 0) {
-                        String[] aUserIDs = sEditUserIDs.split(";");
-                        String sUserName;
-                        for (int i = 0; i < aUserIDs.length; i++) {
-                            if (aUserIDs[i].length() > 0) {
-                                sUserName = ScreenHelper.getFullUserName(aUserIDs[i]);%>
-                    <tr id='tr<%=aUserIDs[i]%>'>
-                        <td>
-                            <img src="<c:url value="/_img/icons/icon_delete.png"/>" class="link" alt="<%=getTranNoLink("Web","delete",sWebLanguage)%>" onclick="doDelete('tr<%=aUserIDs[i]%>',this.parentNode.parentNode.rowIndex)">
-                        </td>
-                        <td><%=sUserName%>
-                        </td>
-                    </tr>
-                    <%		}
-                    	}
-                    }%>
-                </table>
-            </td>
-        </tr>
-         -->
         <tr>
             <td class="admin" width="<%=sTDAdminWidth%>"><%=getTran(request,"hrm", "uur", sWebLanguage)%>
             </td>
@@ -245,6 +225,9 @@
         function searchPlanningUser() {
             openPopup("/_common/search/searchUser.jsp&ts=<%=getTs()%>&ReturnUserID=userid&ReturnName=username&PopupWidth=600");
         }
+        function searchPlanningRefUser() {
+            openPopup("/_common/search/searchUser.jsp&ts=<%=getTs()%>&ReturnUserID=refuser&ReturnName=refusername&PopupWidth=600");
+        }
   		function addUser(){
   			var rights="";
   			if(document.getElementById('useredit').checked){
@@ -253,7 +236,7 @@
   			if(document.getElementById('useradd').checked){
   				rights+="c";
   			}
-  			var params=	"userid="+document.getElementById('userid').value+"&rights="+rights;
+  			var params=	"userid="+document.getElementById('userid').value+"&rights="+rights+"&refuser="+document.getElementById("refuser").value;
   			var url = "<%=sCONTEXTPATH%>/userprofile/addAgendaUser.jsp";
   			new Ajax.Request(url,{
   				method: "POST",
@@ -265,7 +248,8 @@
   		}
 
   		function deleteUser(id){
-  			var params=	"userid="+id;
+  			var params=	"userid="+id+"&refuser="+document.getElementById("refuser").value;
+  			alert(params);
   			var url = "<%=sCONTEXTPATH%>/userprofile/deleteAgendaUser.jsp";
   			new Ajax.Request(url,{
   				method: "POST",
@@ -277,7 +261,7 @@
   		}
 
   		function loadUsers(){
-  			var params="";
+  			var params="refuser="+document.getElementById("refuser").value;
   			var url = "<%=sCONTEXTPATH%>/userprofile/loadAgendaUsers.jsp";
   			new Ajax.Request(url,{
   				method: "POST",
@@ -337,36 +321,38 @@
 //--- SAVE AND RETURN TO INDEX ----------------------------------------------------------------
 else if (sAction.equals("save")) {
     try{
-    Parameter parameter = new Parameter("PlanningFindFrom", sEditFrom, activeUser.userid);
-    activeUser.removeParameter("PlanningFindFrom");
-    activeUser.updateParameter(parameter );
-    activeUser.parameters.add(parameter);
-    parameter = new Parameter("PlanningFindUntil", sEditUntil, activeUser.userid);
-    activeUser.removeParameter("PlanningFindUntil");
-    activeUser.updateParameter(parameter);
-    activeUser.parameters.add(parameter);
-    parameter = new Parameter("PlanningFindZoom", sEditZoom, activeUser.userid);
-    activeUser.removeParameter("PlanningFindZoom");
-    activeUser.updateParameter(parameter);
-    activeUser.parameters.add(parameter);
-    parameter = new Parameter("PlanningFindUserIDs", sEditUserIDs, activeUser.userid);
-    activeUser.removeParameter("PlanningFindUserIDs");
-    activeUser.updateParameter(parameter);
-    activeUser.parameters.add(parameter);
-    parameter = new Parameter("PlanningDoubleBookingProhibited", sEditDoubleBookingProhibited, activeUser.userid);
-    activeUser.removeParameter("PlanningDoubleBookingProhibited");
-    activeUser.updateParameter(parameter);
-    activeUser.parameters.add(parameter);
-    parameter = new Parameter("PlanningExamDuration", sEditExamDuration, activeUser.userid);
-    activeUser.removeParameter("PlanningExamDuration");
-    activeUser.updateParameter(parameter);
-    activeUser.parameters.add(parameter);
-    session.setAttribute("activeUser", activeUser);
-    out.write("<span class='valid'>"+
-                   "<img src='"+sCONTEXTPATH+"/_img/themes/default/valid.gif' style='vertical-align:-3px;'>&nbsp;"+
-                   HTMLEntities.htmlentities(getTranNoLink("web","dataissaved",sWebLanguage))+
-                  "</span><script>if($('tabpatient')){setTimeout('window.location.reload()',500);}else{formFindUser.submit();}</script>");
-    }
+	    Parameter parameter = new Parameter("PlanningFindFrom", sEditFrom, refUser.userid);
+	    refUser.removeParameter("PlanningFindFrom");
+	    refUser.updateParameter(parameter );
+	    refUser.parameters.add(parameter);
+	    parameter = new Parameter("PlanningFindUntil", sEditUntil, refUser.userid);
+	    refUser.removeParameter("PlanningFindUntil");
+	    refUser.updateParameter(parameter);
+	    refUser.parameters.add(parameter);
+	    parameter = new Parameter("PlanningFindZoom", sEditZoom, refUser.userid);
+	    refUser.removeParameter("PlanningFindZoom");
+	    refUser.updateParameter(parameter);
+	    refUser.parameters.add(parameter);
+	    parameter = new Parameter("PlanningFindUserIDs", sEditUserIDs, refUser.userid);
+	    refUser.removeParameter("PlanningFindUserIDs");
+	    refUser.updateParameter(parameter);
+	    refUser.parameters.add(parameter);
+	    parameter = new Parameter("PlanningDoubleBookingProhibited", sEditDoubleBookingProhibited, refUser.userid);
+	    refUser.removeParameter("PlanningDoubleBookingProhibited");
+	    refUser.updateParameter(parameter);
+	    refUser.parameters.add(parameter);
+	    parameter = new Parameter("PlanningExamDuration", sEditExamDuration, refUser.userid);
+	    refUser.removeParameter("PlanningExamDuration");
+	    refUser.updateParameter(parameter);
+	    refUser.parameters.add(parameter);
+    	if(SH.p(request,"refuser").length()==0 || SH.p(request,"refuser").equalsIgnoreCase(activeUser.userid)){
+	    	session.setAttribute("activeUser", refUser);
+    	}
+	    out.write("<span class='valid'>"+
+	                   "<img src='"+sCONTEXTPATH+"/_img/themes/default/valid.gif' style='vertical-align:-3px;'>&nbsp;"+
+	                   HTMLEntities.htmlentities(getTranNoLink("web","dataissaved",sWebLanguage))+
+	                  "</span><script>if($('tabpatient')){setTimeout('window.location.reload()',500);}else{formFindUser.submit();}</script>");
+	    }
     catch(Exception e){
         out.write("<span class='error'>"+
                    "<img src='"+sCONTEXTPATH+"/_img/icons/icon_warning.gif' style='vertical-align:-3px;'>&nbsp;"+

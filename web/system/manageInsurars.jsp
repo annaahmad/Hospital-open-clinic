@@ -129,6 +129,12 @@
     	else if(sEditAcceptationNeeded.length()==0){
     		MedwanQuery.getInstance().setConfigString("InsuranceAgentAcceptationNeededFor",MedwanQuery.getInstance().getConfigString("InsuranceAgentAcceptationNeededFor","").replaceAll("\\*"+sEditInsurarId.replaceAll("\\.","\\\\.")+"\\*", ""));
     	}
+    	if(sEditInsurarCanPrintProforma.length()>0){
+    		insurar.setCanPrintProforma(1);
+    	}
+    	else{
+    		insurar.setCanPrintProforma(0);
+    	}
     	insurar.setAccreditationMechanism(sEditInsurarAccreditationMechanism);
 
         insurar.setName(checkString(request.getParameter("EditInsurarName")));

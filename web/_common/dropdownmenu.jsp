@@ -1249,18 +1249,11 @@
  }
  
   function showteleconsultation(){
-	  window.open("https://webrtc.hnrw.org/demos/wizzeyeVideoroom.html","OpenClinic-Teleconsultation","height=600,width=900,toolbar=yes,status=no,scrollbars=yes,resizable=yes,menubar=yes");
+	  openPopup("util/setupTelemedicineSession.jsp&noglasses=1&PopupWidth=500&PopupHeight=200");
   }
 
   function showsmartglasses(){
 	  openPopup("util/setupTelemedicineSession.jsp&PopupWidth=500&PopupHeight=200");
-	  
-	  //var key=window.prompt('<%=getTranNoLink("web","teleconsultationkey",sWebLanguage)%>');
-	  //if(!key || key=='null'){
-	  //	  key=makeid(3)+"-"+makeid(3)+"-"+makeid(3);
-	  //}
-	  //var key2=window.prompt('<%=getTranNoLink("web","teleconsultationkey2",sWebLanguage)%>');
-	  //linkWizzeyeKey(key,key2);
   }
 
   function linkWizzeyeKey(key,key2){

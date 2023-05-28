@@ -21,9 +21,9 @@
 
 <script>
 	function openappointment(){
-		window.location.href='<%=sCONTEXTPATH%>/popup.jsp?Page=calendar/editEvent.jsp&id=<%=id%>&PopupWidth=500&PopupHeight=250';
+		window.location.href='<%=sCONTEXTPATH%>/popup.jsp?Page=calendar/editEvent.jsp&id=<%=id%>&PopupWidth=500&PopupHeight=400';
 	}
 	function createappointment(){
-		window.location.href='<%=sCONTEXTPATH%>/popup.jsp?Page=calendar/editEvent.jsp&begindate=<%=begindate%>&enddate=<%=enddate%>&PopupWidth=500&PopupHeight=250';
+		window.location.href='<%=sCONTEXTPATH%>/popup.jsp?Page=calendar/editEvent.jsp&begindate=<%=begindate%>&enddate=<%=enddate%>&PopupWidth=500&PopupHeight=400';
 	}
 </script>

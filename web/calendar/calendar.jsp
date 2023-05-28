@@ -64,21 +64,21 @@
 	    		      	text: '<%=User.getFullUserName((String)session.getAttribute("calendarUser"))%>',
 	    		      	click: function() {
 	    		      		calendarType='user',
-	    		      		setActiveButton("fc-userButton-button");
+	    		      		setActiveButton();
 	    		      		renderEvents();
 	    		      	}
 	    		    },
 	    		    changeUserButton: {
 	    		      	text: '<%=getTranNoLink("web","user",sWebLanguage)%>',
 	    		      	click: function() {
-	    		      		setActiveButton("fc-changeUserButton-button");
+	    		      		setActiveButton();
 	    		      		changeUser();
 	    		      	}
 	    		    },
 	    		    resourceButton: {
 	    		      	text: '<%=getTranNoLink("web","resources",sWebLanguage)%>',
 	    		      	click: function() {
-	    		      		setActiveButton("fc-resourceButton-button");
+	    		      		setActiveButton();
 	    		      		resourceCalendar();
 	    		      	}
 	    		    },
@@ -86,21 +86,21 @@
 		   		      	text: '<%=activePatient==null?"":activePatient.getFullName()%>',
 		   		      	click: function() {
 		   		      		calendarType='patient',
-	    		      		setActiveButton("fc-patientButton-button");
+	    		      		setActiveButton();
 		   		      		renderEvents();
 		   		      	}
 		   		    },
 		   		    searchButton: {
 		   		      	text: '<%=getTranNoLink("web","find",sWebLanguage)%>',
 		   		      	click: function() {
-	    		      		setActiveButton("fc-searchButton-button");
+	    		      		setActiveButton();
 		   		      		searchAppointment();
 		   		      	}
 		   		    },
 		   		    dateButton: {
 		   		      	text: '<%=ScreenHelper.formatDate(new java.util.Date())%>',
 		   		      	click: function() {
-	    		      		setActiveButton("fc-dateButton-button");
+	    		      		setActiveButton();
 		   		      		setDate();
 		   		      	}
 		   		    }
@@ -156,11 +156,13 @@
 		        eventResize: function(info) {
 					//Event was resized, update in database
 					updateEvent(info.event.id,fmtDate(info.event.start),fmtDate(info.event.end));
+			        setActiveButton();
 		        },
 		        select : function(info){
 		        	if(info.view.type!='dayGridMonth' && info.end-info.start>300000){
 		        		editEvent('',fmtDate(info.start),fmtDate(info.end),calendarType);
 		        	}
+			        setActiveButton();
 		        },
 		        loading: function(isLoading) {
 		            if (!isLoading) {
@@ -170,6 +172,7 @@
 		            	calendar.render();
 		            	setSize();
 		            }
+			        setActiveButton();
 		        },
 		        dateClick: function(info) {
 		        	if(info.view.type!='dayGridMonth'){
@@ -181,8 +184,8 @@
 		        		calendar.gotoDate(info.dateStr);
 		        		calendar.changeView('timeGridDay');
 		        		calendar.render();
-				        setActiveButton();
 		        	}
+			        setActiveButton();
 		        },
 		        eventDrop: function(info) {
 					//event drop code goes here
@@ -226,6 +229,7 @@
 <script>
 	function renderEvents(){
 		calendar.refetchEvents();
+		setActiveButton();
 	}
 	
 	function setSize(){
@@ -272,6 +276,7 @@
     			}
     		}
     	}
+        setActiveButton();
 	}
 	function updateEvent(id,start,end){
 		var url='<%=sCONTEXTPATH%>/calendar/updateEvent.jsp';
@@ -314,7 +319,7 @@
 	}
 	
 	function editEvent(id,start,end,type){
-		openPopup('calendar/editEvent.jsp&id='+id+'&begindate='+start+'&enddate='+end+"&calendartype="+type,500,300,'<%=getTranNoLink("web","editappointment",sWebLanguage)%>');
+		openPopup('calendar/editEvent.jsp&id='+id+'&begindate='+start+'&enddate='+end+"&calendartype="+type,500,400,'<%=getTranNoLink("web","editappointment",sWebLanguage)%>');
 	}
 	
 	function searchAppointment(){

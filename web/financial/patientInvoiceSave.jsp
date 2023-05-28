@@ -3,7 +3,6 @@
 <%@page errorPage="/includes/error.jsp"%>
 <%@include file="/includes/validateUser.jsp"%>
 <%
-
 try{
     String sEditDate = checkString(request.getParameter("EditDate"));
     String sEditDeliveryDate = checkString(request.getParameter("EditDeliveryDate"));
@@ -126,7 +125,7 @@ try{
     double dTotalDebets = 0;
     boolean bReferenceMandatory=false;
     boolean bOtherReferenceMandatory=false;
-    
+
     if (sEditCBs.length() > 0) {
         String[] aCBs = sEditCBs.split(",");
         String sID;
@@ -246,7 +245,7 @@ try{
 		    }
 		    patientinvoice.setBalance(dBalance);
 		}
-		
+
 	    if (patientinvoice.store()) {
 			patientinvoice.createProductionOrders();
 	    	if(MedwanQuery.getInstance().getConfigInt("invoiceInsurerReferenceMustBeUnique",0)==1 && sEditInsurarReference.length()>0){
@@ -278,7 +277,7 @@ try{
 	        }
 	    	//Nu zetten we de reducties op orde
 	    	//Eerst verwijderen we de bestaande reducties
-	    	if(sEditReduction.length()>0){
+	    	if(sEditReduction.length()>0 && !sEditReduction.equalsIgnoreCase("0")){
 	        	PatientCredit.deletePatientInvoiceReductions(patientinvoice.getUid());
 	        	
 		    	//Bereken de korting
@@ -307,6 +306,7 @@ try{
 	        sMessage = getTran(request,"web.control", "dberror", sWebLanguage);
 	    }
     }
+
 %>
 {
 "Message":"<%=HTMLEntities.htmlentities(sMessage)%>",

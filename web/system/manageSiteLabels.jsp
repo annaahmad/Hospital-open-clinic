@@ -94,6 +94,8 @@
 	out.println(writeRow("web","javaposcentername"));
 	out.println(writeRow("web","javaposcentersubtitle"));
 	out.println(writeRow("web","javaposcenterphone"));
+	out.println(writeRow("messagetypes","appointmentreminder"));
+	out.println(writeRow("web","patientappointmentreminder"));
 %>
   </table>
   <input type='submit' name='save' value='<%=getTranNoLink("web","save",sWebLanguage)%>'/>

@@ -19,10 +19,14 @@
 		<tr class='admin'>
 			<td colspan='2'><%=getTran(request,"web","telemedicinesessionconfig",sWebLanguage) %></td>
 		</tr>
+		<%if(!SH.p(request,"noglasses").equalsIgnoreCase("1")){%>
 		<tr>
 			<td class='admin'><%=getTran(request,"web","telemedicinesessionkey1",sWebLanguage) %> <img style='vertical-align: middle' height='32px' src='<%=sCONTEXTPATH%>/_img/themes/default/smartglasses.png'/></td>
 			<td class='admin2'><input name='sessionkey1' type='text' class='text' size='10'/></td>
 		</tr>
+		<%}else{ %>
+			<input type='hidden' name='sessionkey1'/>
+		<%} %>		
 		<tr>
 			<td class='admin'><%=getTran(request,"web","telemedicinesessionkey2",sWebLanguage) %> <img style='vertical-align: middle' height='32px' src='<%=sCONTEXTPATH%>/_img/themes/default/webcam.png'/></td>
 			<td class='admin2'><input name='sessionkey2' type='text' class='text' size='10'/></td>

@@ -238,8 +238,8 @@
 			  document.getElementById('priority').className='blink_text';
 			  document.getElementById('priority').style.color='red';
 			  document.getElementById('priority').innerHTML='<img height="24px" style="vertical-align: middle" src="<%=sCONTEXTPATH%>/_img/icons/icon_priority1.png"/> ';
-			  document.getElementById('triage.phase3.priority').innerHTML='<%=getTranNoLink("triage","phase3.priority1",sWebLanguage)%>';
-			  document.getElementById('triage.phase3.prioritydescription').innerHTML='<%=getTranNoLink("triage","phase3.prioritydescription1",sWebLanguage)%>';
+			  document.getElementById('triage.phase3.priority').innerHTML='<%=getTranNoLink("triage","phase3.newpriority1",sWebLanguage)%>';
+			  document.getElementById('triage.phase3.prioritydescription').innerHTML='<%=getTranNoLink("triage","phase3.newprioritydescription1",sWebLanguage)%>';
 			  document.getElementById('triage.phase3.waitingtime').innerHTML='0 min';
 			  document.getElementById('triage.phase3.evaluationfrequency').innerHTML='<%=getTranNoLink("triage","phase3.evaluationfrequency1",sWebLanguage)%>';
 		  }
@@ -247,8 +247,8 @@
 			  document.getElementById('priority').className='';
 			  document.getElementById('priority').style.color='red';
 			  document.getElementById('priority').innerHTML='<img height="24px" style="vertical-align: middle" src="<%=sCONTEXTPATH%>/_img/icons/icon_priority2.png"/> ';
-			  document.getElementById('triage.phase3.priority').innerHTML='<%=getTranNoLink("triage","phase3.priority2",sWebLanguage)%>';
-			  document.getElementById('triage.phase3.prioritydescription').innerHTML='<%=getTranNoLink("triage","phase3.prioritydescription2",sWebLanguage)%>';
+			  document.getElementById('triage.phase3.priority').innerHTML='<%=getTranNoLink("triage","phase3.newpriority2",sWebLanguage)%>';
+			  document.getElementById('triage.phase3.prioritydescription').innerHTML='<%=getTranNoLink("triage","phase3.newprioritydescription2",sWebLanguage)%>';
 			  document.getElementById('triage.phase3.waitingtime').innerHTML='15 min';
 			  document.getElementById('triage.phase3.evaluationfrequency').innerHTML='<%=getTranNoLink("triage","phase3.evaluationfrequency2",sWebLanguage)%>';
 		  }
@@ -257,20 +257,20 @@
 			  document.getElementById('priority').style.color='black';
 			  document.getElementById('priority').innerHTML='<img height="24px" style="vertical-align: middle" src="<%=sCONTEXTPATH%>/_img/icons/icon_priority3.png"/> ';
 			  if(document.getElementById('forcedpriority').value=='3'){
-				  document.getElementById('triage.phase3.priority').innerHTML='<%=getTranNoLink("triage","phase3.priority3",sWebLanguage)%>';
-				  document.getElementById('triage.phase3.prioritydescription').innerHTML='<%=getTranNoLink("triage","phase3.prioritydescription3",sWebLanguage)%>';
+				  document.getElementById('triage.phase3.priority').innerHTML='<%=getTranNoLink("triage","phase3.newpriority3",sWebLanguage)%>';
+				  document.getElementById('triage.phase3.prioritydescription').innerHTML='<%=getTranNoLink("triage","phase3.newprioritydescription3",sWebLanguage)%>';
 				  document.getElementById('triage.phase3.waitingtime').innerHTML='30 min';
 				  document.getElementById('triage.phase3.evaluationfrequency').innerHTML='<%=getTranNoLink("triage","phase3.evaluationfrequency3",sWebLanguage)%>';
 			  }
 			  else if(document.getElementById('forcedpriority').value=='4'){
-				  document.getElementById('triage.phase3.priority').innerHTML='<%=getTranNoLink("triage","phase3.priority4",sWebLanguage)%>';
-				  document.getElementById('triage.phase3.prioritydescription').innerHTML='<%=getTranNoLink("triage","phase3.prioritydescription4",sWebLanguage)%>';
+				  document.getElementById('triage.phase3.priority').innerHTML='<%=getTranNoLink("triage","phase3.newpriority4",sWebLanguage)%>';
+				  document.getElementById('triage.phase3.prioritydescription').innerHTML='<%=getTranNoLink("triage","phase3.newprioritydescription4",sWebLanguage)%>';
 				  document.getElementById('triage.phase3.waitingtime').innerHTML='60 min';
 				  document.getElementById('triage.phase3.evaluationfrequency').innerHTML='<%=getTranNoLink("triage","phase3.evaluationfrequency4",sWebLanguage)%>';
 			  }
 			  else {
-				  document.getElementById('triage.phase3.priority').innerHTML='<%=getTranNoLink("triage","phase3.priority5",sWebLanguage)%>';
-				  document.getElementById('triage.phase3.prioritydescription').innerHTML='<%=getTranNoLink("triage","phase3.prioritydescription5",sWebLanguage)%>';
+				  document.getElementById('triage.phase3.priority').innerHTML='<%=getTranNoLink("triage","phase3.newpriority5",sWebLanguage)%>';
+				  document.getElementById('triage.phase3.prioritydescription').innerHTML='<%=getTranNoLink("triage","phase3.newprioritydescription5",sWebLanguage)%>';
 				  document.getElementById('triage.phase3.waitingtime').innerHTML='120 min';
 				  document.getElementById('triage.phase3.evaluationfrequency').innerHTML='<%=getTranNoLink("triage","phase3.evaluationfrequency5",sWebLanguage)%>';
 			  }
@@ -282,8 +282,8 @@
 		  document.getElementById('priority').className='blink_text';
 		  document.getElementById('priority').innerHTML='<img height="24px" style="vertical-align: middle" src="<%=sCONTEXTPATH%>/_img/icons/icon_priority1.png"/> <%=getTranNoLink("web","priority",sWebLanguage)%>: 1';
 		  document.getElementById('priorityscore').value='1';
-		  document.getElementById('triage.phase3.priority').innerHTML='<%=getTranNoLink("triage","phase3.priority1",sWebLanguage)%>';
-		  document.getElementById('triage.phase3.prioritydescription').innerHTML='<%=getTranNoLink("triage","phase3.prioritydescription1",sWebLanguage)%>';
+		  document.getElementById('triage.phase3.priority').innerHTML='<%=getTranNoLink("triage","phase3.newpriority1",sWebLanguage)%>';
+		  document.getElementById('triage.phase3.prioritydescription').innerHTML='<%=getTranNoLink("triage","phase3.newprioritydescription1",sWebLanguage)%>';
 		  document.getElementById('triage.phase3.waitingtime').innerHTML='0 min';
 		  document.getElementById('triage.phase3.evaluationfrequency').innerHTML='<%=getTranNoLink("triage","phase3.evaluationfrequency1",sWebLanguage)%>';
 	  }
@@ -296,8 +296,8 @@
 				  document.getElementById('priority').className='blink_text';
 				  document.getElementById('priority').innerHTML='<img height="24px" style="vertical-align: middle" src="<%=sCONTEXTPATH%>/_img/icons/icon_priority1.png"/> <%=getTranNoLink("web","priority",sWebLanguage)%>: 1';
 				  document.getElementById('priorityscore').value='1';
-				  document.getElementById('triage.phase3.priority').innerHTML='<%=getTranNoLink("triage","phase3.priority1",sWebLanguage)%>';
-				  document.getElementById('triage.phase3.prioritydescription').innerHTML='<%=getTranNoLink("triage","phase3.prioritydescription1",sWebLanguage)%>';
+				  document.getElementById('triage.phase3.priority').innerHTML='<%=getTranNoLink("triage","phase3.newpriority1",sWebLanguage)%>';
+				  document.getElementById('triage.phase3.prioritydescription').innerHTML='<%=getTranNoLink("triage","phase3.newprioritydescription1",sWebLanguage)%>';
 				  document.getElementById('triage.phase3.waitingtime').innerHTML='0 min';
 				  document.getElementById('triage.phase3.evaluationfrequency').innerHTML='<%=getTranNoLink("triage","phase3.evaluationfrequency1",sWebLanguage)%>';
 				  bDone=true;
@@ -311,8 +311,8 @@
 					  document.getElementById('priority').innerHTML='<img height="24px" style="vertical-align: middle" src="<%=sCONTEXTPATH%>/_img/icons/icon_priority2.png"/> <%=getTranNoLink("web","priority",sWebLanguage)%>: 2';
 					  bDone=true;
 					  document.getElementById('priorityscore').value='2';
-					  document.getElementById('triage.phase3.priority').innerHTML='<%=getTranNoLink("triage","phase3.priority2",sWebLanguage)%>';
-					  document.getElementById('triage.phase3.prioritydescription').innerHTML='<%=getTranNoLink("triage","phase3.prioritydescription2",sWebLanguage)%>';
+					  document.getElementById('triage.phase3.priority').innerHTML='<%=getTranNoLink("triage","phase3.newpriority2",sWebLanguage)%>';
+					  document.getElementById('triage.phase3.prioritydescription').innerHTML='<%=getTranNoLink("triage","phase3.newprioritydescription2",sWebLanguage)%>';
 					  document.getElementById('triage.phase3.waitingtime').innerHTML='15 min';
 					  document.getElementById('triage.phase3.evaluationfrequency').innerHTML='<%=getTranNoLink("triage","phase3.evaluationfrequency2",sWebLanguage)%>';
 				  }
@@ -326,8 +326,8 @@
 					  document.getElementById('priority').innerHTML='<img height="24px" style="vertical-align: middle" src="<%=sCONTEXTPATH%>/_img/icons/icon_priority3.png"/> <%=getTranNoLink("web","priority",sWebLanguage)%>: 3';
 					  bDone=true;
 					  document.getElementById('priorityscore').value='3';
-					  document.getElementById('triage.phase3.priority').innerHTML='<%=getTranNoLink("triage","phase3.priority3",sWebLanguage)%>';
-					  document.getElementById('triage.phase3.prioritydescription').innerHTML='<%=getTranNoLink("triage","phase3.prioritydescription3",sWebLanguage)%>';
+					  document.getElementById('triage.phase3.priority').innerHTML='<%=getTranNoLink("triage","phase3.newpriority3",sWebLanguage)%>';
+					  document.getElementById('triage.phase3.prioritydescription').innerHTML='<%=getTranNoLink("triage","phase3.newprioritydescription3",sWebLanguage)%>';
 					  document.getElementById('triage.phase3.waitingtime').innerHTML='30 min';
 					  document.getElementById('triage.phase3.evaluationfrequency').innerHTML='<%=getTranNoLink("triage","phase3.evaluationfrequency3",sWebLanguage)%>';
 				  }
@@ -341,8 +341,8 @@
 					  document.getElementById('priority').innerHTML='<img height="24px" style="vertical-align: middle" src="<%=sCONTEXTPATH%>/_img/icons/icon_priority3.png"/> <%=getTranNoLink("web","priority",sWebLanguage)%>: 4';
 					  bDone=true;
 					  document.getElementById('priorityscore').value='4';
-					  document.getElementById('triage.phase3.priority').innerHTML='<%=getTranNoLink("triage","phase3.priority4",sWebLanguage)%>';
-					  document.getElementById('triage.phase3.prioritydescription').innerHTML='<%=getTranNoLink("triage","phase3.prioritydescription4",sWebLanguage)%>';
+					  document.getElementById('triage.phase3.priority').innerHTML='<%=getTranNoLink("triage","phase3.newpriority4",sWebLanguage)%>';
+					  document.getElementById('triage.phase3.prioritydescription').innerHTML='<%=getTranNoLink("triage","phase3.newprioritydescription4",sWebLanguage)%>';
 					  document.getElementById('triage.phase3.waitingtime').innerHTML='60 min';
 					  document.getElementById('triage.phase3.evaluationfrequency').innerHTML='<%=getTranNoLink("triage","phase3.evaluationfrequency4",sWebLanguage)%>';
 				  }
@@ -355,8 +355,8 @@
 					  document.getElementById('priority').style.color='black';
 					  document.getElementById('priority').innerHTML='<img height="24px" style="vertical-align: middle" src="<%=sCONTEXTPATH%>/_img/icons/icon_priority3.png"/> <%=getTranNoLink("web","priority",sWebLanguage)%>: 5';
 					  document.getElementById('priorityscore').value='5';
-					  document.getElementById('triage.phase3.priority').innerHTML='<%=getTranNoLink("triage","phase3.priority5",sWebLanguage)%>';
-					  document.getElementById('triage.phase3.prioritydescription').innerHTML='<%=getTranNoLink("triage","phase3.prioritydescription5",sWebLanguage)%>';
+					  document.getElementById('triage.phase3.priority').innerHTML='<%=getTranNoLink("triage","phase3.newpriority5",sWebLanguage)%>';
+					  document.getElementById('triage.phase3.prioritydescription').innerHTML='<%=getTranNoLink("triage","phase3.newprioritydescription5",sWebLanguage)%>';
 					  document.getElementById('triage.phase3.waitingtime').innerHTML='120 min';
 					  document.getElementById('triage.phase3.evaluationfrequency').innerHTML='<%=getTranNoLink("triage","phase3.evaluationfrequency5",sWebLanguage)%>';
 				  }

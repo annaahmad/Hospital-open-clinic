@@ -85,7 +85,7 @@
 					sLine+="<td width='"+(100/cols)+"%'/>";
 				}
 				else if(val.startsWith("$")){
-					sLine+="<td bgcolor='"+getItemColor(sLabAnalyses,i,n)+"' width='"+(100/cols)+"%'>"+val.substring(1)+"<hr/></td>";
+					sLine+="<td style='border-style: solid;' bgcolor='"+getItemColor(sLabAnalyses,i,n)+"' width='"+(100/cols)+"%'><font style='font-weight: bolder;font-size: 12px;'>"+val.substring(1)+"</font></td>";
 					hasContent=true;
 				}
 				else if(val.startsWith("^")){

@@ -11,6 +11,9 @@
 	String end = checkString(request.getParameter("end"));
 	String endhour = checkString(request.getParameter("endhour"));
 	String endminutes = checkString(request.getParameter("endminutes"));
+	String warningdays = checkString(request.getParameter("warningdays"));
+	String warningsms = checkString(request.getParameter("warningsms"));
+	String warningemail = checkString(request.getParameter("warningemail"));
 	String visited = checkString(request.getParameter("visited"));
 	String visitedhour = checkString(request.getParameter("visitedhour"));
 	String visitedminutes = checkString(request.getParameter("visitedminutes"));
@@ -106,12 +109,13 @@
 	if(id.equalsIgnoreCase("-2")){
 		id="";
 	}
-
+	boolean bNewPlanning=false;
 	Planning appointment = null;
 	if(id.length()>0){
 		appointment=Planning.get(id);
 	}
 	if(appointment==null || appointment.getPlannedDate()==null){
+		bNewPlanning=true;
 		appointment=new Planning();
 		appointment.setUid(SH.sid()+"."+MedwanQuery.getInstance().getOpenclinicCounter("OC_PLANNING"));
 		appointment.setComment("");
@@ -179,8 +183,6 @@
 	if(type.length()>0){
 		appointment.setType(type);
 	}
-	System.out.println("AAAAAAA: "+request.getParameter("actionField"));
-	
 	if(request.getParameter("deleteButton")!=null){
 		if(id.length()>0){
 			Planning.delete(id);
@@ -251,6 +253,12 @@
 		else{
 			appointment.setUserUID("-1");
 		}
+		if(warningdays.length()>0){
+			appointment.setWarningDays(Integer.parseInt(warningdays));
+			appointment.setConfirmationDate(new java.util.Date(appointment.getPlannedDate().getTime()-SH.getTimeDay()*Integer.parseInt(warningdays)));
+		}
+		appointment.setWarningSMS(warningsms);
+		appointment.setWarningEmail(warningemail);
 		appointment.setColor(color);
 		appointment.setComment(comment);
 		appointment.setType(type);
@@ -432,6 +440,41 @@
 										}
 									%>
 								</select>
+							</td>
+						</tr>
+						<tr>
+							<td class='admin'><%=SH.capitalize(getTran(request,"web","warning",sWebLanguage)) %></td>
+							<td class='admin2'>
+								<table cellpadding="0" cellspacing="0">
+									<tr>
+										<td>
+											<select class='text' name='warningdays' id='warningdays'>
+												<option/>
+												<%
+													for(int n=1;n<14;n++){
+														out.println("<option value='"+n+"' "+(appointment.getWarningDays()>0 && appointment.getWarningDays()==n?"selected":"")+">"+ScreenHelper.padLeft(n+"","0",2)+"</option>");
+													}
+												%>
+											</select>
+											<%=getTran(request,"web","days",sWebLanguage) %>
+										</td>
+										<td class='admin2'>
+											SMS:
+										</td>
+										<td class='admin2'>
+											<input type='text' name='warningsms' id='warningsms' value='<%=SH.c(appointment.getWarningSMS()).length()>0?appointment.getWarningSMS():activePatient==null||!bNewPlanning?"":SH.c(activePatient.getActivePrivate().mobile)%>'/>
+										</td>
+									</tr>
+									<tr>
+										<td><input type='button' class='button' onclick='sendReminder()' value='<%=getTranNoLink("web","test",sWebLanguage)%>'/></td>
+										<td class='admin2'>
+											E-mail:
+										</td>
+										<td class='admin2'>
+											<input type='text' name='warningemail' id='warningemail' value='<%=SH.c(appointment.getWarningEmail()).length()>0?appointment.getWarningEmail():activePatient==null||!bNewPlanning?"":SH.c(activePatient.getActivePrivate().email)%>'/>
+										</td>
+									</tr>
+								</table>
 							</td>
 						</tr>
 						<tr>
@@ -680,6 +723,25 @@
 		parameters: params,
 		onSuccess: function(resp){
 			document.getElementById('resourcelist').innerHTML=resp.responseText;
+		}
+		});
+    }
+    
+    function sendReminder(){
+	    var params = 	"begin="+document.getElementById("begin").value+"&"+
+	    				"beginhour="+document.getElementById("beginhour").value+"&"+
+	    				"beginminutes="+document.getElementById("beginminutes").value+"&"+
+	    				"patientuid="+document.getElementById("patientid").value+"&"+
+						"email="+document.getElementById("warningemail").value+"&"+
+						"sms="+document.getElementById("warningsms").value;
+		var url = "<%=sCONTEXTPATH%>/calendar/sendReminder.jsp";
+		new Ajax.Request(url,{
+		method: "POST",
+		parameters: params,
+		onSuccess: function(resp){
+			if(resp.responseText.includes("<OK>")){
+				alert('<%=getTranNoLink("web","remindersent",sWebLanguage)%>');
+			}
 		}
 		});
     }

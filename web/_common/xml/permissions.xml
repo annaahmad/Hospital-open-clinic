@@ -240,6 +240,7 @@
         <permission type="planning" id="user">planning.user</permission>
         <permission type="planning" id="patient">planning.patient</permission>
         <permission type="web" id="managePlanningResourceLocks">planning.manageresourcelocks</permission>
+        <permission type="web" id="planningmanager">planning.manager</permission>
     </application>
     <application type="Web" id="anesthesie">
         <permission type="web" id="anesthesie">medical.anesthesie</permission>
