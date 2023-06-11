@@ -1,4 +1,5 @@
 <mappings>
+	<mapping id="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_TB"        				path="/main.do?Page=/healthrecord/manageMSPLSRegistryTuberculosis.jsp"        	 accessright="mspls.registry.tb"/>
 	<mapping id="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_ANESTHESIA_MONITORING"        			path="/main.do?Page=/healthrecord/manageAnesthesiaMonitoring.jsp"        		 accessright="anesthesia.monitoring"/>
 	<mapping id="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_GERIATRIC_CONSULTATION"        		path="/main.do?Page=/healthrecord/manageGeriatricConsultation.jsp"        		 accessright="examination.geriatrics"/>
 	<mapping id="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_REFERRAL"        						path="/main.do?Page=/healthrecord/manageReferral.jsp"        		 		 	 accessright="examination.referral"/>

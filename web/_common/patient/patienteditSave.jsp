@@ -225,6 +225,15 @@
             if (sCenterreasons.trim().length() > 0) {
                 activePatient.adminextends.put("centerreasons", sCenterreasons);
             }
+            //Save extended values
+            Enumeration<String> extnames = request.getParameterNames();
+            while(extnames.hasMoreElements()){
+            	String extname = extnames.nextElement();
+            	if(extname.startsWith("ext_")){
+            		String extvalue = request.getParameter(extname);
+            		activePatient.adminextends.put(extname.substring(4),extvalue);
+            	}
+            }
 
             //*** PRIVATE ***
             AdminPrivateContact apcNew = new AdminPrivateContact();

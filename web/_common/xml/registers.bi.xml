@@ -486,4 +486,30 @@
 			<column colspan="20" labelid="mspls;observations" source="transaction" name="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_OBSERVATIONS"/>
 		</columns>
 	</register>
+	<register pagesize="A3" id="18" accessright="registers.select" transactiontype="be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_TB">
+		<columns>
+			<column colspan="10" labelid="register;ordernr" source="system" name="id"/>
+			<column colspan="15" labelid="register;date" source="transaction" name="updatetime"/>
+			<column colspan="10" labelid="register;patientid" source="patient" name="personid"/>
+			<column colspan="10" labelid="register;patientage" source="patient" name="ageinyears"/>
+			<column colspan="10" labelid="web;gender" source="patient" name="gender"/>
+			<column colspan="20" labelid="web;typeofpatient" source="transaction" name="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_TYPEOFPATIENT" translateresult="cds.tb.patienttype"/>
+			<column colspan="15" labelid="web;typeoftuberculosis" source="transaction" name="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_TYPEOFTUBERCULOSIS" translateresult="cds.tb.tbtype"/>
+			<column colspan="15" labelid="web;location" source="transaction" name="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_TB-lOCATION" translateresult="cds.tb.tblocation"/>
+			<column colspan="10" labelid="web;regimen" source="transaction" name="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_REGIMEN"/>
+			<column colspan="25" labelid="web;pharmacoresistance" source="transaction" name="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_PHARMACORESISTANCE" translateresult="cds.tb.pharmacoresistance"/>
+			<column colspan="20" labelid="web;hivstatus" source="transaction" name="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_HIVSTATUS" translateresult="cds.tb.hivstatus"/>
+			<column colspan="20" labelid="web;microscopy" source="transaction" name="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_MICROSCOPY" translateresult="cds.tb.microscopy"/>
+			<column colspan="15" labelid="web;mtb" source="transaction" name="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_GENEXPERTMTB" translateresult="cds.tb.genexpert"/>
+			<column colspan="15" labelid="web;rif" source="transaction" name="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_GENEXPERTRIF" translateresult="cds.tb.genexpert"/>
+			<column colspan="20" labelid="web;coinfectiontreatment" source="transaction" name="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_COINFECTIONTREATMENT" translateresult="cds.tb.coinfectiontreatment"/>
+			<column colspan="20" labelid="web;referralby" source="transaction" name="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_REFERRALBY" translateresult="cds.tb.referralby"/>
+			<column colspan="20" labelid="web;treatmentresult" source="transaction" name="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_TREATMENTRESULT" translateresult="cds.tb.treatmentresult"/>
+			<column colspan="20" labelid="web;reasonforreferral" source="transaction" name="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_REFERRALREASON" translateresult="cds.tb.referralreason"/>
+			<column colspan="10" labelid="web;contactsubjects" source="transaction" name="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CONTACTSUBJECTS"/>
+			<column colspan="10" labelid="web;testedtbpositif" source="transaction" name="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CONTACTSUBJECTS_TBPOS"/>
+			<column colspan="10" labelid="web;testedtbnegative" source="transaction" name="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CONTACTSUBJECTS_TBMIN"/>
+			<column colspan="15" labelid="web;underprophylaxis" source="transaction" name="be.mxs.common.model.vo.healthrecord.IConstants.ITEM_TYPE_CONTACTSUBJECTS_PROPHYLAXIS"/>
+		</columns>
+	</register>
 </registers>

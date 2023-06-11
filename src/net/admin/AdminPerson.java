@@ -3940,7 +3940,11 @@ public class AdminPerson extends OC_Object{
         }
         return age;
     }
-
+    
+    public String getExtendedValue(String key) {
+    	return SH.c(adminextends.get(key));
+    }
+    
     public static Vector getUpdateTimes(java.sql.Date dBegin, java.sql.Date dEnd, int iUserid){
         PreparedStatement ps = null;
         ResultSet rs = null;

@@ -203,6 +203,7 @@
         <permission type="examination" id="1309">examination.counterreferral</permission>
         <permission type="examination" id="1310">examination.geriatrics</permission>
         <permission type="examination" id="1311">anesthesia.monitoring</permission>
+        <permission type="examination" id="1315">mspls.registry.tb</permission>
     </application>
     <application type="Web" id="newexaminations">
         <permission type="web" id="globalexaminations">examinations.global</permission>

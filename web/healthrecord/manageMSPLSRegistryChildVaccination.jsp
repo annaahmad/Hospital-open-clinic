@@ -250,6 +250,7 @@
             <td class="admin"><%=getTran(request,"mspls", "completevaccination", sWebLanguage)%></td>
             <td class="admin2">
             	<%=ScreenHelper.writeDefaultRadioButtons((TransactionVO)transaction, request, "yesno",  "ITEM_TYPE_ECV", sWebLanguage, true, "", " ") %>
+            	&nbsp;&nbsp;<input type='button' class='button' name='cardButton' value='<%=getTranNoLink("web","vaccinationcard",sWebLanguage) %>' onclick='showVaccinationCard();'/>
             </td>
         </tr>
         <tr>
@@ -359,6 +360,10 @@
 <script>
   function searchEncounter(){
     openPopup("/_common/search/searchEncounter.jsp&ts=<%=getTs()%>&VarCode=encounteruid&VarText=&FindEncounterPatient=<%=activePatient.personid%>");
+  }
+  
+  function showVaccinationCard(){
+    openPopup("/healthrecord/showMSPLSVaccinationCard.jsp");
   }
   
   if( document.getElementById('encounteruid').value=="" <%=request.getParameter("nobuttons")==null?"":" && 1==0"%>){

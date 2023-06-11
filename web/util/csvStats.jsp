@@ -122,7 +122,7 @@
     else if("pbf.burundi.blueregister".equalsIgnoreCase(sQueryType)){
     	//Construire le contenu du rapport
     	StringBuffer sResult = new StringBuffer();
-    	sResult.append("DATE;PATIENTID;PATIENT;SEXE;AGE;CHEF_FAMILLE;ADRESSE;VILLAGE;COLLINE;MODE_PAIEMENT;NRO_ASSURANCE;PROFESSION_PARENT;CARTE_IDENTITE_PARENT;CARTE_VACCINATION\r\n");
+    	sResult.append("DATE;PATIENTID;PATIENT;SEXE;AGE;CHEF_FAMILLE;ADRESSE;VILLAGE;COLLINE;MODE_PAIEMENT;NRO_ASSURANCE;PROFESSION_PARENT;CARTE_IDENTITE_PARENT;CARTE_VACCINATION;DATE_EXTRAIT_NAISSANCE\r\n");
 		//ajouter le contenu du rapport
     	Connection conn = SH.getOpenClinicConnection();
 		String sQuery = "select oc_encounter_begindate,a.personid,lastname,firstname,gender,"+
@@ -173,10 +173,88 @@
 			}
 			sResult.append(sModePaiement+";");
 			sResult.append(sInsuranceNr+";");
-    		sResult.append(SH.c(rs.getString("cell"))+";");
     		AdminPerson person = AdminPerson.get(personid);
-    		sResult.append(SH.c(person.adminextends.get("tracnetid"))+";");
-    		sResult.append(SH.c(rs.getString("comment3"))+";");
+    		sResult.append(person.getExtendedValue("parentsprofession")+";");
+    		sResult.append(person.getExtendedValue("parentsidcard")+";");
+    		sResult.append(person.getExtendedValue("vaccinationcardnumber")+";");
+    		sResult.append(person.getExtendedValue("birthcertificatedate")+";");
+    		sResult.append("\r\n");
+    	}
+    	rs.close();
+    	ps.close();
+    	conn.close();
+    	//Produire une réponse http
+    	//Mettre à jour l'en-tête de la réponse http
+        response.setContentType("application/octet-stream; charset=windows-1252");
+	    response.setHeader("Content-Disposition", "Attachment;Filename=\"BlueRegister"+new SimpleDateFormat("yyyyMMddHHmmss").format(new Date())+".csv\"");
+	    //Mettre le body dans la réponse
+	    // Convertir le body en array de bytes (octets)
+	    byte[] aBytes = sResult.toString().getBytes("ISO-8859-1");
+	    for(int n=0;n<aBytes.length;n++){
+	    	// Ecrire chaque byte dans le body de la réponse http
+	    	response.getOutputStream().write(aBytes[n]);
+	    }
+	    // Etre sûr que tous les bytes ont été envoyés vers le navigateur
+	    response.getOutputStream().flush();
+	    // Clôturer la réponse: indique à l'indicateur que c'est terminé
+	    response.getOutputStream().close();
+	    done=true;
+    }
+	//*** 1b - PBF REGISTRE BLEU ADULTES ****************************************************
+    else if("pbf.burundi.blueregisteradults".equalsIgnoreCase(sQueryType)){
+    	//Construire le contenu du rapport
+    	StringBuffer sResult = new StringBuffer();
+    	sResult.append("DATE;PATIENTID;PATIENT;SEXE;AGE;CHEF_FAMILLE;ADRESSE;VILLAGE;COLLINE;MODE_PAIEMENT;NRO_ASSURANCE\r\n");
+		//ajouter le contenu du rapport
+    	Connection conn = SH.getOpenClinicConnection();
+		String sQuery = "select oc_encounter_begindate,a.personid,lastname,firstname,gender,"+
+    					" dateofbirth,comment5,address,sector,city,cell,comment3 "+
+						" from oc_encounters e,adminview a,privateview p where "+
+						" a.personid = p.personid and"+
+						" oc_encounter_patientuid = a.personid and"+
+    					" oc_encounter_begindate >=? and"+
+						" oc_encounter_begindate < ? and"+
+    					" datediff(oc_encounter_begindate,dateofbirth)>=5*365"+
+						" order by oc_encounter_begindate";
+    	PreparedStatement ps = conn.prepareStatement(sQuery);
+    	ps.setDate(1,new java.sql.Date(ScreenHelper.parseDate(request.getParameter("begin")).getTime()));
+    	ps.setDate(2,new java.sql.Date(ScreenHelper.parseDate(request.getParameter("end")).getTime()));
+    	ResultSet rs = ps.executeQuery();
+    	while(rs.next()){
+    		sResult.append(SH.formatDate(rs.getDate("oc_encounter_begindate"))+";");
+    		sResult.append(rs.getString("personid")+";");
+    		sResult.append(SH.c(rs.getString("lastname")).toUpperCase()+","+rs.getString("firstname")+";");
+    		sResult.append(SH.c(rs.getString("gender"))+";");
+    		sResult.append(getAgeGroup(rs.getDate("dateofbirth"))+";");
+    		sResult.append(SH.c(rs.getString("comment5"))+";");
+    		sResult.append(SH.c(rs.getString("address"))+";");
+    		sResult.append(SH.c(rs.getString("sector"))+";");
+    		sResult.append(SH.c(rs.getString("city"))+";");
+			String personid = rs.getString("personid");
+			//Chercher toutes les assurances du patient
+			String sModePaiement = "",sInsuranceNr="";
+			Vector<Insurance> insurances = Insurance.selectInsurances(personid, "OC_INSURANCE_INSURARUID");
+			for(int n=0;n<insurances.size();n++){
+				Insurance insurance = insurances.elementAt(n);
+				//Exclure les assurances inactives au moment du début du contact
+				if(!insurance.getStart().after(rs.getDate("oc_encounter_begindate")) && 
+							(insurance.getStop()==null || 
+							insurance.getStop().after(rs.getDate("oc_encounter_begindate")))){
+					//Cette assurance était active au début du contact
+					//Exclure l'assurance "CASH"
+					if(insurance.getInsurar()!=null && !insurance.getInsurarUid().equalsIgnoreCase(SH.cs("selfinsureduid","1.72"))){
+						if(sModePaiement.length()>0){
+							sModePaiement+=",";
+							sInsuranceNr+=",";
+						}
+						//Cette assurance n'est pas "CASH", donc on l'ajoute
+						sModePaiement+=insurance.getInsurar().getName();
+						sInsuranceNr+=insurance.getInsuranceNr();
+					}
+				}
+			}
+			sResult.append(sModePaiement+";");
+			sResult.append(sInsuranceNr+";");
     		sResult.append("\r\n");
     	}
     	rs.close();

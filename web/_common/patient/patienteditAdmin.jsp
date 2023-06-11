@@ -181,6 +181,14 @@
 	      "<input type='hidden' name='datacenterpatientexport' id='datacenterpatientexport' value='"+(activePatient.hasPendingExportRequest()?"1":"0")+"'/>"	  
 	      )
 	    );
+      if(SH.ci("enableBurundi",0)==1){
+    	  //Données registre blue
+    	  out.println("<tr><td class='admin2' colspan='2'><hr/><b>"+getTran(request,"web","blueregisterdata",sWebLanguage)+"</b><hr/></td></tr>");
+  		  out.print(inputRow(request,"web","birthcertificatedate","ext_birthcertificatedate","Admin",activePatient.getExtendedValue("birthcertificatedate"),"D",true, false,sWebLanguage));
+  		  out.print(inputRow(request,"web","parentsprofession","ext_parentsprofession","Admin",activePatient.getExtendedValue("parentsprofession"),"T",true, false,sWebLanguage));
+  		  out.print(inputRow(request,"web","parentsidcard","ext_parentsidcard","Admin",activePatient.getExtendedValue("parentsidcard"),"T",true, false,sWebLanguage));
+  		  out.print(inputRow(request,"web","vaccinationcardnumber","ext_vaccinationcardnumber","Admin",activePatient.getExtendedValue("vaccinationcardnumber"),"T",true, false,sWebLanguage));
+      }
     %>
     <tr height="0">
         <td width='<%=sTDAdminWidth%>'/><td width='*'/>

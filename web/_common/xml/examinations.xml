@@ -2306,4 +2306,12 @@
 		<fr>Monitorage pendant l'anesthésie</fr>
 		<en>Monitoring during anesthesia</en>
 	</Row>
+	<Row>
+		<id>1315</id>
+		<class>mspls</class>
+		<transactiontype>be.mxs.common.model.vo.healthrecord.IConstants.TRANSACTION_TYPE_MSPLS_REGISTRY_TB</transactiontype>
+		<fr>MSPLS - CDS - Registre de suivi des patients tuberculeux</fr>
+		<en>MSPLS - HC - TB registry</en>
+		<es>MSPLS - CDS - Registro de tuberculosis</es>
+	</Row>
 </Examinations>
